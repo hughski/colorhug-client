@@ -23,6 +23,7 @@
 
 #include <glib-object.h>
 #include <gio/gio.h>
+#include <gusb.h>
 
 #include "ch-client.h"
 
@@ -37,7 +38,8 @@ static void     ch_client_finalize	(GObject     *object);
  **/
 struct _ChClientPrivate
 {
-	GKeyFile			*keyfile;
+	GUsbContext			*usb_ctx;
+	GUsbDevice			*device;
 };
 
 G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
@@ -48,9 +50,45 @@ G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
 gboolean
 ch_client_load (ChClient *client, GError **error)
 {
+	gboolean ret;
+	GUsbDeviceList *list;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	return TRUE;
+
+	/* try to find the ColorHug device */
+	list = g_usb_device_list_new (client->priv->usb_ctx);
+	g_usb_device_list_coldplug (list);
+	client->priv->device = g_usb_device_list_find_by_vid_pid (list,
+								  CH_USB_VID,
+								  CH_USB_PID,
+								  error);
+	if (client->priv->device == NULL) {
+		ret = FALSE;
+		goto out;
+	}
+	g_debug ("Found ColorHug device %s",
+		 g_usb_device_get_platform_id (client->priv->device));
+
+	/* load device */
+	ret = g_usb_device_open (client->priv->device, error);
+	if (!ret)
+		goto out;
+	ret = g_usb_device_set_configuration (client->priv->device,
+					      CH_USB_CONFIG,
+					      error);
+	if (!ret)
+		goto out;
+	ret = g_usb_device_claim_interface (client->priv->device,
+					    CH_USB_INTERFACE,
+					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
+					    error);
+	if (!ret)
+		goto out;
+out:
+	if (list != NULL)
+		g_object_unref (list);
+	return ret;
 }
 
 
@@ -65,6 +103,7 @@ ch_client_get_color_select (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (color_select != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -78,6 +117,7 @@ ch_client_set_color_select (ChClient *client,
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -92,6 +132,7 @@ ch_client_get_multiplier (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (multiplier != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -105,6 +146,7 @@ ch_client_set_multiplier (ChClient *client,
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -119,6 +161,7 @@ ch_client_get_integral_time (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (integral_time != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -133,6 +176,7 @@ ch_client_set_integral_time (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (integral_time > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -151,6 +195,7 @@ ch_client_get_firmware_ver (ChClient *client,
 	g_return_val_if_fail (minor != NULL, FALSE);
 	g_return_val_if_fail (micro != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -167,6 +212,7 @@ ch_client_set_firmware_ver (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (major > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -181,6 +227,7 @@ ch_client_get_calibration (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -195,6 +242,7 @@ ch_client_set_calibration (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -209,6 +257,7 @@ ch_client_get_serial_number (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (serial_number != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -223,6 +272,7 @@ ch_client_set_serial_number (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (serial_number > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -237,6 +287,7 @@ ch_client_get_write_protect (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (write_protect != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -251,6 +302,7 @@ ch_client_set_write_protect (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (write_protect != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -265,6 +317,7 @@ ch_client_take_reading (ChClient *client,
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (take_reading != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 	return TRUE;
 }
 
@@ -286,7 +339,7 @@ static void
 ch_client_init (ChClient *client)
 {
 	client->priv = CH_CLIENT_GET_PRIVATE (client);
-	client->priv->keyfile = g_key_file_new ();
+	client->priv->usb_ctx = g_usb_context_new (NULL);
 }
 
 /**
@@ -298,7 +351,9 @@ ch_client_finalize (GObject *object)
 	ChClient *client = CH_CLIENT (object);
 	ChClientPrivate *priv = client->priv;
 
-	g_key_file_free (priv->keyfile);
+	if (client->priv->device != NULL)
+		g_object_unref (client->priv->device);
+	g_object_unref (priv->usb_ctx);
 
 	G_OBJECT_CLASS (ch_client_parent_class)->finalize (object);
 }

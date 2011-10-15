@@ -19,6 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#define	CH_USB_VID				0x0001
+#define	CH_USB_PID				0x0002
+#define	CH_USB_CONFIG				0x0003
+#define	CH_USB_INTERFACE			0x0004
+
 /* device commands */	
 #define	CH_CMD_GET_COLOR_SELECT			0x00
 #define	CH_CMD_SET_COLOR_SELECT			0x01
