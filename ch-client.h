@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-#define CH_TYPE_CLIENT		(cd_client_get_type ())
+#define CH_TYPE_CLIENT		(ch_client_get_type ())
 #define CH_CLIENT(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), CH_TYPE_CLIENT, ChClient))
 #define CH_CLIENT_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), CH_TYPE_CLIENT, ChClientClass))
 #define CH_IS_CLIENT(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), CH_TYPE_CLIENT))
@@ -48,31 +48,31 @@ struct _ChClientClass
 	GObjectClass		 parent_class;
 };
 
-GType		 cd_client_get_type		(void);
-ChClient	*cd_client_new			(void);
+GType		 ch_client_get_type		(void);
+ChClient	*ch_client_new			(void);
 
-gboolean	 cd_client_load			(ChClient	*client,
+gboolean	 ch_client_load			(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_color_select	(ChClient	*client,
-						 CdColorSelect	*color_select,
+						 ChColorSelect	*color_select,
 						 GError		**error);
 gboolean	 ch_client_set_color_select	(ChClient	*client,
-						 CdColorSelect	 color_select,
+						 ChColorSelect	 color_select,
 						 GError		**error);
 
 gboolean	 ch_client_get_multiplier	(ChClient	*client,
-						 CdFreqScale	*multiplier,
+						 ChFreqScale	*multiplier,
 						 GError		**error);
 gboolean	 ch_client_set_multiplier	(ChClient	*client,
-						 CdFreqScale	 multiplier,
+						 ChFreqScale	 multiplier,
 						 GError		**error);
 
-gboolean	 ch_client_get_intergral_time	(ChClient	*client,
-						 guint16	*intergral_time,
+gboolean	 ch_client_get_integral_time	(ChClient	*client,
+						 guint16	*integral_time,
 						 GError		**error);
-gboolean	 ch_client_set_intergral_time	(ChClient	*client,
-						 guint16	 intergral_time,
+gboolean	 ch_client_set_integral_time	(ChClient	*client,
+						 guint16	 integral_time,
 						 GError		**error);
 
 gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
@@ -87,10 +87,10 @@ gboolean	 ch_client_set_firmware_ver	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_calibration	(ChClient	*client,
-						 guint8		**calibration,
+						 gfloat		**calibration,
 						 GError		**error);
 gboolean	 ch_client_set_calibration	(ChClient	*client,
-						 guint8		*calibration,
+						 gfloat		*calibration,
 						 GError		**error);
 
 gboolean	 ch_client_get_serial_number	(ChClient	*client,

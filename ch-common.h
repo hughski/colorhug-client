@@ -53,7 +53,7 @@ typedef enum {
 	CH_COLOR_SELECT_WHITE,
 	CH_COLOR_SELECT_BLUE,
 	CH_COLOR_SELECT_GREEN
-} CdColorSelect;
+} ChColorSelect;
 
 /* what frequency divider to use */
 typedef enum {
@@ -61,5 +61,5 @@ typedef enum {
 	CH_FREQ_SCALE_20,
 	CH_FREQ_SCALE_2,
 	CH_FREQ_SCALE_100
-} CdFreqScale;
+} ChFreqScale;
 

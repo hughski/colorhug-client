@@ -63,9 +63,9 @@ noinst_PROGRAMS =					\
 	colorhug
 
 colorhug_SOURCES =					\
-	ch-common.h					\
 	ch-client.c					\
 	ch-client.h					\
+	ch-common.h					\
 	ch-main.c
 
 colorhug_LDADD =					\
@@ -79,6 +79,9 @@ check_PROGRAMS =					\
 	ch-self-test
 
 ch_self_test_SOURCES =					\
+	ch-client.c					\
+	ch-client.h					\
+	ch-common.h					\
 	ch-self-test.c
 
 ch_self_test_LDADD =					\

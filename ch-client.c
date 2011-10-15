@@ -26,7 +26,7 @@
 
 #include "ch-client.h"
 
-static void     cd_client_finalize	(GObject     *object);
+static void     ch_client_finalize	(GObject     *object);
 
 #define CH_CLIENT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CH_TYPE_CLIENT, ChClientPrivate))
 
@@ -40,13 +40,13 @@ struct _ChClientPrivate
 	GKeyFile			*keyfile;
 };
 
-G_DEFINE_TYPE (ChClient, cd_client, G_TYPE_OBJECT)
+G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
 
 /**
- * cd_client_load:
+ * ch_client_load:
  **/
 gboolean
-cd_client_load (ChClient *client, GError **error)
+ch_client_load (ChClient *client, GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -59,7 +59,7 @@ cd_client_load (ChClient *client, GError **error)
  **/
 gboolean
 ch_client_get_color_select (ChClient *client,
-			    CdColorSelect *color_select,
+			    ChColorSelect *color_select,
 			    GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -73,7 +73,7 @@ ch_client_get_color_select (ChClient *client,
  **/
 gboolean
 ch_client_set_color_select (ChClient *client,
-			    CdColorSelect color_select,
+			    ChColorSelect color_select,
 			    GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -86,7 +86,7 @@ ch_client_set_color_select (ChClient *client,
  **/
 gboolean
 ch_client_get_multiplier (ChClient *client,
-			  CdFreqScale *multiplier,
+			  ChFreqScale *multiplier,
 			  GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -100,7 +100,7 @@ ch_client_get_multiplier (ChClient *client,
  **/
 gboolean
 ch_client_set_multiplier (ChClient *client,
-			  CdFreqScale multiplier,
+			  ChFreqScale multiplier,
 			  GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -109,29 +109,29 @@ ch_client_set_multiplier (ChClient *client,
 }
 
 /**
- * ch_client_get_intergral_time:
+ * ch_client_get_integral_time:
  **/
 gboolean
-ch_client_get_intergral_time (ChClient *client,
-			      guint16 *intergral_time,
+ch_client_get_integral_time (ChClient *client,
+			      guint16 *integral_time,
 			      GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
-	g_return_val_if_fail (intergral_time != NULL, FALSE);
+	g_return_val_if_fail (integral_time != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	return TRUE;
 }
 
 /**
- * ch_client_set_intergral_time:
+ * ch_client_set_integral_time:
  **/
 gboolean
-ch_client_set_intergral_time (ChClient *client,
-			      guint16 intergral_time,
-			      GError **error)
+ch_client_set_integral_time (ChClient *client,
+			     guint16 integral_time,
+			     GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
-	g_return_val_if_fail (intergral_time > 0, FALSE);
+	g_return_val_if_fail (integral_time > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	return TRUE;
 }
@@ -175,7 +175,7 @@ ch_client_set_firmware_ver (ChClient *client,
  **/
 gboolean
 ch_client_get_calibration (ChClient *client,
-			   guint8 **calibration,
+			   gfloat **calibration,
 			   GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -189,7 +189,7 @@ ch_client_get_calibration (ChClient *client,
  **/
 gboolean
 ch_client_set_calibration (ChClient *client,
-			   guint8 *calibration,
+			   gfloat *calibration,
 			   GError **error)
 {
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -269,45 +269,45 @@ ch_client_take_reading (ChClient *client,
 }
 
 /**
- * cd_client_class_init:
+ * ch_client_class_init:
  **/
 static void
-cd_client_class_init (ChClientClass *klass)
+ch_client_class_init (ChClientClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = cd_client_finalize;
+	object_class->finalize = ch_client_finalize;
 	g_type_class_add_private (klass, sizeof (ChClientPrivate));
 }
 
 /**
- * cd_client_init:
+ * ch_client_init:
  **/
 static void
-cd_client_init (ChClient *client)
+ch_client_init (ChClient *client)
 {
 	client->priv = CH_CLIENT_GET_PRIVATE (client);
 	client->priv->keyfile = g_key_file_new ();
 }
 
 /**
- * cd_client_finalize:
+ * ch_client_finalize:
  **/
 static void
-cd_client_finalize (GObject *object)
+ch_client_finalize (GObject *object)
 {
 	ChClient *client = CH_CLIENT (object);
 	ChClientPrivate *priv = client->priv;
 
 	g_key_file_free (priv->keyfile);
 
-	G_OBJECT_CLASS (cd_client_parent_class)->finalize (object);
+	G_OBJECT_CLASS (ch_client_parent_class)->finalize (object);
 }
 
 /**
- * cd_client_new:
+ * ch_client_new:
  **/
 ChClient *
-cd_client_new (void)
+ch_client_new (void)
 {
 	ChClient *client;
 	client = g_object_new (CH_TYPE_CLIENT, NULL);
