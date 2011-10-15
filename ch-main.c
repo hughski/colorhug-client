@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+#include "ch-client.h"
 
 #include <gio/gio.h>
 #include <gusb.h>

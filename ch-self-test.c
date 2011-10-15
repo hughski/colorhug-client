@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+#include "ch-client.h"
 
 #include <glib.h>
 #include <glib-object.h>

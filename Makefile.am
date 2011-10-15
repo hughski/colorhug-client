@@ -63,6 +63,9 @@ noinst_PROGRAMS =					\
 	colorhug
 
 colorhug_SOURCES =					\
+	ch-common.h					\
+	ch-client.c					\
+	ch-client.h					\
 	ch-main.c
 
 colorhug_LDADD =					\

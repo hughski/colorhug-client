@@ -1,0 +1,116 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ * Copyright (C) 2011 Richard Hughes <richard@hughsie.com>
+ *
+ * Licensed under the GNU General Public License Version 2
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+#ifndef __CH_CLIENT_H
+#define __CH_CLIENT_H
+
+#include "ch-common.h"
+
+#include <glib-object.h>
+
+G_BEGIN_DECLS
+
+#define CH_TYPE_CLIENT		(cd_client_get_type ())
+#define CH_CLIENT(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), CH_TYPE_CLIENT, ChClient))
+#define CH_CLIENT_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), CH_TYPE_CLIENT, ChClientClass))
+#define CH_IS_CLIENT(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), CH_TYPE_CLIENT))
+
+typedef struct _ChClientPrivate		ChClientPrivate;
+typedef struct _ChClient		ChClient;
+typedef struct _ChClientClass		ChClientClass;
+
+struct _ChClient
+{
+	 GObject		 parent;
+	 ChClientPrivate	*priv;
+};
+
+struct _ChClientClass
+{
+	GObjectClass		 parent_class;
+};
+
+GType		 cd_client_get_type		(void);
+ChClient	*cd_client_new			(void);
+
+gboolean	 cd_client_load			(ChClient	*client,
+						 GError		**error);
+
+gboolean	 ch_client_get_color_select	(ChClient	*client,
+						 CdColorSelect	*color_select,
+						 GError		**error);
+gboolean	 ch_client_set_color_select	(ChClient	*client,
+						 CdColorSelect	 color_select,
+						 GError		**error);
+
+gboolean	 ch_client_get_multiplier	(ChClient	*client,
+						 CdFreqScale	*multiplier,
+						 GError		**error);
+gboolean	 ch_client_set_multiplier	(ChClient	*client,
+						 CdFreqScale	 multiplier,
+						 GError		**error);
+
+gboolean	 ch_client_get_intergral_time	(ChClient	*client,
+						 guint16	*intergral_time,
+						 GError		**error);
+gboolean	 ch_client_set_intergral_time	(ChClient	*client,
+						 guint16	 intergral_time,
+						 GError		**error);
+
+gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
+						 guint16	*major,
+						 guint16	*minor,
+						 guint16	*micro,
+						 GError		**error);
+gboolean	 ch_client_set_firmware_ver	(ChClient	*client,
+						 guint16	 major,
+						 guint16	 minor,
+						 guint16	 micro,
+						 GError		**error);
+
+gboolean	 ch_client_get_calibration	(ChClient	*client,
+						 guint8		**calibration,
+						 GError		**error);
+gboolean	 ch_client_set_calibration	(ChClient	*client,
+						 guint8		*calibration,
+						 GError		**error);
+
+gboolean	 ch_client_get_serial_number	(ChClient	*client,
+						 guint64	*serial_number,
+						 GError		**error);
+gboolean	 ch_client_set_serial_number	(ChClient	*client,
+						 guint64	 serial_number,
+						 GError		**error);
+
+gboolean	 ch_client_get_write_protect	(ChClient	*client,
+						 gboolean	*write_protect,
+						 GError		**error);
+gboolean	 ch_client_set_write_protect	(ChClient	*client,
+						 const gchar	*write_protect,
+						 GError		**error);
+
+gboolean	 ch_client_take_reading		(ChClient	*client,
+						 guint16	*take_reading,
+						 GError		**error);
+
+G_END_DECLS
+
+#endif /* __CH_CLIENT_H */
