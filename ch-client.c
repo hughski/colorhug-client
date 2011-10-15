@@ -42,6 +42,8 @@ struct _ChClientPrivate
 	GUsbDevice			*device;
 };
 
+#define	CH_CLIENT_USB_TIMEOUT		2000
+
 G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
 
 /**
@@ -100,11 +102,35 @@ ch_client_get_color_select (ChClient *client,
 			    ChColorSelect *color_select,
 			    GError **error)
 {
+	gboolean ret;
+	guint8 buffer[1];
+	gsize actual_length = -1;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (color_select != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* request */
+	ret = g_usb_device_control_transfer (client->priv->device,
+					     G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
+					     G_USB_DEVICE_REQUEST_TYPE_STANDARD,
+					     G_USB_DEVICE_RECIPIENT_DEVICE,
+					     0, /* request */
+					     0, /* value */
+					     0, /* idx */
+					     buffer,
+					     sizeof (buffer), /* length */
+					     &actual_length, /* actual_length */
+					     CH_CLIENT_USB_TIMEOUT,
+					     NULL,
+					     error);
+	if (!ret)
+		goto out;
+
+	/* read */
+out:
+	return ret;
 }
 
 /**
