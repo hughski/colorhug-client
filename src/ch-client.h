@@ -100,11 +100,8 @@ gboolean	 ch_client_set_serial_number	(ChClient	*client,
 						 guint64	 serial_number,
 						 GError		**error);
 
-gboolean	 ch_client_get_write_protect	(ChClient	*client,
-						 gboolean	*write_protect,
-						 GError		**error);
-gboolean	 ch_client_set_write_protect	(ChClient	*client,
-						 const gchar	*write_protect,
+gboolean	 ch_client_write_eeprom		(ChClient	*client,
+						 const gchar	*magic,
 						 GError		**error);
 
 gboolean	 ch_client_take_reading		(ChClient	*client,

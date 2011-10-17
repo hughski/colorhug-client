@@ -584,54 +584,25 @@ out:
 }
 
 /**
- * ch_client_get_write_protect:
+ * ch_client_write_eeprom:
  **/
 gboolean
-ch_client_get_write_protect (ChClient *client,
-			     gboolean *write_protect,
-			     GError **error)
+ch_client_write_eeprom (ChClient *client,
+			const gchar *magic,
+			GError **error)
 {
 	gboolean ret;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
-	g_return_val_if_fail (write_protect != NULL, FALSE);
+	g_return_val_if_fail (magic != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
-				       CH_CMD_GET_WRITE_PROTECT,
-				       NULL,	/* buffer in */
-				       0,	/* size of input buffer */
-				       (guint8 *) write_protect,
-				       1,	/* size of output buffer */
-				       error);
-	if (!ret)
-		goto out;
-out:
-	return ret;
-}
-
-/**
- * ch_client_set_write_protect:
- **/
-gboolean
-ch_client_set_write_protect (ChClient *client,
-			     const gchar *write_protect,
-			     GError **error)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
-	g_return_val_if_fail (write_protect != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-
-	/* hit hardware */
-	ret = ch_client_write_command (client,
-				       CH_CMD_SET_WRITE_PROTECT,
-				       (const guint8 *) write_protect,	/* buffer in */
-				       strlen(write_protect),	/* size of input buffer */
+				       CH_CMD_WRITE_EEPROM,
+				       (const guint8 *) magic,	/* buffer in */
+				       strlen(magic),	/* size of input buffer */
 				       NULL,
 				       0,	/* size of output buffer */
 				       error);

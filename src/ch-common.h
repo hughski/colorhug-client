@@ -41,14 +41,12 @@
 #define	CH_CMD_SET_CALIBRATION			0x0a
 #define	CH_CMD_GET_SERIAL_NUMBER		0x0b
 #define	CH_CMD_SET_SERIAL_NUMBER		0x0c
-#define	CH_CMD_GET_WRITE_PROTECT		0x0d
-#define	CH_CMD_SET_WRITE_PROTECT		0x0e
-#define	CH_CMD_TAKE_READING			0x0f
-#define	CH_CMD_TAKE_READING_XYZ			0x10
+#define	CH_CMD_WRITE_EEPROM			0x0d
+#define	CH_CMD_TAKE_READING			0x0e
+#define	CH_CMD_TAKE_READING_XYZ			0x0f
 
 /* secret code */
-#define	CH_WRITE_PROTECT_LOCK_MAGIC		"Un1c0rn2"
-#define	CH_WRITE_PROTECT_UNLOCK_MAGIC		"Greml1n0"
+#define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
 
 /* input and output buffer offsets */
 #define	CH_BUFFER_INPUT_CMD			0x00
@@ -58,11 +56,11 @@
 #define	CH_BUFFER_OUTPUT_DATA			0x02
 
 /* EEPROM address offsets */
-#define	CH_EEPROM_ADDR_SERIAL			0x00 /* 6 bytes, LE */
-#define	CH_EEPROM_ADDR_FIRMWARE_MAJOR		0x06 /* 2 bytes, LE */
-#define	CH_EEPROM_ADDR_FIRMWARE_MINOR		0x08 /* 2 bytes, LE */
-#define	CH_EEPROM_ADDR_FIRMWARE_MICRO		0x0a /* 2 bytes, LE */
-#define	CH_EEPROM_ADDR_CALIBRATION_MATRIX	0x0c /* 36 bytes, LE */
+#define	CH_EEPROM_ADDR_SERIAL			0x00 /* 4 bytes, LE */
+#define	CH_EEPROM_ADDR_FIRMWARE_MAJOR		0x04 /* 2 bytes, LE */
+#define	CH_EEPROM_ADDR_FIRMWARE_MINOR		0x06 /* 2 bytes, LE */
+#define	CH_EEPROM_ADDR_FIRMWARE_MICRO		0x08 /* 2 bytes, LE */
+#define	CH_EEPROM_ADDR_CALIBRATION_MATRIX	0x0a /* 36 bytes, LE */
 
 /* which color to select */
 typedef enum {

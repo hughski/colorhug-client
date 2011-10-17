@@ -523,28 +523,10 @@ out:
 }
 
 /**
- * ch_util_get_write_protect:
+ * ch_util_write_eeprom:
  **/
 static gboolean
-ch_util_get_write_protect (ChUtilPrivate *priv, gchar **values, GError **error)
-{
-	gboolean ret;
-	gboolean write_protect;
-
-	/* get from HW */
-	ret = ch_client_get_write_protect (priv->client, &write_protect, error);
-	if (!ret)
-		goto out;
-	g_print ("%s\n", write_protect ? "1" : "0");
-out:
-	return ret;
-}
-
-/**
- * ch_util_set_write_protect:
- **/
-static gboolean
-ch_util_set_write_protect (ChUtilPrivate *priv, gchar **values, GError **error)
+ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 
@@ -557,7 +539,7 @@ ch_util_set_write_protect (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_write_protect (priv->client, values[0], error);
+	ret = ch_client_write_eeprom (priv->client, values[0], error);
 	if (!ret)
 		goto out;
 out:
@@ -668,15 +650,10 @@ main (int argc, char *argv[])
 		     _("Sets the sensor serial number"),
 		     ch_util_set_serial_number);
 	ch_util_add (priv->cmd_array,
-		     "get-write-protect",
+		     "write-eeprom",
 		     /* TRANSLATORS: command description */
-		     _("Gets the sensor wrote protect status"),
-		     ch_util_get_write_protect);
-	ch_util_add (priv->cmd_array,
-		     "set-write-protect",
-		     /* TRANSLATORS: command description */
-		     _("Sets the sensor write protect status"),
-		     ch_util_set_write_protect);
+		     _("Writes the EEPROM with updated values"),
+		     ch_util_write_eeprom);
 	ch_util_add (priv->cmd_array,
 		     "take-reading",
 		     /* TRANSLATORS: command description */

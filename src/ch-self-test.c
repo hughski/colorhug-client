@@ -92,7 +92,6 @@ ch_test_eeprom_func (void)
 {
 	ChClient *client;
 	gboolean ret;
-	gboolean write_protect = FALSE;
 	GError *error = NULL;
 	guint16 major = 0;
 	guint16 micro = 0;
@@ -109,44 +108,13 @@ ch_test_eeprom_func (void)
 	g_assert_no_error (error);
 	g_assert (ret);
 
-	/* unset write protect */
-	ret = ch_client_set_write_protect (client,
-					   CH_WRITE_PROTECT_UNLOCK_MAGIC,
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	ret = ch_client_get_write_protect (client,
-					   &write_protect,
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	g_assert (write_protect);
-
-	/* unset write protect */
-	ret = ch_client_set_write_protect (client,
-					   "hello dave",
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	ret = ch_client_get_write_protect (client,
-					   &write_protect,
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	g_assert (write_protect);
-
-	/* set write protect with magic */
-	ret = ch_client_set_write_protect (client,
-					   CH_WRITE_PROTECT_LOCK_MAGIC,
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	ret = ch_client_get_write_protect (client,
-					   &write_protect,
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	g_assert (!write_protect);
+	/* write eeprom with wrong code */
+	ret = ch_client_write_eeprom (client,
+				      "hello dave",
+				      &error);
+	g_assert_error (error, 1, 0);
+	g_assert (!ret);
+	g_clear_error (&error);
 
 	/* verify serial number */
 	ret = ch_client_set_serial_number (client,
@@ -205,6 +173,15 @@ ch_test_eeprom_func (void)
 			  calibration,
 			  sizeof (gfloat) * 9) == 0);
 	g_free (calibration_tmp);
+
+#if 0
+	/* write eeprom */
+	ret = ch_client_write_eeprom (client,
+				      CH_WRITE_EEPROM_MAGIC,
+				      &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+#endif
 
 	g_object_unref (client);
 }
