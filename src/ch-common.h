@@ -20,8 +20,8 @@
  */
 
 /* device constants */
-#define	CH_USB_VID				0x1d6b
-#define	CH_USB_PID				0x0106
+#define	CH_USB_VID				0x04d8
+#define	CH_USB_PID				0x0001 /* ...waiting for PID from Microchip */
 #define	CH_USB_CONFIG				0x0001
 #define	CH_USB_INTERFACE			0x0000
 #define	CH_USB_HID_EP				0x0001
