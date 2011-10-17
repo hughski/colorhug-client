@@ -111,6 +111,19 @@ ch_test_eeprom_func (void)
 
 	/* unset write protect */
 	ret = ch_client_set_write_protect (client,
+					   CH_WRITE_PROTECT_UNLOCK_MAGIC,
+					   &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	ret = ch_client_get_write_protect (client,
+					   &write_protect,
+					   &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert (write_protect);
+
+	/* unset write protect */
+	ret = ch_client_set_write_protect (client,
 					   "hello dave",
 					   &error);
 	g_assert_no_error (error);
@@ -124,7 +137,7 @@ ch_test_eeprom_func (void)
 
 	/* set write protect with magic */
 	ret = ch_client_set_write_protect (client,
-					   CH_WRITE_PROTECT_MAGIC,
+					   CH_WRITE_PROTECT_LOCK_MAGIC,
 					   &error);
 	g_assert_no_error (error);
 	g_assert (ret);

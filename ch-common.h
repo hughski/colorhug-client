@@ -19,38 +19,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#define	CH_USB_VID				0x0001
-#define	CH_USB_PID				0x0002
-#define	CH_USB_CONFIG				0x0003
-#define	CH_USB_INTERFACE			0x0004
+/* device constants */
+#define	CH_USB_VID				0x1d6b
+#define	CH_USB_PID				0x0106
+#define	CH_USB_CONFIG				0x0001
+#define	CH_USB_INTERFACE			0x0000
+#define	CH_USB_HID_EP				0x0001
+#define	CH_USB_HID_EP_IN			(0x0001 & 0x80)
+#define	CH_USB_HID_EP_OUT			(0x0001 & 0x00)
 
-/* device commands */	
-#define	CH_CMD_GET_COLOR_SELECT			0x00
-#define	CH_CMD_SET_COLOR_SELECT			0x01
-#define	CH_CMD_GET_MULTIPLIER			0x02
-#define	CH_CMD_SET_MULTIPLIER			0x03
-#define	CH_CMD_GET_INTERGRAL_TIME		0x04
-#define	CH_CMD_SET_INTERGRAL_TIME		0x05
-#define	CH_CMD_GET_FIRMWARE_VERSION		0x06
-#define	CH_CMD_SET_FIRMWARE_VERSION		0x07
-#define	CH_CMD_GET_CALIBRATION			0x08
-#define	CH_CMD_SET_CALIBRATION			0x09
-#define	CH_CMD_GET_SERIAL_NUMBER		0x0a
-#define	CH_CMD_SET_SERIAL_NUMBER		0x0b
-#define	CH_CMD_GET_WRITE_PROTECT		0x0c
-#define	CH_CMD_SET_WRITE_PROTECT		0x0d
-#define	CH_CMD_TAKE_READING			0x0e
-#define	CH_CMD_TAKE_READING_XYZ			0x0f
+/* device commands */
+#define	CH_CMD_GET_COLOR_SELECT			0x01
+#define	CH_CMD_SET_COLOR_SELECT			0x02
+#define	CH_CMD_GET_MULTIPLIER			0x03
+#define	CH_CMD_SET_MULTIPLIER			0x04
+#define	CH_CMD_GET_INTERGRAL_TIME		0x05
+#define	CH_CMD_SET_INTERGRAL_TIME		0x06
+#define	CH_CMD_GET_FIRMWARE_VERSION		0x07
+#define	CH_CMD_SET_FIRMWARE_VERSION		0x08
+#define	CH_CMD_GET_CALIBRATION			0x09
+#define	CH_CMD_SET_CALIBRATION			0x0a
+#define	CH_CMD_GET_SERIAL_NUMBER		0x0b
+#define	CH_CMD_SET_SERIAL_NUMBER		0x0c
+#define	CH_CMD_GET_WRITE_PROTECT		0x0d
+#define	CH_CMD_SET_WRITE_PROTECT		0x0e
+#define	CH_CMD_TAKE_READING			0x0f
+#define	CH_CMD_TAKE_READING_XYZ			0x10
 
-/* secret code */	
-#define	CH_WRITE_PROTECT_MAGIC			"Un1c0rn2"
+/* secret code */
+#define	CH_WRITE_PROTECT_LOCK_MAGIC		"Un1c0rn2"
+#define	CH_WRITE_PROTECT_UNLOCK_MAGIC		"Greml1n0"
 
-/* EEPROM addresses */	
-#define	CH_EEPROM_ADDR_SERIAL			0x00 /* 10 bytes */
-#define	CH_EEPROM_ADDR_FIRMWARE_MAJOR		0x0a /* 2 bytes */
-#define	CH_EEPROM_ADDR_FIRMWARE_MINOR		0x0c /* 2 bytes */
-#define	CH_EEPROM_ADDR_FIRMWARE_MICRO		0x0e /* 2 bytes */
-#define	CH_EEPROM_ADDR_CALIBRATION_MATRIX	0x10 /* 36 bytes */
+/* input and output buffer offsets */
+#define	CH_BUFFER_INPUT_CMD			0x00
+#define	CH_BUFFER_INPUT_DATA			0x01
+#define	CH_BUFFER_OUTPUT_RETVAL			0x00
+#define	CH_BUFFER_OUTPUT_CMD			0x01
+#define	CH_BUFFER_OUTPUT_DATA			0x02
+
+/* EEPROM address offsets */
+#define	CH_EEPROM_ADDR_SERIAL			0x00 /* 6 bytes, LE */
+#define	CH_EEPROM_ADDR_FIRMWARE_MAJOR		0x06 /* 2 bytes, LE */
+#define	CH_EEPROM_ADDR_FIRMWARE_MINOR		0x08 /* 2 bytes, LE */
+#define	CH_EEPROM_ADDR_FIRMWARE_MICRO		0x0a /* 2 bytes, LE */
+#define	CH_EEPROM_ADDR_CALIBRATION_MATRIX	0x0c /* 36 bytes, LE */
 
 /* which color to select */
 typedef enum {
@@ -68,3 +80,9 @@ typedef enum {
 	CH_FREQ_SCALE_100
 } ChFreqScale;
 
+/* fatal error morse code */
+typedef enum {
+	CH_FATAL_ERROR_UNKNOWN_CMD,
+	CH_FATAL_ERROR_WRONG_UNLOCK_CODE,
+	CH_FATAL_ERROR_LAST
+} ChFatalError;

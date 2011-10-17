@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include <stdlib.h>
+#include <string.h>
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <gusb.h>
@@ -93,6 +95,111 @@ out:
 	return ret;
 }
 
+/**
+ * ch_client_print_data:
+ **/
+static void
+ch_client_print_data (const gchar *title,
+		      const guint8 *data,
+		      gsize length)
+{
+	guint i;
+
+	if (g_strcmp0 (title, "request") == 0)
+		g_print ("%c[%dm", 0x1B, 31);
+	if (g_strcmp0 (title, "reply") == 0)
+		g_print ("%c[%dm", 0x1B, 34);
+	g_print ("%s\t", title);
+
+	for (i=0; i< length; i++)
+		g_print ("%02x [%c]\t", data[i], g_ascii_isprint (data[i]) ? data[i] : '?');
+
+	g_print ("%c[%dm\n", 0x1B, 0);
+}
+
+/**
+ * ch_client_write_command:
+ *
+ * @client:		A #ChClient
+ * @cmd:		The command to use, e.g. %CH_CMD_GET_COLOR_SELECT
+ * @buffer_in:		The input buffer of data, or %NULL
+ * @buffer_in_length:	The input buffer length
+ * @buffer_out:		The output buffer of data, or %NULL
+ * @buffer_out_length:	The output buffer length
+ * @error:		A #GError, or %NULL
+ *
+ * Sends a message to the device and waits for a reply.
+ *
+ **/
+static gboolean
+ch_client_write_command (ChClient *client,
+			 guint8 cmd,
+			 const guint8 *buffer_in,
+			 gsize buffer_in_length,
+			 guint8 *buffer_out,
+			 gsize buffer_out_length,
+			 GError **error)
+{
+	gboolean ret;
+	gsize actual_length = -1;
+	guint8 buffer[64];
+
+	/* set command */
+	buffer[CH_BUFFER_INPUT_CMD] = cmd;
+	if (buffer_in != NULL) {
+		memcpy (buffer + CH_BUFFER_INPUT_DATA,
+			buffer_in,
+			buffer_in_length);
+	}
+
+	/* request */
+	ch_client_print_data ("request", buffer, sizeof(buffer));
+	ret = g_usb_device_interrupt_transfer (client->priv->device,
+					       CH_USB_HID_EP_OUT, /* relative to...? */
+					       buffer,
+					       sizeof(buffer),
+					       &actual_length,
+					       CH_CLIENT_USB_TIMEOUT,
+					       NULL,
+					       error);
+	if (!ret)
+		goto out;
+
+	/* read */
+	ret = g_usb_device_interrupt_transfer (client->priv->device,
+					       CH_USB_HID_EP_IN, /* relative to...? */
+					       buffer,
+					       sizeof(buffer),
+					       &actual_length,
+					       CH_CLIENT_USB_TIMEOUT,
+					       NULL,
+					       error);
+	if (!ret)
+		goto out;
+	ch_client_print_data ("reply", buffer, sizeof(buffer));
+
+	/* parse */
+	if (buffer[CH_BUFFER_OUTPUT_RETVAL] != EXIT_SUCCESS ||
+	    buffer[CH_BUFFER_OUTPUT_CMD] != cmd ||
+	    actual_length != buffer_out_length + CH_BUFFER_OUTPUT_DATA) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Invalid read: retval=%02x cmd=%02x len=%li",
+			     buffer[CH_BUFFER_OUTPUT_RETVAL],
+			     buffer[CH_BUFFER_OUTPUT_CMD],
+			     actual_length);
+		goto out;
+	}
+
+	/* copy */
+	if (buffer_out != NULL) {
+		memcpy (buffer_out + CH_BUFFER_OUTPUT_DATA,
+			buffer,
+			buffer_out_length);
+	}
+out:
+	return ret;
+}
 
 /**
  * ch_client_get_color_select:
@@ -103,32 +210,22 @@ ch_client_get_color_select (ChClient *client,
 			    GError **error)
 {
 	gboolean ret;
-	guint8 buffer[1];
-	gsize actual_length = -1;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (color_select != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
-	/* request */
-	ret = g_usb_device_control_transfer (client->priv->device,
-					     G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
-					     G_USB_DEVICE_REQUEST_TYPE_STANDARD,
-					     G_USB_DEVICE_RECIPIENT_DEVICE,
-					     0, /* request */
-					     0, /* value */
-					     0, /* idx */
-					     buffer,
-					     sizeof (buffer), /* length */
-					     &actual_length, /* actual_length */
-					     CH_CLIENT_USB_TIMEOUT,
-					     NULL,
-					     error);
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_COLOR_SELECT,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) color_select,
+				       1,	/* size of output buffer */
+				       error);
 	if (!ret)
 		goto out;
-
-	/* read */
 out:
 	return ret;
 }
@@ -141,10 +238,24 @@ ch_client_set_color_select (ChClient *client,
 			    ChColorSelect color_select,
 			    GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_COLOR_SELECT,
+				       (const guint8 *) &color_select,	/* buffer in */
+				       1,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -155,11 +266,25 @@ ch_client_get_multiplier (ChClient *client,
 			  ChFreqScale *multiplier,
 			  GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (multiplier != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_MULTIPLIER,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) multiplier,
+				       1,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -170,10 +295,24 @@ ch_client_set_multiplier (ChClient *client,
 			  ChFreqScale multiplier,
 			  GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_COLOR_SELECT,
+				       (const guint8 *) &multiplier,	/* buffer in */
+				       1,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -184,11 +323,25 @@ ch_client_get_integral_time (ChClient *client,
 			      guint16 *integral_time,
 			      GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (integral_time != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_INTERGRAL_TIME,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) integral_time,
+				       1,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -199,11 +352,25 @@ ch_client_set_integral_time (ChClient *client,
 			     guint16 integral_time,
 			     GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (integral_time > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_COLOR_SELECT,
+				       (const guint8 *) &integral_time,	/* buffer in */
+				       2,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -216,13 +383,33 @@ ch_client_get_firmware_ver (ChClient *client,
 			    guint16 *micro,
 			    GError **error)
 {
+	gboolean ret;
+	guint8 buffer[6];
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (major != NULL, FALSE);
 	g_return_val_if_fail (minor != NULL, FALSE);
 	g_return_val_if_fail (micro != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_FIRMWARE_VERSION,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* parse */
+	*major = buffer[0] * 0xff + buffer[1];
+	*minor = buffer[2] * 0xff + buffer[3];
+	*micro = buffer[4] * 0xff + buffer[5];
+out:
+	return ret;
 }
 
 /**
@@ -235,11 +422,32 @@ ch_client_set_firmware_ver (ChClient *client,
 			    guint16 micro,
 			    GError **error)
 {
+	gboolean ret;
+	guint8 buffer[6];
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (major > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	buffer[0] = major & 0x00ff;
+	buffer[1] = (major & 0xff00) / 0xff;
+	buffer[2] = minor & 0x00ff;
+	buffer[3] = (minor & 0xff00) / 0xff;
+	buffer[4] = micro & 0x00ff;
+	buffer[5] = (micro & 0xff00) / 0xff;
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_FIRMWARE_VERSION,
+				       buffer,	/* buffer in */
+				       sizeof(buffer),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -250,11 +458,32 @@ ch_client_get_calibration (ChClient *client,
 			   gfloat **calibration,
 			   GError **error)
 {
+	gboolean ret;
+	guint8 buffer[36];
+	guint i;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_CALIBRATION,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* parse */
+	*calibration = g_new0 (gfloat, 9);
+	for (i = 0; i < 9; i++)
+		*calibration[i] = ((gfloat *)buffer)[i];
+out:
+	return ret;
 }
 
 /**
@@ -265,11 +494,35 @@ ch_client_set_calibration (ChClient *client,
 			   gfloat *calibration,
 			   GError **error)
 {
+	gboolean ret;
+	guint32 *tmp;
+	guint8 buffer[36];
+	guint i;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	for (i = 0; i < 9; i++) {
+		tmp = (guint32 *) &calibration[i];
+		buffer[i*4+0] = (*tmp << 24) & 0xff;
+		buffer[i*4+1] = (*tmp << 16) & 0xff;
+		buffer[i*4+2] = (*tmp << 8) & 0xff;
+		buffer[i*4+3] = (*tmp << 0) & 0xff;
+	}
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_CALIBRATION,
+				       buffer,	/* buffer in */
+				       sizeof(buffer),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -280,11 +533,25 @@ ch_client_get_serial_number (ChClient *client,
 			     guint64 *serial_number,
 			     GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (serial_number != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_SERIAL_NUMBER,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) serial_number,
+				       4,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -295,11 +562,25 @@ ch_client_set_serial_number (ChClient *client,
 			     guint64 serial_number,
 			     GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (serial_number > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_SERIAL_NUMBER,
+				       (const guint8 *) &serial_number,	/* buffer in */
+				       4,	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -310,11 +591,25 @@ ch_client_get_write_protect (ChClient *client,
 			     gboolean *write_protect,
 			     GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (write_protect != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_WRITE_PROTECT,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) write_protect,
+				       1,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -325,11 +620,25 @@ ch_client_set_write_protect (ChClient *client,
 			     const gchar *write_protect,
 			     GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (write_protect != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_WRITE_PROTECT,
+				       (const guint8 *) write_protect,	/* buffer in */
+				       strlen(write_protect),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
@@ -340,11 +649,25 @@ ch_client_take_reading (ChClient *client,
 			guint16 *take_reading,
 			GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (take_reading != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-	return TRUE;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_TAKE_READING,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &take_reading,
+				       2,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }
 
 /**
