@@ -15,6 +15,17 @@ AC_PROG_CC
 AC_PROG_INSTALL
 LT_INIT
 AM_PROG_CC_C_O
+IT_PROG_INTLTOOL([0.35.0])
+
+dnl ---------------------------------------------------------------------------
+dnl - gettext stuff
+dnl ---------------------------------------------------------------------------
+AM_GNU_GETTEXT_VERSION([0.17])
+AM_GNU_GETTEXT([external])
+
+GETTEXT_PACKAGE=AC_PACKAGE_NAME
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE(GETTEXT_PACKAGE, "AC_PACKAGE_NAME", [foo])
 
 dnl ---------------------------------------------------------------------------
 dnl - Use strict options (default enabled for devs, disabled in releases)
@@ -84,6 +95,7 @@ dnl - Makefiles, etc.
 dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
 Makefile
+po/Makefile.in
 ])
 AC_OUTPUT
 

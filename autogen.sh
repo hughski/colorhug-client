@@ -22,7 +22,7 @@ if test -z $AUTORECONF; then
 fi
 
 autopoint --force
-ACLOCAL="${ACLOCAL-aclocal} $ACLOCAL_FLAGS" autoreconf --force --install --verbose
+ACLOCAL="${ACLOCAL-aclocal} $ACLOCAL_FLAGS"  AUTOPOINT='intltoolize --automake --copy' autoreconf --force --install --verbose
 
 cd "$olddir"
 test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"

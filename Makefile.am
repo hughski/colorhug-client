@@ -2,6 +2,8 @@ AUTOMAKE_OPTIONS = 1.7
 
 ACLOCAL_AMFLAGS = -I m4
 
+SUBDIRS = po
+
 EXTRA_DIST =						\
 	COPYING						\
 	MAINTAINERS					\
@@ -13,6 +15,7 @@ EXTRA_DIST =						\
 	config.h
 
 MAINTAINERCLEANFILES =					\
+	$(srcdir)/ABOUT-NLS				\
 	$(srcdir)/INSTALL				\
 	$(srcdir)/aclocal.m4				\
 	$(srcdir)/autoscan.log				\
@@ -57,7 +60,8 @@ INCLUDES =						\
 	$(GLIB_CFLAGS)					\
 	$(GUSB_CFLAGS)					\
 	-DG_LOG_DOMAIN=\"Ch\"				\
-	-DG_USB_API_IS_SUBJECT_TO_CHANGE
+	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
+	-DLOCALEDIR=\""$(localedir)"\"
 
 noinst_PROGRAMS =					\
 	colorhug
