@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <locale.h>
+#include <stdlib.h>
 
 #include "ch-client.h"
 
@@ -44,10 +45,10 @@ typedef struct {
 } ChUtilItem;
 
 /**
- * cd_util_item_free:
+ * ch_util_item_free:
  **/
 static void
-cd_util_item_free (ChUtilItem *item)
+ch_util_item_free (ChUtilItem *item)
 {
 	g_free (item->name);
 	g_free (item->description);
@@ -64,10 +65,10 @@ cd_sort_command_name_cb (ChUtilItem **item1, ChUtilItem **item2)
 }
 
 /**
- * cd_util_add:
+ * ch_util_add:
  **/
 static void
-cd_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUtilPrivateCb callback)
+ch_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUtilPrivateCb callback)
 {
 	gchar **names;
 	guint i;
@@ -92,10 +93,10 @@ cd_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUt
 }
 
 /**
- * cd_util_get_descriptions:
+ * ch_util_get_descriptions:
  **/
 static gchar *
-cd_util_get_descriptions (GPtrArray *array)
+ch_util_get_descriptions (GPtrArray *array)
 {
 	guint i;
 	guint j;
@@ -137,10 +138,10 @@ cd_util_get_descriptions (GPtrArray *array)
 }
 
 /**
- * cd_util_run:
+ * ch_util_run:
  **/
 static gboolean
-cd_util_run (ChUtilPrivate *priv, const gchar *command, gchar **values, GError **error)
+ch_util_run (ChUtilPrivate *priv, const gchar *command, gchar **values, GError **error)
 {
 	gboolean ret = FALSE;
 	guint i;
@@ -172,10 +173,87 @@ out:
 }
 
 /**
- * cd_util_get_multiplier:
+ * ch_util_get_color_select:
  **/
 static gboolean
-cd_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
+ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChColorSelect color_select;
+
+	/* get from HW */
+	ret = ch_client_get_color_select (priv->client, &color_select, error);
+	if (!ret)
+		goto out;
+
+	switch (color_select) {
+	case CH_COLOR_SELECT_BLUE:
+		g_print ("Blue\n");
+		break;
+	case CH_COLOR_SELECT_RED:
+		g_print ("Red\n");
+		break;
+	case CH_COLOR_SELECT_GREEN:
+		g_print ("Green\n");
+		break;
+	case CH_COLOR_SELECT_WHITE:
+		g_print ("White\n");
+		break;
+	default:
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid color value %i",
+			     color_select);
+	}
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_color_select:
+ **/
+static gboolean
+ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChColorSelect color_select;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'color'");
+		goto out;
+	}
+	if (g_strcmp0 (values[0], "red") == 0)
+		color_select = CH_COLOR_SELECT_RED;
+	else if (g_strcmp0 (values[0], "blue") == 0)
+		color_select = CH_COLOR_SELECT_BLUE;
+	else if (g_strcmp0 (values[0], "green") == 0)
+		color_select = CH_COLOR_SELECT_GREEN;
+	else if (g_strcmp0 (values[0], "white") == 0)
+		color_select = CH_COLOR_SELECT_WHITE;
+	else {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid input '%s', expect 'red|green|blue|white'",
+			     values[0]);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_color_select (priv->client, color_select, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_multiplier:
+ **/
+static gboolean
+ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	ChFreqScale multiplier;
@@ -187,16 +265,16 @@ cd_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	switch (multiplier) {
 	case CH_FREQ_SCALE_0:
-		g_print ("0%% (disabled)");
+		g_print ("0%% (disabled)\n");
 		break;
 	case CH_FREQ_SCALE_2:
-		g_print ("2%%");
+		g_print ("2%%\n");
 		break;
 	case CH_FREQ_SCALE_20:
-		g_print ("20%%");
+		g_print ("20%%\n");
 		break;
 	case CH_FREQ_SCALE_100:
-		g_print ("100%%");
+		g_print ("100%%\n");
 		break;
 	default:
 		ret = FALSE;
@@ -204,6 +282,302 @@ cd_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 			     "invalid multiplier value %i",
 			     multiplier);
 	}
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_multiplier:
+ **/
+static gboolean
+ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChFreqScale multiplier;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'color'");
+		goto out;
+	}
+	if (g_strcmp0 (values[0], "0") == 0)
+		multiplier = CH_FREQ_SCALE_0;
+	else if (g_strcmp0 (values[0], "2") == 0)
+		multiplier = CH_FREQ_SCALE_2;
+	else if (g_strcmp0 (values[0], "20") == 0)
+		multiplier = CH_FREQ_SCALE_20;
+	else if (g_strcmp0 (values[0], "100") == 0)
+		multiplier = CH_FREQ_SCALE_100;
+	else {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid input '%s', expect '0|2|20|100'",
+			     values[0]);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_multiplier (priv->client, multiplier, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_integral_time:
+ **/
+static gboolean
+ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 integral_time = 0;
+
+	/* get from HW */
+	ret = ch_client_get_integral_time (priv->client, &integral_time, error);
+	if (!ret)
+		goto out;
+	g_print ("%i\n", integral_time);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_integral_time:
+ **/
+static gboolean
+ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 integral_time = 0;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	integral_time = atoi (values[0]);
+
+	/* set to HW */
+	ret = ch_client_set_integral_time (priv->client, integral_time, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_firmware_ver:
+ **/
+static gboolean
+ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 major, minor, micro;
+
+	/* get from HW */
+	ret = ch_client_get_firmware_ver (priv->client,
+					  &major,
+					  &minor,
+					  &micro,
+					  error);
+	if (!ret)
+		goto out;
+	g_print ("%i.%i.%i\n", major, minor, micro);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_firmware_ver:
+ **/
+static gboolean
+ch_util_set_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 major, minor, micro;
+
+	/* parse */
+	if (g_strv_length (values) != 3) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	major = atoi (values[0]);
+	minor = atoi (values[1]);
+	micro = atoi (values[2]);
+
+	/* set to HW */
+	ret = ch_client_set_firmware_ver (priv->client,
+					  major,
+					  minor,
+					  micro,
+					  error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_calibration:
+ **/
+static gboolean
+ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gfloat *calibration = NULL;
+	guint i, j;
+
+	/* get from HW */
+	ret = ch_client_get_calibration (priv->client, &calibration, error);
+	if (!ret)
+		goto out;
+	for (j = 0; j < 3; j++) {
+		g_print ("( ");
+		for (i = 0; i < 3; i++) {
+			g_print ("%.3f\t", calibration[j*3 + i]);
+		}
+		g_print (")\n");
+	}
+out:
+	g_free (calibration);
+	return ret;
+}
+
+/**
+ * ch_util_set_calibration:
+ **/
+static gboolean
+ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gfloat calibration[9];
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 9) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	for (i = 0; i < 9; i++)
+		calibration[i] = atof (values[i]);
+
+	/* set to HW */
+	ret = ch_client_set_calibration (priv->client, calibration, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_serial_number:
+ **/
+static gboolean
+ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint64 serial_number;
+
+	/* get from HW */
+	ret = ch_client_get_serial_number (priv->client, &serial_number, error);
+	if (!ret)
+		goto out;
+	g_print ("%li\n", serial_number);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_serial_number:
+ **/
+static gboolean
+ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint64 serial_number;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	serial_number = atoi (values[0]);
+
+	/* set to HW */
+	ret = ch_client_set_serial_number (priv->client, serial_number, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_write_protect:
+ **/
+static gboolean
+ch_util_get_write_protect (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gboolean write_protect;
+
+	/* get from HW */
+	ret = ch_client_get_write_protect (priv->client, &write_protect, error);
+	if (!ret)
+		goto out;
+	g_print ("%s\n", write_protect ? "1" : "0");
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_write_protect:
+ **/
+static gboolean
+ch_util_set_write_protect (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_write_protect (priv->client, values[0], error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_take_reading:
+ **/
+static gboolean
+ch_util_take_reading (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 take_reading;
+
+	/* get from HW */
+	ret = ch_client_take_reading (priv->client, &take_reading, error);
+	if (!ret)
+		goto out;
+	g_print ("%i\n", take_reading);
 out:
 	return ret;
 }
@@ -232,12 +606,82 @@ main (int argc, char *argv[])
 	priv = g_new0 (ChUtilPrivate, 1);
 
 	/* add commands */
-	priv->cmd_array = g_ptr_array_new_with_free_func ((GDestroyNotify) cd_util_item_free);
-	cd_util_add (priv->cmd_array,
+	priv->cmd_array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_util_item_free);
+	ch_util_add (priv->cmd_array,
+		     "get-color-select",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor color filter"),
+		     ch_util_get_color_select);
+	ch_util_add (priv->cmd_array,
+		     "set-color-select",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor color filter"),
+		     ch_util_set_color_select);
+	ch_util_add (priv->cmd_array,
 		     "get-multiplier",
 		     /* TRANSLATORS: command description */
 		     _("Gets the sensor multiplier"),
-		     cd_util_get_multiplier);
+		     ch_util_get_multiplier);
+	ch_util_add (priv->cmd_array,
+		     "set-multiplier",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor multiplier"),
+		     ch_util_set_multiplier);
+	ch_util_add (priv->cmd_array,
+		     "get-integral-time",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor integral time"),
+		     ch_util_get_integral_time);
+	ch_util_add (priv->cmd_array,
+		     "set-integral-time",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor integral time"),
+		     ch_util_set_integral_time);
+	ch_util_add (priv->cmd_array,
+		     "get-firmware-version",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor firmware version"),
+		     ch_util_get_firmware_ver);
+	ch_util_add (priv->cmd_array,
+		     "set-firmware-version",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor firmware version"),
+		     ch_util_set_firmware_ver);
+	ch_util_add (priv->cmd_array,
+		     "get-calibration",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor calibration matrix"),
+		     ch_util_get_calibration);
+	ch_util_add (priv->cmd_array,
+		     "set-calibration",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor calibration matrix"),
+		     ch_util_set_calibration);
+	ch_util_add (priv->cmd_array,
+		     "get-serial-number",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor serial number"),
+		     ch_util_get_serial_number);
+	ch_util_add (priv->cmd_array,
+		     "set-serial-number",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor serial number"),
+		     ch_util_set_serial_number);
+	ch_util_add (priv->cmd_array,
+		     "get-write-protect",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor wrote protect status"),
+		     ch_util_get_write_protect);
+	ch_util_add (priv->cmd_array,
+		     "set-write-protect",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor write protect status"),
+		     ch_util_set_write_protect);
+	ch_util_add (priv->cmd_array,
+		     "take-reading",
+		     /* TRANSLATORS: command description */
+		     _("Takes a reading"),
+		     ch_util_take_reading);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
@@ -245,7 +689,7 @@ main (int argc, char *argv[])
 
 	/* get a list of the commands */
 	priv->context = g_option_context_new (NULL);
-	cmd_descriptions = cd_util_get_descriptions (priv->cmd_array);
+	cmd_descriptions = ch_util_get_descriptions (priv->cmd_array);
 	g_option_context_set_summary (priv->context, cmd_descriptions);
 
 	/* TRANSLATORS: program name */
@@ -264,7 +708,7 @@ main (int argc, char *argv[])
 	}
 
 	/* run the specified command */
-	ret = cd_util_run (priv, argv[1], (gchar**) &argv[2], &error);
+	ret = ch_util_run (priv, argv[1], (gchar**) &argv[2], &error);
 	if (!ret) {
 		g_print ("%s\n", error->message);
 		g_error_free (error);
