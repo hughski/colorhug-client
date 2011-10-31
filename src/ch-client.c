@@ -78,17 +78,20 @@ ch_client_load (ChClient *client, GError **error)
 	ret = g_usb_device_open (client->priv->device, error);
 	if (!ret)
 		goto out;
+	g_debug ("Opened device");
 	ret = g_usb_device_set_configuration (client->priv->device,
 					      CH_USB_CONFIG,
 					      error);
 	if (!ret)
 		goto out;
+	g_debug ("Set configuration 0x%x", CH_USB_CONFIG);
 	ret = g_usb_device_claim_interface (client->priv->device,
 					    CH_USB_INTERFACE,
 					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
 					    error);
 	if (!ret)
 		goto out;
+	g_debug ("Caimed interface 0x%x for device", CH_USB_INTERFACE);
 out:
 	if (list != NULL)
 		g_object_unref (list);
@@ -144,6 +147,9 @@ ch_client_write_command (ChClient *client,
 	gsize actual_length = -1;
 	guint8 buffer[64];
 
+	/* clear buffer for debugging */
+	memset (buffer, 0xff, sizeof (buffer));
+
 	/* set command */
 	buffer[CH_BUFFER_INPUT_CMD] = cmd;
 	if (buffer_in != NULL) {
@@ -155,7 +161,7 @@ ch_client_write_command (ChClient *client,
 	/* request */
 	ch_client_print_data ("request", buffer, sizeof(buffer));
 	ret = g_usb_device_interrupt_transfer (client->priv->device,
-					       CH_USB_HID_EP_OUT, /* relative to...? */
+					       CH_USB_HID_EP_OUT,
 					       buffer,
 					       sizeof(buffer),
 					       &actual_length,
@@ -167,7 +173,7 @@ ch_client_write_command (ChClient *client,
 
 	/* read */
 	ret = g_usb_device_interrupt_transfer (client->priv->device,
-					       CH_USB_HID_EP_IN, /* relative to...? */
+					       CH_USB_HID_EP_IN,
 					       buffer,
 					       sizeof(buffer),
 					       &actual_length,
@@ -184,17 +190,21 @@ ch_client_write_command (ChClient *client,
 	    actual_length != buffer_out_length + CH_BUFFER_OUTPUT_DATA) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
-			     "Invalid read: retval=%02x cmd=%02x len=%li",
+			     "Invalid read: retval=%02x "
+			     "cmd=%02x (expected 0x%x) "
+			     "len=%li (expected %li)",
 			     buffer[CH_BUFFER_OUTPUT_RETVAL],
 			     buffer[CH_BUFFER_OUTPUT_CMD],
-			     actual_length);
+			     cmd,
+			     actual_length,
+			     buffer_out_length + CH_BUFFER_OUTPUT_DATA);
 		goto out;
 	}
 
 	/* copy */
 	if (buffer_out != NULL) {
-		memcpy (buffer_out + CH_BUFFER_OUTPUT_DATA,
-			buffer,
+		memcpy (buffer_out,
+			buffer + CH_BUFFER_OUTPUT_DATA,
 			buffer_out_length);
 	}
 out:
