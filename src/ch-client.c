@@ -361,7 +361,7 @@ ch_client_set_integral_time (ChClient *client,
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
-				       CH_CMD_SET_COLOR_SELECT,
+				       CH_CMD_SET_INTERGRAL_TIME,
 				       (const guint8 *) &integral_time,	/* buffer in */
 				       2,	/* size of input buffer */
 				       NULL,	/* buffer out */
