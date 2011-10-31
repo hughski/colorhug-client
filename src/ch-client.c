@@ -179,7 +179,7 @@ ch_client_write_command (ChClient *client,
 	ch_client_print_data ("reply", buffer, sizeof(buffer));
 
 	/* parse */
-	if (buffer[CH_BUFFER_OUTPUT_RETVAL] != EXIT_SUCCESS ||
+	if (buffer[CH_BUFFER_OUTPUT_RETVAL] != CH_FATAL_ERROR_NONE ||
 	    buffer[CH_BUFFER_OUTPUT_CMD] != cmd ||
 	    actual_length != buffer_out_length + CH_BUFFER_OUTPUT_DATA) {
 		ret = FALSE;

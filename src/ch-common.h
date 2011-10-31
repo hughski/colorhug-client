@@ -82,6 +82,7 @@ typedef enum {
 
 /* fatal error morse code */
 typedef enum {
+	CH_FATAL_ERROR_NONE,
 	CH_FATAL_ERROR_UNKNOWN_CMD,
 	CH_FATAL_ERROR_WRONG_UNLOCK_CODE,
 	CH_FATAL_ERROR_LAST
