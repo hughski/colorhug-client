@@ -336,7 +336,7 @@ ch_client_get_integral_time (ChClient *client,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
 				       (guint8 *) integral_time,
-				       1,	/* size of output buffer */
+				       2,	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
