@@ -384,7 +384,7 @@ ch_client_get_firmware_ver (ChClient *client,
 			    GError **error)
 {
 	gboolean ret;
-	guint8 buffer[6];
+	guint16 buffer[3];
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (major != NULL, FALSE);
@@ -398,16 +398,16 @@ ch_client_get_firmware_ver (ChClient *client,
 				       CH_CMD_GET_FIRMWARE_VERSION,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       buffer,
+				       (guint8 *) buffer,
 				       sizeof(buffer),	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
 
 	/* parse */
-	*major = buffer[0] * 0xff + buffer[1];
-	*minor = buffer[2] * 0xff + buffer[3];
-	*micro = buffer[4] * 0xff + buffer[5];
+	*major = buffer[0];
+	*minor = buffer[1];
+	*micro = buffer[2];
 out:
 	return ret;
 }
