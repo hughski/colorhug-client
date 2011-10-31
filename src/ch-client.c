@@ -303,7 +303,7 @@ ch_client_set_multiplier (ChClient *client,
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
-				       CH_CMD_SET_COLOR_SELECT,
+				       CH_CMD_SET_MULTIPLIER,
 				       (const guint8 *) &multiplier,	/* buffer in */
 				       1,	/* size of input buffer */
 				       NULL,	/* buffer out */
