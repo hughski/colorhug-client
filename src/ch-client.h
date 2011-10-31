@@ -100,6 +100,13 @@ gboolean	 ch_client_set_serial_number	(ChClient	*client,
 						 guint64	 serial_number,
 						 GError		**error);
 
+gboolean	 ch_client_get_leds		(ChClient	*client,
+						 guint8		*leds,
+						 GError		**error);
+gboolean	 ch_client_set_leds		(ChClient	*client,
+						 guint8		 leds,
+						 GError		**error);
+
 gboolean	 ch_client_write_eeprom		(ChClient	*client,
 						 const gchar	*magic,
 						 GError		**error);

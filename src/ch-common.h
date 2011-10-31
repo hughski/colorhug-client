@@ -41,9 +41,11 @@
 #define	CH_CMD_SET_CALIBRATION			0x0a
 #define	CH_CMD_GET_SERIAL_NUMBER		0x0b
 #define	CH_CMD_SET_SERIAL_NUMBER		0x0c
-#define	CH_CMD_WRITE_EEPROM			0x0d
-#define	CH_CMD_TAKE_READING			0x0e
-#define	CH_CMD_TAKE_READING_XYZ			0x0f
+#define	CH_CMD_GET_LEDS				0x0d
+#define	CH_CMD_SET_LEDS				0x0e
+#define	CH_CMD_WRITE_EEPROM			0x20
+#define	CH_CMD_TAKE_READING			0x21
+#define	CH_CMD_TAKE_READING_XYZ			0x22
 
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"

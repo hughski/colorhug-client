@@ -523,6 +523,64 @@ out:
 }
 
 /**
+ * ch_util_get_leds:
+ **/
+static gboolean
+ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint8 leds = 0xff;
+
+	/* get from HW */
+	ret = ch_client_get_leds (priv->client, &leds, error);
+	if (!ret)
+		goto out;
+	if (leds > 3) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid leds value %i",
+			     leds);
+		goto out;
+	}
+	g_print ("LEDs: %i\n", leds);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_leds:
+ **/
+static gboolean
+ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint8 leds;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect '0-3'");
+		goto out;
+	}
+
+	/* set to HW */
+	leds = atoi (values[0]);
+	if (leds > 3) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid leds value %i",
+			     leds);
+		goto out;
+	}
+	ret = ch_client_set_leds (priv->client, leds, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_write_eeprom:
  **/
 static gboolean
@@ -649,6 +707,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the sensor serial number"),
 		     ch_util_set_serial_number);
+	ch_util_add (priv->cmd_array,
+		     "get-leds",
+		     /* TRANSLATORS: command description */
+		     _("Gets the LED values"),
+		     ch_util_get_leds);
+	ch_util_add (priv->cmd_array,
+		     "set-leds",
+		     /* TRANSLATORS: command description */
+		     _("Sets the LEDs"),
+		     ch_util_set_leds);
 	ch_util_add (priv->cmd_array,
 		     "write-eeprom",
 		     /* TRANSLATORS: command description */

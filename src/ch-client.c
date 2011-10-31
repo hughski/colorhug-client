@@ -584,6 +584,64 @@ out:
 }
 
 /**
+ * ch_client_get_leds:
+ **/
+gboolean
+ch_client_get_leds (ChClient *client,
+		    guint8 *leds,
+		    GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (leds != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_LEDS,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) leds,
+				       1,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_client_set_leds:
+ **/
+gboolean
+ch_client_set_leds (ChClient *client,
+		    guint8 leds,
+		    GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (leds < 0x04, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_LEDS,
+				       (const guint8 *) &leds,	/* buffer in */
+				       1,	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_write_eeprom:
  **/
 gboolean

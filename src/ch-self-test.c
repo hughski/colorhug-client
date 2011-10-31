@@ -36,6 +36,7 @@ ch_test_state_func (void)
 	gboolean ret;
 	GError *error = NULL;
 	guint16 integral_time = 0;
+	guint8 leds;
 
 	/* new device */
 	client = ch_client_new ();
@@ -44,6 +45,19 @@ ch_test_state_func (void)
 	ret = ch_client_load (client, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
+
+	/* verify LEDs */
+	ret = ch_client_set_leds (client,
+				  3,
+				  &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	ret = ch_client_get_leds (client,
+				  &leds,
+				  &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert_cmpint (leds, ==, 3);
 
 	/* verify color select */
 	ret = ch_client_set_color_select (client,
