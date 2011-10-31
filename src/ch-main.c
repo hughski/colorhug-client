@@ -512,9 +512,10 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	serial_number = atoi (values[0]);
+	serial_number = atol (values[0]);
 
 	/* set to HW */
+	g_print ("setting serial number to %li\n", serial_number);
 	ret = ch_client_set_serial_number (priv->client, serial_number, error);
 	if (!ret)
 		goto out;
