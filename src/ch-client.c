@@ -129,6 +129,7 @@ ch_client_strerror (ChFatalError fatal_error)
 	const char *str = NULL;
 	switch (fatal_error) {
 	case CH_FATAL_ERROR_NONE:
+		str = "Success";
 		break;
 	case CH_FATAL_ERROR_UNKNOWN_CMD:
 		str = "Unknown command";
@@ -144,6 +145,81 @@ ch_client_strerror (ChFatalError fatal_error)
 		break;
 	default:
 		str = "Unknown error, please report";
+		break;
+	}
+	return str;
+}
+
+/**
+ * ch_client_command_to_string:
+ **/
+static const gchar *
+ch_client_command_to_string (guint8 cmd)
+{
+	const char *str = NULL;
+	switch (cmd) {
+	case CH_CMD_GET_COLOR_SELECT:
+		str = "get-color-select";
+		break;
+	case CH_CMD_SET_COLOR_SELECT:
+		str = "set-color-select";
+		break;
+	case CH_CMD_GET_MULTIPLIER:
+		str = "get-multiplier";
+		break;
+	case CH_CMD_SET_MULTIPLIER:
+		str = "set-multiplier";
+		break;
+	case CH_CMD_GET_INTERGRAL_TIME:
+		str = "get-integral-time";
+		break;
+	case CH_CMD_SET_INTERGRAL_TIME:
+		str = "set-integral-time";
+		break;
+	case CH_CMD_GET_FIRMWARE_VERSION:
+		str = "get-firmare-version";
+		break;
+	case CH_CMD_SET_FIRMWARE_VERSION:
+		str = "set-firmware-version";
+		break;
+	case CH_CMD_GET_CALIBRATION:
+		str = "get-calibration";
+		break;
+	case CH_CMD_SET_CALIBRATION:
+		str = "set-calibration";
+		break;
+	case CH_CMD_GET_SERIAL_NUMBER:
+		str = "get-serial-number";
+		break;
+	case CH_CMD_SET_SERIAL_NUMBER:
+		str = "set-serial-number";
+		break;
+	case CH_CMD_GET_LEDS:
+		str = "get-leds";
+		break;
+	case CH_CMD_SET_LEDS:
+		str = "set-leds";
+		break;
+	case CH_CMD_GET_DARK_OFFSETS:
+		str = "get-dark-offsets";
+		break;
+	case CH_CMD_SET_DARK_OFFSETS:
+		str = "set-dark-offsets";
+		break;
+	case CH_CMD_WRITE_EEPROM:
+		str = "write-eeprom";
+		break;
+	case CH_CMD_TAKE_READING_RAW:
+		str = "take-readin-raw";
+		break;
+	case CH_CMD_TAKE_READINGS:
+		str = "take-readings";
+		break;
+	case CH_CMD_TAKE_READING_XYZ:
+		str = "take-reading-xyz";
+		break;
+	default:
+		str = "unknown-command";
 		break;
 	}
 	return str;
@@ -221,13 +297,14 @@ ch_client_write_command (ChClient *client,
 		ret = FALSE;
 		fatal_error = buffer[CH_BUFFER_OUTPUT_RETVAL];
 		g_set_error (error, 1, 0,
-			     "Invalid read: retval=%02x [%s] "
-			     "cmd=%02x (expected 0x%x) "
+			     "Invalid read: retval=0x%02x [%s] "
+			     "cmd=0x%02x (expected 0x%x [%s]) "
 			     "len=%li (expected %li)",
 			     fatal_error,
 			     ch_client_strerror (fatal_error),
 			     buffer[CH_BUFFER_OUTPUT_CMD],
 			     cmd,
+			     ch_client_command_to_string (cmd),
 			     actual_length,
 			     buffer_out_length + CH_BUFFER_OUTPUT_DATA);
 		goto out;
