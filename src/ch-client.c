@@ -121,6 +121,35 @@ ch_client_print_data (const gchar *title,
 }
 
 /**
+ * ch_client_strerror:
+ **/
+static const gchar *
+ch_client_strerror (ChFatalError fatal_error)
+{
+	const char *str = NULL;
+	switch (fatal_error) {
+	case CH_FATAL_ERROR_NONE:
+		break;
+	case CH_FATAL_ERROR_UNKNOWN_CMD:
+		str = "Unknown command";
+		break;
+	case CH_FATAL_ERROR_WRONG_UNLOCK_CODE:
+		str = "Wrong unlock code";
+		break;
+	case CH_FATAL_ERROR_NOT_IMPLEMENTED:
+		str = "Not implemented";
+		break;
+	case CH_FATAL_ERROR_UNDERFLOW:
+		str = "Underflow";
+		break;
+	default:
+		str = "Unknown error, please report";
+		break;
+	}
+	return str;
+}
+
+/**
  * ch_client_write_command:
  *
  * @client:		A #ChClient
@@ -145,6 +174,7 @@ ch_client_write_command (ChClient *client,
 {
 	gboolean ret;
 	gsize actual_length = -1;
+	ChFatalError fatal_error;
 	guint8 buffer[64];
 
 	/* clear buffer for debugging */
@@ -189,11 +219,13 @@ ch_client_write_command (ChClient *client,
 	    buffer[CH_BUFFER_OUTPUT_CMD] != cmd ||
 	    actual_length != buffer_out_length + CH_BUFFER_OUTPUT_DATA) {
 		ret = FALSE;
+		fatal_error = buffer[CH_BUFFER_OUTPUT_RETVAL];
 		g_set_error (error, 1, 0,
-			     "Invalid read: retval=%02x "
+			     "Invalid read: retval=%02x [%s] "
 			     "cmd=%02x (expected 0x%x) "
 			     "len=%li (expected %li)",
-			     buffer[CH_BUFFER_OUTPUT_RETVAL],
+			     fatal_error,
+			     ch_client_strerror (fatal_error),
 			     buffer[CH_BUFFER_OUTPUT_CMD],
 			     cmd,
 			     actual_length,
