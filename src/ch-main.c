@@ -582,6 +582,60 @@ out:
 }
 
 /**
+ * ch_util_get_dark_offsets:
+ **/
+static gboolean
+ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 red, green, blue;
+
+	/* get from HW */
+	ret = ch_client_get_dark_offsets (priv->client,
+					  &red,
+					  &green,
+					  &blue,
+					  error);
+	if (!ret)
+		goto out;
+	g_print ("R:%i G:%i B:%i\n", red, green, blue);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_dark_offsets:
+ **/
+static gboolean
+ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 red, green, blue;
+
+	/* parse */
+	if (g_strv_length (values) != 3) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	red = atoi (values[0]);
+	green = atoi (values[1]);
+	blue = atoi (values[2]);
+
+	/* set to HW */
+	ret = ch_client_set_dark_offsets (priv->client,
+					  red,
+					  green,
+					  blue,
+					  error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_write_eeprom:
  **/
 static gboolean
@@ -718,6 +772,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the LEDs"),
 		     ch_util_set_leds);
+	ch_util_add (priv->cmd_array,
+		     "get-dark-offsets",
+		     /* TRANSLATORS: command description */
+		     _("Gets the dark offset values"),
+		     ch_util_get_dark_offsets);
+	ch_util_add (priv->cmd_array,
+		     "set-dark-offsets",
+		     /* TRANSLATORS: command description */
+		     _("Sets the dark offset values"),
+		     ch_util_set_dark_offsets);
 	ch_util_add (priv->cmd_array,
 		     "write-eeprom",
 		     /* TRANSLATORS: command description */

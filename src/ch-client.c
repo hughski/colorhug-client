@@ -681,6 +681,82 @@ out:
 }
 
 /**
+ * ch_client_get_dark_offsets:
+ **/
+gboolean
+ch_client_get_dark_offsets (ChClient *client,
+			    guint16 *red,
+			    guint16 *green,
+			    guint16 *blue,
+			    GError **error)
+{
+	gboolean ret;
+	guint16 buffer[3];
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (red != NULL, FALSE);
+	g_return_val_if_fail (green != NULL, FALSE);
+	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_DARK_OFFSETS,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* parse */
+	*red = buffer[0];
+	*green = buffer[1];
+	*blue = buffer[2];
+out:
+	return ret;
+}
+
+/**
+ * ch_client_set_dark_offsets:
+ **/
+gboolean
+ch_client_set_dark_offsets (ChClient *client,
+			    guint16 red,
+			    guint16 green,
+			    guint16 blue,
+			    GError **error)
+{
+	gboolean ret;
+	guint8 buffer[6];
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	buffer[0] = red & 0x00ff;
+	buffer[1] = (red & 0xff00) / 0xff;
+	buffer[2] = green & 0x00ff;
+	buffer[3] = (green & 0xff00) / 0xff;
+	buffer[4] = blue & 0x00ff;
+	buffer[5] = (blue & 0xff00) / 0xff;
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_DARK_OFFSETS,
+				       buffer,	/* buffer in */
+				       sizeof(buffer),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_take_reading:
  **/
 gboolean

@@ -107,6 +107,17 @@ gboolean	 ch_client_set_leds		(ChClient	*client,
 						 guint8		 leds,
 						 GError		**error);
 
+gboolean	 ch_client_get_dark_offsets	(ChClient	*client,
+						 guint16	*red,
+						 guint16	*green,
+						 guint16	*blue,
+						 GError		**error);
+gboolean	 ch_client_set_dark_offsets	(ChClient	*client,
+						 guint16	 red,
+						 guint16	 green,
+						 guint16	 blue,
+						 GError		**error);
+
 gboolean	 ch_client_write_eeprom		(ChClient	*client,
 						 const gchar	*magic,
 						 GError		**error);

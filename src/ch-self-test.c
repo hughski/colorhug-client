@@ -110,6 +110,9 @@ ch_test_eeprom_func (void)
 	guint16 major = 0;
 	guint16 micro = 0;
 	guint16 minor = 0;
+	guint16 red = 0;
+	guint16 green = 0;
+	guint16 blue = 0;
 	guint64 serial_number = 0;
 	gfloat *calibration = NULL;
 	gfloat *calibration_tmp = NULL;
@@ -159,6 +162,23 @@ ch_test_eeprom_func (void)
 	g_assert_cmpint (major, ==, 1);
 	g_assert_cmpint (minor, ==, 2);
 	g_assert_cmpint (micro, ==, 3);
+
+	/* verify dark offsets */
+	ret = ch_client_set_dark_offsets (client,
+					  12, 34, 56,
+					  &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	ret = ch_client_get_dark_offsets (client,
+					  &red,
+					  &green,
+					  &blue,
+					  &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert_cmpint (red, ==, 12);
+	g_assert_cmpint (green, ==, 34);
+	g_assert_cmpint (blue, ==, 56);
 
 	/* verify calibration */
 	calibration = g_new0 (gfloat, 9);
