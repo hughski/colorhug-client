@@ -757,12 +757,12 @@ out:
 }
 
 /**
- * ch_client_take_reading:
+ * ch_client_take_reading_raw:
  **/
 gboolean
-ch_client_take_reading (ChClient *client,
-			guint16 *take_reading,
-			GError **error)
+ch_client_take_reading_raw (ChClient *client,
+			    guint16 *take_reading,
+			    GError **error)
 {
 	gboolean ret;
 
@@ -773,14 +773,53 @@ ch_client_take_reading (ChClient *client,
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
-				       CH_CMD_TAKE_READING,
+				       CH_CMD_TAKE_READING_RAW,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       (guint8 *) &take_reading,
+				       (guint8 *) take_reading,
 				       2,	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_client_take_readings:
+ **/
+gboolean
+ch_client_take_readings (ChClient *client,
+			 guint16 *red,
+			 guint16 *green,
+			 guint16 *blue,
+			 GError **error)
+{
+	gboolean ret;
+	guint16 buffer[3];
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (red != NULL, FALSE);
+	g_return_val_if_fail (green != NULL, FALSE);
+	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_TAKE_READINGS,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* parse */
+	*red = buffer[0];
+	*green = buffer[1];
+	*blue = buffer[2];
 out:
 	return ret;
 }

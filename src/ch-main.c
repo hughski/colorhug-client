@@ -660,19 +660,41 @@ out:
 }
 
 /**
- * ch_util_take_reading:
+ * ch_util_take_reading_raw:
  **/
 static gboolean
-ch_util_take_reading (ChUtilPrivate *priv, gchar **values, GError **error)
+ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	guint16 take_reading;
 
 	/* get from HW */
-	ret = ch_client_take_reading (priv->client, &take_reading, error);
+	ret = ch_client_take_reading_raw (priv->client, &take_reading, error);
 	if (!ret)
 		goto out;
 	g_print ("%i\n", take_reading);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_take_readings:
+ **/
+static gboolean
+ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 red, green, blue;
+
+	/* get from HW */
+	ret = ch_client_take_readings (priv->client,
+				       &red,
+				       &green,
+				       &blue,
+				       error);
+	if (!ret)
+		goto out;
+	g_print ("R:%i G:%i B:%i\n", red, green, blue);
 out:
 	return ret;
 }
@@ -788,10 +810,15 @@ main (int argc, char *argv[])
 		     _("Writes the EEPROM with updated values"),
 		     ch_util_write_eeprom);
 	ch_util_add (priv->cmd_array,
-		     "take-reading",
+		     "take-reading-raw",
 		     /* TRANSLATORS: command description */
 		     _("Takes a reading"),
-		     ch_util_take_reading);
+		     ch_util_take_reading_raw);
+	ch_util_add (priv->cmd_array,
+		     "take-readings",
+		     /* TRANSLATORS: command description */
+		     _("Takes all color readings"),
+		     ch_util_take_readings);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

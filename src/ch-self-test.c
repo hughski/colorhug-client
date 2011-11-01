@@ -258,9 +258,9 @@ ch_test_reading_func (void)
 	g_assert (ret);
 
 	/* take a reading from the hardware */
-	ret = ch_client_take_reading (client,
-				      &take_reading,
-				      &error);
+	ret = ch_client_take_reading_raw (client,
+					  &take_reading,
+					  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (take_reading, ==, 12345678);

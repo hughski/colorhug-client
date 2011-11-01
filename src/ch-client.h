@@ -122,8 +122,14 @@ gboolean	 ch_client_write_eeprom		(ChClient	*client,
 						 const gchar	*magic,
 						 GError		**error);
 
-gboolean	 ch_client_take_reading		(ChClient	*client,
+gboolean	 ch_client_take_reading_raw	(ChClient	*client,
 						 guint16	*take_reading,
+						 GError		**error);
+
+gboolean	 ch_client_take_readings	(ChClient	*client,
+						 guint16	*red,
+						 guint16	*green,
+						 guint16	*blue,
 						 GError		**error);
 
 G_END_DECLS

@@ -50,8 +50,9 @@
 #define	CH_CMD_GET_DARK_OFFSETS			0x0f
 #define	CH_CMD_SET_DARK_OFFSETS			0x10
 #define	CH_CMD_WRITE_EEPROM			0x20
-#define	CH_CMD_TAKE_READING			0x21
-#define	CH_CMD_TAKE_READING_XYZ			0x22
+#define	CH_CMD_TAKE_READING_RAW			0x21
+#define	CH_CMD_TAKE_READINGS			0x22
+#define	CH_CMD_TAKE_READING_XYZ			0x23
 
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
