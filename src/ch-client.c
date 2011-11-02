@@ -890,6 +890,46 @@ out:
 }
 
 /**
+ * ch_client_take_readings_xyz:
+ **/
+gboolean
+ch_client_take_readings_xyz (ChClient *client,
+			     gfloat *red,
+			     gfloat *green,
+			     gfloat *blue,
+			     GError **error)
+{
+	gboolean ret;
+	gfloat buffer[3];
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (red != NULL, FALSE);
+	g_return_val_if_fail (green != NULL, FALSE);
+	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_TAKE_READING_XYZ,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* this is only possible as the PIC has the same floating point
+	 * layout as i386 */
+	*red = buffer[0];
+	*green = buffer[1];
+	*blue = buffer[2];
+out:
+	return ret;
+}
+
+/**
  * ch_client_class_init:
  **/
 static void

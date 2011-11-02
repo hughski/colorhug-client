@@ -126,6 +126,11 @@ gboolean	 ch_client_take_readings	(ChClient	*client,
 						 guint16	*green,
 						 guint16	*blue,
 						 GError		**error);
+gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
+						 gfloat		*red,
+						 gfloat		*green,
+						 gfloat		*blue,
+						 GError		**error);
 
 G_END_DECLS
 
