@@ -74,6 +74,13 @@
 #define CH_COLOR_OFFSET_GREEN			0x01
 #define CH_COLOR_OFFSET_BLUE			0x02
 
+/* approximate sample times */
+#define CH_INTEGRAL_TIME_VALUE_5MS		0x0300
+#define CH_INTEGRAL_TIME_VALUE_50MS		0x1f00
+#define CH_INTEGRAL_TIME_VALUE_100MS		0x3a00
+#define CH_INTEGRAL_TIME_VALUE_200MS		0x7500
+#define CH_INTEGRAL_TIME_VALUE_MAX		0xffff
+
 /* which color to select */
 typedef enum {
 	CH_COLOR_SELECT_RED,

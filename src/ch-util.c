@@ -65,10 +65,10 @@ ch_util_activate_cb (GApplication *application, ChUtilPrivate *priv)
 }
 
 /**
- * cd_util_refresh:
+ * ch_util_refresh:
  **/
 static void
-cd_util_refresh (ChUtilPrivate *priv)
+ch_util_refresh (ChUtilPrivate *priv)
 {
 	ChColorSelect color_select = 0;
 	ChFreqScale multiplier = 0;
@@ -79,6 +79,7 @@ cd_util_refresh (ChUtilPrivate *priv)
 	gfloat *calibration = NULL;
 	GtkAdjustment *adj;
 	GtkWidget *widget;
+	guint16 integral_time = 0;
 	guint16 major, minor, micro;
 	guint16 red, green, blue;
 	guint64 serial_number;
@@ -215,6 +216,41 @@ cd_util_refresh (ChUtilPrivate *priv)
 			g_free (label);
 		}
 	}
+
+	/* get integral time */
+	ret = ch_client_get_integral_time (priv->client,
+					   &integral_time,
+					   &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to get integral time"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+	switch (integral_time) {
+	case CH_INTEGRAL_TIME_VALUE_5MS:
+		i = 0;
+		break;
+	case CH_INTEGRAL_TIME_VALUE_50MS:
+		i = 1;
+		break;
+	case CH_INTEGRAL_TIME_VALUE_100MS:
+		i = 2;
+		break;
+	case CH_INTEGRAL_TIME_VALUE_200MS:
+		i = 3;
+		break;
+	case CH_INTEGRAL_TIME_VALUE_MAX:
+		i = 4;
+		break;
+	default:
+		g_debug ("Not found time %i, setting to max", integral_time);
+		i = 4;
+		break;
+	}
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "comboboxtext_integral"));
+	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 out:
 	g_free (calibration);
 }
@@ -225,7 +261,7 @@ out:
 static void
 ch_util_refresh_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
-	cd_util_refresh (priv);
+	ch_util_refresh (priv);
 }
 
 /**
@@ -259,15 +295,18 @@ ch_util_write_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 }
 
 /**
- * ch_util_measure_button_cb:
+ * ch_util_measure_raw:
  **/
 static void
-ch_util_measure_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
+ch_util_measure_raw (ChUtilPrivate *priv)
 {
 	gboolean ret;
-	guint16 red, green, blue;
-	GError *error = NULL;
 	gchar *tmp;
+	GError *error = NULL;
+	gfloat red_f, green_f, blue_f;
+	GtkWidget *widget;
+	guint16 red, green, blue;
+	GTimer *timer = NULL;
 
 	/* turn on sensor */
 	ret = ch_client_set_multiplier (priv->client,
@@ -282,6 +321,7 @@ ch_util_measure_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	}
 
 	/* get from HW */
+	timer = g_timer_new ();
 	ret = ch_client_take_readings (priv->client,
 				       &red,
 				       &green,
@@ -295,20 +335,115 @@ ch_util_measure_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 		goto out;
 	}
 
-	tmp = g_strdup_printf ("%i", red);
+	/* convert to floating point */
+	red_f = red / (gfloat) 0xffff;
+	green_f = green / (gfloat) 0xffff;
+	blue_f = blue / (gfloat) 0xffff;
+
+	/* update profile label */
+	tmp = g_strdup_printf ("%.2fms", g_timer_elapsed (timer, NULL) * 1000);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_profile"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+
+	/* update sample */
+	tmp = g_strdup_printf ("%.4f", red_f);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_x"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%i", green);
+	tmp = g_strdup_printf ("%.4f", green_f);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_y"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%i", blue);
+	tmp = g_strdup_printf ("%.4f", blue_f);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_z"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
 out:
-	return;
+	if (timer != NULL)
+		g_timer_destroy (timer);
+}
+
+/**
+ * ch_util_measure_device:
+ **/
+static void
+ch_util_measure_device (ChUtilPrivate *priv)
+{
+	gboolean ret;
+	gchar *tmp;
+	GError *error = NULL;
+	gfloat red, green, blue;
+	GtkWidget *widget;
+	GTimer *timer = NULL;
+
+	/* turn on sensor */
+	ret = ch_client_set_multiplier (priv->client,
+					CH_FREQ_SCALE_100,
+					&error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to turn on sensor"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get from HW */
+	timer = g_timer_new ();
+	ret = ch_client_take_readings_xyz (priv->client,
+					   &red,
+					   &green,
+					   &blue,
+					   &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to take readings"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* update profile label */
+	tmp = g_strdup_printf ("%.2fms", g_timer_elapsed (timer, NULL) * 1000);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_profile"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+
+	/* update sample */
+	tmp = g_strdup_printf ("%.4f", red);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_x"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+	tmp = g_strdup_printf ("%.4f", green);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_y"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+	tmp = g_strdup_printf ("%.4f", blue);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_z"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+out:
+	if (timer != NULL)
+		g_timer_destroy (timer);
+}
+
+/**
+ * ch_util_measure_button_cb:
+ **/
+static void
+ch_util_measure_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
+{
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "radiobutton_mode_raw"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		ch_util_measure_raw (priv);
+		return;
+	}
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "radiobutton_mode_device"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		ch_util_measure_device (priv);
+		return;
+	}
 }
 
 /**
@@ -372,7 +507,7 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	}
 out:
 	/* refresh GUI */
-	cd_util_refresh (priv);
+	ch_util_refresh (priv);
 }
 
 /**
@@ -406,6 +541,9 @@ ch_util_calibrate_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
+
+	/* refresh */
+	ch_util_refresh (priv);
 out:
 	return;
 }
@@ -525,6 +663,55 @@ ch_util_multiplier_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 }
 
 /**
+ * ch_util_integral_changed_cb:
+ **/
+static void
+ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
+{
+	gint idx;
+	guint16 integral_time = 0;
+	gboolean ret;
+	GError *error = NULL;
+
+	idx = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+	switch (idx) {
+	case 0:
+		/* 5ms */
+		integral_time = CH_INTEGRAL_TIME_VALUE_5MS;
+		break;
+	case 1:
+		/* 50ms */
+		integral_time = CH_INTEGRAL_TIME_VALUE_50MS;
+		break;
+	case 2:
+		/* 100ms */
+		integral_time = CH_INTEGRAL_TIME_VALUE_100MS;
+		break;
+	case 3:
+		/* 200ms */
+		integral_time = CH_INTEGRAL_TIME_VALUE_200MS;
+		break;
+	case 4:
+		/* maximum */
+		integral_time = CH_INTEGRAL_TIME_VALUE_MAX;
+		break;
+	default:
+		g_assert_not_reached ();
+	}
+
+	/* set to HW */
+	ret = ch_client_set_integral_time (priv->client,
+					   integral_time,
+					   &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to set integral time"),
+				      error->message);
+		g_error_free (error);
+	}
+}
+
+/**
  * ch_util_startup_cb:
  **/
 static void
@@ -594,6 +781,9 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "comboboxtext_multiplier"));
 	g_signal_connect (widget, "changed",
 			  G_CALLBACK (ch_util_multiplier_changed_cb), priv);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "comboboxtext_integral"));
+	g_signal_connect (widget, "changed",
+			  G_CALLBACK (ch_util_integral_changed_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "checkbutton_led0"));
 	g_signal_connect (widget, "toggled",
 			  G_CALLBACK (ch_util_checkbutton0_toggled_cb), priv);
@@ -605,7 +795,7 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	gtk_widget_show (main_window);
 
 	/* update UI */
-	cd_util_refresh (priv);
+	ch_util_refresh (priv);
 
 	/* post refresh connects */
 	adj = GTK_ADJUSTMENT (gtk_builder_get_object (priv->builder, "adjustment_serial"));
