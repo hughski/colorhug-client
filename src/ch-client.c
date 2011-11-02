@@ -579,7 +579,6 @@ ch_client_get_calibration (ChClient *client,
 {
 	gboolean ret;
 	guint8 buffer[36];
-	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
@@ -597,10 +596,10 @@ ch_client_get_calibration (ChClient *client,
 	if (!ret)
 		goto out;
 
-	/* parse */
+	/* this is only possible as the PIC has the same floating point
+	 * layout as i386 */
 	*calibration = g_new0 (gfloat, 9);
-	for (i = 0; i < 9; i++)
-		*calibration[i] = ((gfloat *)buffer)[i];
+	memcpy (*calibration, buffer, 36);
 out:
 	return ret;
 }
@@ -610,27 +609,22 @@ out:
  **/
 gboolean
 ch_client_set_calibration (ChClient *client,
-			   gfloat *calibration,
+			   const gfloat *calibration,
 			   GError **error)
 {
 	gboolean ret;
-	guint32 *tmp;
 	guint8 buffer[36];
-	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
+	/* this is only possible as the PIC has the same floating point
+	 * layout as i386 */
+	memcpy (buffer, calibration, 36);
+
 	/* hit hardware */
-	for (i = 0; i < 9; i++) {
-		tmp = (guint32 *) &calibration[i];
-		buffer[i*4+0] = (*tmp << 24) & 0xff;
-		buffer[i*4+1] = (*tmp << 16) & 0xff;
-		buffer[i*4+2] = (*tmp << 8) & 0xff;
-		buffer[i*4+3] = (*tmp << 0) & 0xff;
-	}
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_CALIBRATION,
 				       buffer,	/* buffer in */

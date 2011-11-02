@@ -90,7 +90,7 @@ gboolean	 ch_client_get_calibration	(ChClient	*client,
 						 gfloat		**calibration,
 						 GError		**error);
 gboolean	 ch_client_set_calibration	(ChClient	*client,
-						 gfloat		*calibration,
+						 const gfloat	*calibration,
 						 GError		**error);
 
 gboolean	 ch_client_get_serial_number	(ChClient	*client,
