@@ -532,44 +532,6 @@ out:
 }
 
 /**
- * ch_client_set_firmware_ver:
- **/
-gboolean
-ch_client_set_firmware_ver (ChClient *client,
-			    guint16 major,
-			    guint16 minor,
-			    guint16 micro,
-			    GError **error)
-{
-	gboolean ret;
-	guint8 buffer[6];
-
-	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
-	g_return_val_if_fail (major > 0, FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	g_return_val_if_fail (client->priv->device != NULL, FALSE);
-
-	/* hit hardware */
-	buffer[0] = major & 0x00ff;
-	buffer[1] = (major & 0xff00) / 0xff;
-	buffer[2] = minor & 0x00ff;
-	buffer[3] = (minor & 0xff00) / 0xff;
-	buffer[4] = micro & 0x00ff;
-	buffer[5] = (micro & 0xff00) / 0xff;
-	ret = ch_client_write_command (client,
-				       CH_CMD_SET_FIRMWARE_VERSION,
-				       buffer,	/* buffer in */
-				       sizeof(buffer),	/* size of input buffer */
-				       NULL,
-				       0,	/* size of output buffer */
-				       error);
-	if (!ret)
-		goto out;
-out:
-	return ret;
-}
-
-/**
  * ch_client_get_calibration:
  **/
 gboolean

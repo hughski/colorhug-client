@@ -393,38 +393,6 @@ out:
 }
 
 /**
- * ch_util_set_firmware_ver:
- **/
-static gboolean
-ch_util_set_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
-{
-	gboolean ret;
-	guint16 major, minor, micro;
-
-	/* parse */
-	if (g_strv_length (values) != 3) {
-		ret = FALSE;
-		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'value'");
-		goto out;
-	}
-	major = atoi (values[0]);
-	minor = atoi (values[1]);
-	micro = atoi (values[2]);
-
-	/* set to HW */
-	ret = ch_client_set_firmware_ver (priv->client,
-					  major,
-					  minor,
-					  micro,
-					  error);
-	if (!ret)
-		goto out;
-out:
-	return ret;
-}
-
-/**
  * ch_util_get_calibration:
  **/
 static gboolean
@@ -759,11 +727,6 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Gets the sensor firmware version"),
 		     ch_util_get_firmware_ver);
-	ch_util_add (priv->cmd_array,
-		     "set-firmware-version",
-		     /* TRANSLATORS: command description */
-		     _("Sets the sensor firmware version"),
-		     ch_util_set_firmware_ver);
 	ch_util_add (priv->cmd_array,
 		     "get-calibration",
 		     /* TRANSLATORS: command description */

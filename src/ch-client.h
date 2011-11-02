@@ -80,11 +80,6 @@ gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
 						 guint16	*minor,
 						 guint16	*micro,
 						 GError		**error);
-gboolean	 ch_client_set_firmware_ver	(ChClient	*client,
-						 guint16	 major,
-						 guint16	 minor,
-						 guint16	 micro,
-						 GError		**error);
 
 gboolean	 ch_client_get_calibration	(ChClient	*client,
 						 gfloat		**calibration,
