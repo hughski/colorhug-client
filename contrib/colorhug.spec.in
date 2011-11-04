@@ -1,0 +1,57 @@
+%define alphatag                #ALPHATAG#
+
+Summary:   Tools for the Hughski Colorimeter
+Name:      colorhug
+Version:   #VERSION#
+Release:   0.#BUILD#%{?alphatag}%{?dist}
+License:   GPLv2+ and LGPLv2+
+URL:       http://www.hughski.co.uk
+Source0:   http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.tar.xz
+
+BuildRequires: gettext
+BuildRequires: glib2-devel
+BuildRequires: gtk2-devel
+BuildRequires: intltool
+BuildRequires: libgusb-devel
+BuildRequires: colord-devel
+#BuildRequires: sqlite-devel
+
+%description
+The Hughski ColorHug Colorimeter is a low cost open-source hardware
+sensor used to calibrate screens.
+
+This package includes the client tools which allows the user to upgrade
+the firmware on the sensor or to access the sensor from command line
+scripts.
+
+%prep
+%setup -q
+
+%build
+%configure \
+        --disable-static \
+        --disable-rpath \
+        --disable-dependency-tracking
+
+make %{?_smp_mflags}
+
+%install
+make install DESTDIR=$RPM_BUILD_ROOT
+
+%find_lang %{name}
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%files -f %{name}.lang
+%defattr(-,root,root,-)
+%doc README AUTHORS NEWS COPYING
+%dir %{_datadir}/colorhug
+%{_datadir}/colorhug
+%{_libexecdir}/colorhug
+%{_libexecdir}/colorhug-gui
+
+%changelog
+* #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
+- Update from git

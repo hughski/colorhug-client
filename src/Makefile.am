@@ -17,7 +17,7 @@ libchshared_a_SOURCES =					\
 libchshared_a_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
-noinst_PROGRAMS =					\
+libexec_PROGRAMS =					\
 	colorhug					\
 	colorhug-gui
 
