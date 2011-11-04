@@ -179,9 +179,6 @@ ch_client_command_to_string (guint8 cmd)
 	case CH_CMD_GET_FIRMWARE_VERSION:
 		str = "get-firmare-version";
 		break;
-	case CH_CMD_SET_FIRMWARE_VERSION:
-		str = "set-firmware-version";
-		break;
 	case CH_CMD_GET_CALIBRATION:
 		str = "get-calibration";
 		break;
