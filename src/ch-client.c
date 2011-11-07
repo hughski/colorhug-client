@@ -248,7 +248,7 @@ ch_client_write_command (ChClient *client,
 	gboolean ret;
 	gsize actual_length = -1;
 	ChFatalError fatal_error;
-	guint8 buffer[64];
+	guint8 buffer[CH_USB_HID_EP_SIZE];
 
 	/* clear buffer for debugging */
 	memset (buffer, 0xff, sizeof (buffer));
