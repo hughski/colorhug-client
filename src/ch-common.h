@@ -19,12 +19,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef COLOR_HUG_H
-#define COLOR_HUG_H
+#ifndef CH_COMMON_H
+#define CH_COMMON_H
 
 /* device constants */
 #define	CH_USB_VID				0x04d8
-#define	CH_USB_PID				0x0001 /* ...waiting for PID from Microchip */
+#define	CH_USB_PID				0xf8da
 #define	CH_USB_CONFIG				0x0001
 #define	CH_USB_INTERFACE			0x0000
 #define	CH_USB_HID_EP				0x0001
