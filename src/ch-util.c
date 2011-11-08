@@ -34,6 +34,9 @@ typedef struct {
 	GtkApplication	*application;
 	ChClient	*client;
 	guint8		 leds_old;
+	gfloat		 red_max;
+	gfloat		 green_max;
+	gfloat		 blue_max;
 } ChUtilPrivate;
 
 /**
@@ -349,6 +352,25 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_profile"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
+
+	/* update maximum values */
+	if (red_f > priv->red_max)
+		priv->red_max = red_f;
+	if (green_f > priv->green_max)
+		priv->green_max = green_f;
+	if (blue_f > priv->blue_max)
+		priv->blue_max = blue_f;
+
+	/* update sliders */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_red"));
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
+				       red_f / priv->red_max);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_green"));
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
+				       green_f / priv->green_max);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_blue"));
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
+				       blue_f / priv->blue_max);
 
 	/* update sample */
 	tmp = g_strdup_printf ("%.4f", red_f);
@@ -667,6 +689,21 @@ ch_util_multiplier_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 }
 
 /**
+ * ch_util_mode_changed_cb:
+ **/
+static void
+ch_util_mode_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
+{
+	gboolean is_raw;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "radiobutton_mode_raw"));
+	is_raw = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "grid_raw_bars"));
+	gtk_widget_set_visible (widget, is_raw);
+}
+
+/**
  * ch_util_integral_changed_cb:
  **/
 static void
@@ -795,6 +832,13 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	g_signal_connect (widget, "toggled",
 			  G_CALLBACK (ch_util_checkbutton1_toggled_cb), priv);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "radiobutton_mode_raw"));
+	g_signal_connect (widget, "toggled",
+			  G_CALLBACK (ch_util_mode_changed_cb), priv);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "radiobutton_mode_device"));
+	g_signal_connect (widget, "toggled",
+			  G_CALLBACK (ch_util_mode_changed_cb), priv);
+
 	/* show main UI */
 	gtk_widget_show (main_window);
 
@@ -839,6 +883,9 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChUtilPrivate, 1);
+	priv->red_max = 0.0f;
+	priv->green_max = 0.0f;
+	priv->blue_max = 0.0f;
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("org.hughsie.ColorHug.Util", 0);
