@@ -82,7 +82,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	guint16 integral_time = 0;
 	guint16 major, minor, micro;
 	guint16 red, green, blue;
-	guint64 serial_number;
+	guint64 serial_number = 0;
 	guint8 leds;
 	guint i, j;
 
@@ -167,6 +167,10 @@ ch_util_refresh (ChUtilPrivate *priv)
 				      error->message);
 		g_error_free (error);
 		goto out;
+	}
+	if (serial_number == 0xffffffff) {
+		g_warning ("no valid serial number");
+		serial_number = 0;
 	}
 	adj = GTK_ADJUSTMENT (gtk_builder_get_object (priv->builder, "adjustment_serial"));
 	gtk_adjustment_set_value (adj, serial_number);
@@ -583,7 +587,7 @@ ch_util_adjustment_value_changed_cb (GtkAdjustment *adjustment, ChUtilPrivate *p
 	GError *error = NULL;
 
 	value = gtk_adjustment_get_value (adjustment);
-	ret = ch_client_set_serial_number (priv->client, value, &error);
+	ret = ch_client_set_serial_number (priv->client, (guint64) value, &error);
 	if (!ret) {
 		ch_util_error_dialog (priv,
 				      _("Failed to set serial number"),
