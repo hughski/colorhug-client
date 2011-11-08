@@ -143,6 +143,9 @@ ch_client_strerror (ChFatalError fatal_error)
 	case CH_FATAL_ERROR_UNDERFLOW:
 		str = "Underflow";
 		break;
+	case CH_FATAL_ERROR_NO_SERIAL:
+		str = "No serial";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
