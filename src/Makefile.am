@@ -3,6 +3,7 @@ INCLUDES =						\
 	$(GTK_CFLAGS)					\
 	$(GUSB_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
+	$(LCMS_CFLAGS)					\
 	-DG_LOG_DOMAIN=\"Ch\"				\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
@@ -26,6 +27,7 @@ colorhug_SOURCES =					\
 
 colorhug_LDADD =					\
 	libchshared.a					\
+	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)
 

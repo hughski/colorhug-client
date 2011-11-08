@@ -25,6 +25,7 @@
 #include <gio/gio.h>
 #include <locale.h>
 #include <stdlib.h>
+#include <lcms2.h>
 
 #include "ch-client.h"
 
@@ -393,6 +394,22 @@ out:
 }
 
 /**
+ * ch_util_show_calibration:
+ **/
+static void
+ch_util_show_calibration (const gfloat *calibration)
+{
+	guint i, j;
+	for (j = 0; j < 3; j++) {
+		g_print ("( ");
+		for (i = 0; i < 3; i++) {
+			g_print ("%.2f\t", calibration[j*3 + i]);
+		}
+		g_print (")\n");
+	}
+}
+
+/**
  * ch_util_get_calibration:
  **/
 static gboolean
@@ -400,19 +417,12 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gfloat *calibration = NULL;
-	guint i, j;
 
 	/* get from HW */
 	ret = ch_client_get_calibration (priv->client, &calibration, error);
 	if (!ret)
 		goto out;
-	for (j = 0; j < 3; j++) {
-		g_print ("( ");
-		for (i = 0; i < 3; i++) {
-			g_print ("%.3f\t", calibration[j*3 + i]);
-		}
-		g_print (")\n");
-	}
+	ch_util_show_calibration (calibration);
 out:
 	g_free (calibration);
 	return ret;
@@ -442,7 +452,77 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	ret = ch_client_set_calibration (priv->client, calibration, error);
 	if (!ret)
 		goto out;
+	ch_util_show_calibration (calibration);
 out:
+	return ret;
+}
+
+/**
+ * ch_util_set_calibration_ccmx:
+ **/
+static gboolean
+ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	cmsHANDLE ccmx = NULL;
+	const gchar *sheet_type;
+	gboolean ret;
+	gchar *ccmx_data = NULL;
+	gfloat calibration[9];
+	gsize ccmx_size;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'filename'");
+		goto out;
+	}
+
+	/* load file */
+	ret = g_file_get_contents (values[0],
+				   &ccmx_data,
+				   &ccmx_size,
+				   error);
+	if (!ret)
+		goto out;
+	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
+	if (ccmx == NULL) {
+		ret = FALSE;
+		g_set_error (error, 1, 0, "Cannot open %s", values[0]);
+		goto out;
+	}
+
+	/* select correct sheet */
+	sheet_type = cmsIT8GetSheetType (ccmx);
+	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
+		ret = FALSE;
+		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
+			     values[0], sheet_type);
+		goto out;
+	}
+
+	/* get the values */
+	calibration[0] = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
+	calibration[1] = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
+	calibration[2] = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
+	calibration[3] = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
+	calibration[4] = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
+	calibration[5] = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
+	calibration[6] = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
+	calibration[7] = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
+	calibration[8] = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
+
+	/* set to HW */
+	ret = ch_client_set_calibration (priv->client,
+					 calibration,
+					 error);
+	if (!ret)
+		goto out;
+	ch_util_show_calibration (calibration);
+out:
+	g_free (ccmx_data);
+	if (ccmx != NULL)
+		cmsIT8Free (ccmx);
 	return ret;
 }
 
@@ -759,6 +839,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the sensor calibration matrix"),
 		     ch_util_set_calibration);
+	ch_util_add (priv->cmd_array,
+		     "set-calibration-ccmx",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor calibration matrix from a CCMX file"),
+		     ch_util_set_calibration_ccmx);
 	ch_util_add (priv->cmd_array,
 		     "get-serial-number",
 		     /* TRANSLATORS: command description */

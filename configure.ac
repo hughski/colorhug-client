@@ -91,6 +91,7 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28.0 gobject-2.0 gio-2.0 >= 2.25.9)
 PKG_CHECK_MODULES(GUSB, gusb >= 0.1.1)
 PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.0)
 PKG_CHECK_MODULES(COLORD, colord >= 0.1.12)
+PKG_CHECK_MODULES(LCMS, lcms2)
 
 dnl ---------------------------------------------------------------------------
 dnl - Makefiles, etc.
