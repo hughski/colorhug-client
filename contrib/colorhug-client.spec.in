@@ -1,7 +1,7 @@
 %define alphatag                #ALPHATAG#
 
 Summary:   Tools for the Hughski Colorimeter
-Name:      colorhug
+Name:      colorhug-client
 Version:   #VERSION#
 Release:   0.#BUILD#%{?alphatag}%{?dist}
 License:   GPLv2+ and LGPLv2+
@@ -12,10 +12,9 @@ BuildRequires: gettext
 BuildRequires: glib2-devel
 BuildRequires: gtk2-devel
 BuildRequires: intltool
-BuildRequires: libgusb-devel
-BuildRequires: colord-devel
+BuildRequires: libgusb-devel >= 0.1.2
+BuildRequires: colord-devel >= 0.1.15
 BuildRequires: lcms2-devel
-#BuildRequires: sqlite-devel
 
 %description
 The Hughski ColorHug Colorimeter is a low cost open-source hardware
@@ -41,15 +40,11 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang %{name}
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README AUTHORS NEWS COPYING
-%dir %{_datadir}/colorhug
-%{_datadir}/colorhug
+%dir %{_datadir}/colorhug-client
+%{_datadir}/colorhug-client
 %{_libexecdir}/colorhug
 %{_libexecdir}/colorhug-gui
 

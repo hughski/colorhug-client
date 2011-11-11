@@ -1,7 +1,7 @@
 # Copyright (C) 2011 Richard Hughes <richard@hughsie.com>
 AC_PREREQ(2.63)
 
-AC_INIT([colorhug],[0.1.0],[http://hughsie.com])
+AC_INIT([colorhug-client],[0.1.0],[http://www.hughski.com/])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar])
 AC_CONFIG_HEADERS([config.h])
@@ -88,9 +88,9 @@ dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28.0 gobject-2.0 gio-2.0 >= 2.25.9)
-PKG_CHECK_MODULES(GUSB, gusb >= 0.1.1)
+PKG_CHECK_MODULES(GUSB, gusb >= 0.1.2)
 PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.0)
-PKG_CHECK_MODULES(COLORD, colord >= 0.1.12)
+PKG_CHECK_MODULES(COLORD, colord >= 0.1.15)
 PKG_CHECK_MODULES(LCMS, lcms2)
 
 dnl ---------------------------------------------------------------------------
