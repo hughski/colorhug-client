@@ -147,11 +147,6 @@ ch_test_eeprom_func (void)
 	g_assert_cmpint (serial_number, ==, 12345678);
 
 	/* verify firmware */
-	ret = ch_client_set_firmware_ver (client,
-					  1, 2, 3,
-					  &error);
-	g_assert_no_error (error);
-	g_assert (ret);
 	ret = ch_client_get_firmware_ver (client,
 					  &major,
 					  &minor,
@@ -159,8 +154,8 @@ ch_test_eeprom_func (void)
 					  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpint (major, ==, 1);
-	g_assert_cmpint (minor, ==, 2);
+	g_assert_cmpint (major, ==, 0);
+	g_assert_cmpint (minor, ==, 0);
 	g_assert_cmpint (micro, ==, 3);
 
 	/* verify dark offsets */
@@ -196,7 +191,6 @@ ch_test_eeprom_func (void)
 					 &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_free (calibration);
 
 	ret = ch_client_get_calibration (client,
 					 &calibration_tmp,
@@ -206,6 +200,7 @@ ch_test_eeprom_func (void)
 	g_assert (memcmp (calibration_tmp,
 			  calibration,
 			  sizeof (gfloat) * 9) == 0);
+	g_free (calibration);
 	g_free (calibration_tmp);
 
 #if 0
@@ -252,7 +247,7 @@ ch_test_reading_func (void)
 
 	/* set integral */
 	ret = ch_client_set_integral_time (client,
-					   100,
+					   0xffff,
 					   &error);
 	g_assert_no_error (error);
 	g_assert (ret);
@@ -263,7 +258,7 @@ ch_test_reading_func (void)
 					  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpint (take_reading, ==, 12345678);
+	g_assert_cmpint (take_reading, >, 0);
 
 	g_object_unref (client);
 }
