@@ -221,6 +221,9 @@ ch_client_command_to_string (guint8 cmd)
 	case CH_CMD_TAKE_READING_XYZ:
 		str = "take-reading-xyz";
 		break;
+	case CH_CMD_RESET:
+		str = "reset";
+		break;
 	default:
 		str = "unknown-command";
 		break;
@@ -929,6 +932,30 @@ ch_client_take_readings_xyz (ChClient *client,
 	*green = buffer[1];
 	*blue = buffer[2];
 out:
+	return ret;
+}
+
+/**
+ * ch_client_reset:
+ **/
+gboolean
+ch_client_reset (ChClient *client,
+		 GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_RESET,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
 	return ret;
 }
 

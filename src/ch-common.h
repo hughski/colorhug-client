@@ -222,6 +222,16 @@
  **/
 #define	CH_CMD_TAKE_READING_XYZ			0x23
 
+/**
+ * CH_CMD_RESET:
+ *
+ * Reset the processor.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd] (but with success the device will disconnect)
+ **/
+#define	CH_CMD_RESET				0x24
+
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
 

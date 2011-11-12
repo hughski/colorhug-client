@@ -132,6 +132,9 @@ gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
 						 gfloat		*blue,
 						 GError		**error);
 
+gboolean	 ch_client_reset		(ChClient	*client,
+						 GError		**error);
+
 G_END_DECLS
 
 #endif /* __CH_CLIENT_H */

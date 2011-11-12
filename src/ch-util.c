@@ -575,6 +575,32 @@ out:
 }
 
 /**
+ * ch_util_reset_button_cb:
+ **/
+static void
+ch_util_reset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
+{
+	gboolean ret;
+	GError *error = NULL;
+
+	/* set to HW */
+	ret = ch_client_reset (priv->client,
+			       &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to reset processor"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* refresh */
+	ch_util_refresh (priv);
+out:
+	return;
+}
+
+/**
  * ch_util_color_select_changed_cb:
  **/
 static void
@@ -816,6 +842,9 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_calibrate"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_util_calibrate_button_cb), priv);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_reset"));
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (ch_util_reset_button_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "comboboxtext_color_select"));
 	g_signal_connect (widget, "changed",
 			  G_CALLBACK (ch_util_color_select_changed_cb), priv);

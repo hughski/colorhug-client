@@ -770,6 +770,23 @@ out:
 }
 
 /**
+ * ch_util_reset:
+ **/
+static gboolean
+ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+
+	/* this may return with an error */
+	ret = ch_client_reset (priv->client,
+			       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * main:
  **/
 int
@@ -894,6 +911,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Takes all color readings (to XYZ)"),
 		     ch_util_take_readings_xyz);
+	ch_util_add (priv->cmd_array,
+		     "reset",
+		     /* TRANSLATORS: command description */
+		     _("Reset the processor back to the bootloader"),
+		     ch_util_reset);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
