@@ -32,25 +32,194 @@
 #define	CH_USB_HID_EP_OUT			(CH_USB_HID_EP | 0x00)
 #define	CH_USB_HID_EP_SIZE			64
 
-/* device commands */
+/**
+ * CH_CMD_GET_COLOR_SELECT:
+ *
+ * Get the color select state.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][1:color_select]
+ **/
 #define	CH_CMD_GET_COLOR_SELECT			0x01
+
+/**
+ * CH_CMD_SET_COLOR_SELECT:
+ *
+ * Set the color select state.
+ *
+ * IN:  [1:cmd][1:color_select]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_COLOR_SELECT			0x02
+
+/**
+ * CH_CMD_GET_MULTIPLIER:
+ *
+ * Gets the multiplier value.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][1:multiplier_value]
+ **/
 #define	CH_CMD_GET_MULTIPLIER			0x03
+
+/**
+ * CH_CMD_SET_MULTIPLIER:
+ *
+ * Sets the multiplier value.
+ *
+ * IN:  [1:cmd][1:multiplier_value]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_MULTIPLIER			0x04
+
+/**
+ * CH_CMD_GET_INTERGRAL_TIME:
+ *
+ * Gets the integral time.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][2:integral_time]
+ **/
 #define	CH_CMD_GET_INTERGRAL_TIME		0x05
+
+/**
+ * CH_CMD_SET_INTERGRAL_TIME:
+ *
+ * Sets the integral time.
+ *
+ * IN:  [1:cmd][2:integral_time]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_INTERGRAL_TIME		0x06
+
+/**
+ * CH_CMD_GET_FIRMWARE_VERSION:
+ *
+ * Gets the firmware version.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][2:major][2:minor][2:micro]
+ **/
 #define	CH_CMD_GET_FIRMWARE_VERSION		0x07
+
+/**
+ * CH_CMD_GET_CALIBRATION:
+ *
+ * Gets the calibration matrix.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][4*9:(float)matrix_value]
+ **/
 #define	CH_CMD_GET_CALIBRATION			0x09
+
+/**
+ * CH_CMD_SET_CALIBRATION:
+ *
+ * Sets the calibration matrix.
+ *
+ * IN:  [1:cmd][4*9:(float)matrix_value]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_CALIBRATION			0x0a
+
+/**
+ * CH_CMD_GET_SERIAL_NUMBER:
+ *
+ * Gets the device serial number.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][4:serial_number]
+ **/
 #define	CH_CMD_GET_SERIAL_NUMBER		0x0b
+
+/**
+ * CH_CMD_SET_SERIAL_NUMBER:
+ *
+ * Sets the device serial number.
+ *
+ * IN:  [1:cmd][4:serial_number]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_SERIAL_NUMBER		0x0c
+
+/**
+ * CH_CMD_GET_LEDS:
+ *
+ * Get the LED state.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][1:led_state]
+ **/
 #define	CH_CMD_GET_LEDS				0x0d
+
+/**
+ * CH_CMD_SET_LEDS:
+ *
+ * Set the LED state.
+ *
+ * IN:  [1:cmd][1:led_state]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_LEDS				0x0e
+
+/**
+ * CH_CMD_GET_DARK_OFFSETS:
+ *
+ * Get the dark offsets.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][2:red][2:green][2:blue]
+ **/
 #define	CH_CMD_GET_DARK_OFFSETS			0x0f
+
+/**
+ * CH_CMD_SET_DARK_OFFSETS:
+ *
+ * Set the dark offsets.
+ *
+ * IN:  [1:cmd][2:red][2:green][2:blue]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_SET_DARK_OFFSETS			0x10
+
+/**
+ * CH_CMD_WRITE_EEPROM:
+ *
+ * Write values to EEPROM.
+ *
+ * IN:  [1:cmd][8:eeprom_magic]
+ * OUT: [1:retval][1:cmd]
+ **/
 #define	CH_CMD_WRITE_EEPROM			0x20
+
+/**
+ * CH_CMD_TAKE_READING_RAW:
+ *
+ * Take a raw reading.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][2:count]
+ **/
 #define	CH_CMD_TAKE_READING_RAW			0x21
+
+/**
+ * CH_CMD_TAKE_READINGS:
+ *
+ * Take a reading taking into account dark offsets.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][2:red][2:green][2:blue]
+ **/
 #define	CH_CMD_TAKE_READINGS			0x22
+
+/**
+ * CH_CMD_TAKE_READING_XYZ:
+ *
+ * Take a reading taking into account dark offsets and calibration.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][4*3:(float)value]
+ **/
 #define	CH_CMD_TAKE_READING_XYZ			0x23
 
 /* secret code */
