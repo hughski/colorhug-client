@@ -146,6 +146,9 @@ ch_client_strerror (ChFatalError fatal_error)
 	case CH_FATAL_ERROR_NO_SERIAL:
 		str = "No serial";
 		break;
+	case CH_FATAL_ERROR_WATCHDOG:
+		str = "Watchdog";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
