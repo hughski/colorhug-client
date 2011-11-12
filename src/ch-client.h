@@ -135,6 +135,10 @@ gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
 gboolean	 ch_client_reset		(ChClient	*client,
 						 GError		**error);
 
+gboolean	 ch_client_flash_firmware	(ChClient	*client,
+						 const gchar	*filename,
+						 GError		**error);
+
 G_END_DECLS
 
 #endif /* __CH_CLIENT_H */

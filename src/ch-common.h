@@ -232,6 +232,59 @@
  **/
 #define	CH_CMD_RESET				0x24
 
+/**
+ * CH_CMD_READ_FLASH:
+ *
+ * Read in raw data from the flash memory.
+ *
+ * IN:  [1:cmd][2:address][1:length]
+ * OUT: [1:retval][1:cmd][1:checksum][1-60:data]
+ **/
+#define	CH_CMD_READ_FLASH			0x25
+
+/**
+ * CH_CMD_WRITE_FLASH:
+ *
+ * Write raw data to the flash memory.
+ *
+ * IN:  [1:cmd][2:address][1:length][1:checksum][1-59:data]
+ * OUT: [1:retval][1:cmd]
+ **/
+#define	CH_CMD_WRITE_FLASH			0x26
+
+/**
+ * CH_CMD_BOOT_FLASH:
+ *
+ * Boot into to the flash memory.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd]
+ **/
+#define	CH_CMD_BOOT_FLASH			0x27
+
+/**
+ * CH_CMD_SET_FLASH_SUCCESS:
+ *
+ * Sets the result of the firmware flashing. The idea of this command
+ * is that the flashing interaction is thus:
+ *
+ * 1.	Reset()			device goes to bootloader mode
+ * 2.	SetFlashSuccess(FALSE)
+ * 3.	WriteFlash($data)
+ * 4.	ReadFlash($data)	to verify
+ * 5.	BootFlash()		switch to program mode
+ * 6.	SetFlashSuccess(TRUE)
+ *
+ * The idea is that we only set the success FALSE from the bootoloader
+ * to indicate that on booting we should not boot into the program.
+ * We can only set the success true from the *new* program code so as
+ * to verify that the new program boots, and can accept HID commands.
+ *
+ * IN:  [1:cmd][1:success]
+ * OUT: [1:retval][1:cmd]
+ **/
+#define	CH_CMD_SET_FLASH_SUCCESS		0x28
+
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
 
@@ -241,6 +294,9 @@
 #define	CH_BUFFER_OUTPUT_RETVAL			0x00
 #define	CH_BUFFER_OUTPUT_CMD			0x01
 #define	CH_BUFFER_OUTPUT_DATA			0x02
+
+/* where the custom firmware is stored */
+#define CH_EEPROM_ADDR_RUNCODE			0x4000
 
 /* approximate sample times */
 #define CH_INTEGRAL_TIME_VALUE_5MS		0x0300
@@ -274,6 +330,10 @@ typedef enum {
 	CH_FATAL_ERROR_UNDERFLOW,
 	CH_FATAL_ERROR_NO_SERIAL,
 	CH_FATAL_ERROR_WATCHDOG,
+	CH_FATAL_ERROR_INVALID_ADDRESS,
+	CH_FATAL_ERROR_INVALID_LENGTH,
+	CH_FATAL_ERROR_INVALID_CHECKSUM,
+	CH_FATAL_ERROR_INVALID_VALUE,
 	CH_FATAL_ERROR_LAST
 } ChFatalError;
 

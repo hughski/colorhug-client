@@ -787,6 +787,31 @@ out:
 }
 
 /**
+ * ch_util_flash_firmware:
+ **/
+static gboolean
+ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'filename'");
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_flash_firmware (priv->client,
+					values[0],
+					error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+/**
  * main:
  **/
 int
@@ -916,6 +941,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Reset the processor back to the bootloader"),
 		     ch_util_reset);
+	ch_util_add (priv->cmd_array,
+		     "flash-firmware",
+		     /* TRANSLATORS: command description */
+		     _("Flash firmware into the processor"),
+		     ch_util_flash_firmware);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

@@ -149,6 +149,18 @@ ch_client_strerror (ChFatalError fatal_error)
 	case CH_FATAL_ERROR_WATCHDOG:
 		str = "Watchdog";
 		break;
+	case CH_FATAL_ERROR_INVALID_ADDRESS:
+		str = "Invalid address";
+		break;
+	case CH_FATAL_ERROR_INVALID_LENGTH:
+		str = "Invalid length";
+		break;
+	case CH_FATAL_ERROR_INVALID_CHECKSUM:
+		str = "Invalid checksum";
+		break;
+	case CH_FATAL_ERROR_INVALID_VALUE:
+		str = "Invalid value";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
@@ -223,6 +235,18 @@ ch_client_command_to_string (guint8 cmd)
 		break;
 	case CH_CMD_RESET:
 		str = "reset";
+		break;
+	case CH_CMD_READ_FLASH:
+		str = "read-flash";
+		break;
+	case CH_CMD_WRITE_FLASH:
+		str = "write-flash";
+		break;
+	case CH_CMD_BOOT_FLASH:
+		str = "boot-flash";
+		break;
+	case CH_CMD_SET_FLASH_SUCCESS:
+		str = "set-flash-success";
 		break;
 	default:
 		str = "unknown-command";
@@ -956,6 +980,210 @@ ch_client_reset (ChClient *client,
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
 				       error);
+	return ret;
+}
+
+/**
+ * ch_client_calculate_checksum:
+ **/
+static guint8
+ch_client_calculate_checksum (guint8 *data,
+			      gsize len)
+{
+	guint8 checksum = 0xff;
+	guint i;
+	for (i = 0; i < len; i++)
+		checksum ^= data[i];
+	return checksum;
+}
+
+/**
+ * ch_client_write_flash:
+ **/
+static gboolean
+ch_client_write_flash (ChClient *client,
+		       guint16 address,
+		       guint8 *data,
+		       gsize len,
+		       GError **error)
+{
+	gboolean ret;
+	guint8 buffer_tx[64];
+
+	/* set address, length, checksum, data */
+	memcpy (buffer_tx + 0, &address, 2);
+	buffer_tx[2] = len;
+	buffer_tx[3] = ch_client_calculate_checksum (data, len);
+	memcpy (buffer_tx + 4, data, len);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_WRITE_FLASH,
+				       buffer_tx,
+				       sizeof(buffer_tx),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
+	return ret;
+}
+
+/**
+ * ch_client_read_flash:
+ **/
+static gboolean
+ch_client_read_flash (ChClient *client,
+		      guint16 address,
+		      guint8 *data,
+		      gsize len,
+		      GError **error)
+{
+	gboolean ret;
+	guint8 buffer_rx[64];
+	guint8 buffer_tx[3];
+	guint8 expected_checksum;
+
+	/* set address, length, checksum, data */
+	memcpy (buffer_tx + 0, &address, 2);
+	buffer_tx[2] = len;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_READ_FLASH,
+				       buffer_tx,
+				       sizeof(buffer_tx),
+				       buffer_rx,
+				       len + 1,
+				       error);
+	if (!ret)
+		goto out;
+
+	/* verify checksum */
+	expected_checksum = ch_client_calculate_checksum (buffer_rx + 1, len);
+	if (buffer_rx[0] != expected_checksum) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Checksum @0x%04x invalid",
+			     address);
+		goto out;
+	}
+	memcpy (data, buffer_rx + 1, len);
+out:
+	return ret;
+}
+
+/**
+ * ch_client_flash_firmware:
+ **/
+gboolean
+ch_client_flash_firmware (ChClient *client,
+			  const gchar *filename,
+			  GError **error)
+{
+	gboolean ret;
+	gchar *data = NULL;
+	guint8 buffer[60];
+	guint idx;
+	gsize len = 0;
+	gsize chunk_len;
+	guint8 flash_success;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (filename != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* load file */
+	ret = g_file_get_contents (filename, &data, &len, error);
+	if (!ret)
+		goto out;
+
+	/* boot to bootloader */
+	ret = ch_client_reset (client, error);
+	if (!ret)
+		goto out;
+
+	/* wait for the device to reconnect */
+	g_object_unref (client->priv->device);
+	g_usleep (1 * G_USEC_PER_SEC);
+	ret = ch_client_load (client, error);
+	if (!ret)
+		goto out;
+
+	/* set flash success false */
+	flash_success = 0x00;
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       &flash_success, 1,
+				       NULL, 0,
+				       error);
+	if (!ret)
+		goto out;
+
+	/* write in 59 byte chunks */
+	idx = 0;
+	chunk_len = 59;
+	do {
+		if (idx + chunk_len > len)
+			chunk_len = len - idx;
+		ret = ch_client_write_flash (client,
+					     CH_EEPROM_ADDR_RUNCODE + idx,
+					     (guint8 *) data + idx,
+					     chunk_len,
+					     error);
+		if (!ret)
+			goto out;
+		idx += chunk_len;
+	} while (idx < len);
+
+	/* read in 60 byte chunks */
+	idx = 0;
+	chunk_len = 60;
+	do {
+		if (idx + chunk_len > len)
+			chunk_len = len - idx;
+		ret = ch_client_read_flash (client,
+					    CH_EEPROM_ADDR_RUNCODE + idx,
+					    buffer,
+					    chunk_len,
+					    error);
+		if (!ret)
+			goto out;
+		if (memcmp (data + idx, buffer, chunk_len) != 0) {
+			ret = FALSE;
+			g_set_error (error, 1, 0,
+				     "Failed to verify @0x%04x", idx);
+			goto out;
+		}
+		idx += chunk_len;
+	} while (idx < len);
+
+	/* boot into new code */
+	ret = ch_client_write_command (client,
+				       CH_CMD_BOOT_FLASH,
+				       NULL, 0,
+				       NULL, 0,
+				       error);
+	if (!ret)
+		goto out;
+
+	/* wait for the device to reconnect */
+	g_object_unref (client->priv->device);
+	g_usleep (1 * G_USEC_PER_SEC);
+	ret = ch_client_load (client, error);
+	if (!ret)
+		goto out;
+
+	/* set flash success true */
+	flash_success = 0x01;
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       &flash_success, 1,
+				       NULL, 0,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	g_free (data);
 	return ret;
 }
 
