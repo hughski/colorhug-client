@@ -20,6 +20,7 @@ libchshared_a_CFLAGS =					\
 
 libexec_PROGRAMS =					\
 	colorhug					\
+	colorhug-inhx32-to-bin				\
 	colorhug-gui
 
 colorhug_SOURCES =					\
@@ -46,6 +47,16 @@ colorhug_gui_LDADD =					\
 	-lm
 
 colorhug_gui_CFLAGS =					\
+	$(WARNINGFLAGS_C)
+
+colorhug_inhx32_to_bin_SOURCES =			\
+	ch-inhx32-to-bin.c
+
+colorhug_inhx32_to_bin_LDADD =				\
+	$(GLIB_LIBS)					\
+	-lm
+
+colorhug_inhx32_to_bin_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
 check_PROGRAMS =					\
