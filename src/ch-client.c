@@ -188,10 +188,10 @@ ch_client_command_to_string (guint8 cmd)
 	case CH_CMD_SET_MULTIPLIER:
 		str = "set-multiplier";
 		break;
-	case CH_CMD_GET_INTERGRAL_TIME:
+	case CH_CMD_GET_INTEGRAL_TIME:
 		str = "get-integral-time";
 		break;
-	case CH_CMD_SET_INTERGRAL_TIME:
+	case CH_CMD_SET_INTEGRAL_TIME:
 		str = "set-integral-time";
 		break;
 	case CH_CMD_GET_FIRMWARE_VERSION:
@@ -225,7 +225,7 @@ ch_client_command_to_string (guint8 cmd)
 		str = "write-eeprom";
 		break;
 	case CH_CMD_TAKE_READING_RAW:
-		str = "take-readin-raw";
+		str = "take-reading-raw";
 		break;
 	case CH_CMD_TAKE_READINGS:
 		str = "take-readings";
@@ -484,7 +484,7 @@ ch_client_get_integral_time (ChClient *client,
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
-				       CH_CMD_GET_INTERGRAL_TIME,
+				       CH_CMD_GET_INTEGRAL_TIME,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
 				       (guint8 *) &integral_le,
@@ -517,7 +517,7 @@ ch_client_set_integral_time (ChClient *client,
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
-				       CH_CMD_SET_INTERGRAL_TIME,
+				       CH_CMD_SET_INTEGRAL_TIME,
 				       (const guint8 *) &integral_le,	/* buffer in */
 				       2,	/* size of input buffer */
 				       NULL,	/* buffer out */

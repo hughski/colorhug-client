@@ -73,24 +73,24 @@
 #define	CH_CMD_SET_MULTIPLIER			0x04
 
 /**
- * CH_CMD_GET_INTERGRAL_TIME:
+ * CH_CMD_GET_INTEGRAL_TIME:
  *
  * Gets the integral time.
  *
  * IN:  [1:cmd]
  * OUT: [1:retval][1:cmd][2:integral_time]
  **/
-#define	CH_CMD_GET_INTERGRAL_TIME		0x05
+#define	CH_CMD_GET_INTEGRAL_TIME		0x05
 
 /**
- * CH_CMD_SET_INTERGRAL_TIME:
+ * CH_CMD_SET_INTEGRAL_TIME:
  *
  * Sets the integral time.
  *
  * IN:  [1:cmd][2:integral_time]
  * OUT: [1:retval][1:cmd]
  **/
-#define	CH_CMD_SET_INTERGRAL_TIME		0x06
+#define	CH_CMD_SET_INTEGRAL_TIME		0x06
 
 /**
  * CH_CMD_GET_FIRMWARE_VERSION:
