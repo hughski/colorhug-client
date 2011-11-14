@@ -243,6 +243,18 @@
 #define	CH_CMD_READ_FLASH			0x25
 
 /**
+ * CH_CMD_ERASE_FLASH:
+ *
+ * Erases flash memory before a write is done.
+ * Erasing flash can only be done in 1k byte chunks and should be
+ * aligned to 1k.
+ *
+ * IN:  [1:cmd][2:address][1:length]
+ * OUT: [1:retval][1:cmd]
+ **/
+#define	CH_CMD_ERASE_FLASH			0x29
+
+/**
  * CH_CMD_WRITE_FLASH:
  *
  * Write raw data to the flash memory.

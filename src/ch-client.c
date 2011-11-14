@@ -239,6 +239,9 @@ ch_client_command_to_string (guint8 cmd)
 	case CH_CMD_READ_FLASH:
 		str = "read-flash";
 		break;
+	case CH_CMD_ERASE_FLASH:
+		str = "erase-flash";
+		break;
 	case CH_CMD_WRITE_FLASH:
 		str = "write-flash";
 		break;
@@ -1095,6 +1098,38 @@ out:
 }
 
 /**
+ * ch_client_erase_flash:
+ **/
+static gboolean
+ch_client_erase_flash (ChClient *client,
+		       guint16 address,
+		       gsize len,
+		       GError **error)
+{
+	gboolean ret;
+	guint8 buffer_tx[3];
+	guint16 addr_le;
+
+	/* set address, length, checksum, data */
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
+	buffer_tx[2] = len;
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_ERASE_FLASH,
+				       buffer_tx,
+				       sizeof(buffer_tx),
+				       NULL,
+				       0,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_flash_firmware:
  **/
 gboolean
@@ -1139,6 +1174,14 @@ ch_client_flash_firmware (ChClient *client,
 				       &flash_success, 1,
 				       NULL, 0,
 				       error);
+	if (!ret)
+		goto out;
+
+	/* erase flash */
+	ret = ch_client_erase_flash (client,
+				     CH_EEPROM_ADDR_RUNCODE,
+				     len,
+				     error);
 	if (!ret)
 		goto out;
 
