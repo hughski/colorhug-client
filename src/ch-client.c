@@ -310,6 +310,9 @@ ch_client_write_command (ChClient *client,
 	if (!ret)
 		goto out;
 
+	/* clear buffer for debugging */
+	memset (buffer, 0xff, sizeof (buffer));
+
 	/* read */
 	ret = g_usb_device_interrupt_transfer (client->priv->device,
 					       CH_USB_HID_EP_IN,
