@@ -388,6 +388,7 @@ ch_client_set_color_select (ChClient *client,
 			    GError **error)
 {
 	gboolean ret;
+	guint8 csel8 = color_select;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -396,7 +397,7 @@ ch_client_set_color_select (ChClient *client,
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_COLOR_SELECT,
-				       (const guint8 *) &color_select,	/* buffer in */
+				       &csel8,	/* buffer in */
 				       1,	/* size of input buffer */
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
@@ -445,6 +446,7 @@ ch_client_set_multiplier (ChClient *client,
 			  GError **error)
 {
 	gboolean ret;
+	guint8 mult8 = multiplier;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -453,7 +455,7 @@ ch_client_set_multiplier (ChClient *client,
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_MULTIPLIER,
-				       (const guint8 *) &multiplier,	/* buffer in */
+				       &mult8,	/* buffer in */
 				       1,	/* size of input buffer */
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
@@ -473,6 +475,7 @@ ch_client_get_integral_time (ChClient *client,
 			      GError **error)
 {
 	gboolean ret;
+	guint16 integral_le;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (integral_time != NULL, FALSE);
@@ -484,11 +487,12 @@ ch_client_get_integral_time (ChClient *client,
 				       CH_CMD_GET_INTERGRAL_TIME,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       (guint8 *) integral_time,
+				       (guint8 *) &integral_le,
 				       2,	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
+	*integral_time = GUINT16_FROM_LE (integral_le);
 out:
 	return ret;
 }
@@ -502,16 +506,19 @@ ch_client_set_integral_time (ChClient *client,
 			     GError **error)
 {
 	gboolean ret;
+	guint16 integral_le;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (integral_time > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
+	integral_le = GUINT16_TO_LE (integral_time);
+
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_INTERGRAL_TIME,
-				       (const guint8 *) &integral_time,	/* buffer in */
+				       (const guint8 *) &integral_le,	/* buffer in */
 				       2,	/* size of input buffer */
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
@@ -554,9 +561,9 @@ ch_client_get_firmware_ver (ChClient *client,
 		goto out;
 
 	/* parse */
-	*major = buffer[0];
-	*minor = buffer[1];
-	*micro = buffer[2];
+	*major = GUINT16_FROM_LE (buffer[0]);
+	*minor = GUINT16_FROM_LE (buffer[1]);
+	*micro = GUINT16_FROM_LE (buffer[2]);
 out:
 	return ret;
 }
@@ -590,6 +597,7 @@ ch_client_get_calibration (ChClient *client,
 
 	/* this is only possible as the PIC has the same floating point
 	 * layout as i386 */
+	/* XXXX: What is this layout so we can convert it properly? */
 	*calibration = g_new0 (gfloat, 9);
 	memcpy (*calibration, buffer, 36);
 out:
@@ -614,6 +622,7 @@ ch_client_set_calibration (ChClient *client,
 
 	/* this is only possible as the PIC has the same floating point
 	 * layout as i386 */
+	/* XXXX: What is this layout so we can convert it properly? */
 	memcpy (buffer, calibration, 36);
 
 	/* hit hardware */
@@ -639,6 +648,7 @@ ch_client_get_serial_number (ChClient *client,
 			     GError **error)
 {
 	gboolean ret;
+	guint32 serial_le;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (serial_number != NULL, FALSE);
@@ -650,11 +660,13 @@ ch_client_get_serial_number (ChClient *client,
 				       CH_CMD_GET_SERIAL_NUMBER,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       (guint8 *) serial_number,
-				       4,	/* size of output buffer */
+				       (guint8 *) &serial_le,
+				       sizeof(serial_le),	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
+	/* XXX: 32 vs. 64 bits? */
+	*serial_number = GUINT32_FROM_LE (serial_le);
 out:
 	return ret;
 }
@@ -668,17 +680,20 @@ ch_client_set_serial_number (ChClient *client,
 			     GError **error)
 {
 	gboolean ret;
+	guint32 serial_le;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (serial_number > 0, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
+	serial_le = GUINT32_TO_LE (serial_number);
+
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_SERIAL_NUMBER,
-				       (const guint8 *) &serial_number,	/* buffer in */
-				       4,	/* size of input buffer */
+				       (const guint8 *) &serial_le,	/* buffer in */
+				       sizeof(serial_le),	/* size of input buffer */
 				       NULL,
 				       0,	/* size of output buffer */
 				       error);
@@ -807,9 +822,9 @@ ch_client_get_dark_offsets (ChClient *client,
 		goto out;
 
 	/* parse */
-	*red = buffer[0];
-	*green = buffer[1];
-	*blue = buffer[2];
+	*red = GUINT16_FROM_LE (buffer[0]);
+	*green = GUINT16_FROM_LE (buffer[1]);
+	*blue = GUINT16_FROM_LE (buffer[2]);
 out:
 	return ret;
 }
@@ -860,6 +875,7 @@ ch_client_take_reading_raw (ChClient *client,
 			    GError **error)
 {
 	gboolean ret;
+	guint16 reading_le;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (take_reading != NULL, FALSE);
@@ -871,11 +887,13 @@ ch_client_take_reading_raw (ChClient *client,
 				       CH_CMD_TAKE_READING_RAW,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       (guint8 *) take_reading,
-				       2,	/* size of output buffer */
+				       (guint8 *) &reading_le,
+				       sizeof(reading_le),	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
+
+	*take_reading = GUINT16_FROM_LE (reading_le);
 out:
 	return ret;
 }
@@ -912,9 +930,9 @@ ch_client_take_readings (ChClient *client,
 		goto out;
 
 	/* parse */
-	*red = buffer[0];
-	*green = buffer[1];
-	*blue = buffer[2];
+	*red = GUINT16_FROM_LE (buffer[0]);
+	*green = GUINT16_FROM_LE (buffer[1]);
+	*blue = GUINT16_FROM_LE (buffer[2]);
 out:
 	return ret;
 }
@@ -952,6 +970,7 @@ ch_client_take_readings_xyz (ChClient *client,
 
 	/* this is only possible as the PIC has the same floating point
 	 * layout as i386 */
+	/* XXXX: convert properly */
 	*red = buffer[0];
 	*green = buffer[1];
 	*blue = buffer[2];
@@ -1008,10 +1027,12 @@ ch_client_write_flash (ChClient *client,
 		       GError **error)
 {
 	gboolean ret;
+	guint16 addr_le;
 	guint8 buffer_tx[64];
 
 	/* set address, length, checksum, data */
-	memcpy (buffer_tx + 0, &address, 2);
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
 	buffer_tx[2] = len;
 	buffer_tx[3] = ch_client_calculate_checksum (data, len);
 	memcpy (buffer_tx + 4, data, len);
@@ -1041,9 +1062,11 @@ ch_client_read_flash (ChClient *client,
 	guint8 buffer_rx[64];
 	guint8 buffer_tx[3];
 	guint8 expected_checksum;
+	guint16 addr_le;
 
 	/* set address, length, checksum, data */
-	memcpy (buffer_tx + 0, &address, 2);
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
 	buffer_tx[2] = len;
 
 	/* hit hardware */
