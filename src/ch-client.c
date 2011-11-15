@@ -1050,7 +1050,7 @@ ch_client_write_flash (ChClient *client,
 	ret = ch_client_write_command (client,
 				       CH_CMD_WRITE_FLASH,
 				       buffer_tx,
-				       sizeof(buffer_tx),
+				       len + 4,
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
 				       error);
@@ -1191,9 +1191,9 @@ ch_client_flash_firmware (ChClient *client,
 	if (!ret)
 		goto out;
 
-	/* write in 59 byte chunks */
+	/* write in 32 byte chunks */
 	idx = 0;
-	chunk_len = 59;
+	chunk_len = CH_FLASH_TRANSFER_BLOCK_SIZE;
 	do {
 		if (idx + chunk_len > len)
 			chunk_len = len - idx;
@@ -1206,6 +1206,20 @@ ch_client_flash_firmware (ChClient *client,
 			goto out;
 		idx += chunk_len;
 	} while (idx < len);
+
+	/* flush to 64 byte chunk */
+	if ((idx & CH_FLASH_TRANSFER_BLOCK_SIZE) == 0) {
+		idx -= chunk_len;
+		idx += CH_FLASH_TRANSFER_BLOCK_SIZE;
+		ret = ch_client_write_flash (client,
+					     CH_EEPROM_ADDR_RUNCODE + idx,
+					     (guint8 *) data,
+					     0,
+					     error);
+		if (!ret)
+			goto out;
+
+	}
 
 	/* read in 60 byte chunks */
 	idx = 0;
