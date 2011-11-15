@@ -161,6 +161,9 @@ ch_client_strerror (ChFatalError fatal_error)
 	case CH_FATAL_ERROR_INVALID_VALUE:
 		str = "Invalid value";
 		break;
+	case CH_FATAL_ERROR_UNKNOWN_CMD_FOR_BOOTLOADER:
+		str = "Unknown command for bootloader";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
