@@ -1197,6 +1197,9 @@ ch_client_flash_firmware (ChClient *client,
 	do {
 		if (idx + chunk_len > len)
 			chunk_len = len - idx;
+		g_debug ("Writing at %04x size %li",
+			 CH_EEPROM_ADDR_RUNCODE + idx,
+			 chunk_len);
 		ret = ch_client_write_flash (client,
 					     CH_EEPROM_ADDR_RUNCODE + idx,
 					     (guint8 *) data + idx,
@@ -1211,6 +1214,8 @@ ch_client_flash_firmware (ChClient *client,
 	if ((idx & CH_FLASH_TRANSFER_BLOCK_SIZE) == 0) {
 		idx -= chunk_len;
 		idx += CH_FLASH_TRANSFER_BLOCK_SIZE;
+		g_debug ("Flushing at %04x",
+			 CH_EEPROM_ADDR_RUNCODE + idx);
 		ret = ch_client_write_flash (client,
 					     CH_EEPROM_ADDR_RUNCODE + idx,
 					     (guint8 *) data,
@@ -1227,6 +1232,9 @@ ch_client_flash_firmware (ChClient *client,
 	do {
 		if (idx + chunk_len > len)
 			chunk_len = len - idx;
+		g_debug ("Reading at %04x size %li",
+			 CH_EEPROM_ADDR_RUNCODE + idx,
+			 chunk_len);
 		ret = ch_client_read_flash (client,
 					    CH_EEPROM_ADDR_RUNCODE + idx,
 					    buffer,
@@ -1237,7 +1245,14 @@ ch_client_flash_firmware (ChClient *client,
 		if (memcmp (data + idx, buffer, chunk_len) != 0) {
 			ret = FALSE;
 			g_set_error (error, 1, 0,
-				     "Failed to verify @0x%04x", idx);
+				     "Failed to verify @0x%04x",
+				     CH_EEPROM_ADDR_RUNCODE + idx);
+			ch_client_print_data ("expected",
+					      (const guint8*) &data[idx],
+					      chunk_len);
+			ch_client_print_data ("got     ",
+					      buffer,
+					      chunk_len);
 			goto out;
 		}
 		idx += chunk_len;
