@@ -91,7 +91,7 @@ ch_client_load (ChClient *client, GError **error)
 					    error);
 	if (!ret)
 		goto out;
-	g_debug ("Caimed interface 0x%x for device", CH_USB_INTERFACE);
+	g_debug ("Claimed interface 0x%x for device", CH_USB_INTERFACE);
 out:
 	if (list != NULL)
 		g_object_unref (list);
