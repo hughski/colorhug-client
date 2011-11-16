@@ -604,16 +604,22 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	guint8 leds;
+	guint8 repeat = 0;
+	guint8 time_on = 0x00;
+	guint8 time_off = 0x00;
 
 	/* parse */
-	if (g_strv_length (values) != 1) {
+	if (g_strv_length (values) != 1 &&
+	    g_strv_length (values) != 4) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect '0-3'");
+				     "invalid input, expect "
+				     "'<leds> <repeat> <time_on> <time_off>' or "
+				     "'<leds>'");
 		goto out;
 	}
 
-	/* set to HW */
+	/* get the LEDs value */
 	leds = atoi (values[0]);
 	if (leds > 3) {
 		ret = FALSE;
@@ -622,7 +628,21 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 			     leds);
 		goto out;
 	}
-	ret = ch_client_set_leds (priv->client, leds, error);
+
+	/* get the optional other parameters */
+	if (g_strv_length (values) == 4) {
+		repeat = atoi (values[1]);
+		time_on = atoi (values[2]);
+		time_off = atoi (values[3]);
+	}
+
+	/* set to HW */
+	ret = ch_client_set_leds (priv->client,
+				  leds,
+				  repeat,
+				  time_on,
+				  time_off,
+				  error);
 	if (!ret)
 		goto out;
 out:

@@ -100,6 +100,9 @@ gboolean	 ch_client_get_leds		(ChClient	*client,
 						 GError		**error);
 gboolean	 ch_client_set_leds		(ChClient	*client,
 						 guint8		 leds,
+						 guint8		 repeat,
+						 guint8		 on_time,
+						 guint8		 off_time,
 						 GError		**error);
 
 gboolean	 ch_client_get_dark_offsets	(ChClient	*client,

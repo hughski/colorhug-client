@@ -155,9 +155,13 @@
 /**
  * CH_CMD_SET_LEDS:
  *
- * Set the LED state.
+ * Set the LED state. Using a @repeat value of anything other than
+ * 0 will block the processor for the duration of the command.
  *
- * IN:  [1:cmd][1:led_state]
+ * If @repeat is not 0, then the LEDs are reset to all off at the end
+ * of the sequence.
+ *
+ * IN:  [1:cmd][1:led_state][1:repeat][1:on-time][1:off-time]
  * OUT: [1:retval][1:cmd]
  **/
 #define	CH_CMD_SET_LEDS				0x0e

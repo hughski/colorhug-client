@@ -734,6 +734,9 @@ ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	/* set to HW */
 	ret = ch_client_set_leds (priv->client,
 				  priv->leds_old,
+				  0,
+				  0xff,
+				  0xff,
 				  &error);
 	if (!ret) {
 		ch_util_error_dialog (priv,
@@ -757,6 +760,9 @@ ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	/* set to HW */
 	ret = ch_client_set_leds (priv->client,
 				  priv->leds_old,
+				  0,
+				  0xff,
+				  0xff,
 				  &error);
 	if (!ret) {
 		ch_util_error_dialog (priv,
