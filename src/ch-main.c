@@ -26,6 +26,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <lcms2.h>
+#include <math.h>
 
 #include "ch-client.h"
 
@@ -477,7 +478,9 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	gboolean ret;
 	gchar *ccmx_data = NULL;
 	gdouble calibration[9];
+	gdouble largest = 0.0f;
 	gsize ccmx_size;
+	guint i;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -521,12 +524,40 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	calibration[7] = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
 	calibration[8] = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
 
+	/* find largest value */
+	for (i = 0; i < 9; i++) {
+		if (largest < fabs (calibration[i]))
+			largest = fabs (calibration[i]);
+	}
+	for (i = 0; i < 9; i++)
+		calibration[i] /= largest;
+	g_debug ("scaling factor = %.4f", largest);
+
+	/* check is valid */
+	for (i = 0; i < 9; i++) {
+		if (calibration[i] > 1.0f || calibration[i] < -1.0f) {
+			ret = FALSE;
+			g_set_error_literal (error, 1, 0,
+					     "invalid value, expect -1.0 to +1.0");
+			goto out;
+		}
+	}
+
 	/* set to HW */
 	ret = ch_client_set_calibration (priv->client,
 					 calibration,
 					 error);
 	if (!ret)
 		goto out;
+
+	/* set post scale */
+	ret = ch_client_set_post_scale (priv->client,
+					largest,
+					error);
+	if (!ret)
+		goto out;
+
+	g_print ("post scale: %f\n", largest);
 	ch_util_show_calibration (calibration);
 out:
 	g_free (ccmx_data);
