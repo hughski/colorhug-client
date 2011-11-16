@@ -1014,7 +1014,7 @@ ch_client_take_readings (ChClient *client,
 			 GError **error)
 {
 	gboolean ret;
-	guint16 buffer[3];
+	gint16 buffer[3];
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (red != NULL, FALSE);
@@ -1074,9 +1074,15 @@ ch_client_take_readings_xyz (ChClient *client,
 		goto out;
 
 	/* convert back into floating point */
-	*red = ch_client_int16le_to_double (buffer[0], CH_DIVISOR_CALIBRATION);
-	*green = ch_client_int16le_to_double (buffer[1], CH_DIVISOR_CALIBRATION);
-	*blue = ch_client_int16le_to_double (buffer[2], CH_DIVISOR_CALIBRATION);
+	*red = ch_client_int16le_to_double (buffer[0],
+					    CH_DIVISOR_CALIBRATION) *
+					    CH_DIVISOR_READING_XYZ;
+	*green = ch_client_int16le_to_double (buffer[1],
+					      CH_DIVISOR_CALIBRATION) *
+					      CH_DIVISOR_READING_XYZ;
+	*blue = ch_client_int16le_to_double (buffer[2],
+					     CH_DIVISOR_CALIBRATION) *
+					     CH_DIVISOR_READING_XYZ;
 out:
 	return ret;
 }
