@@ -45,8 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %doc README AUTHORS NEWS COPYING
 %dir %{_datadir}/colorhug-client
 %{_datadir}/colorhug-client
-%{_libexecdir}/colorhug
-%{_libexecdir}/colorhug-gui
+%{_libexecdir}/colorhug*
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
