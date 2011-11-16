@@ -34,9 +34,9 @@ typedef struct {
 	GtkApplication	*application;
 	ChClient	*client;
 	guint8		 leds_old;
-	gfloat		 red_max;
-	gfloat		 green_max;
-	gfloat		 blue_max;
+	gdouble		 red_max;
+	gdouble		 green_max;
+	gdouble		 blue_max;
 } ChUtilPrivate;
 
 /**
@@ -79,7 +79,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gchar *label;
 	gchar *tmp;
 	GError *error = NULL;
-	gfloat *calibration = NULL;
+	gdouble calibration[9];
 	GtkAdjustment *adj;
 	GtkWidget *widget;
 	guint16 integral_time = 0;
@@ -191,21 +191,21 @@ ch_util_refresh (ChUtilPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
-	tmp = g_strdup_printf ("%i", red);
+	tmp = g_strdup_printf ("%.4f", (gdouble) red / 0xffff);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_red"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%i", green);
+	tmp = g_strdup_printf ("%.4f", (gdouble) green / 0xffff);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_green"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%i", blue);
+	tmp = g_strdup_printf ("%.4f", (gdouble) blue / 0xffff);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_blue"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
 
 	/* get calibration */
-	ret = ch_client_get_calibration (priv->client, &calibration, &error);
+	ret = ch_client_get_calibration (priv->client, calibration, &error);
 	if (!ret) {
 		ch_util_error_dialog (priv,
 				      _("Failed to get calibration data"),
@@ -259,7 +259,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "comboboxtext_integral"));
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 out:
-	g_free (calibration);
+	return;
 }
 
 /**
@@ -310,9 +310,9 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
-	gfloat red_f, green_f, blue_f;
+	gdouble red_f, green_f, blue_f;
 	GtkWidget *widget;
-	guint16 red, green, blue;
+	gint16 red, green, blue;
 	GTimer *timer = NULL;
 
 	/* turn on sensor */
@@ -343,9 +343,9 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	}
 
 	/* convert to floating point */
-	red_f = red / (gfloat) 0xffff;
-	green_f = green / (gfloat) 0xffff;
-	blue_f = blue / (gfloat) 0xffff;
+	red_f = red / (gdouble) CH_DIVISOR_CALIBRATION;
+	green_f = green / (gdouble) CH_DIVISOR_CALIBRATION;
+	blue_f = blue / (gdouble) CH_DIVISOR_CALIBRATION;
 
 	/* update profile label */
 	tmp = g_strdup_printf ("%.2fms", g_timer_elapsed (timer, NULL) * 1000);
@@ -399,7 +399,7 @@ ch_util_measure_device (ChUtilPrivate *priv)
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
-	gfloat red, green, blue;
+	gdouble red, green, blue;
 	GtkWidget *widget;
 	GTimer *timer = NULL;
 
@@ -479,7 +479,7 @@ static void
 ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
 	gboolean ret;
-	guint16 red, green, blue;
+	gint16 red, green, blue;
 	GError *error = NULL;
 
 	/* reset to zero */
@@ -544,7 +544,7 @@ ch_util_calibrate_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
 	gboolean ret;
 	GError *error = NULL;
-	gfloat calibration[9];
+	gdouble calibration[9];
 
 	calibration[0] = 1.0f;
 	calibration[1] = 0.0f;

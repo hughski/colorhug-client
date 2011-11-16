@@ -397,7 +397,7 @@ out:
  * ch_util_show_calibration:
  **/
 static void
-ch_util_show_calibration (const gfloat *calibration)
+ch_util_show_calibration (const gdouble *calibration)
 {
 	guint i, j;
 	for (j = 0; j < 3; j++) {
@@ -416,15 +416,14 @@ static gboolean
 ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gfloat *calibration = NULL;
+	gdouble calibration[9];
 
 	/* get from HW */
-	ret = ch_client_get_calibration (priv->client, &calibration, error);
+	ret = ch_client_get_calibration (priv->client, calibration, error);
 	if (!ret)
 		goto out;
 	ch_util_show_calibration (calibration);
 out:
-	g_free (calibration);
 	return ret;
 }
 
@@ -435,7 +434,7 @@ static gboolean
 ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gfloat calibration[9];
+	gdouble calibration[9];
 	guint i;
 
 	/* parse */
@@ -447,6 +446,16 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 	for (i = 0; i < 9; i++)
 		calibration[i] = atof (values[i]);
+
+	/* check is valid */
+	for (i = 0; i < 9; i++) {
+		if (calibration[i] > 1.0f || calibration[i] < -1.0f) {
+			ret = FALSE;
+			g_set_error_literal (error, 1, 0,
+					     "invalid value, expect -1.0 to +1.0");
+			goto out;
+		}
+	}
 
 	/* set to HW */
 	ret = ch_client_set_calibration (priv->client, calibration, error);
@@ -467,7 +476,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	const gchar *sheet_type;
 	gboolean ret;
 	gchar *ccmx_data = NULL;
-	gfloat calibration[9];
+	gdouble calibration[9];
 	gsize ccmx_size;
 
 	/* parse */
@@ -752,7 +761,7 @@ static gboolean
 ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint16 red, green, blue;
+	gint16 red, green, blue;
 
 	/* get from HW */
 	ret = ch_client_take_readings (priv->client,
@@ -774,7 +783,7 @@ static gboolean
 ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gfloat red, green, blue;
+	gdouble red, green, blue;
 
 	/* get from HW */
 	ret = ch_client_take_readings_xyz (priv->client,

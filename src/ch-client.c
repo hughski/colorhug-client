@@ -49,6 +49,24 @@ struct _ChClientPrivate
 G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
 
 /**
+ * ch_client_int16le_to_double:
+ **/
+static gdouble
+ch_client_int16le_to_double (gint16 value_le, gint16 divisor)
+{
+	return (gdouble) GINT16_FROM_LE (value_le) / (gdouble) divisor;
+}
+
+/**
+ * ch_client_double_to_int16le:
+ **/
+static gint16
+ch_client_double_to_int16le (gdouble value, gint16 divisor)
+{
+	return GINT16_TO_LE (value * divisor);
+}
+
+/**
  * ch_client_load:
  **/
 gboolean
@@ -582,11 +600,12 @@ out:
  **/
 gboolean
 ch_client_get_calibration (ChClient *client,
-			   gfloat **calibration,
+			   gdouble *calibration,
 			   GError **error)
 {
 	gboolean ret;
-	guint8 buffer[36];
+	gint16 buffer[9];
+	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
@@ -598,17 +617,16 @@ ch_client_get_calibration (ChClient *client,
 				       CH_CMD_GET_CALIBRATION,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       buffer,
+				       (guint8 *) buffer,
 				       sizeof(buffer),	/* size of output buffer */
 				       error);
 	if (!ret)
 		goto out;
 
-	/* this is only possible as the PIC has the same floating point
-	 * layout as i386 */
-	/* XXXX: What is this layout so we can convert it properly? */
-	*calibration = g_new0 (gfloat, 9);
-	memcpy (*calibration, buffer, 36);
+	/* convert back into floating point */
+	for (i = 0; i < 9; i++)
+		calibration[i] = ch_client_int16le_to_double (buffer[i],
+							      CH_DIVISOR_CALIBRATION);
 out:
 	return ret;
 }
@@ -618,28 +636,29 @@ out:
  **/
 gboolean
 ch_client_set_calibration (ChClient *client,
-			   const gfloat *calibration,
+			   const gdouble *calibration,
 			   GError **error)
 {
 	gboolean ret;
-	guint8 buffer[36];
+	gint16 buffer[9];
+	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
-	/* this is only possible as the PIC has the same floating point
-	 * layout as i386 */
-	/* XXXX: What is this layout so we can convert it properly? */
-	memcpy (buffer, calibration, 36);
+	/* convert from float to signed value */
+	for (i = 0; i < 9; i++)
+		buffer[i] = ch_client_double_to_int16le (calibration[i],
+							 CH_DIVISOR_CALIBRATION);
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_CALIBRATION,
-				       buffer,	/* buffer in */
-				       sizeof(buffer),	/* size of input buffer */
-				       NULL,
+				       (guint8 *) buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
 				       error);
 	if (!ret)
@@ -920,9 +939,9 @@ out:
  **/
 gboolean
 ch_client_take_readings (ChClient *client,
-			 guint16 *red,
-			 guint16 *green,
-			 guint16 *blue,
+			 gint16 *red,
+			 gint16 *green,
+			 gint16 *blue,
 			 GError **error)
 {
 	gboolean ret;
@@ -947,9 +966,9 @@ ch_client_take_readings (ChClient *client,
 		goto out;
 
 	/* parse */
-	*red = GUINT16_FROM_LE (buffer[0]);
-	*green = GUINT16_FROM_LE (buffer[1]);
-	*blue = GUINT16_FROM_LE (buffer[2]);
+	*red = GINT16_FROM_LE (buffer[0]);
+	*green = GINT16_FROM_LE (buffer[1]);
+	*blue = GINT16_FROM_LE (buffer[2]);
 out:
 	return ret;
 }
@@ -959,13 +978,13 @@ out:
  **/
 gboolean
 ch_client_take_readings_xyz (ChClient *client,
-			     gfloat *red,
-			     gfloat *green,
-			     gfloat *blue,
+			     gdouble *red,
+			     gdouble *green,
+			     gdouble *blue,
 			     GError **error)
 {
 	gboolean ret;
-	gfloat buffer[3];
+	gint16 buffer[3];
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (red != NULL, FALSE);
@@ -985,12 +1004,10 @@ ch_client_take_readings_xyz (ChClient *client,
 	if (!ret)
 		goto out;
 
-	/* this is only possible as the PIC has the same floating point
-	 * layout as i386 */
-	/* XXXX: convert properly */
-	*red = buffer[0];
-	*green = buffer[1];
-	*blue = buffer[2];
+	/* convert back into floating point */
+	*red = ch_client_int16le_to_double (buffer[0], CH_DIVISOR_CALIBRATION);
+	*green = ch_client_int16le_to_double (buffer[1], CH_DIVISOR_CALIBRATION);
+	*blue = ch_client_int16le_to_double (buffer[2], CH_DIVISOR_CALIBRATION);
 out:
 	return ret;
 }

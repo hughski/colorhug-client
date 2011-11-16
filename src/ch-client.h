@@ -82,10 +82,10 @@ gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_calibration	(ChClient	*client,
-						 gfloat		**calibration,
+						 gdouble	*calibration,
 						 GError		**error);
 gboolean	 ch_client_set_calibration	(ChClient	*client,
-						 const gfloat	*calibration,
+						 const gdouble	*calibration,
 						 GError		**error);
 
 gboolean	 ch_client_get_serial_number	(ChClient	*client,
@@ -125,14 +125,14 @@ gboolean	 ch_client_take_reading_raw	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_take_readings	(ChClient	*client,
-						 guint16	*red,
-						 guint16	*green,
-						 guint16	*blue,
+						 gint16		*red,
+						 gint16		*green,
+						 gint16		*blue,
 						 GError		**error);
 gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
-						 gfloat		*red,
-						 gfloat		*green,
-						 gfloat		*blue,
+						 gdouble	*red,
+						 gdouble	*green,
+						 gdouble	*blue,
 						 GError		**error);
 
 gboolean	 ch_client_reset		(ChClient	*client,

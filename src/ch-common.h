@@ -108,16 +108,17 @@
  * Gets the calibration matrix.
  *
  * IN:  [1:cmd]
- * OUT: [1:retval][1:cmd][4*9:(float)matrix_value]
+ * OUT: [1:retval][1:cmd][2*9:matrix_value]
  **/
 #define	CH_CMD_GET_CALIBRATION			0x09
 
 /**
  * CH_CMD_SET_CALIBRATION:
  *
- * Sets the calibration matrix.
+ * Sets the calibration matrix. The @matrix_value parameter is a 16 bit
+ * _signed_ value that scales from -1.0 to +1.0.
  *
- * IN:  [1:cmd][4*9:(float)matrix_value]
+ * IN:  [1:cmd][2*9:matrix_value]
  * OUT: [1:retval][1:cmd]
  **/
 #define	CH_CMD_SET_CALIBRATION			0x0a
@@ -209,7 +210,10 @@
 /**
  * CH_CMD_TAKE_READINGS:
  *
- * Take a reading taking into account dark offsets.
+ * Take a reading taking into account just dark offsets.
+ * All of @red, @green and @blue are _signed_ values.
+ *
+ * This command is useful if you want to do an ambient reading.
  *
  * IN:  [1:cmd]
  * OUT: [1:retval][1:cmd][2:red][2:green][2:blue]
@@ -219,10 +223,15 @@
 /**
  * CH_CMD_TAKE_READING_XYZ:
  *
- * Take a reading taking into account dark offsets and calibration.
+ * Take a reading taking into account:
+ *  1. dark offsets
+ *  2. normalization to Y=1.0
+ *  3. the calibration matrix
+ * All of @red, @green and @blue are _signed_ values
+ * ranging from -1.0 to +1.0.
  *
  * IN:  [1:cmd]
- * OUT: [1:retval][1:cmd][4*3:(float)value]
+ * OUT: [1:retval][1:cmd][2:red][2:green][2:blue]
  **/
 #define	CH_CMD_TAKE_READING_XYZ			0x23
 
@@ -302,6 +311,9 @@
  **/
 #define	CH_CMD_SET_FLASH_SUCCESS		0x28
 
+/* magic numbers */
+#define	CH_DIVISOR_CALIBRATION			0x7fff
+
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
 
@@ -357,6 +369,8 @@ typedef enum {
 	CH_FATAL_ERROR_INVALID_CHECKSUM,
 	CH_FATAL_ERROR_INVALID_VALUE,
 	CH_FATAL_ERROR_UNKNOWN_CMD_FOR_BOOTLOADER,
+	CH_FATAL_ERROR_NO_CALIBRATION,
+	CH_FATAL_ERROR_OVERFLOW,
 	CH_FATAL_ERROR_LAST
 } ChFatalError;
 
