@@ -840,6 +840,62 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 out:
 	return ret;
 }
+
+/**
+ * ch_util_get_post_scale:
+ **/
+static gboolean
+ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble post_scale;
+
+	/* get from HW */
+	ret = ch_client_get_post_scale (priv->client,
+					&post_scale,
+					error);
+	if (!ret)
+		goto out;
+	g_print ("Post Scale: %f\n", post_scale);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_post_scale:
+ **/
+static gboolean
+ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble post_scale;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	post_scale = atof (values[0]);
+	if (post_scale < 0.0f || post_scale > 20.0f) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid post scale value %f",
+			     post_scale);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_post_scale (priv->client,
+					post_scale,
+					error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
 /**
  * main:
  **/
@@ -975,6 +1031,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Flash firmware into the processor"),
 		     ch_util_flash_firmware);
+	ch_util_add (priv->cmd_array,
+		     "get-post-scale",
+		     /* TRANSLATORS: command description */
+		     _("Gets the post scale constant"),
+		     ch_util_get_post_scale);
+	ch_util_add (priv->cmd_array,
+		     "set-post-scale",
+		     /* TRANSLATORS: command description */
+		     _("Sets the post scale constant"),
+		     ch_util_set_post_scale);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

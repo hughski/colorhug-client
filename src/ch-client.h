@@ -88,6 +88,13 @@ gboolean	 ch_client_set_calibration	(ChClient	*client,
 						 const gdouble	*calibration,
 						 GError		**error);
 
+gboolean	 ch_client_get_post_scale	(ChClient	*client,
+						 gdouble	*post_scale,
+						 GError		**error);
+gboolean	 ch_client_set_post_scale	(ChClient	*client,
+						 gdouble	 post_scale,
+						 GError		**error);
+
 gboolean	 ch_client_get_serial_number	(ChClient	*client,
 						 guint64	*serial_number,
 						 GError		**error);

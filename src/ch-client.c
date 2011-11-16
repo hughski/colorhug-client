@@ -668,6 +668,75 @@ out:
 }
 
 /**
+ * ch_client_get_post_scale:
+ **/
+gboolean
+ch_client_get_post_scale (ChClient *client,
+			  gdouble *post_scale,
+			  GError **error)
+{
+	gboolean ret;
+	gint16 buffer;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (post_scale != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_POST_SCALE,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	*post_scale = ch_client_int16le_to_double (buffer,
+						   CH_DIVISOR_POST_SCALE);
+out:
+	return ret;
+}
+
+/**
+ * ch_client_set_post_scale:
+ **/
+gboolean
+ch_client_set_post_scale (ChClient *client,
+			  gdouble post_scale,
+			  GError **error)
+{
+	gboolean ret;
+	gint16 buffer;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (post_scale > -20.0f, FALSE);
+	g_return_val_if_fail (post_scale < 20.0f, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* convert from float to signed value */
+	buffer = ch_client_double_to_int16le (post_scale,
+					      CH_DIVISOR_POST_SCALE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_POST_SCALE,
+				       (guint8 *) &buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_get_serial_number:
  **/
 gboolean

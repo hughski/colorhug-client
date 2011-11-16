@@ -80,6 +80,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gchar *tmp;
 	GError *error = NULL;
 	gdouble calibration[9];
+	gdouble post_scale;
 	GtkAdjustment *adj;
 	GtkWidget *widget;
 	guint16 integral_time = 0;
@@ -201,6 +202,22 @@ ch_util_refresh (ChUtilPrivate *priv)
 	g_free (tmp);
 	tmp = g_strdup_printf ("%.4f", (gdouble) blue / 0xffff);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_blue"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+
+	/* get post scale */
+	ret = ch_client_get_post_scale (priv->client,
+					&post_scale,
+					&error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to get dark offsets"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+	tmp = g_strdup_printf ("%.4f", post_scale);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_post_scale"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
 
@@ -545,6 +562,7 @@ ch_util_calibrate_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	gboolean ret;
 	GError *error = NULL;
 	gdouble calibration[9];
+	gdouble post_scale = 1.0f;
 
 	calibration[0] = 1.0f;
 	calibration[1] = 0.0f;
@@ -563,6 +581,18 @@ ch_util_calibrate_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	if (!ret) {
 		ch_util_error_dialog (priv,
 				      _("Failed to set calibration"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_post_scale (priv->client,
+					post_scale,
+					&error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to set post scale"),
 				      error->message);
 		g_error_free (error);
 		goto out;
