@@ -158,8 +158,8 @@ ch_client_strerror (ChFatalError fatal_error)
 	case CH_FATAL_ERROR_NOT_IMPLEMENTED:
 		str = "Not implemented";
 		break;
-	case CH_FATAL_ERROR_UNDERFLOW:
-		str = "Underflow";
+	case CH_FATAL_ERROR_UNDERFLOW_SENSOR:
+		str = "Underflow of sensor";
 		break;
 	case CH_FATAL_ERROR_NO_SERIAL:
 		str = "No serial";
@@ -181,6 +181,15 @@ ch_client_strerror (ChFatalError fatal_error)
 		break;
 	case CH_FATAL_ERROR_UNKNOWN_CMD_FOR_BOOTLOADER:
 		str = "Unknown command for bootloader";
+		break;
+	case CH_FATAL_ERROR_OVERFLOW_MULTIPLY:
+		str = "Overflow of multiply";
+		break;
+	case CH_FATAL_ERROR_OVERFLOW_ADDITION:
+		str = "Overflow of addition";
+		break;
+	case CH_FATAL_ERROR_OVERFLOW_SENSOR:
+		str = "Overflow of sensor";
 		break;
 	default:
 		str = "Unknown error, please report";
