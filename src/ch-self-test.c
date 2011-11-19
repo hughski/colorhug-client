@@ -21,11 +21,180 @@
 
 #include "config.h"
 #include "ch-client.h"
+#include "ch-math.h"
 
 #include <string.h>
 #include <glib.h>
 #include <glib-object.h>
 #include <gusb.h>
+
+static void
+ch_test_math_convert_func (void)
+{
+	ChPackedFloat pf;
+	gdouble value = 0.0f;
+
+	/* test packing */
+	g_assert_cmpint (sizeof (ChPackedFloat), ==, 4);
+
+	/* test converting to packed struct */
+	value = 3.1415927f;
+	ch_double_to_packed_float (value, &pf);
+	g_assert_cmpint (pf.offset, ==, 3);
+	g_assert_cmpint (pf.fraction, ==, 0x243c);
+
+	/* test converting to packed struct */
+	value = -3.1415927f;
+	ch_double_to_packed_float (value, &pf);
+	g_assert_cmpint (pf.offset, ==, -4);
+	g_assert_cmpint (pf.fraction, ==, 0x243b ^ 0xffff);
+
+	/* test converting positive to float */
+	pf.offset = 3;
+	pf.fraction = 0x243c;
+	ch_packed_float_to_double (&pf, &value);
+	g_assert_cmpfloat (value, >, 3.1415);
+	g_assert_cmpfloat (value, <, 3.1416);
+
+	/* test converting negative to float */
+	pf.offset = -4;
+	pf.fraction = 0x243b ^ 0xffff;
+	ch_packed_float_to_double (&pf, &value);
+	g_assert_cmpfloat (value, >, -3.1416);
+	g_assert_cmpfloat (value, <, -3.1415);
+
+	/* test converting zero */
+	value = 0.0f;
+	ch_double_to_packed_float (value, &pf);
+	g_assert_cmpint (pf.offset, ==, 0);
+	g_assert_cmpint (pf.fraction, ==, 0);
+	ch_packed_float_to_double (&pf, &value);
+	g_assert_cmpfloat (value, >, -0.001f);
+	g_assert_cmpfloat (value, <, +0.001f);
+
+	/* test converting positive */
+	value = +1.4f;
+	ch_double_to_packed_float (value, &pf);
+	g_assert_cmpint (pf.offset, ==, 1);
+	g_assert_cmpint (pf.fraction, ==, 0x6664);
+	ch_packed_float_to_double (&pf, &value);
+	g_assert_cmpfloat (value, <, 1.41);
+	g_assert_cmpfloat (value, >, 1.39);
+
+	/* test converting negative */
+	value = -1.4f;
+	ch_double_to_packed_float (value, &pf);
+	g_assert_cmpint (pf.offset, ==, -2);
+	g_assert_cmpint (pf.fraction, ==, 0x6663 ^ 0xffff);
+	ch_packed_float_to_double (&pf, &value);
+	g_assert_cmpfloat (value, <, -1.39);
+	g_assert_cmpfloat (value, >, -1.41);
+
+	/* test converting negative max */
+	value = -0x7fff;
+	ch_double_to_packed_float (value, &pf);
+	g_assert_cmpint (pf.offset, ==, -32767);
+	g_assert_cmpint (pf.fraction, ==, 32767);
+	ch_packed_float_to_double (&pf, &value);
+	g_assert_cmpfloat (value, >, -32768.0001);
+	g_assert_cmpfloat (value, <, +32767.9999);
+}
+
+static void
+ch_test_math_add_func (void)
+{
+	ChPackedFloat pf;
+	ChPackedFloat pf_tmp;
+	ChPackedFloat pf_result;
+	gdouble value = 0.0f;
+	guint8 rc;
+
+	/* test addition */
+	ch_double_to_packed_float (3.90f, &pf);
+	ch_double_to_packed_float (1.40f, &pf_tmp);
+	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, >, 5.299);
+	g_assert_cmpfloat (value, <, 5.310);
+
+	/* test addition with both negative */
+	ch_double_to_packed_float (-3.90f, &pf);
+	ch_double_to_packed_float (-1.40f, &pf_tmp);
+	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, >, -5.301);
+	g_assert_cmpfloat (value, <, -5.299);
+
+	/* test addition with negative */
+	ch_double_to_packed_float (3.20f, &pf);
+	ch_double_to_packed_float (-1.50f, &pf_tmp);
+	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, <, 1.701);
+	g_assert_cmpfloat (value, >, 1.699);
+
+	/* test addition with negative */
+	ch_double_to_packed_float (3.20f, &pf);
+	ch_double_to_packed_float (-10.50f, &pf_tmp);
+	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, >, -7.301);
+	g_assert_cmpfloat (value, <, -7.299);
+
+	/* test addition overflow */
+	ch_double_to_packed_float (0x7fff, &pf);
+	ch_double_to_packed_float (0x7fff, &pf_tmp);
+	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
+//	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_OVERFLOW_ADDITION);
+}
+
+
+static void
+ch_test_math_multiply_func (void)
+{
+	ChPackedFloat pf;
+	ChPackedFloat pf_tmp;
+	ChPackedFloat pf_result;
+	gdouble value = 0.0f;
+	guint8 rc;
+
+	/* test multiplication */
+	ch_double_to_packed_float (3.90f, &pf);
+	ch_double_to_packed_float (1.40f, &pf_tmp);
+	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, >, 5.45);
+	g_assert_cmpfloat (value, <, 5.47);
+
+	/* test multiplication of negative */
+	ch_double_to_packed_float (3.90f, &pf);
+	ch_double_to_packed_float (-1.4f, &pf_tmp);
+	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, <, -5.45);
+	g_assert_cmpfloat (value, >, -5.47);
+
+	/* test multiplication of double negative */
+	ch_double_to_packed_float (-3.90f, &pf);
+	ch_double_to_packed_float (-1.4f, &pf_tmp);
+	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, >, 5.45);
+	g_assert_cmpfloat (value, <, 5.47);
+
+	/* test multiplication overflow */
+	ch_double_to_packed_float (0x4fff, &pf);
+	ch_double_to_packed_float (0x4, &pf_tmp);
+	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_OVERFLOW_MULTIPLY);
+}
 
 static void
 ch_test_state_func (void)
@@ -49,6 +218,9 @@ ch_test_state_func (void)
 	/* verify LEDs */
 	ret = ch_client_set_leds (client,
 				  3,
+				  0,
+				  0x00,
+				  0x00,
 				  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
@@ -110,12 +282,14 @@ ch_test_eeprom_func (void)
 	guint16 major = 0;
 	guint16 micro = 0;
 	guint16 minor = 0;
-	guint16 red = 0;
-	guint16 green = 0;
-	guint16 blue = 0;
+	gdouble red = 0;
+	gdouble green = 0;
+	gdouble blue = 0;
+	gdouble post_scale = 0;
+	gdouble post_scale_tmp = 0;
 	guint64 serial_number = 0;
-	gfloat *calibration = NULL;
-	gfloat *calibration_tmp = NULL;
+	gdouble calibration[9];
+	gdouble calibration_tmp[9];
 
 	/* new device */
 	client = ch_client_new ();
@@ -176,7 +350,6 @@ ch_test_eeprom_func (void)
 	g_assert_cmpint (blue, ==, 56);
 
 	/* verify calibration */
-	calibration = g_new0 (gfloat, 9);
 	calibration[0] = 1.0f;
 	calibration[1] = 2.0f;
 	calibration[2] = 3.0f;
@@ -193,15 +366,28 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 
 	ret = ch_client_get_calibration (client,
-					 &calibration_tmp,
+					 calibration_tmp,
 					 &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert (memcmp (calibration_tmp,
 			  calibration,
 			  sizeof (gfloat) * 9) == 0);
-	g_free (calibration);
-	g_free (calibration_tmp);
+
+	/* verify post scale */
+	post_scale = 127.8f;
+	ret = ch_client_set_post_scale (client,
+					post_scale,
+					&error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	ret = ch_client_get_post_scale (client,
+					&post_scale,
+					&error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert_cmpfloat (post_scale, ==, post_scale_tmp);
 
 #if 0
 	/* write eeprom */
@@ -274,6 +460,9 @@ main (int argc, char **argv)
 	g_log_set_fatal_mask (NULL, G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
 
 	/* tests go here */
+	g_test_add_func ("/ColorHug/math-convert", ch_test_math_convert_func);
+	g_test_add_func ("/ColorHug/math-add", ch_test_math_add_func);
+	g_test_add_func ("/ColorHug/math-multiply", ch_test_math_multiply_func);
 	g_test_add_func ("/ColorHug/state", ch_test_state_func);
 	g_test_add_func ("/ColorHug/eeprom", ch_test_eeprom_func);
 	g_test_add_func ("/ColorHug/reading", ch_test_reading_func);

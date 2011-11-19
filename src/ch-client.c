@@ -27,6 +27,7 @@
 #include <gio/gio.h>
 #include <gusb.h>
 
+#include "ch-math.h"
 #include "ch-client.h"
 
 static void     ch_client_finalize	(GObject     *object);
@@ -47,24 +48,6 @@ struct _ChClientPrivate
 #define	CH_CLIENT_USB_TIMEOUT		2000
 
 G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
-
-/**
- * ch_client_int16le_to_double:
- **/
-static gdouble
-ch_client_int16le_to_double (gint16 value_le, gint16 divisor)
-{
-	return (gdouble) GINT16_FROM_LE (value_le) / (gdouble) divisor;
-}
-
-/**
- * ch_client_double_to_int16le:
- **/
-static gint16
-ch_client_double_to_int16le (gdouble value, gint16 divisor)
-{
-	return GINT16_TO_LE (value * divisor);
-}
 
 /**
  * ch_client_load:
@@ -507,8 +490,8 @@ out:
  **/
 gboolean
 ch_client_get_integral_time (ChClient *client,
-			      guint16 *integral_time,
-			      GError **error)
+			     guint16 *integral_time,
+			     GError **error)
 {
 	gboolean ret;
 	guint16 integral_le;
@@ -613,7 +596,7 @@ ch_client_get_calibration (ChClient *client,
 			   GError **error)
 {
 	gboolean ret;
-	gint16 buffer[9];
+	ChPackedFloat buffer[9];
 	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -634,8 +617,7 @@ ch_client_get_calibration (ChClient *client,
 
 	/* convert back into floating point */
 	for (i = 0; i < 9; i++)
-		calibration[i] = ch_client_int16le_to_double (buffer[i],
-							      CH_DIVISOR_CALIBRATION);
+		ch_packed_float_to_double (&buffer[i], &calibration[i]);
 out:
 	return ret;
 }
@@ -649,7 +631,7 @@ ch_client_set_calibration (ChClient *client,
 			   GError **error)
 {
 	gboolean ret;
-	gint16 buffer[9];
+	ChPackedFloat buffer[9];
 	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -659,8 +641,7 @@ ch_client_set_calibration (ChClient *client,
 
 	/* convert from float to signed value */
 	for (i = 0; i < 9; i++)
-		buffer[i] = ch_client_double_to_int16le (calibration[i],
-							 CH_DIVISOR_CALIBRATION);
+		ch_double_to_packed_float (calibration[i], &buffer[i]);
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
@@ -685,7 +666,7 @@ ch_client_get_post_scale (ChClient *client,
 			  GError **error)
 {
 	gboolean ret;
-	gint16 buffer;
+	ChPackedFloat buffer;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (post_scale != NULL, FALSE);
@@ -704,8 +685,7 @@ ch_client_get_post_scale (ChClient *client,
 		goto out;
 
 	/* convert back into floating point */
-	*post_scale = ch_client_int16le_to_double (buffer,
-						   CH_DIVISOR_POST_SCALE);
+	ch_packed_float_to_double (&buffer, post_scale);
 out:
 	return ret;
 }
@@ -719,7 +699,7 @@ ch_client_set_post_scale (ChClient *client,
 			  GError **error)
 {
 	gboolean ret;
-	gint16 buffer;
+	ChPackedFloat buffer;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (post_scale > -20.0f, FALSE);
@@ -728,8 +708,7 @@ ch_client_set_post_scale (ChClient *client,
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
 	/* convert from float to signed value */
-	buffer = ch_client_double_to_int16le (post_scale,
-					      CH_DIVISOR_POST_SCALE);
+	ch_double_to_packed_float (post_scale, &buffer);
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
@@ -909,9 +888,9 @@ out:
  **/
 gboolean
 ch_client_get_dark_offsets (ChClient *client,
-			    guint16 *red,
-			    guint16 *green,
-			    guint16 *blue,
+			    gdouble *red,
+			    gdouble *green,
+			    gdouble *blue,
 			    GError **error)
 {
 	gboolean ret;
@@ -935,10 +914,10 @@ ch_client_get_dark_offsets (ChClient *client,
 	if (!ret)
 		goto out;
 
-	/* parse */
-	*red = GUINT16_FROM_LE (buffer[0]);
-	*green = GUINT16_FROM_LE (buffer[1]);
-	*blue = GUINT16_FROM_LE (buffer[2]);
+	/* convert back into floating point */
+	*red = (gdouble) buffer[0] / (gdouble) 0xffff;
+	*green = (gdouble) buffer[1] / (gdouble) 0xffff;
+	*blue = (gdouble) buffer[2] / (gdouble) 0xffff;
 out:
 	return ret;
 }
@@ -948,28 +927,25 @@ out:
  **/
 gboolean
 ch_client_set_dark_offsets (ChClient *client,
-			    guint16 red,
-			    guint16 green,
-			    guint16 blue,
+			    gdouble red,
+			    gdouble green,
+			    gdouble blue,
 			    GError **error)
 {
 	gboolean ret;
-	guint8 buffer[6];
+	guint16 buffer[3];
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
 	/* hit hardware */
-	buffer[0] = red & 0x00ff;
-	buffer[1] = (red & 0xff00) / 0xff;
-	buffer[2] = green & 0x00ff;
-	buffer[3] = (green & 0xff00) / 0xff;
-	buffer[4] = blue & 0x00ff;
-	buffer[5] = (blue & 0xff00) / 0xff;
+	buffer[0] = red * (gdouble) 0xffff;
+	buffer[1] = green * (gdouble) 0xffff;
+	buffer[2] = blue * (gdouble) 0xffff;
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_DARK_OFFSETS,
-				       buffer,	/* buffer in */
+				       (const guint8 *) buffer,	/* buffer in */
 				       sizeof(buffer),	/* size of input buffer */
 				       NULL,
 				       0,	/* size of output buffer */
@@ -1017,13 +993,13 @@ out:
  **/
 gboolean
 ch_client_take_readings (ChClient *client,
-			 gint16 *red,
-			 gint16 *green,
-			 gint16 *blue,
+			 gdouble *red,
+			 gdouble *green,
+			 gdouble *blue,
 			 GError **error)
 {
 	gboolean ret;
-	gint16 buffer[3];
+	ChPackedFloat buffer[3];
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (red != NULL, FALSE);
@@ -1043,10 +1019,10 @@ ch_client_take_readings (ChClient *client,
 	if (!ret)
 		goto out;
 
-	/* parse */
-	*red = GINT16_FROM_LE (buffer[0]);
-	*green = GINT16_FROM_LE (buffer[1]);
-	*blue = GINT16_FROM_LE (buffer[2]);
+	/* convert back into floating point */
+	ch_packed_float_to_double (&buffer[0], red);
+	ch_packed_float_to_double (&buffer[1], green);
+	ch_packed_float_to_double (&buffer[2], blue);
 out:
 	return ret;
 }
@@ -1062,7 +1038,7 @@ ch_client_take_readings_xyz (ChClient *client,
 			     GError **error)
 {
 	gboolean ret;
-	gint16 buffer[3];
+	ChPackedFloat buffer[3];
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (red != NULL, FALSE);
@@ -1083,15 +1059,9 @@ ch_client_take_readings_xyz (ChClient *client,
 		goto out;
 
 	/* convert back into floating point */
-	*red = ch_client_int16le_to_double (buffer[0],
-					    CH_DIVISOR_CALIBRATION) *
-					    CH_DIVISOR_READING_XYZ;
-	*green = ch_client_int16le_to_double (buffer[1],
-					      CH_DIVISOR_CALIBRATION) *
-					      CH_DIVISOR_READING_XYZ;
-	*blue = ch_client_int16le_to_double (buffer[2],
-					     CH_DIVISOR_CALIBRATION) *
-					     CH_DIVISOR_READING_XYZ;
+	ch_packed_float_to_double (&buffer[0], red);
+	ch_packed_float_to_double (&buffer[1], green);
+	ch_packed_float_to_double (&buffer[2], blue);
 out:
 	return ret;
 }

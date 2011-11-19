@@ -29,6 +29,7 @@
 #include <math.h>
 
 #include "ch-client.h"
+#include "ch-math.h"
 
 typedef struct {
 	ChClient		*client;
@@ -696,7 +697,7 @@ static gboolean
 ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint16 red, green, blue;
+	gdouble red, green, blue;
 
 	/* get from HW */
 	ret = ch_client_get_dark_offsets (priv->client,
@@ -706,7 +707,7 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 					  error);
 	if (!ret)
 		goto out;
-	g_print ("R:%i G:%i B:%i\n", red, green, blue);
+	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
 out:
 	return ret;
 }
@@ -718,7 +719,7 @@ static gboolean
 ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint16 red, green, blue;
+	gdouble red, green, blue;
 
 	/* parse */
 	if (g_strv_length (values) != 3) {
@@ -727,9 +728,9 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	red = atoi (values[0]);
-	green = atoi (values[1]);
-	blue = atoi (values[2]);
+	red = atof (values[0]);
+	green = atof (values[1]);
+	blue = atof (values[2]);
 
 	/* set to HW */
 	ret = ch_client_set_dark_offsets (priv->client,
@@ -792,7 +793,7 @@ static gboolean
 ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gint16 red, green, blue;
+	gdouble red, green, blue;
 
 	/* get from HW */
 	ret = ch_client_take_readings (priv->client,
@@ -802,7 +803,7 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 				       error);
 	if (!ret)
 		goto out;
-	g_print ("R:%i G:%i B:%i\n", red, green, blue);
+	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
 out:
 	return ret;
 }

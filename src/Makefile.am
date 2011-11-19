@@ -11,6 +11,8 @@ INCLUDES =						\
 
 noinst_LIBRARIES = libchshared.a
 libchshared_a_SOURCES =					\
+	ch-math.c					\
+	ch-math.h					\
 	ch-client.c					\
 	ch-client.h					\
 	ch-common.h
@@ -30,7 +32,8 @@ colorhug_LDADD =					\
 	libchshared.a					\
 	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
-	$(GLIB_LIBS)
+	$(GLIB_LIBS)					\
+	-lm
 
 colorhug_CFLAGS =					\
 	$(WARNINGFLAGS_C)
@@ -68,7 +71,8 @@ ch_self_test_SOURCES =					\
 ch_self_test_LDADD =					\
 	libchshared.a					\
 	$(GUSB_LIBS)					\
-	$(GLIB_LIBS)
+	$(GLIB_LIBS)					\
+	-lm
 
 ch_self_test_CFLAGS = $(WARNINGFLAGS_C)
 

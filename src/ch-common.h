@@ -336,11 +336,6 @@
  **/
 #define	CH_CMD_SET_POST_SCALE			0x2b
 
-/* magic numbers */
-#define	CH_DIVISOR_POST_SCALE			0x1fff
-#define	CH_DIVISOR_CALIBRATION			0x7fff
-#define	CH_DIVISOR_READING_XYZ			0x0900
-
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
 

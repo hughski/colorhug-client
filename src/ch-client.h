@@ -113,14 +113,14 @@ gboolean	 ch_client_set_leds		(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_dark_offsets	(ChClient	*client,
-						 guint16	*red,
-						 guint16	*green,
-						 guint16	*blue,
+						 gdouble	*red,
+						 gdouble	*green,
+						 gdouble	*blue,
 						 GError		**error);
 gboolean	 ch_client_set_dark_offsets	(ChClient	*client,
-						 guint16	 red,
-						 guint16	 green,
-						 guint16	 blue,
+						 gdouble	 red,
+						 gdouble	 green,
+						 gdouble	 blue,
 						 GError		**error);
 
 gboolean	 ch_client_write_eeprom		(ChClient	*client,
@@ -132,9 +132,9 @@ gboolean	 ch_client_take_reading_raw	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_take_readings	(ChClient	*client,
-						 gint16		*red,
-						 gint16		*green,
-						 gint16		*blue,
+						 gdouble	*red,
+						 gdouble	*green,
+						 gdouble	*blue,
 						 GError		**error);
 gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
 						 gdouble	*red,

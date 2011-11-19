@@ -85,7 +85,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	GtkWidget *widget;
 	guint16 integral_time = 0;
 	guint16 major, minor, micro;
-	guint16 red, green, blue;
+	gdouble red, green, blue;
 	guint64 serial_number = 0;
 	guint8 leds;
 	guint i, j;
@@ -192,15 +192,15 @@ ch_util_refresh (ChUtilPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
-	tmp = g_strdup_printf ("%.4f", (gdouble) red / 0xffff);
+	tmp = g_strdup_printf ("%.4f", red);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_red"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", (gdouble) green / 0xffff);
+	tmp = g_strdup_printf ("%.4f", green);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_green"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", (gdouble) blue / 0xffff);
+	tmp = g_strdup_printf ("%.4f", blue);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_blue"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
@@ -327,9 +327,8 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
-	gdouble red_f, green_f, blue_f;
+	gdouble red, green, blue;
 	GtkWidget *widget;
-	gint16 red, green, blue;
 	GTimer *timer = NULL;
 
 	/* turn on sensor */
@@ -359,11 +358,6 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 		goto out;
 	}
 
-	/* convert to floating point */
-	red_f = red / (gdouble) CH_DIVISOR_CALIBRATION;
-	green_f = green / (gdouble) CH_DIVISOR_CALIBRATION;
-	blue_f = blue / (gdouble) CH_DIVISOR_CALIBRATION;
-
 	/* update profile label */
 	tmp = g_strdup_printf ("%.2fms", g_timer_elapsed (timer, NULL) * 1000);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_profile"));
@@ -371,34 +365,34 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* update maximum values */
-	if (red_f > priv->red_max)
-		priv->red_max = red_f;
-	if (green_f > priv->green_max)
-		priv->green_max = green_f;
-	if (blue_f > priv->blue_max)
-		priv->blue_max = blue_f;
+	if (red > priv->red_max)
+		priv->red_max = red;
+	if (green > priv->green_max)
+		priv->green_max = green;
+	if (blue > priv->blue_max)
+		priv->blue_max = blue;
 
 	/* update sliders */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_red"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
-				       red_f / priv->red_max);
+				       red / priv->red_max);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_green"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
-				       green_f / priv->green_max);
+				       green / priv->green_max);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_blue"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
-				       blue_f / priv->blue_max);
+				       blue / priv->blue_max);
 
 	/* update sample */
-	tmp = g_strdup_printf ("%.4f", red_f);
+	tmp = g_strdup_printf ("%.4f", red);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_x"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", green_f);
+	tmp = g_strdup_printf ("%.4f", green);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_y"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", blue_f);
+	tmp = g_strdup_printf ("%.4f", blue);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_z"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
@@ -496,7 +490,7 @@ static void
 ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
 	gboolean ret;
-	gint16 red, green, blue;
+	gdouble red, green, blue;
 	GError *error = NULL;
 
 	/* reset to zero */
