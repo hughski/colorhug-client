@@ -78,6 +78,9 @@ ch_self_test_CFLAGS = $(WARNINGFLAGS_C)
 
 TESTS = ch-self-test
 
+MAINTAINERCLEANFILES =					\
+	$(srcdir)/libchshared.a
+
 pkgdata_DATA =						\
 	ch-util.ui
 

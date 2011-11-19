@@ -3,6 +3,7 @@
 Makefile.in.in
 Makefile.in.in~
 Makevars.template
+*.pot
 POTFILES
 Rules-quot
 *.sed
