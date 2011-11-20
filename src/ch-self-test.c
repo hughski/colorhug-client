@@ -330,11 +330,11 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 	g_assert_cmpint (major, ==, 0);
 	g_assert_cmpint (minor, ==, 0);
-	g_assert_cmpint (micro, ==, 3);
+	g_assert_cmpint (micro, ==, 4);
 
 	/* verify dark offsets */
 	ret = ch_client_set_dark_offsets (client,
-					  12, 34, 56,
+					  0.12, 0.34, 0.56,
 					  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
@@ -345,9 +345,9 @@ ch_test_eeprom_func (void)
 					  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpint (red, ==, 12);
-	g_assert_cmpint (green, ==, 34);
-	g_assert_cmpint (blue, ==, 56);
+	g_assert_cmpint (red, ==, 0.12);
+	g_assert_cmpint (green, ==, 0.34);
+	g_assert_cmpint (blue, ==, 0.56);
 
 	/* verify calibration */
 	calibration[0] = 1.0f;
@@ -383,11 +383,11 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 
 	ret = ch_client_get_post_scale (client,
-					&post_scale,
+					&post_scale_tmp,
 					&error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpfloat (post_scale, ==, post_scale_tmp);
+	g_assert_cmpfloat (fabs (post_scale - post_scale_tmp), <, 0.0001);
 
 #if 0
 	/* write eeprom */
