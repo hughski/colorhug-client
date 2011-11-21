@@ -84,7 +84,7 @@
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">9</property>
-                        <property name="n_rows">12</property>
+                        <property name="n_rows">13</property>
                         <property name="n_columns">2</property>
                         <child>
                           <object class="GtkLabel" id="label8">
@@ -601,7 +601,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">11</property>
+                            <property name="top_attach">12</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -615,7 +615,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">11</property>
+                            <property name="top_attach">12</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -664,7 +664,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">10</property>
+                            <property name="top_attach">11</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -679,7 +679,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">10</property>
+                            <property name="top_attach">11</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -694,7 +694,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">9</property>
+                            <property name="top_attach">10</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -741,7 +741,36 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">9</property>
+                            <property name="top_attach">10</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label16_2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Pre scale:&lt;/span&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">8</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_pre_scale">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">0.0000</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">8</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -756,7 +785,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">8</property>
+                            <property name="top_attach">9</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -770,7 +799,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">8</property>
+                            <property name="top_attach">9</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>

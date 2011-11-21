@@ -682,6 +682,71 @@ out:
 }
 
 /**
+ * ch_client_get_pre_scale:
+ **/
+gboolean
+ch_client_get_pre_scale (ChClient *client,
+			 gdouble *pre_scale,
+			 GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (pre_scale != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_GET_PRE_SCALE,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	ch_packed_float_to_double (&buffer, pre_scale);
+out:
+	return ret;
+}
+
+/**
+ * ch_client_set_pre_scale:
+ **/
+gboolean
+ch_client_set_pre_scale (ChClient *client,
+			 gdouble pre_scale,
+			 GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* convert from float to signed value */
+	ch_double_to_packed_float (pre_scale, &buffer);
+
+	/* hit hardware */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_PRE_SCALE,
+				       (guint8 *) &buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_get_post_scale:
  **/
 gboolean

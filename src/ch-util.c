@@ -76,6 +76,7 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	gboolean ret;
 	GError *error = NULL;
 	gdouble calibration[9];
+	gdouble pre_scale = 5.0f;
 	gdouble post_scale = 1.0f;
 
 	calibration[0] = 1.0f;
@@ -113,6 +114,18 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
+
+	/* set to HW */
+	ret = ch_client_set_pre_scale (priv->client,
+				       pre_scale,
+				       &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to set pre scale"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
 out:
 	return;
 }
@@ -130,6 +143,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gchar *tmp;
 	GError *error = NULL;
 	gdouble calibration[9];
+	gdouble pre_scale;
 	gdouble post_scale;
 	GtkAdjustment *adj;
 	GtkWidget *widget;
@@ -275,13 +289,29 @@ ch_util_refresh (ChUtilPrivate *priv)
 		}
 	}
 
+	/* get pre scale */
+	ret = ch_client_get_pre_scale (priv->client,
+				       &pre_scale,
+				       &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to get pre scale"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+	tmp = g_strdup_printf ("%.4f", pre_scale);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_pre_scale"));
+	gtk_label_set_label (GTK_LABEL (widget), tmp);
+	g_free (tmp);
+
 	/* get post scale */
 	ret = ch_client_get_post_scale (priv->client,
 					&post_scale,
 					&error);
 	if (!ret) {
 		ch_util_error_dialog (priv,
-				      _("Failed to get dark offsets"),
+				      _("Failed to get post scale"),
 				      error->message);
 		g_error_free (error);
 		goto out;

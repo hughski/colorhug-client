@@ -882,6 +882,61 @@ out:
 }
 
 /**
+ * ch_util_get_pre_scale:
+ **/
+static gboolean
+ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble pre_scale;
+
+	/* get from HW */
+	ret = ch_client_get_pre_scale (priv->client,
+				       &pre_scale,
+				       error);
+	if (!ret)
+		goto out;
+	g_print ("Pre Scale: %f\n", pre_scale);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_pre_scale:
+ **/
+static gboolean
+ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble pre_scale;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	pre_scale = atof (values[0]);
+	if (pre_scale < -0x7fff || pre_scale > 0x7fff) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid post scale value %f",
+			     pre_scale);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_pre_scale (priv->client,
+				       pre_scale,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_post_scale:
  **/
 static gboolean
@@ -1071,6 +1126,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Flash firmware into the processor"),
 		     ch_util_flash_firmware);
+	ch_util_add (priv->cmd_array,
+		     "get-pre-scale",
+		     /* TRANSLATORS: command description */
+		     _("Gets the pre scale constant"),
+		     ch_util_get_pre_scale);
+	ch_util_add (priv->cmd_array,
+		     "set-pre-scale",
+		     /* TRANSLATORS: command description */
+		     _("Sets the pre scale constant"),
+		     ch_util_set_pre_scale);
 	ch_util_add (priv->cmd_array,
 		     "get-post-scale",
 		     /* TRANSLATORS: command description */
