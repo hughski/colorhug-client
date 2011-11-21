@@ -311,7 +311,7 @@ ch_client_write_command (ChClient *client,
 	}
 
 	/* request */
-	ch_client_print_data ("request", buffer, sizeof(buffer));
+	ch_client_print_data ("request", buffer, buffer_in_length + 1);
 	ret = g_usb_device_interrupt_transfer (client->priv->device,
 					       CH_USB_HID_EP_OUT,
 					       buffer,
@@ -337,7 +337,7 @@ ch_client_write_command (ChClient *client,
 					       error);
 	if (!ret)
 		goto out;
-	ch_client_print_data ("reply", buffer, sizeof(buffer));
+	ch_client_print_data ("reply", buffer, actual_length);
 
 	/* parse */
 	if (buffer[CH_BUFFER_OUTPUT_RETVAL] != CH_FATAL_ERROR_NONE ||
