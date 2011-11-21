@@ -174,6 +174,9 @@ ch_client_strerror (ChFatalError fatal_error)
 	case CH_FATAL_ERROR_OVERFLOW_SENSOR:
 		str = "Overflow of sensor";
 		break;
+	case CH_FATAL_ERROR_NO_CALIBRATION:
+		str = "No calibration";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
