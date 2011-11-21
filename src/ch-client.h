@@ -82,10 +82,14 @@ gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_calibration	(ChClient	*client,
+						 guint16	 calibration_index,
 						 gdouble	*calibration,
+						 gchar		*description,
 						 GError		**error);
 gboolean	 ch_client_set_calibration	(ChClient	*client,
+						 guint16	 calibration_index,
 						 const gdouble	*calibration,
+						 const gchar	*description,
 						 GError		**error);
 
 gboolean	 ch_client_get_post_scale	(ChClient	*client,
@@ -137,6 +141,7 @@ gboolean	 ch_client_take_readings	(ChClient	*client,
 						 gdouble	*blue,
 						 GError		**error);
 gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
+						 guint16	 calibration_index,
 						 gdouble	*red,
 						 gdouble	*green,
 						 gdouble	*blue,

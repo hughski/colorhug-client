@@ -595,14 +595,17 @@ out:
  **/
 gboolean
 ch_client_get_calibration (ChClient *client,
+			   guint16 calibration_index,
 			   gdouble *calibration,
+			   gchar *description,
 			   GError **error)
 {
 	gboolean ret;
-	ChPackedFloat buffer[9];
+	guint8 buffer[9*4 + 24];
 	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
@@ -610,17 +613,23 @@ ch_client_get_calibration (ChClient *client,
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_GET_CALIBRATION,
-				       NULL,	/* buffer in */
-				       0,	/* size of input buffer */
+				       (guint8 *) &calibration_index,
+				       sizeof(guint16),
 				       (guint8 *) buffer,
-				       sizeof(buffer),	/* size of output buffer */
+				       sizeof(buffer),
 				       error);
 	if (!ret)
 		goto out;
 
 	/* convert back into floating point */
-	for (i = 0; i < 9; i++)
-		ch_packed_float_to_double (&buffer[i], &calibration[i]);
+	for (i = 0; i < 9; i++) {
+		ch_packed_float_to_double ((ChPackedFloat *) &buffer[i*4],
+					   &calibration[i]);
+	}
+
+	/* get the description */
+	if (description != NULL)
+		strncpy (description, (const char *) &buffer[9*4], 24);
 out:
 	return ret;
 }
@@ -630,21 +639,33 @@ out:
  **/
 gboolean
 ch_client_set_calibration (ChClient *client,
+			   guint16 calibration_index,
 			   const gdouble *calibration,
+			   const gchar *description,
 			   GError **error)
 {
 	gboolean ret;
-	ChPackedFloat buffer[9];
+	guint8 buffer[9*4 + 2 + 24];
 	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
 	g_return_val_if_fail (calibration != NULL, FALSE);
+	g_return_val_if_fail (description != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
+	/* write index */
+	memcpy (buffer, &calibration_index, sizeof(guint16));
+
 	/* convert from float to signed value */
-	for (i = 0; i < 9; i++)
-		ch_double_to_packed_float (calibration[i], &buffer[i]);
+	for (i = 0; i < 9; i++) {
+		ch_double_to_packed_float (calibration[i],
+					   (ChPackedFloat *) &buffer[i*4 + 2]);
+	}
+
+	/* write description */
+	strncpy ((gchar *) buffer + 9*4 + 2, description, 24);
 
 	/* hit hardware */
 	ret = ch_client_write_command (client,
@@ -1033,6 +1054,7 @@ out:
  **/
 gboolean
 ch_client_take_readings_xyz (ChClient *client,
+			     guint16 calibration_index,
 			     gdouble *red,
 			     gdouble *green,
 			     gdouble *blue,
@@ -1051,10 +1073,10 @@ ch_client_take_readings_xyz (ChClient *client,
 	/* hit hardware */
 	ret = ch_client_write_command (client,
 				       CH_CMD_TAKE_READING_XYZ,
-				       NULL,	/* buffer in */
-				       0,	/* size of input buffer */
+				       (guint8 *) &calibration_index,
+				       sizeof(guint16),
 				       (guint8 *) buffer,
-				       sizeof(buffer),	/* size of output buffer */
+				       sizeof(buffer),
 				       error);
 	if (!ret)
 		goto out;

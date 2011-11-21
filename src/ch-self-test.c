@@ -309,6 +309,7 @@ ch_test_eeprom_func (void)
 	guint64 serial_number = 0;
 	gdouble calibration[9];
 	gdouble calibration_tmp[9];
+	gchar desc[24];
 
 	/* new device */
 	client = ch_client_new ();
@@ -379,19 +380,50 @@ ch_test_eeprom_func (void)
 	calibration[7] = 8.0f;
 	calibration[8] = 9.0f;
 	ret = ch_client_set_calibration (client,
+					 0,
 					 calibration,
+					 "test0",
+					 &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	ret = ch_client_set_calibration (client,
+					 1,
+					 calibration,
+					 "test1",
+					 &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	ret = ch_client_set_calibration (client,
+					 0,
+					 calibration,
+					 "test0",
 					 &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
+	/* read back data */
 	ret = ch_client_get_calibration (client,
+					 0,
 					 calibration_tmp,
+					 desc,
 					 &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert (memcmp (calibration_tmp,
 			  calibration,
 			  sizeof (gfloat) * 9) == 0);
+	g_assert_cmpstr (desc, ==, "test0");
+	ret = ch_client_get_calibration (client,
+					 1,
+					 calibration_tmp,
+					 desc,
+					 &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert (memcmp (calibration_tmp,
+			  calibration,
+			  sizeof (gfloat) * 9) == 0);
+	g_assert_cmpstr (desc, ==, "test1");
 
 	/* verify post scale */
 	post_scale = 127.8f;

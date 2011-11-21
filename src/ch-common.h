@@ -105,10 +105,10 @@
 /**
  * CH_CMD_GET_CALIBRATION:
  *
- * Gets the calibration matrix.
+ * Gets the calibration matrix. The description does not have to be NULL terminated.
  *
- * IN:  [1:cmd]
- * OUT: [1:retval][1:cmd][2*9:matrix_value]
+ * IN:  [1:cmd][2:index]
+ * OUT: [1:retval][1:cmd][2*9:matrix_value][24:description]
  **/
 #define	CH_CMD_GET_CALIBRATION			0x09
 
@@ -118,7 +118,7 @@
  * Sets the calibration matrix. The @matrix_value parameter is a 16 bit
  * _signed_ value that scales from -1.0 to +1.0.
  *
- * IN:  [1:cmd][2*9:matrix_value]
+ * IN:  [1:cmd][2:index][4*9:matrix_value][24:description]
  * OUT: [1:retval][1:cmd]
  **/
 #define	CH_CMD_SET_CALIBRATION			0x0a
@@ -225,12 +225,11 @@
  *
  * Take a reading taking into account:
  *  1. dark offsets
- *  2. normalization to Y=1.0
- *  3. the calibration matrix
+ *  2. the calibration matrix
  * All of @red, @green and @blue are _signed_ values
  * ranging from -1.0 to +1.0.
  *
- * IN:  [1:cmd]
+ * IN:  [1:cmd][2:calibration-index]
  * OUT: [1:retval][1:cmd][2:red][2:green][2:blue]
  **/
 #define	CH_CMD_TAKE_READING_XYZ			0x23
@@ -349,6 +348,10 @@
 /* where the custom firmware is stored */
 #define CH_EEPROM_ADDR_RUNCODE			0x4000
 
+/* although each calibration can be stored in 60 bytes,
+ * we use a full 64 byte block */
+#define	CH_CALIBRATION_MAX			64	/* so finishes at device params */
+
 /* approximate sample times */
 #define CH_INTEGRAL_TIME_VALUE_5MS		0x0300
 #define CH_INTEGRAL_TIME_VALUE_50MS		0x1f00
@@ -357,9 +360,9 @@
 #define CH_INTEGRAL_TIME_VALUE_MAX		0xffff
 
 /* flash constants */
-#define	CH_FLASH_ERASE_BLOCK_SIZE		0x400
-#define	CH_FLASH_WRITE_BLOCK_SIZE		0x040
-#define	CH_FLASH_TRANSFER_BLOCK_SIZE		0x020
+#define	CH_FLASH_ERASE_BLOCK_SIZE		0x400	/* 1024 */
+#define	CH_FLASH_WRITE_BLOCK_SIZE		0x040	/* 64 */
+#define	CH_FLASH_TRANSFER_BLOCK_SIZE		0x020	/* 32 */
 
 /* which color to select */
 typedef enum {

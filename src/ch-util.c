@@ -68,6 +68,56 @@ ch_util_activate_cb (GApplication *application, ChUtilPrivate *priv)
 }
 
 /**
+ * ch_util_set_default_calibration:
+ **/
+static void
+ch_util_set_default_calibration (ChUtilPrivate *priv)
+{
+	gboolean ret;
+	GError *error = NULL;
+	gdouble calibration[9];
+	gdouble post_scale = 1.0f;
+
+	calibration[0] = 1.0f;
+	calibration[1] = 0.0f;
+	calibration[2] = 0.0f;
+	calibration[3] = 0.0f;
+	calibration[4] = 1.0f;
+	calibration[5] = 0.0f;
+	calibration[6] = 0.0f;
+	calibration[7] = 0.0f;
+	calibration[8] = 1.0f;
+
+	/* set to HW */
+	ret = ch_client_set_calibration (priv->client,
+					 0,
+					 calibration,
+					 "Default unity value",
+					 &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to set calibration"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_post_scale (priv->client,
+					post_scale,
+					&error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to set post scale"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+out:
+	return;
+}
+
+/**
  * ch_util_refresh:
  **/
 static void
@@ -205,6 +255,26 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
 
+	/* get calibration */
+	ret = ch_client_get_calibration (priv->client, 0, calibration, NULL, &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to get calibration data, setting unity"),
+				      error->message);
+		g_clear_error (&error);
+		ch_util_set_default_calibration (priv);
+	}
+	for (j = 0; j < 3; j++) {
+		for (i = 0; i < 3; i++) {
+			label = g_strdup_printf ("label_cal_%i%i", j, i);
+			tmp = g_strdup_printf ("%.4f", calibration[j*3 + i]);
+			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, label));
+			gtk_label_set_label (GTK_LABEL (widget), tmp);
+			g_free (tmp);
+			g_free (label);
+		}
+	}
+
 	/* get post scale */
 	ret = ch_client_get_post_scale (priv->client,
 					&post_scale,
@@ -220,26 +290,6 @@ ch_util_refresh (ChUtilPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_post_scale"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-
-	/* get calibration */
-	ret = ch_client_get_calibration (priv->client, calibration, &error);
-	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get calibration data"),
-				      error->message);
-		g_error_free (error);
-		goto out;
-	}
-	for (j = 0; j < 3; j++) {
-		for (i = 0; i < 3; i++) {
-			label = g_strdup_printf ("label_cal_%i%i", j, i);
-			tmp = g_strdup_printf ("%.4f", calibration[j*3 + i]);
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, label));
-			gtk_label_set_label (GTK_LABEL (widget), tmp);
-			g_free (tmp);
-			g_free (label);
-		}
-	}
 
 	/* get integral time */
 	ret = ch_client_get_integral_time (priv->client,
@@ -429,6 +479,7 @@ ch_util_measure_device (ChUtilPrivate *priv)
 	/* get from HW */
 	timer = g_timer_new ();
 	ret = ch_client_take_readings_xyz (priv->client,
+					   0,
 					   &red,
 					   &green,
 					   &blue,
@@ -553,49 +604,10 @@ out:
 static void
 ch_util_calibrate_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
-	gboolean ret;
-	GError *error = NULL;
-	gdouble calibration[9];
-	gdouble post_scale = 1.0f;
-
-	calibration[0] = 1.0f;
-	calibration[1] = 0.0f;
-	calibration[2] = 0.0f;
-	calibration[3] = 0.0f;
-	calibration[4] = 1.0f;
-	calibration[5] = 0.0f;
-	calibration[6] = 0.0f;
-	calibration[7] = 0.0f;
-	calibration[8] = 1.0f;
-
-	/* set to HW */
-	ret = ch_client_set_calibration (priv->client,
-					 calibration,
-					 &error);
-	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set calibration"),
-				      error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* set to HW */
-	ret = ch_client_set_post_scale (priv->client,
-					post_scale,
-					&error);
-	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set post scale"),
-				      error->message);
-		g_error_free (error);
-		goto out;
-	}
+	ch_util_set_default_calibration (priv);
 
 	/* refresh */
 	ch_util_refresh (priv);
-out:
-	return;
 }
 
 /**

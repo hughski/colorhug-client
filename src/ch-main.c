@@ -419,11 +419,28 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gdouble calibration[9];
+	guint16 calibration_index = 0;
+	gchar description[24];
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'calibration_index'");
+		goto out;
+	}
+	calibration_index = atoi (values[0]);
 
 	/* get from HW */
-	ret = ch_client_get_calibration (priv->client, calibration, error);
+	ret = ch_client_get_calibration (priv->client,
+					 calibration_index,
+					 calibration,
+					 description,
+					 error);
 	if (!ret)
 		goto out;
+	g_print ("index: %i\n", calibration_index);
+	g_print ("description: %s\n", description);
 	ch_util_show_calibration (calibration);
 out:
 	return ret;
@@ -437,17 +454,19 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gdouble calibration[9];
+	guint16 calibration_index = 0;
 	guint i;
 
 	/* parse */
-	if (g_strv_length (values) != 9) {
+	if (g_strv_length (values) != 11) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'value'");
+				     "invalid input, expect 'index' 'values' 'description'");
 		goto out;
 	}
+	calibration_index = atoi (values[0]);
 	for (i = 0; i < 9; i++)
-		calibration[i] = atof (values[i]);
+		calibration[i] = atof (values[i+1]);
 
 	/* check is valid */
 	for (i = 0; i < 9; i++) {
@@ -460,7 +479,11 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_calibration (priv->client, calibration, error);
+	ret = ch_client_set_calibration (priv->client,
+					 calibration_index,
+					 calibration,
+					 values[10],
+					 error);
 	if (!ret)
 		goto out;
 	ch_util_show_calibration (calibration);
@@ -480,17 +503,19 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	gchar *ccmx_data = NULL;
 	gdouble calibration[9];
 	gsize ccmx_size;
+	guint16 calibration_index = 0;
 
 	/* parse */
-	if (g_strv_length (values) != 1) {
+	if (g_strv_length (values) != 2) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'filename'");
+				     "invalid input, expect 'index' 'filename'");
 		goto out;
 	}
 
 	/* load file */
-	ret = g_file_get_contents (values[0],
+	calibration_index = atoi (values[0]);
+	ret = g_file_get_contents (values[1],
 				   &ccmx_data,
 				   &ccmx_size,
 				   error);
@@ -525,7 +550,9 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 
 	/* set to HW */
 	ret = ch_client_set_calibration (priv->client,
+					 calibration_index,
 					 calibration,
+					 "CCMX data",
 					 error);
 	if (!ret)
 		goto out;
@@ -786,9 +813,20 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gdouble red, green, blue;
+	guint16 calibration_index = 0;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'calibration_index'");
+		goto out;
+	}
+	calibration_index = atoi (values[0]);
 
 	/* get from HW */
 	ret = ch_client_take_readings_xyz (priv->client,
+					   calibration_index,
 					   &red,
 					   &green,
 					   &blue,
