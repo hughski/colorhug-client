@@ -451,7 +451,7 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* check is valid */
 	for (i = 0; i < 9; i++) {
-		if (calibration[i] > 1.0f || calibration[i] < -1.0f) {
+		if (calibration[i] > 0x7fff || calibration[i] < -0x7fff) {
 			ret = FALSE;
 			g_set_error_literal (error, 1, 0,
 					     "invalid value, expect -1.0 to +1.0");
@@ -880,7 +880,7 @@ ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 		goto out;
 	}
 	post_scale = atof (values[0]);
-	if (post_scale < 0.0f || post_scale > 20.0f) {
+	if (post_scale < -0x7fff || post_scale > 0x7fff) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid post scale value %f",

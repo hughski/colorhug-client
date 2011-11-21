@@ -538,7 +538,7 @@ ch_client_set_integral_time (ChClient *client,
 	ret = ch_client_write_command (client,
 				       CH_CMD_SET_INTEGRAL_TIME,
 				       (const guint8 *) &integral_le,	/* buffer in */
-				       2,	/* size of input buffer */
+				       sizeof(guint16),	/* size of input buffer */
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
 				       error);
@@ -702,8 +702,6 @@ ch_client_set_post_scale (ChClient *client,
 	ChPackedFloat buffer;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
-	g_return_val_if_fail (post_scale > -20.0f, FALSE);
-	g_return_val_if_fail (post_scale < 20.0f, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
