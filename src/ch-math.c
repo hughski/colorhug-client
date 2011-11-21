@@ -110,20 +110,36 @@ ch_packed_float_multiply (const ChPackedFloat *pf1,
 			  const ChPackedFloat *pf2,
 			  ChPackedFloat *result)
 {
-	gint32 pf1_tmp;
-	gint32 pf2_tmp;
+	gint32 mult_result;
+	gint32 mult_divisor;
+	gint i;
 
 	g_return_val_if_fail (pf1 != NULL, CH_FATAL_ERROR_INVALID_VALUE);
 	g_return_val_if_fail (pf2 != NULL, CH_FATAL_ERROR_INVALID_VALUE);
 	g_return_val_if_fail (result != NULL, CH_FATAL_ERROR_INVALID_VALUE);
 
-	/* check overflow */
-	pf1_tmp = pf1->raw / 0xffff;
-	pf2_tmp = pf2->raw / 0xffff;
-	if (pf1_tmp * pf2_tmp > 0xffff)
-		return CH_FATAL_ERROR_OVERFLOW_MULTIPLY;
+	/* trivial: two numbers < 1.0 can be safely handled
+	 * within 32 bits */
+	if (pf1->raw < 0x10000 && pf2->raw < 0x10000)
+		result->raw = (pf1->raw * pf2->raw) / 0x10000;
 
-	/* do the proper result */
-	result->raw = (pf1->raw / 256) * (pf2->raw / 256);
-	return CH_FATAL_ERROR_NONE;
+	/* find a divisor that can multiply these numbers with the
+	 * greatest precision and with the temporary result still
+	 * staying within 32 bits */
+	for (i = 2; i < 0xff; i *= 2) {
+
+		/* just do the multiplication */
+		mult_result = (pf1->raw / i) * (pf2->raw / i);
+
+		/* detect overflow */
+		if (ABS((mult_result / pf1->raw) - (pf2->raw / (i * i))) > 1)
+			continue;
+
+		/* calculate post-multiply divisor */
+		mult_divisor = 0x10000 / (i * i);
+		result->raw = mult_result / mult_divisor;
+		return CH_FATAL_ERROR_NONE;
+	}
+
+	return CH_FATAL_ERROR_OVERFLOW_MULTIPLY;
 }
