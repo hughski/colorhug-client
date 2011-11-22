@@ -1303,6 +1303,57 @@ out:
 }
 
 /**
+ * ch_client_set_flash_success:
+ **/
+gboolean
+ch_client_set_flash_success (ChClient *client,
+			     gboolean value,
+			     GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* set flash success true */
+	ret = ch_client_write_command (client,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       (guint8 *) &value, 1,
+				       NULL, 0,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_client_boot_flash:
+ **/
+gboolean
+ch_client_boot_flash (ChClient *client,
+		      GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* boot into new code */
+	ret = ch_client_write_command (client,
+				       CH_CMD_BOOT_FLASH,
+				       NULL, 0,
+				       NULL, 0,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_flash_firmware:
  **/
 gboolean

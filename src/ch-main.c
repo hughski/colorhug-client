@@ -992,6 +992,58 @@ out:
 }
 
 /**
+ * ch_util_boot_flash:
+ **/
+static gboolean
+ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+
+	/* set to HW */
+	ret = ch_client_boot_flash (priv->client,
+				    error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_flash_success:
+ **/
+static gboolean
+ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gboolean flash_success;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	flash_success = atoi (values[0]);
+	if (flash_success > 1) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid flash success value %i",
+			     flash_success);
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_set_flash_success (priv->client,
+					   flash_success,
+					   error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * main:
  **/
 int
@@ -1146,6 +1198,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the post scale constant"),
 		     ch_util_set_post_scale);
+	ch_util_add (priv->cmd_array,
+		     "set-flash-success",
+		     /* TRANSLATORS: command description */
+		     _("Sets the flash success"),
+		     ch_util_set_flash_success);
+	ch_util_add (priv->cmd_array,
+		     "boot-flash",
+		     /* TRANSLATORS: command description */
+		     _("Boots from the bootloader into the firmware"),
+		     ch_util_boot_flash);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

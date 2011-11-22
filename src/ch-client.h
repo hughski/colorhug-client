@@ -161,6 +161,13 @@ gboolean	 ch_client_flash_firmware	(ChClient	*client,
 						 const gchar	*filename,
 						 GError		**error);
 
+gboolean	 ch_client_boot_flash		(ChClient	*client,
+						 GError		**error);
+
+gboolean	 ch_client_set_flash_success	(ChClient	*client,
+						 gboolean	 value,
+						 GError		**error);
+
 G_END_DECLS
 
 #endif /* __CH_CLIENT_H */
