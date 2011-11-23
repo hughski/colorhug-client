@@ -125,56 +125,56 @@ ch_client_print_data (const gchar *title,
  * ch_client_strerror:
  **/
 static const gchar *
-ch_client_strerror (ChFatalError fatal_error)
+ch_client_strerror (ChError error_enum)
 {
 	const char *str = NULL;
-	switch (fatal_error) {
-	case CH_FATAL_ERROR_NONE:
+	switch (error_enum) {
+	case CH_ERROR_NONE:
 		str = "Success";
 		break;
-	case CH_FATAL_ERROR_UNKNOWN_CMD:
+	case CH_ERROR_UNKNOWN_CMD:
 		str = "Unknown command";
 		break;
-	case CH_FATAL_ERROR_WRONG_UNLOCK_CODE:
+	case CH_ERROR_WRONG_UNLOCK_CODE:
 		str = "Wrong unlock code";
 		break;
-	case CH_FATAL_ERROR_NOT_IMPLEMENTED:
+	case CH_ERROR_NOT_IMPLEMENTED:
 		str = "Not implemented";
 		break;
-	case CH_FATAL_ERROR_UNDERFLOW_SENSOR:
+	case CH_ERROR_UNDERFLOW_SENSOR:
 		str = "Underflow of sensor";
 		break;
-	case CH_FATAL_ERROR_NO_SERIAL:
+	case CH_ERROR_NO_SERIAL:
 		str = "No serial";
 		break;
-	case CH_FATAL_ERROR_WATCHDOG:
+	case CH_ERROR_WATCHDOG:
 		str = "Watchdog";
 		break;
-	case CH_FATAL_ERROR_INVALID_ADDRESS:
+	case CH_ERROR_INVALID_ADDRESS:
 		str = "Invalid address";
 		break;
-	case CH_FATAL_ERROR_INVALID_LENGTH:
+	case CH_ERROR_INVALID_LENGTH:
 		str = "Invalid length";
 		break;
-	case CH_FATAL_ERROR_INVALID_CHECKSUM:
+	case CH_ERROR_INVALID_CHECKSUM:
 		str = "Invalid checksum";
 		break;
-	case CH_FATAL_ERROR_INVALID_VALUE:
+	case CH_ERROR_INVALID_VALUE:
 		str = "Invalid value";
 		break;
-	case CH_FATAL_ERROR_UNKNOWN_CMD_FOR_BOOTLOADER:
+	case CH_ERROR_UNKNOWN_CMD_FOR_BOOTLOADER:
 		str = "Unknown command for bootloader";
 		break;
-	case CH_FATAL_ERROR_OVERFLOW_MULTIPLY:
+	case CH_ERROR_OVERFLOW_MULTIPLY:
 		str = "Overflow of multiply";
 		break;
-	case CH_FATAL_ERROR_OVERFLOW_ADDITION:
+	case CH_ERROR_OVERFLOW_ADDITION:
 		str = "Overflow of addition";
 		break;
-	case CH_FATAL_ERROR_OVERFLOW_SENSOR:
+	case CH_ERROR_OVERFLOW_SENSOR:
 		str = "Overflow of sensor";
 		break;
-	case CH_FATAL_ERROR_NO_CALIBRATION:
+	case CH_ERROR_NO_CALIBRATION:
 		str = "No calibration";
 		break;
 	default:
@@ -299,7 +299,7 @@ ch_client_write_command (ChClient *client,
 {
 	gboolean ret;
 	gsize actual_length = -1;
-	ChFatalError fatal_error;
+	ChError error_enum;
 	guint8 buffer[CH_USB_HID_EP_SIZE];
 
 	/* clear buffer for debugging */
@@ -343,17 +343,17 @@ ch_client_write_command (ChClient *client,
 	ch_client_print_data ("reply", buffer, actual_length);
 
 	/* parse */
-	if (buffer[CH_BUFFER_OUTPUT_RETVAL] != CH_FATAL_ERROR_NONE ||
+	if (buffer[CH_BUFFER_OUTPUT_RETVAL] != CH_ERROR_NONE ||
 	    buffer[CH_BUFFER_OUTPUT_CMD] != cmd ||
 	    actual_length != buffer_out_length + CH_BUFFER_OUTPUT_DATA) {
 		ret = FALSE;
-		fatal_error = buffer[CH_BUFFER_OUTPUT_RETVAL];
+		error_enum = buffer[CH_BUFFER_OUTPUT_RETVAL];
 		g_set_error (error, 1, 0,
 			     "Invalid read: retval=0x%02x [%s] "
 			     "cmd=0x%02x (expected 0x%x [%s]) "
 			     "len=%li (expected %li)",
-			     fatal_error,
-			     ch_client_strerror (fatal_error),
+			     error_enum,
+			     ch_client_strerror (error_enum),
 			     buffer[CH_BUFFER_OUTPUT_CMD],
 			     cmd,
 			     ch_client_command_to_string (cmd),
@@ -1378,7 +1378,7 @@ ch_client_flash_firmware (ChClient *client,
 	ret = g_file_get_contents (filename, &data, &len, error);
 	if (!ret)
 		goto out;
-
+#if 0
 	/* boot to bootloader */
 	ret = ch_client_reset (client, error);
 	if (!ret)
@@ -1390,6 +1390,7 @@ ch_client_flash_firmware (ChClient *client,
 	ret = ch_client_load (client, error);
 	if (!ret)
 		goto out;
+#endif
 
 	/* set flash success false */
 	flash_success = 0x00;
@@ -1475,6 +1476,7 @@ ch_client_flash_firmware (ChClient *client,
 		}
 		idx += chunk_len;
 	} while (idx < len);
+goto out;
 
 	/* boot into new code */
 	ret = ch_client_write_command (client,

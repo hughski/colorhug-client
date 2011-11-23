@@ -71,7 +71,7 @@ ch_double_to_packed_float (gdouble value, ChPackedFloat *pf)
  *
  * @return: an error code
  **/
-ChFatalError
+ChError
 ch_packed_float_add (const ChPackedFloat *pf1,
 		     const ChPackedFloat *pf2,
 		     ChPackedFloat *result)
@@ -79,19 +79,19 @@ ch_packed_float_add (const ChPackedFloat *pf1,
 	gint32 pf1_tmp;
 	gint32 pf2_tmp;
 
-	g_return_val_if_fail (pf1 != NULL, CH_FATAL_ERROR_INVALID_VALUE);
-	g_return_val_if_fail (pf2 != NULL, CH_FATAL_ERROR_INVALID_VALUE);
-	g_return_val_if_fail (result != NULL, CH_FATAL_ERROR_INVALID_VALUE);
+	g_return_val_if_fail (pf1 != NULL, CH_ERROR_INVALID_VALUE);
+	g_return_val_if_fail (pf2 != NULL, CH_ERROR_INVALID_VALUE);
+	g_return_val_if_fail (result != NULL, CH_ERROR_INVALID_VALUE);
 
 	/* check overflow */
 	pf1_tmp = pf1->raw / 0xffff;
 	pf2_tmp = pf2->raw / 0xffff;
 	if (pf1_tmp + pf2_tmp > 0x7fff)
-		return CH_FATAL_ERROR_OVERFLOW_ADDITION;
+		return CH_ERROR_OVERFLOW_ADDITION;
 
 	/* do the proper result */
 	result->raw = pf1->raw + pf2->raw;
-	return CH_FATAL_ERROR_NONE;
+	return CH_ERROR_NONE;
 }
 
 /**
@@ -105,7 +105,7 @@ ch_packed_float_add (const ChPackedFloat *pf1,
  *
  * @return: an error code
  **/
-ChFatalError
+ChError
 ch_packed_float_multiply (const ChPackedFloat *pf1,
 			  const ChPackedFloat *pf2,
 			  ChPackedFloat *result)
@@ -114,9 +114,9 @@ ch_packed_float_multiply (const ChPackedFloat *pf1,
 	gint32 mult_divisor;
 	gint i;
 
-	g_return_val_if_fail (pf1 != NULL, CH_FATAL_ERROR_INVALID_VALUE);
-	g_return_val_if_fail (pf2 != NULL, CH_FATAL_ERROR_INVALID_VALUE);
-	g_return_val_if_fail (result != NULL, CH_FATAL_ERROR_INVALID_VALUE);
+	g_return_val_if_fail (pf1 != NULL, CH_ERROR_INVALID_VALUE);
+	g_return_val_if_fail (pf2 != NULL, CH_ERROR_INVALID_VALUE);
+	g_return_val_if_fail (result != NULL, CH_ERROR_INVALID_VALUE);
 
 	/* trivial: two numbers < 1.0 can be safely handled
 	 * within 32 bits */
@@ -138,8 +138,8 @@ ch_packed_float_multiply (const ChPackedFloat *pf1,
 		/* calculate post-multiply divisor */
 		mult_divisor = 0x10000 / (i * i);
 		result->raw = mult_result / mult_divisor;
-		return CH_FATAL_ERROR_NONE;
+		return CH_ERROR_NONE;
 	}
 
-	return CH_FATAL_ERROR_OVERFLOW_MULTIPLY;
+	return CH_ERROR_OVERFLOW_MULTIPLY;
 }

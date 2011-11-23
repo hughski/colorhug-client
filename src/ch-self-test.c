@@ -114,7 +114,7 @@ ch_test_math_add_func (void)
 	ch_double_to_packed_float (3.90f, &pf);
 	ch_double_to_packed_float (1.40f, &pf_tmp);
 	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, 5.299);
 	g_assert_cmpfloat (value, <, 5.310);
@@ -123,7 +123,7 @@ ch_test_math_add_func (void)
 	ch_double_to_packed_float (-3.90f, &pf);
 	ch_double_to_packed_float (-1.40f, &pf_tmp);
 	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, -5.301);
 	g_assert_cmpfloat (value, <, -5.299);
@@ -132,7 +132,7 @@ ch_test_math_add_func (void)
 	ch_double_to_packed_float (3.20f, &pf);
 	ch_double_to_packed_float (-1.50f, &pf_tmp);
 	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, <, 1.701);
 	g_assert_cmpfloat (value, >, 1.699);
@@ -141,7 +141,7 @@ ch_test_math_add_func (void)
 	ch_double_to_packed_float (3.20f, &pf);
 	ch_double_to_packed_float (-10.50f, &pf_tmp);
 	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, -7.301);
 	g_assert_cmpfloat (value, <, -7.299);
@@ -150,7 +150,7 @@ ch_test_math_add_func (void)
 	ch_double_to_packed_float (0x7fff, &pf);
 	ch_double_to_packed_float (0x7fff, &pf_tmp);
 	rc = ch_packed_float_add (&pf, &pf_tmp, &pf_result);
-//	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_OVERFLOW_ADDITION);
+//	g_assert_cmpint (rc, ==, CH_ERROR_OVERFLOW_ADDITION);
 }
 
 
@@ -167,7 +167,7 @@ ch_test_math_multiply_func (void)
 	ch_double_to_packed_float (0.25f, &pf);
 	ch_double_to_packed_float (0.50f, &pf_tmp);
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, 0.1249);
 	g_assert_cmpfloat (value, <, 0.1251);
@@ -176,7 +176,7 @@ ch_test_math_multiply_func (void)
 	ch_double_to_packed_float (3.90f, &pf);
 	ch_double_to_packed_float (1.40f, &pf_tmp);
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, 5.45);
 	g_assert_cmpfloat (value, <, 5.47);
@@ -185,7 +185,7 @@ ch_test_math_multiply_func (void)
 	ch_double_to_packed_float (3.90f, &pf);
 	ch_double_to_packed_float (200.0f, &pf_tmp);
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, 779.7);
 	g_assert_cmpfloat (value, <, 780.3);
@@ -194,7 +194,7 @@ ch_test_math_multiply_func (void)
 	ch_double_to_packed_float (3.90f, &pf);
 	ch_double_to_packed_float (-1.4f, &pf_tmp);
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, <, -5.45);
 	g_assert_cmpfloat (value, >, -5.47);
@@ -203,7 +203,7 @@ ch_test_math_multiply_func (void)
 	ch_double_to_packed_float (-3.90f, &pf);
 	ch_double_to_packed_float (-1.4f, &pf_tmp);
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_NONE);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, 5.45);
 	g_assert_cmpfloat (value, <, 5.47);
@@ -212,7 +212,7 @@ ch_test_math_multiply_func (void)
 	ch_double_to_packed_float (0x4fff, &pf);
 	ch_double_to_packed_float (0x4, &pf_tmp);
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
-	g_assert_cmpint (rc, ==, CH_FATAL_ERROR_OVERFLOW_MULTIPLY);
+	g_assert_cmpint (rc, ==, CH_ERROR_OVERFLOW_MULTIPLY);
 }
 
 static void

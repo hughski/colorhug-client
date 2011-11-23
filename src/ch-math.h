@@ -45,10 +45,10 @@ void		 ch_packed_float_to_double	(const ChPackedFloat	*pf,
 void		 ch_double_to_packed_float	(gdouble		 value,
 						 ChPackedFloat		*pf);
 
-ChFatalError	 ch_packed_float_add		(const ChPackedFloat	*pf1,
+ChError		 ch_packed_float_add		(const ChPackedFloat	*pf1,
 						 const ChPackedFloat	*pf2,
 						 ChPackedFloat		*result);
-ChFatalError	 ch_packed_float_multiply	(const ChPackedFloat	*pf1,
+ChError		 ch_packed_float_multiply	(const ChPackedFloat	*pf1,
 						 const ChPackedFloat	*pf2,
 						 ChPackedFloat		*result);
 
