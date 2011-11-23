@@ -15,6 +15,7 @@ libchshared_a_SOURCES =					\
 	ch-math.h					\
 	ch-client.c					\
 	ch-client.h					\
+	ch-common.c					\
 	ch-common.h
 
 libchshared_a_CFLAGS =					\

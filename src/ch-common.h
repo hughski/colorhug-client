@@ -22,6 +22,8 @@
 #ifndef CH_COMMON_H
 #define CH_COMMON_H
 
+#include <glib.h>
+
 /* device constants */
 #define	CH_USB_VID				0x04d8
 #define	CH_USB_PID				0xf8da
@@ -415,5 +417,9 @@ typedef enum {
 	CH_ERROR_OVERFLOW_SENSOR,
 	CH_ERROR_LAST
 } ChError;
+
+/* prototypes */
+const gchar	*ch_strerror			(ChError	 error_enum);
+const gchar	*ch_command_to_string		(guint8		 cmd);
 
 #endif

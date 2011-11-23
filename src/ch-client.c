@@ -29,6 +29,7 @@
 
 #include "ch-math.h"
 #include "ch-client.h"
+#include "ch-common.h"
 
 static void     ch_client_finalize	(GObject     *object);
 
@@ -122,159 +123,6 @@ ch_client_print_data (const gchar *title,
 }
 
 /**
- * ch_client_strerror:
- **/
-static const gchar *
-ch_client_strerror (ChError error_enum)
-{
-	const char *str = NULL;
-	switch (error_enum) {
-	case CH_ERROR_NONE:
-		str = "Success";
-		break;
-	case CH_ERROR_UNKNOWN_CMD:
-		str = "Unknown command";
-		break;
-	case CH_ERROR_WRONG_UNLOCK_CODE:
-		str = "Wrong unlock code";
-		break;
-	case CH_ERROR_NOT_IMPLEMENTED:
-		str = "Not implemented";
-		break;
-	case CH_ERROR_UNDERFLOW_SENSOR:
-		str = "Underflow of sensor";
-		break;
-	case CH_ERROR_NO_SERIAL:
-		str = "No serial";
-		break;
-	case CH_ERROR_WATCHDOG:
-		str = "Watchdog";
-		break;
-	case CH_ERROR_INVALID_ADDRESS:
-		str = "Invalid address";
-		break;
-	case CH_ERROR_INVALID_LENGTH:
-		str = "Invalid length";
-		break;
-	case CH_ERROR_INVALID_CHECKSUM:
-		str = "Invalid checksum";
-		break;
-	case CH_ERROR_INVALID_VALUE:
-		str = "Invalid value";
-		break;
-	case CH_ERROR_UNKNOWN_CMD_FOR_BOOTLOADER:
-		str = "Unknown command for bootloader";
-		break;
-	case CH_ERROR_OVERFLOW_MULTIPLY:
-		str = "Overflow of multiply";
-		break;
-	case CH_ERROR_OVERFLOW_ADDITION:
-		str = "Overflow of addition";
-		break;
-	case CH_ERROR_OVERFLOW_SENSOR:
-		str = "Overflow of sensor";
-		break;
-	case CH_ERROR_NO_CALIBRATION:
-		str = "No calibration";
-		break;
-	default:
-		str = "Unknown error, please report";
-		break;
-	}
-	return str;
-}
-
-/**
- * ch_client_command_to_string:
- **/
-static const gchar *
-ch_client_command_to_string (guint8 cmd)
-{
-	const char *str = NULL;
-	switch (cmd) {
-	case CH_CMD_GET_COLOR_SELECT:
-		str = "get-color-select";
-		break;
-	case CH_CMD_SET_COLOR_SELECT:
-		str = "set-color-select";
-		break;
-	case CH_CMD_GET_MULTIPLIER:
-		str = "get-multiplier";
-		break;
-	case CH_CMD_SET_MULTIPLIER:
-		str = "set-multiplier";
-		break;
-	case CH_CMD_GET_INTEGRAL_TIME:
-		str = "get-integral-time";
-		break;
-	case CH_CMD_SET_INTEGRAL_TIME:
-		str = "set-integral-time";
-		break;
-	case CH_CMD_GET_FIRMWARE_VERSION:
-		str = "get-firmare-version";
-		break;
-	case CH_CMD_GET_CALIBRATION:
-		str = "get-calibration";
-		break;
-	case CH_CMD_SET_CALIBRATION:
-		str = "set-calibration";
-		break;
-	case CH_CMD_GET_SERIAL_NUMBER:
-		str = "get-serial-number";
-		break;
-	case CH_CMD_SET_SERIAL_NUMBER:
-		str = "set-serial-number";
-		break;
-	case CH_CMD_GET_LEDS:
-		str = "get-leds";
-		break;
-	case CH_CMD_SET_LEDS:
-		str = "set-leds";
-		break;
-	case CH_CMD_GET_DARK_OFFSETS:
-		str = "get-dark-offsets";
-		break;
-	case CH_CMD_SET_DARK_OFFSETS:
-		str = "set-dark-offsets";
-		break;
-	case CH_CMD_WRITE_EEPROM:
-		str = "write-eeprom";
-		break;
-	case CH_CMD_TAKE_READING_RAW:
-		str = "take-reading-raw";
-		break;
-	case CH_CMD_TAKE_READINGS:
-		str = "take-readings";
-		break;
-	case CH_CMD_TAKE_READING_XYZ:
-		str = "take-reading-xyz";
-		break;
-	case CH_CMD_RESET:
-		str = "reset";
-		break;
-	case CH_CMD_READ_FLASH:
-		str = "read-flash";
-		break;
-	case CH_CMD_ERASE_FLASH:
-		str = "erase-flash";
-		break;
-	case CH_CMD_WRITE_FLASH:
-		str = "write-flash";
-		break;
-	case CH_CMD_BOOT_FLASH:
-		str = "boot-flash";
-		break;
-	case CH_CMD_SET_FLASH_SUCCESS:
-		str = "set-flash-success";
-		break;
-	default:
-		str = "unknown-command";
-		break;
-	}
-	return str;
-}
-
-/**
  * ch_client_write_command:
  *
  * @client:		A #ChClient
@@ -353,10 +201,10 @@ ch_client_write_command (ChClient *client,
 			     "cmd=0x%02x (expected 0x%x [%s]) "
 			     "len=%li (expected %li)",
 			     error_enum,
-			     ch_client_strerror (error_enum),
+			     ch_strerror (error_enum),
 			     buffer[CH_BUFFER_OUTPUT_CMD],
 			     cmd,
-			     ch_client_command_to_string (cmd),
+			     ch_command_to_string (cmd),
 			     actual_length,
 			     buffer_out_length + CH_BUFFER_OUTPUT_DATA);
 		goto out;
