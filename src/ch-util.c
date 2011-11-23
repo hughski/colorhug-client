@@ -1069,7 +1069,7 @@ main (int argc, char **argv)
 	priv->blue_max = 0.0f;
 
 	/* ensure single instance */
-	priv->application = gtk_application_new ("org.hughsie.ColorHug.Util", 0);
+	priv->application = gtk_application_new ("com.hughski.ColorHug.Util", 0);
 	g_signal_connect (priv->application, "startup",
 			  G_CALLBACK (ch_util_startup_cb), priv);
 	g_signal_connect (priv->application, "activate",
