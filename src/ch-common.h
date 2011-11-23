@@ -23,6 +23,7 @@
 #define CH_COMMON_H
 
 #include <glib.h>
+#include <gusb.h>
 
 /* device constants */
 #define	CH_USB_VID				0x04d8
@@ -421,5 +422,26 @@ typedef enum {
 /* prototypes */
 const gchar	*ch_strerror			(ChError	 error_enum);
 const gchar	*ch_command_to_string		(guint8		 cmd);
+
+void		ch_device_write_command_async	(GUsbDevice	*device,
+						 guint8		 cmd,
+						 const guint8	*buffer_in,
+						 gsize		 buffer_in_len,
+						 guint8		*buffer_out,
+						 gsize		 buffer_out_len,
+						 GCancellable	*cancellable,
+						 GAsyncReadyCallback callback,
+						 gpointer	 user_data);
+gboolean	 ch_device_write_command_finish	(GUsbDevice	*device,
+						 GAsyncResult	*res,
+						 GError		**error);
+gboolean	ch_device_write_command		(GUsbDevice	*device,
+						 guint8		 cmd,
+						 const guint8	*buffer_in,
+						 gsize		 buffer_in_len,
+						 guint8		*buffer_out,
+						 gsize		 buffer_out_len,
+						 GCancellable	*cancellable,
+						 GError		**error);
 
 #endif
