@@ -1378,7 +1378,7 @@ ch_client_flash_firmware (ChClient *client,
 	ret = g_file_get_contents (filename, &data, &len, error);
 	if (!ret)
 		goto out;
-#if 0
+
 	/* boot to bootloader */
 	ret = ch_client_reset (client, error);
 	if (!ret)
@@ -1390,7 +1390,6 @@ ch_client_flash_firmware (ChClient *client,
 	ret = ch_client_load (client, error);
 	if (!ret)
 		goto out;
-#endif
 
 	/* set flash success false */
 	flash_success = 0x00;
@@ -1476,7 +1475,6 @@ ch_client_flash_firmware (ChClient *client,
 		}
 		idx += chunk_len;
 	} while (idx < len);
-goto out;
 
 	/* boot into new code */
 	ret = ch_client_write_command (client,
