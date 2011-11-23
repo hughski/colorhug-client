@@ -396,7 +396,7 @@ ch_device_write_command_async (GUsbDevice *device,
 	helper->res = g_simple_async_result_new (G_OBJECT (device),
 						 callback,
 						 user_data,
-						 ch_device_write_command);
+						 ch_device_write_command_async);
 	if (cancellable != NULL)
 		helper->cancellable = g_object_ref (cancellable);
 

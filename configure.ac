@@ -92,6 +92,7 @@ PKG_CHECK_MODULES(GUSB, gusb >= 0.1.2)
 PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.0)
 PKG_CHECK_MODULES(COLORD, colord >= 0.1.15)
 PKG_CHECK_MODULES(LCMS, lcms2)
+PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 
 dnl ---------------------------------------------------------------------------
 dnl - Makefiles, etc.

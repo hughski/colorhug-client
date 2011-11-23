@@ -4,6 +4,7 @@ INCLUDES =						\
 	$(GUSB_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
 	$(LCMS_CFLAGS)					\
+	$(SOUP_CFLAGS)					\
 	-DG_LOG_DOMAIN=\"Ch\"				\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
@@ -25,6 +26,9 @@ libexec_PROGRAMS =					\
 	colorhug					\
 	colorhug-inhx32-to-bin				\
 	colorhug-gui
+
+bin_PROGRAMS =						\
+	colorhug-flash
 
 colorhug_SOURCES =					\
 	ch-main.c
@@ -51,6 +55,21 @@ colorhug_gui_LDADD =					\
 	-lm
 
 colorhug_gui_CFLAGS =					\
+	$(WARNINGFLAGS_C)
+
+colorhug_flash_SOURCES =				\
+	ch-flash.c
+
+colorhug_flash_LDADD =					\
+	libchshared.a					\
+	$(COLORD_LIBS)					\
+	$(GLIB_LIBS)					\
+	$(GTK_LIBS)					\
+	$(GUSB_LIBS)					\
+	$(SOUP_LIBS)					\
+	-lm
+
+colorhug_flash_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_inhx32_to_bin_SOURCES =			\

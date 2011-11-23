@@ -1,3 +1,6 @@
+data/ch-flash.desktop.in
+data/ch-flash.ui
+src/ch-flash.c
 src/ch-main.c
 src/ch-util.c
 src/ch-util.ui
