@@ -58,8 +58,10 @@ ch_inhx32_to_bin (const gchar *hex_fn,
 	gint checksum;
 	gint end;
 	gint i;
+	guint j;
 	gint offset = 0;
 	guint addr32 = 0;
+	guint addr32_last = 0;
 	guint addr_high = 0;
 	guint addr_low = 0;
 	guint len_tmp;
@@ -112,8 +114,21 @@ ch_inhx32_to_bin (const gchar *hex_fn,
 			for (i = offset + 9; i < end; i += 2) {
 				if (addr32 >= CH_EEPROM_ADDR_RUNCODE &&
 				    addr32 < 0xfff0) {
+
+					/* find out if there are any
+					 * holes in the hex record */
+					len_tmp = addr32 - addr32_last;
+					if (addr32_last > 0x0 && len_tmp > 1) {
+						for (j = 1; j < len_tmp; j++) {
+							g_debug ("Filling address 0x%04x",
+								 addr32_last + j);
+							g_string_append_c (string, 0xff);
+						}
+					}
 					data_tmp = ch_inhx32_parse_uint8 (data, i);
 					g_string_append_c (string, data_tmp);
+					g_debug ("Writing address 0x%04x", addr32);
+					addr32_last = addr32;
 				} else {
 					g_debug ("Ignoring address 0x%04x", addr32);
 				}
