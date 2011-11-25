@@ -80,6 +80,9 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_OVERFLOW_SENSOR:
 		str = "Overflow of sensor";
 		break;
+	case CH_ERROR_OVERFLOW_STACK:
+		str = "Overflow of stack";
+		break;
 	case CH_ERROR_NO_CALIBRATION:
 		str = "No calibration";
 		break;
