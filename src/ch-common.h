@@ -264,7 +264,7 @@
  * Erasing flash can only be done in 1k byte chunks and should be
  * aligned to 1k.
  *
- * IN:  [1:cmd][2:address][1:length]
+ * IN:  [1:cmd][2:address][2:length]
  * OUT: [1:retval][1:cmd]
  **/
 #define	CH_CMD_ERASE_FLASH			0x29

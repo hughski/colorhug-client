@@ -1034,13 +1034,15 @@ ch_client_erase_flash (ChClient *client,
 		       GError **error)
 {
 	gboolean ret;
-	guint8 buffer_tx[3];
+	guint8 buffer_tx[4];
 	guint16 addr_le;
+	guint16 len_le;
 
 	/* set address, length, checksum, data */
 	addr_le = GUINT16_TO_LE (address);
 	memcpy (buffer_tx + 0, &addr_le, 2);
-	buffer_tx[2] = len;
+	len_le = GUINT16_TO_LE (len);
+	memcpy (buffer_tx + 2, &len_le, 2);
 
 	/* hit hardware */
 	ret = ch_device_write_command (client->priv->device,

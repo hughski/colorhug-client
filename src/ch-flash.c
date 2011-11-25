@@ -608,7 +608,8 @@ ch_flash_set_flash_success_0_cb (GObject *source,
 	gboolean ret;
 	GError *error = NULL;
 	guint16 addr_le;
-	guint8 buffer_tx[3];
+	guint8 buffer_tx[4];
+	guint16 len_le;
 	GUsbDevice *device = G_USB_DEVICE (source);
 
 	/* get data */
@@ -625,7 +626,8 @@ ch_flash_set_flash_success_0_cb (GObject *source,
 	/* set address, length */
 	addr_le = GUINT16_TO_LE (CH_EEPROM_ADDR_RUNCODE);
 	memcpy (buffer_tx + 0, &addr_le, 2);
-	buffer_tx[2] = priv->firmware_len;
+	len_le = GUINT16_TO_LE (priv->firmware_len);
+	memcpy (buffer_tx + 2, &len_le, 2);
 
 	/* erase enough flash for the program code */
 	ch_device_write_command_async (priv->device,
