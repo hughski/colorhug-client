@@ -545,6 +545,113 @@ ch_test_reading_func (void)
 	g_object_unref (client);
 }
 
+static void
+ch_test_reading_xyz_func (void)
+{
+	ChClient *client;
+	gboolean ret;
+	guint16 post_scale;
+	gdouble reading1[3];
+	gdouble reading2[3];
+	gdouble calibration[9];
+	gdouble scaling_factor_actual;
+	GError *error = NULL;
+	guint i;
+
+	/* new device */
+	client = ch_client_new ();
+
+	/* load the device */
+	ret = ch_client_load (client, &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* set unity calibration */
+	calibration[0] = 1.0f;
+	calibration[1] = 0.0f;
+	calibration[2] = 0.0f;
+	calibration[3] = 0.0f;
+	calibration[4] = 1.0f;
+	calibration[5] = 0.0f;
+	calibration[6] = 0.0f;
+	calibration[7] = 0.0f;
+	calibration[8] = 1.0f;
+	ret = ch_client_set_calibration (client,
+					 0,
+					 calibration,
+					 "test0",
+					 &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* set dark offsets */
+	ret = ch_client_set_dark_offsets (client,
+					  0.0, 0.0, 0.0,
+					  &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* set pre scale */
+	ret = ch_client_set_pre_scale (client,
+				       5.0f,
+				       &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* set post scale */
+	ret = ch_client_set_post_scale (client,
+					1.0f,
+					&error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* take a reading from the hardware */
+	ret = ch_client_take_readings_xyz (client,
+					   0,
+					   &reading1[0],
+					   &reading1[1],
+					   &reading1[2],
+					   &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert_cmpfloat (reading1[0], >, 0.0f);
+	g_assert_cmpfloat (reading1[1], >, 0.0f);
+	g_assert_cmpfloat (reading1[2], >, 0.0f);
+
+	/* set post scale much higher */
+	for (post_scale = 1; post_scale < 2000; post_scale *= 2) {
+		g_debug ("Setting post-scale %i", post_scale);
+		ret = ch_client_set_post_scale (client,
+						post_scale,
+						&error);
+		g_assert_no_error (error);
+		g_assert (ret);
+
+		/* take a reading from the hardware */
+		ret = ch_client_take_readings_xyz (client,
+						   0,
+						   &reading2[0],
+						   &reading2[1],
+						   &reading2[2],
+						   &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+
+		for (i = 0; i < 3; i++) {
+			scaling_factor_actual = reading2[i] / reading1[i];
+			g_debug ("scale %i: %f, scale 1: %f so effective %f",
+				 post_scale,
+				 reading2[i],
+				 reading1[i],
+				 scaling_factor_actual);
+			g_assert_cmpfloat (scaling_factor_actual, >, 0.9);
+			g_assert_cmpfloat (scaling_factor_actual, <, 1.1);
+			reading1[i] = reading2[i] * 2;
+		}
+	}
+	g_object_unref (client);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -562,6 +669,7 @@ main (int argc, char **argv)
 	g_test_add_func ("/ColorHug/state", ch_test_state_func);
 	g_test_add_func ("/ColorHug/eeprom", ch_test_eeprom_func);
 	g_test_add_func ("/ColorHug/reading", ch_test_reading_func);
+	g_test_add_func ("/ColorHug/reading-xyz", ch_test_reading_xyz_func);
 	return g_test_run ();
 }
 
