@@ -554,6 +554,7 @@ static gboolean
 ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	cmsHANDLE ccmx = NULL;
+	const gchar *description;
 	const gchar *sheet_type;
 	gboolean ret;
 	gchar *ccmx_data = NULL;
@@ -593,6 +594,15 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 		goto out;
 	}
 
+	/* get the description from the ccmx file */
+	description = CMSEXPORT cmsIT8GetProperty(ccmx, "DISPLAY");
+	if (description == NULL) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "CCMX file does not have DISPLAY");
+		goto out;
+	}
+
 	/* get the values */
 	calibration[0] = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
 	calibration[1] = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
@@ -608,7 +618,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	ret = ch_client_set_calibration (priv->client,
 					 calibration_index,
 					 calibration,
-					 "CCMX data",
+					 description,
 					 error);
 	if (!ret)
 		goto out;
