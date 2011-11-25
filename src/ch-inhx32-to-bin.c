@@ -54,6 +54,7 @@ ch_inhx32_to_bin (const gchar *hex_fn,
 	gchar *data = NULL;
 	gsize len = 0;
 	gboolean ret;
+	gboolean verbose;
 	gchar *ptr;
 	gint checksum;
 	gint end;
@@ -68,6 +69,9 @@ ch_inhx32_to_bin (const gchar *hex_fn,
 	guint type;
 	guint8 data_tmp;
 	GString *string = NULL;
+
+	/* only if set */
+	verbose = g_getenv ("VERBOSE") != NULL;
 
 	/* load file */
 	ret = g_file_get_contents (hex_fn, &data, &len, error);
@@ -120,17 +124,21 @@ ch_inhx32_to_bin (const gchar *hex_fn,
 					len_tmp = addr32 - addr32_last;
 					if (addr32_last > 0x0 && len_tmp > 1) {
 						for (j = 1; j < len_tmp; j++) {
-							g_debug ("Filling address 0x%04x",
-								 addr32_last + j);
+							if (verbose) {
+								g_debug ("Filling address 0x%04x",
+									 addr32_last + j);
+							}
 							g_string_append_c (string, 0xff);
 						}
 					}
 					data_tmp = ch_inhx32_parse_uint8 (data, i);
 					g_string_append_c (string, data_tmp);
-					g_debug ("Writing address 0x%04x", addr32);
+					if (verbose)
+						g_debug ("Writing address 0x%04x", addr32);
 					addr32_last = addr32;
 				} else {
-					g_debug ("Ignoring address 0x%04x", addr32);
+					if (verbose)
+						g_debug ("Ignoring address 0x%04x", addr32);
 				}
 				addr32++;
 			}
