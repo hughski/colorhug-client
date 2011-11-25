@@ -176,6 +176,12 @@ ch_command_to_string (guint8 cmd)
 	case CH_CMD_SET_FLASH_SUCCESS:
 		str = "set-flash-success";
 		break;
+	case CH_CMD_GET_CALIBRATION_MAP:
+		str = "get-calibration-map";
+		break;
+	case CH_CMD_SET_CALIBRATION_MAP:
+		str = "set-calibration-map";
+		break;
 	default:
 		str = "unknown-command";
 		break;

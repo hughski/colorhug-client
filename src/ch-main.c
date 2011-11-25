@@ -374,6 +374,62 @@ out:
 }
 
 /**
+ * ch_util_get_calibration_map:
+ **/
+static gboolean
+ch_util_get_calibration_map (ChUtilPrivate *priv,
+			     gchar **values,
+			     GError **error)
+{
+	gboolean ret;
+	guint16 calibration_map[6];
+	guint i;
+
+	/* get from HW */
+	ret = ch_client_get_calibration_map (priv->client,
+					     calibration_map,
+					     error);
+	if (!ret)
+		goto out;
+	for (i = 0; i < 6; i++)
+		g_print ("%i -> %i\n", i, calibration_map[i]);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_calibration_map:
+ **/
+static gboolean
+ch_util_set_calibration_map (ChUtilPrivate *priv,
+			     gchar **values,
+			     GError **error)
+{
+	gboolean ret;
+	guint16 calibration_map[6];
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 6) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	for (i = 0; i < 6; i++)
+		calibration_map[i] = atoi (values[i]);
+
+	/* set to HW */
+	ret = ch_client_set_calibration_map (priv->client,
+					     calibration_map,
+					     error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_firmware_ver:
  **/
 static gboolean
@@ -1208,6 +1264,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Boots from the bootloader into the firmware"),
 		     ch_util_boot_flash);
+	ch_util_add (priv->cmd_array,
+		     "get-calibration-map",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor calibration map"),
+		     ch_util_get_calibration_map);
+	ch_util_add (priv->cmd_array,
+		     "set-calibration-map",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor calibration map"),
+		     ch_util_set_calibration_map);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

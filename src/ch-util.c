@@ -78,6 +78,7 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	gdouble calibration[9];
 	gdouble pre_scale = 5.0f;
 	gdouble post_scale = 1.0f;
+	guint16 calibration_map[6];
 
 	calibration[0] = 1.0f;
 	calibration[1] = 0.0f;
@@ -122,6 +123,24 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	if (!ret) {
 		ch_util_error_dialog (priv,
 				      _("Failed to set pre scale"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* set to HW */
+	calibration_map[0] = 0x00;
+	calibration_map[1] = 0x00;
+	calibration_map[2] = 0x00;
+	calibration_map[3] = 0x00;
+	calibration_map[4] = 0x00;
+	calibration_map[5] = 0x00;
+	ret = ch_client_set_calibration_map (priv->client,
+					     calibration_map,
+					     &error);
+	if (!ret) {
+		ch_util_error_dialog (priv,
+				      _("Failed to set calibration map"),
 				      error->message);
 		g_error_free (error);
 		goto out;

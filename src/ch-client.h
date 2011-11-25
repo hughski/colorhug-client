@@ -75,6 +75,13 @@ gboolean	 ch_client_set_integral_time	(ChClient	*client,
 						 guint16	 integral_time,
 						 GError		**error);
 
+gboolean	 ch_client_get_calibration_map	(ChClient	*client,
+						 guint16	*calibration_map,
+						 GError		**error);
+gboolean	 ch_client_set_calibration_map	(ChClient	*client,
+						 guint16	*calibration_map,
+						 GError		**error);
+
 gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
 						 guint16	*major,
 						 guint16	*minor,

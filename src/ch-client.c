@@ -286,6 +286,66 @@ out:
 }
 
 /**
+ * ch_client_get_calibration_map:
+ **/
+gboolean
+ch_client_get_calibration_map (ChClient *client,
+			       guint16 *calibration_map,
+			       GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (calibration_map != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (client->priv->device,
+				       CH_CMD_GET_CALIBRATION_MAP,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) calibration_map,
+				       6 * sizeof(guint16),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_client_set_calibration_map:
+ **/
+gboolean
+ch_client_set_calibration_map (ChClient *client,
+			       guint16 *calibration_map,
+			       GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (calibration_map != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (client->priv->device,
+				       CH_CMD_SET_CALIBRATION_MAP,
+				       (const guint8 *) calibration_map,	/* buffer in */
+				       6 * sizeof(guint16),	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_get_firmware_ver:
  **/
 gboolean
