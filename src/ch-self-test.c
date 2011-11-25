@@ -42,13 +42,15 @@ ch_test_math_convert_func (void)
 	value = 3.1415927f;
 	ch_double_to_packed_float (value, &pf);
 	g_assert_cmpint (pf.offset, ==, 3);
-	g_assert_cmpint (pf.fraction, ==, 0x243f);
+	g_assert_cmpint (pf.fraction, <, 0x249f);
+	g_assert_cmpint (pf.fraction, >, 0x240f);
 
 	/* test converting to packed struct */
 	value = -3.1415927f;
 	ch_double_to_packed_float (value, &pf);
 	g_assert_cmpint (pf.offset, ==, -4);
-	g_assert_cmpint (pf.fraction, ==, (0x243f ^ 0xffff) + 1);
+	g_assert_cmpint (pf.fraction, <, (0x240f ^ 0xffff));
+	g_assert_cmpint (pf.fraction, >, (0x249f ^ 0xffff));
 
 	/* test converting positive to float */
 	pf.offset = 3;
@@ -77,7 +79,8 @@ ch_test_math_convert_func (void)
 	value = +1.4f;
 	ch_double_to_packed_float (value, &pf);
 	g_assert_cmpint (pf.offset, ==, 1);
-	g_assert_cmpint (pf.fraction, ==, 0x6666);
+	g_assert_cmpint (pf.fraction, <, 0x6668);
+	g_assert_cmpint (pf.fraction, >, 0x6663);
 	ch_packed_float_to_double (&pf, &value);
 	g_assert_cmpfloat (value, <, 1.41);
 	g_assert_cmpfloat (value, >, 1.39);
@@ -86,7 +89,8 @@ ch_test_math_convert_func (void)
 	value = -1.4f;
 	ch_double_to_packed_float (value, &pf);
 	g_assert_cmpint (pf.offset, ==, -2);
-	g_assert_cmpint (pf.fraction, ==, (0x6666 ^ 0xffff) + 1);
+	g_assert_cmpint (pf.fraction, <, (0x6662 ^ 0xffff));
+	g_assert_cmpint (pf.fraction, >, (0x6668 ^ 0xffff));
 	ch_packed_float_to_double (&pf, &value);
 	g_assert_cmpfloat (value, <, -1.39);
 	g_assert_cmpfloat (value, >, -1.41);
@@ -161,6 +165,8 @@ ch_test_math_multiply_func (void)
 	ChPackedFloat pf_tmp;
 	ChPackedFloat pf_result;
 	gdouble value = 0.0f;
+	gdouble value1;
+	gdouble value2;
 	guint8 rc;
 
 	/* test safe multiplication */
@@ -187,8 +193,8 @@ ch_test_math_multiply_func (void)
 	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
 	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
 	ch_packed_float_to_double (&pf_result, &value);
-	g_assert_cmpfloat (value, >, 779.7);
-	g_assert_cmpfloat (value, <, 780.3);
+	g_assert_cmpfloat (value, >, 778.9);
+	g_assert_cmpfloat (value, <, 780.1);
 
 	/* test multiplication of negative */
 	ch_double_to_packed_float (3.90f, &pf);
@@ -207,6 +213,28 @@ ch_test_math_multiply_func (void)
 	ch_packed_float_to_double (&pf_result, &value);
 	g_assert_cmpfloat (value, >, 5.45);
 	g_assert_cmpfloat (value, <, 5.47);
+
+	/* test multiplication of very different numbers */
+	ch_double_to_packed_float (0.072587f, &pf);
+	ch_double_to_packed_float (80.0f, &pf_tmp);
+	rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
+	g_assert_cmpint (rc, ==, CH_ERROR_NONE);
+	ch_packed_float_to_double (&pf_result, &value);
+	g_assert_cmpfloat (value, >, 5.79);
+	g_assert_cmpfloat (value, <, 5.81);
+
+	/* be evil */
+	for (value1 = -127; value1 < +127; value1 += 0.5f) {
+		for (value2 = -127; value2 < +127; value2 += 0.5f) {
+			ch_double_to_packed_float (value1, &pf);
+			ch_double_to_packed_float (value2, &pf_tmp);
+			rc = ch_packed_float_multiply (&pf, &pf_tmp, &pf_result);
+			g_assert_cmpint (rc, ==, CH_ERROR_NONE);
+			ch_packed_float_to_double (&pf_result, &value);
+			g_assert_cmpfloat (value, >, (value1 * value2) - 0.01);
+			g_assert_cmpfloat (value, <, (value1 * value2) + 0.01);
+		}
+	}
 
 	/* test multiplication overflow */
 	ch_double_to_packed_float (0x4fff, &pf);

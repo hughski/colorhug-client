@@ -40,7 +40,7 @@ ch_packed_float_to_double (const ChPackedFloat *pf, gdouble *value)
 {
 	g_return_if_fail (value != NULL);
 	g_return_if_fail (pf != NULL);
-	*value = pf->raw / (gdouble) 0xffff;
+	*value = pf->raw / (gdouble) 0x10000;
 }
 
 /**
@@ -55,9 +55,9 @@ void
 ch_double_to_packed_float (gdouble value, ChPackedFloat *pf)
 {
 	g_return_if_fail (pf != NULL);
-	g_return_if_fail (value <= 0x7fff);
-	g_return_if_fail (value >= -0x7fff);
-	pf->raw = value * (gdouble) 0xffff;
+	g_return_if_fail (value <= 0x8000);
+	g_return_if_fail (value >= -0x8000);
+	pf->raw = value * (gdouble) 0x10000;
 }
 
 /**
@@ -84,9 +84,9 @@ ch_packed_float_add (const ChPackedFloat *pf1,
 	g_return_val_if_fail (result != NULL, CH_ERROR_INVALID_VALUE);
 
 	/* check overflow */
-	pf1_tmp = pf1->raw / 0xffff;
-	pf2_tmp = pf2->raw / 0xffff;
-	if (pf1_tmp + pf2_tmp > 0x7fff)
+	pf1_tmp = pf1->raw / 0x10000;
+	pf2_tmp = pf2->raw / 0x10000;
+	if (pf1_tmp + pf2_tmp > 0x8000)
 		return CH_ERROR_OVERFLOW_ADDITION;
 
 	/* do the proper result */
@@ -110,36 +110,34 @@ ch_packed_float_multiply (const ChPackedFloat *pf1,
 			  const ChPackedFloat *pf2,
 			  ChPackedFloat *result)
 {
-	gint32 mult_result;
-	gint32 mult_divisor;
-	gint i;
+	ChPackedFloat pf1_tmp;
+	ChPackedFloat pf2_tmp;
 
 	g_return_val_if_fail (pf1 != NULL, CH_ERROR_INVALID_VALUE);
 	g_return_val_if_fail (pf2 != NULL, CH_ERROR_INVALID_VALUE);
 	g_return_val_if_fail (result != NULL, CH_ERROR_INVALID_VALUE);
 
-	/* trivial: two numbers < 1.0 can be safely handled
-	 * within 32 bits */
-	if (pf1->raw < 0x10000 && pf2->raw < 0x10000)
-		result->raw = (pf1->raw * pf2->raw) / 0x10000;
+	/* make positive */
+	pf1_tmp.raw = ABS(pf1->raw);
+	pf2_tmp.raw = ABS(pf2->raw);
 
-	/* find a divisor that can multiply these numbers with the
-	 * greatest precision and with the temporary result still
-	 * staying within 32 bits */
-	for (i = 2; i < 0xff; i *= 2) {
+	/* check for overflow */
+	if (pf1_tmp.offset > 0 &&
+	    0x8000 / pf1_tmp.offset < pf2_tmp.offset)
+		return CH_ERROR_OVERFLOW_MULTIPLY;
 
-		/* just do the multiplication */
-		mult_result = (pf1->raw / i) * (pf2->raw / i);
+	/* do long multiplication on each 16 bit part */
+	result->raw = ((guint32) pf1_tmp.fraction *
+		       (guint32) pf2_tmp.fraction) / 0x10000;
+	result->raw += ((guint32) pf1_tmp.offset *
+			(guint32) pf2_tmp.offset) * 0x10000;
+	result->raw += (guint32) pf1_tmp.fraction *
+		       (guint32) pf2_tmp.offset;
+	result->raw += (guint32) pf1_tmp.offset *
+		       (guint32) pf2_tmp.fraction;
 
-		/* detect overflow */
-		if (ABS((mult_result / pf1->raw) - (pf2->raw / (i * i))) > 1)
-			continue;
-
-		/* calculate post-multiply divisor */
-		mult_divisor = 0x10000 / (i * i);
-		result->raw = mult_result / mult_divisor;
-		return CH_ERROR_NONE;
-	}
-
-	return CH_ERROR_OVERFLOW_MULTIPLY;
+	/* correct sign bit */
+	if ((pf1->raw < 0) ^ (pf2->raw < 0))
+		result->raw = -result->raw;
+	return CH_ERROR_NONE;
 }
