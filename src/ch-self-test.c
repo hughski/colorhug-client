@@ -306,6 +306,8 @@ ch_test_eeprom_func (void)
 	gdouble blue = 0;
 	gdouble post_scale = 0;
 	gdouble post_scale_tmp = 0;
+	gdouble pre_scale = 0;
+	gdouble pre_scale_tmp = 0;
 	guint64 serial_number = 0;
 	gdouble calibration[9];
 	gdouble calibration_tmp[9];
@@ -348,9 +350,9 @@ ch_test_eeprom_func (void)
 					  &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpint (major, ==, 0);
+	g_assert_cmpint (major, ==, 1);
 	g_assert_cmpint (minor, ==, 0);
-	g_assert_cmpint (micro, ==, 4);
+	g_assert_cmpint (micro, >, 0);
 
 	/* verify dark offsets */
 	ret = ch_client_set_dark_offsets (client,
@@ -440,6 +442,21 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 	g_assert_cmpfloat (fabs (post_scale - post_scale_tmp), <, 0.0001);
 
+	/* verify pre scale */
+	pre_scale = 1.23f;
+	ret = ch_client_set_pre_scale (client,
+				       pre_scale,
+				       &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	ret = ch_client_get_pre_scale (client,
+					&pre_scale_tmp,
+					&error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert_cmpfloat (fabs (pre_scale - pre_scale_tmp), <, 0.0001);
+
 #if 0
 	/* write eeprom */
 	ret = ch_client_write_eeprom (client,
@@ -477,7 +494,7 @@ ch_test_reading_func (void)
 
 	/* set multiplier */
 	ret = ch_client_set_multiplier (client,
-					CH_FREQ_SCALE_2,
+					CH_FREQ_SCALE_100,
 					&error);
 	g_assert_no_error (error);
 	g_assert (ret);
