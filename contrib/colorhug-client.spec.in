@@ -10,7 +10,7 @@ Source0:   http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.
 
 BuildRequires: gettext
 BuildRequires: glib2-devel
-BuildRequires: gtk2-devel
+BuildRequires: gtk3-devel
 BuildRequires: intltool
 BuildRequires: libgusb-devel >= 0.1.2
 BuildRequires: colord-devel >= 0.1.15
