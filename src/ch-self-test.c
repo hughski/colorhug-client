@@ -259,6 +259,13 @@ ch_test_state_func (void)
 
 	/* load the device */
 	ret = ch_client_load (client, &error);
+	if (!ret && g_error_matches (error,
+				     G_USB_DEVICE_ERROR,
+				     G_USB_DEVICE_ERROR_NO_DEVICE)) {
+		g_debug ("no device, skipping tests");
+		g_error_free (error);
+		return;
+	}
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -346,6 +353,13 @@ ch_test_eeprom_func (void)
 
 	/* load the device */
 	ret = ch_client_load (client, &error);
+	if (!ret && g_error_matches (error,
+				     G_USB_DEVICE_ERROR,
+				     G_USB_DEVICE_ERROR_NO_DEVICE)) {
+		g_debug ("no device, skipping tests");
+		g_error_free (error);
+		return;
+	}
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -510,6 +524,13 @@ ch_test_reading_func (void)
 
 	/* load the device */
 	ret = ch_client_load (client, &error);
+	if (!ret && g_error_matches (error,
+				     G_USB_DEVICE_ERROR,
+				     G_USB_DEVICE_ERROR_NO_DEVICE)) {
+		g_debug ("no device, skipping tests");
+		g_error_free (error);
+		return;
+	}
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -563,6 +584,13 @@ ch_test_reading_xyz_func (void)
 
 	/* load the device */
 	ret = ch_client_load (client, &error);
+	if (!ret && g_error_matches (error,
+				     G_USB_DEVICE_ERROR,
+				     G_USB_DEVICE_ERROR_NO_DEVICE)) {
+		g_debug ("no device, skipping tests");
+		g_error_free (error);
+		return;
+	}
 	g_assert_no_error (error);
 	g_assert (ret);
 
