@@ -16,6 +16,7 @@ BuildRequires: libgusb-devel >= 0.1.2
 BuildRequires: colord-devel >= 0.1.15
 BuildRequires: lcms2-devel
 BuildRequires: libsoup-devel
+BuildRequires: docbook-utils
 
 %description
 The Hughski ColorHug Colorimeter is a low cost open-source hardware
@@ -51,6 +52,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_datadir}/applications/ch-flash.desktop
 %{_datadir}/icons/hicolor/*/apps/colorhug.png
 %{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
+%{_mandir}/man1/*.1.gz
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#

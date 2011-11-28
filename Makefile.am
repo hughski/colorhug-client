@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = 1.7
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = po src data
+SUBDIRS = po man src data
 
 EXTRA_DIST =						\
 	COPYING						\
