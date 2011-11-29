@@ -1,5 +1,5 @@
 [Desktop Entry]
-_Name=ColorHug Firmware Updater
+_Name=Firmware Updater
 _Comment=Update the firmware on the ColorHug colorimeter
 Icon=colorhug
 Exec=colorhug-flash

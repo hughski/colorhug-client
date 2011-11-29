@@ -49,7 +49,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_datadir}/colorhug-client
 %{_libexecdir}/colorhug*
 %{_bindir}/colorhug*
-%{_datadir}/applications/ch-flash.desktop
+%{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/*/apps/colorhug.png
 %{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
 %{_mandir}/man1/*.1.gz
