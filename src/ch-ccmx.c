@@ -184,6 +184,8 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	GError *error = NULL;
 	GtkListStore *list_store;
 	GtkTreeIter iter;
+	guint8 types;
+	const gchar *description;
 	GUsbDevice *device = G_USB_DEVICE (source);
 
 	/* get data */
@@ -191,32 +193,43 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	if (!ret) {
 		g_debug ("ignoring: %s", error->message);
 		g_error_free (error);
-	} else {
-		/* is suitable for LCD */
-		list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
-		gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, priv->ccmx_buffer + (4*9),
-				    COLUMN_INDEX, priv->ccmx_idx,
-				    -1);
+		goto out;
+	}
 
-		/* is suitable for CRT */
-		list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
-		gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, priv->ccmx_buffer + (4*9),
-				    COLUMN_INDEX, priv->ccmx_idx,
-				    -1);
+	/* get the types this is suitable for */
+	types = priv->ccmx_buffer[4*9];
+	description = (const gchar *) priv->ccmx_buffer + (4*9) + 1;
 
-		/* is suitable for projector */
-		list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
+	/* is suitable for LCD */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
+	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
 		gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, priv->ccmx_buffer + (4*9),
+				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
 				    -1);
 	}
 
+	/* is suitable for CRT */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
+	if ((types & CH_CALIBRATION_TYPE_CRT) > 0) {
+		gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, priv->ccmx_idx,
+				    -1);
+	}
+
+	/* is suitable for projector */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
+	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0) {
+		gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, priv->ccmx_idx,
+				    -1);
+	}
+out:
 	/* track if it's in use so we can find a spare slot on import */
 	priv->in_use[priv->ccmx_idx] = ret;
 

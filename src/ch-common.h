@@ -108,20 +108,28 @@
 /**
  * CH_CMD_GET_CALIBRATION:
  *
- * Gets the calibration matrix. The description does not have to be NULL terminated.
+ * Gets the calibration matrix. The description does not have to be NULL
+ * terminated.
+ *
+ * @types is a bitmask which corresponds to:
+ *
+ * bit:
+ *  0     Can be used with LCD panels
+ *  1     Can be used with CRT monitors
+ *  2     Can be used with projectors
+ *  3-7   Reserved for future use
  *
  * IN:  [1:cmd][2:index]
- * OUT: [1:retval][1:cmd][2*9:matrix_value][24:description]
+ * OUT: [1:retval][1:cmd][2*9:matrix_value][1:types][23:description]
  **/
 #define	CH_CMD_GET_CALIBRATION			0x09
 
 /**
  * CH_CMD_SET_CALIBRATION:
  *
- * Sets the calibration matrix. The @matrix_value parameter is a 16 bit
- * _signed_ value that scales from -1.0 to +1.0.
+ * Sets the calibration matrix.
  *
- * IN:  [1:cmd][2:index][4*9:matrix_value][24:description]
+ * IN:  [1:cmd][2:index][4*9:matrix_value][1:types][23:description]
  * OUT: [1:retval][1:cmd]
  **/
 #define	CH_CMD_SET_CALIBRATION			0x0a
@@ -402,6 +410,13 @@
 /* although each calibration can be stored in 60 bytes,
  * we use a full 64 byte block */
 #define	CH_CALIBRATION_MAX			64	/* so finishes at device params */
+#define	CH_CALIBRATION_DESCRIPTION_LEN		23	/* 60 - (9*4) - 1 */
+
+/* the supported calibration types bitfield */
+#define	CH_CALIBRATION_TYPE_LCD			0x01
+#define	CH_CALIBRATION_TYPE_CRT			0x02
+#define	CH_CALIBRATION_TYPE_PROJECTOR		0x04
+#define	CH_CALIBRATION_TYPE_ALL			0xff
 
 /* approximate sample times */
 #define CH_INTEGRAL_TIME_VALUE_5MS		0x0300

@@ -477,6 +477,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble calibration[9];
 	guint16 calibration_index = 0;
 	gchar description[24];
+	guint8 types;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -491,11 +492,15 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	ret = ch_client_get_calibration (priv->client,
 					 calibration_index,
 					 calibration,
+					 &types,
 					 description,
 					 error);
 	if (!ret)
 		goto out;
 	g_print ("index: %i\n", calibration_index);
+	g_print ("supports LCD: %i\n", (types & 0x01) > 0);
+	g_print ("supports CRT: %i\n", (types & 0x02) > 0);
+	g_print ("supports projector: %i\n", (types & 0x04) > 0);
 	g_print ("description: %s\n", description);
 	ch_util_show_calibration (calibration);
 out:
@@ -511,18 +516,33 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 	gdouble calibration[9];
 	guint16 calibration_index = 0;
+	guint types = 0;
 	guint i;
 
 	/* parse */
-	if (g_strv_length (values) != 11) {
+	if (g_strv_length (values) != 12) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'index' 'values' 'description'");
+				     "invalid input, expect 'index' 'types' 'values' 'description'");
 		goto out;
 	}
 	calibration_index = atoi (values[0]);
+
+	/* try to parse magic constants */
+	if (g_strstr_len (values[1], -1, "lcd") != NULL)
+		types += CH_CALIBRATION_TYPE_LCD;
+	if (g_strstr_len (values[1], -1, "crt") != NULL)
+		types += CH_CALIBRATION_TYPE_CRT;
+	if (g_strstr_len (values[1], -1, "projector") != NULL)
+		types += CH_CALIBRATION_TYPE_PROJECTOR;
+	if (types == 0) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid type, expected 'lcd', 'crt', 'projector'");
+		goto out;
+	}
 	for (i = 0; i < 9; i++)
-		calibration[i] = atof (values[i+1]);
+		calibration[i] = atof (values[i+2]);
 
 	/* check is valid */
 	for (i = 0; i < 9; i++) {
@@ -534,11 +554,21 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 		}
 	}
 
+	/* check length */
+	if (strlen (values[11]) > CH_CALIBRATION_DESCRIPTION_LEN) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "decription is limited to %i chars",
+			     CH_CALIBRATION_DESCRIPTION_LEN);
+		goto out;
+	}
+
 	/* set to HW */
 	ret = ch_client_set_calibration (priv->client,
 					 calibration_index,
 					 calibration,
-					 values[10],
+					 types,
+					 values[11],
 					 error);
 	if (!ret)
 		goto out;
@@ -618,6 +648,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	ret = ch_client_set_calibration (priv->client,
 					 calibration_index,
 					 calibration,
+					 CH_CALIBRATION_TYPE_ALL,
 					 description,
 					 error);
 	if (!ret)

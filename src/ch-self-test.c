@@ -336,6 +336,7 @@ ch_test_eeprom_func (void)
 	guint16 major = 0;
 	guint16 micro = 0;
 	guint16 minor = 0;
+	guint8 types = 0;
 	gdouble red = 0;
 	gdouble green = 0;
 	gdouble blue = 0;
@@ -424,22 +425,25 @@ ch_test_eeprom_func (void)
 	calibration[7] = 8.0f;
 	calibration[8] = 9.0f;
 	ret = ch_client_set_calibration (client,
-					 0,
+					 60,
 					 calibration,
+					 CH_CALIBRATION_TYPE_CRT,
 					 "test0",
 					 &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ret = ch_client_set_calibration (client,
-					 1,
+					 61,
 					 calibration,
+					 CH_CALIBRATION_TYPE_PROJECTOR,
 					 "test1",
 					 &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ret = ch_client_set_calibration (client,
-					 0,
+					 60,
 					 calibration,
+					 CH_CALIBRATION_TYPE_CRT,
 					 "test0",
 					 &error);
 	g_assert_no_error (error);
@@ -447,8 +451,9 @@ ch_test_eeprom_func (void)
 
 	/* read back data */
 	ret = ch_client_get_calibration (client,
-					 0,
+					 60,
 					 calibration_tmp,
+					 &types,
 					 desc,
 					 &error);
 	g_assert_no_error (error);
@@ -456,10 +461,12 @@ ch_test_eeprom_func (void)
 	g_assert (memcmp (calibration_tmp,
 			  calibration,
 			  sizeof (gfloat) * 9) == 0);
+	g_assert_cmpint (types, ==, CH_CALIBRATION_TYPE_CRT);
 	g_assert_cmpstr (desc, ==, "test0");
 	ret = ch_client_get_calibration (client,
-					 1,
+					 61,
 					 calibration_tmp,
+					 &types,
 					 desc,
 					 &error);
 	g_assert_no_error (error);
@@ -467,6 +474,7 @@ ch_test_eeprom_func (void)
 	g_assert (memcmp (calibration_tmp,
 			  calibration,
 			  sizeof (gfloat) * 9) == 0);
+	g_assert_cmpint (types, ==, CH_CALIBRATION_TYPE_PROJECTOR);
 	g_assert_cmpstr (desc, ==, "test1");
 
 	/* verify post scale */
@@ -571,12 +579,13 @@ ch_test_reading_xyz_func (void)
 {
 	ChClient *client;
 	gboolean ret;
-	guint16 post_scale;
+	gdouble calibration[9];
 	gdouble reading1[3];
 	gdouble reading2[3];
-	gdouble calibration[9];
 	gdouble scaling_factor_actual;
 	GError *error = NULL;
+	guint16 calibration_map[6];
+	guint16 post_scale;
 	guint i;
 
 	/* new device */
@@ -605,10 +614,20 @@ ch_test_reading_xyz_func (void)
 	calibration[7] = 0.0f;
 	calibration[8] = 1.0f;
 	ret = ch_client_set_calibration (client,
-					 0,
+					 60,
 					 calibration,
+					 CH_CALIBRATION_TYPE_ALL,
 					 "test0",
 					 &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* set everything to use the unity values */
+	for (i = 0; i < 6; i++)
+		calibration_map[i] = 60;
+	ret = ch_client_set_calibration_map (client,
+					     calibration_map,
+					     &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 

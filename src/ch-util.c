@@ -94,6 +94,7 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	ret = ch_client_set_calibration (priv->client,
 					 0,
 					 calibration,
+					 CH_CALIBRATION_TYPE_ALL,
 					 "Default unity value",
 					 &error);
 	if (!ret) {
@@ -289,7 +290,12 @@ ch_util_refresh (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* get calibration */
-	ret = ch_client_get_calibration (priv->client, 0, calibration, NULL, &error);
+	ret = ch_client_get_calibration (priv->client,
+					 0,
+					 calibration,
+					 NULL,
+					 NULL,
+					 &error);
 	if (!ret) {
 		ch_util_error_dialog (priv,
 				      _("Failed to get calibration data, setting unity"),

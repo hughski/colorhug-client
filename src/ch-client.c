@@ -392,11 +392,12 @@ gboolean
 ch_client_get_calibration (ChClient *client,
 			   guint16 calibration_index,
 			   gdouble *calibration,
+			   guint8 *types,
 			   gchar *description,
 			   GError **error)
 {
 	gboolean ret;
-	guint8 buffer[9*4 + 24];
+	guint8 buffer[9*4 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
 	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -423,9 +424,16 @@ ch_client_get_calibration (ChClient *client,
 					   &calibration[i]);
 	}
 
+	/* get the supported types */
+	if (types != NULL)
+		*types = buffer[9*4];
+
 	/* get the description */
-	if (description != NULL)
-		strncpy (description, (const char *) &buffer[9*4], 24);
+	if (description != NULL) {
+		strncpy (description,
+			 (const char *) buffer + 9*4 + 1,
+			 CH_CALIBRATION_DESCRIPTION_LEN);
+	}
 out:
 	return ret;
 }
@@ -437,11 +445,12 @@ gboolean
 ch_client_set_calibration (ChClient *client,
 			   guint16 calibration_index,
 			   const gdouble *calibration,
+			   guint8 types,
 			   const gchar *description,
 			   GError **error)
 {
 	gboolean ret;
-	guint8 buffer[9*4 + 2 + 24];
+	guint8 buffer[9*4 + 2 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
 	guint i;
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
@@ -460,8 +469,13 @@ ch_client_set_calibration (ChClient *client,
 					   (ChPackedFloat *) &buffer[i*4 + 2]);
 	}
 
+	/* write types */
+	buffer[9*4 + 2] = types;
+
 	/* write description */
-	strncpy ((gchar *) buffer + 9*4 + 2, description, 24);
+	strncpy ((gchar *) buffer + 9*4 + 2 + 1,
+		 description,
+		 CH_CALIBRATION_DESCRIPTION_LEN);
 
 	/* hit hardware */
 	ret = ch_device_write_command (client->priv->device,

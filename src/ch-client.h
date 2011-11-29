@@ -91,11 +91,13 @@ gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
 gboolean	 ch_client_get_calibration	(ChClient	*client,
 						 guint16	 calibration_index,
 						 gdouble	*calibration,
+						 guint8		*types,
 						 gchar		*description,
 						 GError		**error);
 gboolean	 ch_client_set_calibration	(ChClient	*client,
 						 guint16	 calibration_index,
 						 const gdouble	*calibration,
+						 guint8		 types,
 						 const gchar	*description,
 						 GError		**error);
 
