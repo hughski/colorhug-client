@@ -4,10 +4,12 @@ SUBDIRS = 						\
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files =					\
+	colorhug-ccmx.desktop.in			\
 	colorhug-flash.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 pkgdata_DATA =						\
+	ch-ccmx.ui					\
 	ch-flash.ui
 
 EXTRA_DIST =						\
@@ -18,6 +20,7 @@ clean-local :
 	rm -f *~
 
 DISTCLEANFILES =					\
+	colorhug-ccmx.desktop				\
 	colorhug-flash.desktop
 
 -include $(top_srcdir)/git.mk

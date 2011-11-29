@@ -1,0 +1,10 @@
+[Desktop Entry]
+_Name=CCMX Loader
+_Comment=Modify the calibration matrices on the ColorHug device
+Icon=colorhug
+Exec=colorhug-ccmx
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;System;
+StartupNotify=true
+NoDisplay=false
