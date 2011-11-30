@@ -1,0 +1,54 @@
+PackageKit Release Notes
+
+1. Write NEWS entries in the same format as usual.
+
+git shortlog COLORHUG_CLIENT_0_1_1.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+
+--------------------------------------------------------------------------------
+Version 0.1.2
+~~~~~~~~~~~~~
+Released: 2011-xx-xx
+
+Notes:
+
+New Features:
+
+Bugfixes:
+--------------------------------------------------------------------------------
+
+3. Commit changes in git:
+
+git commit -a -m "Release version 0.1.2"
+git tag -s COLORHUG_CLIENT_0_1_2 -m "==== Version 0.1.2 ===="
+<wait>
+git push --tags
+git push
+
+4. Create tarball
+
+make distcheck
+
+5. Upload tarballs:
+
+scp *.tar.xz hughsient@people.freedesktop.org:public_html/releases/
+
+6. Do post release version bump in configure.ac
+
+7. Commit trivial changes:
+
+git commit -a -m "trivial: Post release version bump"
+git push
+
+8. Send an email to colorhug-users
+
+=================================================
+colorhug-client 0.1.2 released!
+
+This package includes the client tools which allows the user to upgrade
+the firmware on the sensor or to access the sensor from command line
+scripts.
+
+Tarballs available here: http://people.freedesktop.org/~hughsient/releases/
+
+=================================================
+

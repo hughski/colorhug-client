@@ -1,7 +1,7 @@
 # Copyright (C) 2011 Richard Hughes <richard@hughsie.com>
 AC_PREREQ(2.63)
 
-AC_INIT([colorhug-client],[0.1.1],[http://www.hughski.com/])
+AC_INIT([colorhug-client],[0.1.2],[http://www.hughski.com/])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar])
 AC_CONFIG_HEADERS([config.h])

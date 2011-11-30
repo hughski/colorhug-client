@@ -17,7 +17,6 @@ EXTRA_DIST =						\
 MAINTAINERCLEANFILES =					\
 	$(srcdir)/ABOUT-NLS				\
 	$(srcdir)/INSTALL				\
-	$(srcdir)/RELEASE				\
 	$(srcdir)/aclocal.m4				\
 	$(srcdir)/autoscan.log				\
 	$(srcdir)/compile				\
