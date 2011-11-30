@@ -4,8 +4,8 @@ Summary:   Tools for the Hughski Colorimeter
 Name:      colorhug-client
 Version:   #VERSION#
 Release:   0.#BUILD#%{?alphatag}%{?dist}
-License:   GPLv2+ and LGPLv2+
-URL:       http://www.hughski.co.uk
+License:   GPLv2+
+URL:       http://www.hughski.com/
 Source0:   http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.tar.xz
 
 BuildRequires: gettext
@@ -19,7 +19,7 @@ BuildRequires: libsoup-devel
 BuildRequires: docbook-utils
 
 %description
-The Hughski ColorHug Colorimeter is a low cost open-source hardware
+The Hughski ColorHug colorimeter is a low cost open-source hardware
 sensor used to calibrate screens.
 
 This package includes the client tools which allows the user to upgrade
@@ -30,10 +30,7 @@ scripts.
 %setup -q
 
 %build
-%configure \
-        --disable-static \
-        --disable-rpath \
-        --disable-dependency-tracking
+%configure --disable-static
 
 make %{?_smp_mflags}
 
