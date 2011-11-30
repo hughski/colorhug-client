@@ -1,5 +1,8 @@
-data/ch-flash.desktop.in
+data/ch-ccmx.ui
 data/ch-flash.ui
+data/colorhug-ccmx.desktop.in
+data/colorhug-flash.desktop.in
+src/ch-ccmx.c
 src/ch-flash.c
 src/ch-main.c
 src/ch-util.c

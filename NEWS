@@ -1,9 +1,35 @@
-Version 0.1.0
+Version 0.1.1
 ~~~~~~~~~~~~~
-Released: 2011-??-??
-
-Notes:
- - ???
+Released: 2011-11-30
 
 New Features:
- - ???
+ - Add a flash update GTK program (Richard Hughes)
+ - Add a man page for colorhug-flash (Richard Hughes)
+ - Add a new colorhug-inhx32-to-bin binary to make the firmware image (Richard Hughes)
+ - Add a simple GUI CCMX file loader (Richard Hughes)
+ - Add calibration remapping functionality (Richard Hughes)
+ - Add support for the reset device command (Richard Hughes)
+ - Add two new commands to test booting into the firmware (Richard Hughes)
+ - Install a colorhug logo (Richard Hughes)
+ - Support pre-scaling the sensor result for maximum accuracy (Richard Hughes)
+ - Support setting the post scale value (Richard Hughes)
+ - Support the new LED flashing options (Richard Hughes)
+ - Support up to 64 calibration matrices to be stored in the device (Richard Hughes)
+ - Support writing replacement firmware (Richard Hughes)
+ - Use a 32 bit packed struct to return readings from the sensor (Richard Hughes)
+
+Bugfixes:
+ - Allow erasing flash in chunks larger than 256 bytes (Richard Hughes)
+ - Don't abort 'make check' if there is no hardware attached (Richard Hughes)
+ - Get the calibration description from the CCMX file (Richard Hughes)
+ - Make the client code work on big endian machines (Johannes Berg)
+
+Version 0.1.0
+~~~~~~~~~~~~~
+Released: 2011-11-11
+
+Notes:
+ - Initial tarball release
+
+New Features:
+ - Every ColorHug command can be controlled using the colorhug CLI tool.
