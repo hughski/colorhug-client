@@ -360,6 +360,8 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 	gtk_label_set_label (GTK_LABEL (widget), _("Device successfully updated"));
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
 	gtk_widget_set_sensitive (widget, TRUE);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
+	gtk_widget_hide (widget);
 out:
 	return;
 }
