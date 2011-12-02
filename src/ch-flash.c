@@ -41,6 +41,7 @@ typedef struct {
 	GtkApplication	*application;
 	GtkBuilder	*builder;
 	guint16		 firmware_version[3];
+	guint8		 hardware_version;
 	guint8		*firmware_data;
 	gsize		 firmware_len;
 	gboolean	 planned_replug;
@@ -1080,7 +1081,23 @@ ch_flash_get_firmware_version_cb (GObject *source,
 		goto out;
 	}
 
-	/* update label */
+	/* update product label */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_detected"));
+	if (priv->hardware_version == 0) {
+		/* TRANSLATORS: pre-production hardware */
+		str = g_strdup (_("Prototype ColorHug Detected"));
+	} else if (priv->hardware_version == 0) {
+		/* TRANSLATORS: first release hardware */
+		str = g_strdup (_("ColorHug Detected"));
+	} else {
+		/* TRANSLATORS: new-issue hardware */
+		str = g_strdup_printf (_("ColorHug v%i Detected"),
+				       priv->hardware_version);
+	}
+	gtk_label_set_label (GTK_LABEL (widget), str);
+	g_free (str);
+
+	/* update firmware label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_firmware"));
 	if (priv->firmware_version[0] == 0) {
 		str = g_strdup_printf (_("Bootloader version %i.%i.%i"),
@@ -1130,6 +1147,43 @@ out:
 	priv->planned_replug = FALSE;
 	g_free (str);
 	g_free (uri);
+}
+
+/**
+ * ch_flash_get_hardware_version_cb:
+ **/
+static void
+ch_flash_get_hardware_version_cb (GObject *source,
+				  GAsyncResult *res,
+				  gpointer user_data)
+{
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	gboolean ret;
+	GError *error = NULL;
+	GUsbDevice *device = G_USB_DEVICE (source);
+
+	/* get data */
+	ret = ch_device_write_command_finish (device, res, &error);
+	if (!ret) {
+		ch_flash_error_dialog (priv,
+				       _("Failed to contact ColorHug"),
+				       error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get the firmware version */
+	ch_device_write_command_async (priv->device,
+				       CH_CMD_GET_FIRMWARE_VERSION,
+				       NULL, /* buffer_in */
+				       0, /* buffer_in_len */
+				       (guint8 *) priv->firmware_version,
+				       6,
+				       NULL, /* cancellable */
+				       ch_flash_get_firmware_version_cb,
+				       priv);
+out:
+	return;
 }
 
 /**
@@ -1185,13 +1239,13 @@ ch_flash_got_device (ChFlashPrivate *priv)
 
 	/* get the firmware version */
 	ch_device_write_command_async (priv->device,
-				       CH_CMD_GET_FIRMWARE_VERSION,
+				       CH_CMD_GET_HARDWARE_VERSION,
 				       NULL, /* buffer_in */
 				       0, /* buffer_in_len */
-				       (guint8 *) priv->firmware_version,
-				       6,
+				       &priv->hardware_version,
+				       1,
 				       NULL, /* cancellable */
-				       ch_flash_get_firmware_version_cb,
+				       ch_flash_get_hardware_version_cb,
 				       priv);
 }
 

@@ -57,6 +57,9 @@ gboolean	 ch_client_load			(ChClient	*client,
 gboolean	 ch_client_get_color_select	(ChClient	*client,
 						 ChColorSelect	*color_select,
 						 GError		**error);
+gboolean	 ch_client_get_hardware_version	(ChClient	*client,
+						 guint8		*hw_version,
+						 GError		**error);
 gboolean	 ch_client_set_color_select	(ChClient	*client,
 						 ChColorSelect	 color_select,
 						 GError		**error);

@@ -1337,6 +1337,36 @@ out:
 }
 
 /**
+ * ch_client_get_hardware_version:
+ **/
+gboolean
+ch_client_get_hardware_version (ChClient *client,
+				guint8 *hw_version,
+				GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (hw_version != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (client->priv->device,
+				       CH_CMD_GET_HARDWARE_VERSION,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       hw_version,
+				       1,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_class_init:
  **/
 static void

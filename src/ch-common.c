@@ -182,6 +182,9 @@ ch_command_to_string (guint8 cmd)
 	case CH_CMD_SET_CALIBRATION_MAP:
 		str = "set-calibration-map";
 		break;
+	case CH_CMD_GET_HARDWARE_VERSION:
+		str = "get-hardware-version";
+		break;
 	default:
 		str = "unknown-command";
 		break;

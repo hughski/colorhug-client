@@ -452,8 +452,27 @@
  *
  * IN:  [1:cmd][6*2:types]
  * OUT: [1:retval][1:cmd]
+ *
+ * This command is only available in firmware mode.
  **/
 #define	CH_CMD_SET_CALIBRATION_MAP		0x2f
+
+/**
+ * CH_CMD_GET_HARDWARE_VERSION:
+ *
+ * Get the hardware version.
+ *
+ * The hardware versions are as follows:
+ * 0x00		= Pre-production hardware
+ * 0x01		= First generation hardware
+ * 0x02-0x0f	= Reserved for future use
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][1:hw_version]
+ *
+ * This command is available in bootloader and firmware mode.
+ **/
+#define	CH_CMD_GET_HARDWARE_VERSION		0x30
 
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"

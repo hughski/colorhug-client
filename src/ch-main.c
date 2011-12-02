@@ -213,6 +213,33 @@ out:
 }
 
 /**
+ * ch_util_get_hardware_version:
+ **/
+static gboolean
+ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint8 hw_version = 0;
+
+	/* get from HW */
+	ret = ch_client_get_hardware_version (priv->client,
+					      &hw_version,
+					      error);
+	if (!ret)
+		goto out;
+
+	switch (hw_version) {
+	case 0x00:
+		g_print ("Prototype Hardware\n");
+		break;
+	default:
+		g_print ("Hardware Version %i\n", hw_version);
+	}
+out:
+	return ret;
+}
+
+/**
  * ch_util_set_color_select:
  **/
 static gboolean
@@ -1315,6 +1342,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the sensor calibration map"),
 		     ch_util_set_calibration_map);
+	ch_util_add (priv->cmd_array,
+		     "get-hardware-version",
+		     /* TRANSLATORS: command description */
+		     _("Gets the hardware version"),
+		     ch_util_get_hardware_version);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
