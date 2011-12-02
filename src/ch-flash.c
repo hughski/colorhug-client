@@ -43,6 +43,7 @@ typedef struct {
 	guint16		 firmware_version[3];
 	guint8		*firmware_data;
 	gsize		 firmware_len;
+	gboolean	 planned_replug;
 	GUsbContext	*usb_ctx;
 	GUsbDevice	*device;
 	GUsbDeviceList	*device_list;
@@ -489,6 +490,9 @@ ch_flash_read_firmware_chunk (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_msg"));
 	gtk_widget_show (widget);
 
+	/* this is planned */
+	priv->planned_replug = TRUE;
+
 	/* boot into new code */
 	ch_device_write_command_async (priv->device,
 				       CH_CMD_BOOT_FLASH,
@@ -734,6 +738,9 @@ ch_flash_reset_into_bootloader (ChFlashPrivate *priv)
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	gtk_label_set_label (GTK_LABEL (widget), _("Resetting into bootloader..."));
+
+	/* this is planned */
+	priv->planned_replug = TRUE;
 
 	/* need to boot into bootloader */
 	ch_device_write_command_async (priv->device,
@@ -1089,7 +1096,7 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	gtk_label_set_label (GTK_LABEL (widget), str);
 
 	/* already done flash, we're just booting into the new firmware */
-	if (priv->flash_idx > 0) {
+	if (priv->planned_replug) {
 		g_debug ("after booting into new firmware");
 		return;
 	}
@@ -1119,6 +1126,8 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	soup_session_queue_message (priv->session, msg,
 				    ch_flash_got_manifest_cb, priv);
 out:
+	/* reset the flag */
+	priv->planned_replug = FALSE;
 	g_free (str);
 	g_free (uri);
 }
@@ -1164,13 +1173,15 @@ ch_flash_got_device (ChFlashPrivate *priv)
 		return;
 	}
 
-	/* update the UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
-	gtk_widget_show (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Getting firmware version..."));
+	/* initial detection */
+	if (!priv->planned_replug) {
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
+		gtk_widget_hide (widget);
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
+		gtk_widget_show (widget);
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+		gtk_label_set_label (GTK_LABEL (widget), _("Getting firmware version..."));
+	}
 
 	/* get the firmware version */
 	ch_device_write_command_async (priv->device,
@@ -1206,6 +1217,32 @@ ch_flash_activate_link_cb (GtkLabel *label,
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 	return TRUE;
+}
+
+/**
+ * ch_flash_please_attach_device:
+ **/
+static void
+ch_flash_please_attach_device (ChFlashPrivate *priv)
+{
+	GtkWidget *widget;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
+	gtk_widget_show (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_warning"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_details"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_status"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+	gtk_label_set_label (GTK_LABEL (widget), _("Please connect your ColorHug"));
 }
 
 /**
@@ -1259,9 +1296,9 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget),
 				      "colorhug-gray",
 				      GTK_ICON_SIZE_DIALOG);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
 
 	/* setup USB image */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
 	pixbuf = gdk_pixbuf_new_from_file_at_scale (CH_DATA
 						    G_DIR_SEPARATOR_S "icons"
 						    G_DIR_SEPARATOR_S "usb.svg",
@@ -1271,20 +1308,7 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	g_object_unref (pixbuf);
 
 	/* hide all unused widgets until we've connected with the device */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_warning"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_details"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_status"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Please connect your ColorHug"));
+	ch_flash_please_attach_device (priv);
 
 	/* is the colorhug already plugged in? */
 	g_usb_device_list_coldplug (priv->device_list);
@@ -1340,6 +1364,8 @@ ch_flash_device_removed_cb (GUsbDeviceList *list,
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
 		priv->device = NULL;
+		if (!priv->planned_replug)
+			ch_flash_please_attach_device (priv);
 	}
 }
 
