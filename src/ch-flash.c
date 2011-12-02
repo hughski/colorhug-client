@@ -899,6 +899,18 @@ out:
 	g_free (uri);
 }
 
+/**
+ * ch_flash_get_packed_version:
+ **/
+static guint32
+ch_flash_get_packed_version (guint16 *ver)
+{
+	return ver[0] * 0xffff + ver[1] * 0xff + ver[2];
+}
+
+/**
+ * ch_flash_version_is_newer:
+ **/
 static gboolean
 ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 {
@@ -914,14 +926,10 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 	for (i = 0; i < 3; i++)
 		tmp[i] = atoi (split[i]);
 
-	for (i = 0; i < 3; i++) {
-		if (tmp[i] > priv->firmware_version[i]) {
-			ret = TRUE;
-			goto out;
-		}
-		if (tmp[i] == priv->firmware_version[i])
-			goto out;
-	}
+	/* check versions */
+	if (ch_flash_get_packed_version (tmp) >
+	    ch_flash_get_packed_version (priv->firmware_version))
+		ret = TRUE;
 out:
 	g_debug ("%i.%i.%i compared to %i.%i.%i = %s",
 		 tmp[0], tmp[1], tmp[2],
