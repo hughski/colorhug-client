@@ -633,6 +633,47 @@ out:
 }
 
 /**
+ * ch_util_list_calibration:
+ **/
+static gboolean
+ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gchar description[CH_CALIBRATION_DESCRIPTION_LEN];
+	GString *string;
+	guint16 i;
+
+	string = g_string_new ("");
+	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
+		ret = ch_client_get_calibration (priv->client,
+						 i,
+						 NULL,
+						 NULL,
+						 description,
+						 NULL);
+		if (ret) {
+			g_string_append_printf (string, "%i\t%s\n",
+						i, description);
+		}
+	}
+
+	/* if no matrices */
+	if (string->len == 0) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "no calibration matrices stored");
+		goto out;
+	}
+
+	/* print */
+	g_print ("Index\tDescription\n%s", string->str);
+	ret = TRUE;
+out:
+	g_string_free (string, FALSE);
+	return ret;
+}
+
+/**
  * ch_util_set_calibration_ccmx:
  **/
 static gboolean
@@ -1270,6 +1311,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Clear the sensor calibration matrix"),
 		     ch_util_clear_calibration);
+	ch_util_add (priv->cmd_array,
+		     "list-calibration",
+		     /* TRANSLATORS: command description */
+		     _("List the sensor calibration matrices"),
+		     ch_util_list_calibration);
 	ch_util_add (priv->cmd_array,
 		     "set-calibration-ccmx",
 		     /* TRANSLATORS: command description */

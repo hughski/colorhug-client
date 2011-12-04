@@ -402,7 +402,6 @@ ch_client_get_calibration (ChClient *client,
 
 	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
 	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
-	g_return_val_if_fail (calibration != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
@@ -419,9 +418,11 @@ ch_client_get_calibration (ChClient *client,
 		goto out;
 
 	/* convert back into floating point */
-	for (i = 0; i < 9; i++) {
-		ch_packed_float_to_double ((ChPackedFloat *) &buffer[i*4],
-					   &calibration[i]);
+	if (calibration != NULL) {
+		for (i = 0; i < 9; i++) {
+			ch_packed_float_to_double ((ChPackedFloat *) &buffer[i*4],
+						   &calibration[i]);
+		}
 	}
 
 	/* get the supported types */
