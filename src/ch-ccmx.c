@@ -34,6 +34,9 @@
 #include "ch-common.h"
 #include "ch-math.h"
 
+/* don't change this unless you want to provide ccmx files */
+#define COLORHUG_CCMX_LOCATION		"http://www.hughski.com/downloads/colorhug/ccmx/"
+
 typedef struct {
 	GtkApplication	*application;
 	GtkBuilder	*builder;
@@ -46,11 +49,14 @@ typedef struct {
 	gboolean	 in_use[CH_CALIBRATION_MAX];
 	guint		 ccmx_idx;
 	guint8		 ccmx_buffer[64];
+	GHashTable	*hash;
 } ChCcmxPrivate;
 
 enum {
 	COLUMN_DESCRIPTION,
 	COLUMN_INDEX,
+	COLUMN_TYPE,
+	COLUMN_LOCAL_FILENAME,
 	COLUMN_LAST
 };
 
@@ -99,6 +105,194 @@ ch_ccmx_close_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_ccmx"));
 	gtk_widget_destroy (widget);
+}
+
+/**
+ * ch_ccmx_create_user_datadir:
+ **/
+static gboolean
+ch_ccmx_create_user_datadir (ChCcmxPrivate *priv, const gchar *location)
+{
+	gboolean ret;
+	GError *error = NULL;
+	GFile *file = NULL;
+
+	/* check if exists */
+	file = g_file_new_for_path (location);
+	ret = g_file_query_exists (file, NULL);
+	if (ret)
+		goto out;
+	ret = g_file_make_directory_with_parents (file, NULL, &error);
+	if (!ret) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to create directory"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+out:
+	g_object_unref (file);
+	return ret;
+}
+
+/**
+ * ch_ccmx_add_local_file:
+ **/
+static gboolean
+ch_ccmx_add_local_file (ChCcmxPrivate *priv,
+			const gchar *filename,
+			GError **error)
+{
+	cmsHANDLE ccmx = NULL;
+	const gchar *description;
+	const gchar *sheet_type;
+	const gchar *type_tmp;
+	gboolean ret;
+	gchar *ccmx_data = NULL;
+	gsize ccmx_size;
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+	guint8 types = 0;
+
+	/* load file */
+	g_debug ("opening %s", filename);
+	ret = g_file_get_contents (filename,
+				   &ccmx_data,
+				   &ccmx_size,
+				   error);
+	if (!ret)
+		goto out;
+	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
+	if (ccmx == NULL) {
+		ret = FALSE;
+		g_set_error (error, 1, 0, "Cannot open %s", filename);
+		goto out;
+	}
+
+	/* select correct sheet */
+	sheet_type = cmsIT8GetSheetType (ccmx);
+	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
+		ret = FALSE;
+		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
+			     filename, sheet_type);
+		goto out;
+	}
+
+	/* get the description from the ccmx file */
+	description = cmsIT8GetProperty (ccmx, "DISPLAY");
+	if (description == NULL) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "CCMX file does not have DISPLAY");
+		goto out;
+	}
+
+	/* does already exist? */
+	if (g_hash_table_lookup (priv->hash, description) != NULL) {
+		ret = TRUE;
+		g_debug ("CCMX '%s' already exists", description);
+		goto out;
+	}
+
+	/* get the types */
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_LCD;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_CRT;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_PROJECTOR");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_PROJECTOR;
+
+	/* is suitable for LCD */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
+	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
+		gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, -1,
+				    COLUMN_TYPE, "web-browser",
+				    COLUMN_LOCAL_FILENAME, filename,
+				    -1);
+	}
+
+	/* insert into hash */
+	g_hash_table_insert (priv->hash,
+			     g_strdup (description),
+			     GINT_TO_POINTER (1));
+
+	/* is suitable for CRT */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
+	if ((types & CH_CALIBRATION_TYPE_CRT) > 0) {
+		gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, -1,
+				    COLUMN_TYPE, "web-browser",
+				    COLUMN_LOCAL_FILENAME, filename,
+				    -1);
+	}
+
+	/* is suitable for projector */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
+	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0) {
+		gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, -1,
+				    COLUMN_TYPE, "web-browser",
+				    COLUMN_LOCAL_FILENAME, filename,
+				    -1);
+	}
+out:
+	g_free (ccmx_data);
+	if (ccmx != NULL)
+		cmsIT8Free (ccmx);
+	return ret;
+}
+
+/**
+ * ch_ccmx_add_local_files:
+ **/
+static void
+ch_ccmx_add_local_files (ChCcmxPrivate *priv)
+{
+	const gchar *tmp;
+	gboolean ret;
+	gchar *location;
+	gchar *location_tmp;
+	GDir *dir;
+	GError *error = NULL;
+
+	/* open directory */
+	location = g_build_filename (g_get_user_data_dir (),
+				     "colorhug-ccmx",
+				     NULL);
+	dir = g_dir_open (location, 0, &error);
+	if (dir == NULL) {
+		g_warning ("Failed to get directory: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	while (TRUE) {
+		tmp = g_dir_read_name (dir);
+		if (tmp == NULL)
+			break;
+		location_tmp = g_build_filename (location, tmp, NULL);
+		ret = ch_ccmx_add_local_file (priv, location_tmp, &error);
+		if (!ret) {
+			g_warning ("Failed to add file %s: %s",
+				   location_tmp, error->message);
+			g_error_free (error);
+			goto out;
+		}
+		g_free (location_tmp);
+	}
+out:
+	if (dir != NULL)
+		g_dir_close (dir);
+	g_free (location);
 }
 
 /**
@@ -207,6 +401,8 @@ ch_ccmx_get_calibration_cb (GObject *source,
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
 				    -1);
 	}
 
@@ -217,6 +413,8 @@ ch_ccmx_get_calibration_cb (GObject *source,
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
 				    -1);
 	}
 
@@ -227,8 +425,15 @@ ch_ccmx_get_calibration_cb (GObject *source,
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
 				    -1);
 	}
+
+	/* insert into hash */
+	g_hash_table_insert (priv->hash,
+			     g_strdup (description),
+			     GINT_TO_POINTER (1));
 out:
 	/* track if it's in use so we can find a spare slot on import */
 	priv->in_use[priv->ccmx_idx] = ret;
@@ -258,6 +463,9 @@ ch_ccmx_get_calibration_idx (ChCcmxPrivate *priv)
 					       priv);
 		goto out;
 	}
+
+	/* add local files */
+	ch_ccmx_add_local_files (priv);
 
 	/* get calibration map */
 	ch_device_write_command_async (priv->device,
@@ -585,6 +793,14 @@ ch_ccmx_set_combo_simple_text (GtkWidget *combo_box)
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,
 					"text", COLUMN_DESCRIPTION,
 					NULL);
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (renderer,
+		      "stock-size", 1,
+		      NULL);
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,
+					"icon-name", COLUMN_TYPE,
+					NULL);
 }
 
 /**
@@ -625,11 +841,14 @@ static void
 ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 {
 	gboolean ret;
+	gchar *local_filename = NULL;
+	GError *error = NULL;
+	gint idx_tmp;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	guint idx_tmp;
-	guint cal_index;
 	GtkWidget *widget;
+	guint cal_index;
+	guint i;
 
 	/* not yet setup UI */
 	if (!priv->done_get_cal)
@@ -642,7 +861,42 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 	model = gtk_combo_box_get_model (combo);
 	gtk_tree_model_get (model, &iter,
 			    COLUMN_INDEX, &idx_tmp,
+			    COLUMN_LOCAL_FILENAME, &local_filename,
 			    -1);
+
+	/* import the file into a spare slot */
+	if (idx_tmp == -1) {
+
+		for (i = 0; i < CH_CALIBRATION_MAX; i++) {
+			if (!priv->in_use[i])
+				break;
+		}
+		if (i == CH_CALIBRATION_MAX) {
+			ch_ccmx_error_dialog (priv,
+					      _("No space left on device"),
+					      _("All 64 slots are used up!"));
+			goto out;
+		}
+
+		/* load this ccmx file as the new calibration */
+		ret = ch_ccmx_set_calibration_file (priv, i, local_filename, &error);
+		if (!ret) {
+			ch_ccmx_error_dialog (priv,
+					       _("Failed to load file"),
+					       error->message);
+			g_error_free (error);
+			goto out;
+		}
+
+		/* fix the index */
+		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+				    COLUMN_INDEX, i,
+				    COLUMN_TYPE, NULL,
+				    -1);
+
+		/* now map with this */
+		idx_tmp = i;
+	}
 
 	/* update the map */
 	cal_index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (combo),
@@ -663,6 +917,215 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 				       NULL, /* cancellable */
 				       ch_ccmx_set_calibration_map_cb,
 				       priv);
+out:
+	g_free (local_filename);
+}
+
+/**
+ * ch_ccmx_got_file_cb:
+ **/
+static void
+ch_ccmx_got_file_cb (SoupSession *session,
+		     SoupMessage *msg,
+		     gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	gboolean ret;
+	gchar *basename = NULL;
+	gchar *location = NULL;
+	GError *error = NULL;
+	GtkWidget *widget;
+	SoupURI *uri;
+
+	/* we failed */
+	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to get file"),
+				      soup_status_get_phrase (msg->status_code));
+		goto out;
+	}
+
+	/* empty file */
+	if (msg->response_body->length == 0) {
+		ch_ccmx_error_dialog (priv,
+				      _("File has zero size: %s"),
+				      soup_status_get_phrase (msg->status_code));
+		goto out;
+	}
+
+	/* write file */
+	uri = soup_message_get_uri (msg);
+	basename = g_path_get_basename (soup_uri_get_path (uri));
+	location = g_build_filename (g_get_user_data_dir (),
+				     "colorhug-ccmx",
+				     basename,
+				     NULL);
+	ret = g_file_set_contents (location,
+				   msg->response_body->data,
+				   msg->response_body->length,
+				   &error);
+	if (!ret) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to write file"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* update UI */
+	if (--priv->ccmx_idx == 0) {
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+		gtk_widget_hide (widget);
+		ch_ccmx_add_local_files (priv);
+	}
+out:
+	g_free (basename);
+	g_free (location);
+	return;
+}
+
+/**
+ * ch_ccmx_download_file:
+ **/
+static void
+ch_ccmx_download_file (ChCcmxPrivate *priv, const gchar *uri)
+{
+	SoupMessage *msg = NULL;
+	SoupURI *base_uri = NULL;
+
+	/* GET file */
+	base_uri = soup_uri_new (uri);
+	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
+	if (msg == NULL) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to setup message"),
+				      uri);
+		goto out;
+	}
+
+	/* send sync */
+	soup_session_queue_message (priv->session, msg,
+				    ch_ccmx_got_file_cb, priv);
+out:
+	soup_uri_free (base_uri);
+}
+
+/**
+ * ch_ccmx_got_index_cb:
+ **/
+static void
+ch_ccmx_got_index_cb (SoupSession *session,
+		      SoupMessage *msg,
+		      gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	gboolean ret;
+	gchar *filename_tmp;
+	gchar **lines = NULL;
+	gchar *location = NULL;
+	gchar *uri_tmp;
+	GtkWidget *widget;
+	guint i;
+
+	/* we failed */
+	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to get manifest"),
+				      soup_status_get_phrase (msg->status_code));
+		goto out;
+	}
+
+	/* empty file */
+	if (msg->response_body->length == 0) {
+		ch_ccmx_error_dialog (priv,
+				      _("INDEX has zero size: %s"),
+				      soup_status_get_phrase (msg->status_code));
+		goto out;
+	}
+
+	/* check cache directory exists */
+	location = g_build_filename (g_get_user_data_dir (),
+				     "colorhug-ccmx",
+				     NULL);
+	ret = ch_ccmx_create_user_datadir (priv, location);
+	if (!ret)
+		goto out;
+
+	/* reset the counter */
+	priv->ccmx_idx = 0;
+
+	/* read file */
+	lines = g_strsplit (msg->response_body->data, "\n", -1);
+	for (i = 0; lines[i] != NULL; i++) {
+		if (lines[i][0] == '\0')
+			continue;
+
+		/* check if file already exists, otherwise download */
+		filename_tmp = g_build_filename (location,
+						 lines[i],
+						 NULL);
+		ret = g_file_test (filename_tmp, G_FILE_TEST_EXISTS);
+		if (!ret) {
+			uri_tmp = g_build_filename (COLORHUG_CCMX_LOCATION,
+						    lines[i],
+						    NULL);
+			priv->ccmx_idx++;
+			g_debug ("download %s to %s",
+				 uri_tmp, filename_tmp);
+			ch_ccmx_download_file (priv, uri_tmp);
+			g_free (uri_tmp);
+		}
+		g_free (filename_tmp);
+	}
+
+	/* nothing to do */
+	if (priv->ccmx_idx == 0) {
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+		gtk_widget_hide (widget);
+	}
+out:
+	g_free (location);
+	g_strfreev (lines);
+	return;
+}
+
+/**
+ * ch_ccmx_refresh_button_cb:
+ **/
+static void
+ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+{
+	gchar *uri = NULL;
+	SoupMessage *msg = NULL;
+	SoupURI *base_uri = NULL;
+
+	/* setup UI */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+	gtk_label_set_label (GTK_LABEL (widget), _("Getting latest data from the web..."));
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+	gtk_widget_show_all (widget);
+
+	/* get the latest INDEX file */
+	uri = g_build_filename (COLORHUG_CCMX_LOCATION,
+				"INDEX",
+				NULL);
+	base_uri = soup_uri_new (uri);
+
+	/* GET file */
+	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
+	if (msg == NULL) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to setup message"),
+				      NULL);
+		goto out;
+	}
+
+	/* send sync */
+	soup_session_queue_message (priv->session, msg,
+				    ch_ccmx_got_index_cb, priv);
+out:
+	soup_uri_free (base_uri);
+	g_free (uri);
 }
 
 /**
@@ -707,6 +1170,9 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_import"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_ccmx_import_button_cb), priv);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (ch_ccmx_refresh_button_cb), priv);
 
 	/* setup logo image */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_logo"));
@@ -845,6 +1311,7 @@ main (int argc, char **argv)
 
 	priv = g_new0 (ChCcmxPrivate, 1);
 	priv->usb_ctx = g_usb_context_new (NULL);
+	priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
 	g_signal_connect (priv->device_list, "device-added",
 			  G_CALLBACK (ch_ccmx_device_added_cb), priv);
@@ -862,6 +1329,8 @@ main (int argc, char **argv)
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);
 
 	g_object_unref (priv->application);
+	if (priv->hash != NULL)
+		g_object_unref (priv->hash);
 	if (priv->device_list != NULL)
 		g_object_unref (priv->device_list);
 	if (priv->usb_ctx != NULL)
