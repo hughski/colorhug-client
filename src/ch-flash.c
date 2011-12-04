@@ -33,7 +33,7 @@
 #include "ch-common.h"
 
 /* don't change this unless you want to provide firmware updates */
-#define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/"
+#define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/firmware/"
 
 typedef struct {
 	gchar		*filename;
