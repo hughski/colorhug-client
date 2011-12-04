@@ -696,7 +696,6 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget),
 				      "colorhug-gray",
 				      GTK_ICON_SIZE_DIALOG);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
 
 	/* setup comboboxes */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_lcd"));
@@ -722,6 +721,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	ch_ccmx_set_combo_simple_text (widget);
 
 	/* setup USB image */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
 	pixbuf = gdk_pixbuf_new_from_file_at_scale (CH_DATA
 						    G_DIR_SEPARATOR_S "icons"
 						    G_DIR_SEPARATOR_S "usb.svg",
