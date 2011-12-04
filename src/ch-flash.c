@@ -907,6 +907,7 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 				    ch_flash_got_firmware_cb, priv);
 out:
 	g_free (uri);
+	soup_uri_free (base_uri);
 }
 
 /**
@@ -1145,6 +1146,7 @@ ch_flash_get_firmware_version_cb (GObject *source,
 out:
 	/* reset the flag */
 	priv->planned_replug = FALSE;
+	soup_uri_free (base_uri);
 	g_free (str);
 	g_free (uri);
 }
