@@ -103,6 +103,9 @@ gboolean	 ch_client_set_calibration	(ChClient	*client,
 						 guint8		 types,
 						 const gchar	*description,
 						 GError		**error);
+gboolean	 ch_client_clear_calibration	(ChClient	*client,
+						 guint16	 calibration_index,
+						 GError		**error);
 
 gboolean	 ch_client_get_pre_scale	(ChClient	*client,
 						 gdouble	*pre_scale,

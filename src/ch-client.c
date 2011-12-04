@@ -493,6 +493,43 @@ out:
 }
 
 /**
+ * ch_client_clear_calibration:
+ **/
+gboolean
+ch_client_clear_calibration (ChClient *client,
+			     guint16 calibration_index,
+			     GError **error)
+{
+	gboolean ret;
+	guint8 buffer[9*4 + 2 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
+
+	g_return_val_if_fail (CH_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (client->priv->device != NULL, FALSE);
+
+	/* write index */
+	memcpy (buffer, &calibration_index, sizeof(guint16));
+
+	/* clear data */
+	memset (buffer + 2, 0xff, sizeof (buffer) - 2);
+
+	/* hit hardware */
+	ret = ch_device_write_command (client->priv->device,
+				       CH_CMD_SET_CALIBRATION,
+				       (guint8 *) buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_client_get_pre_scale:
  **/
 gboolean

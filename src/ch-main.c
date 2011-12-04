@@ -605,6 +605,34 @@ out:
 }
 
 /**
+ * ch_util_clear_calibration:
+ **/
+static gboolean
+ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 calibration_index = 0;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'index'");
+		goto out;
+	}
+	calibration_index = atoi (values[0]);
+
+	/* set to HW */
+	ret = ch_client_clear_calibration (priv->client,
+					   calibration_index,
+					   error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_set_calibration_ccmx:
  **/
 static gboolean
@@ -1237,6 +1265,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the sensor calibration matrix"),
 		     ch_util_set_calibration);
+	ch_util_add (priv->cmd_array,
+		     "clear-calibration",
+		     /* TRANSLATORS: command description */
+		     _("Clear the sensor calibration matrix"),
+		     ch_util_clear_calibration);
 	ch_util_add (priv->cmd_array,
 		     "set-calibration-ccmx",
 		     /* TRANSLATORS: command description */
