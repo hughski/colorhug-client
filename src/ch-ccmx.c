@@ -1281,16 +1281,31 @@ ch_ccmx_device_removed_cb (GUsbDeviceList *list,
 }
 
 /**
+ * ch_ccmx_ignore_cb:
+ **/
+static void
+ch_ccmx_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
+		   const gchar *message, gpointer user_data)
+{
+}
+
+/**
  * main:
  **/
 int
 main (int argc, char **argv)
 {
 	ChCcmxPrivate *priv;
+	gboolean ret;
+	gboolean verbose = FALSE;
+	GError *error = NULL;
 	GOptionContext *context;
 	int status = 0;
-	gboolean ret;
-	GError *error = NULL;
+	const GOptionEntry options[] = {
+		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+			_("Show extra debugging information"), NULL },
+		{ NULL}
+	};
 
 	setlocale (LC_ALL, "");
 
@@ -1302,6 +1317,7 @@ main (int argc, char **argv)
 
 	context = g_option_context_new ("ColorHug CCMX loader");
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
+	g_option_context_add_main_entries (context, options, NULL);
 	ret = g_option_context_parse (context, &argc, &argv, &error);
 	if (!ret) {
 		g_warning ("failed to parse options: %s", error->message);
@@ -1324,6 +1340,13 @@ main (int argc, char **argv)
 			  G_CALLBACK (ch_ccmx_startup_cb), priv);
 	g_signal_connect (priv->application, "activate",
 			  G_CALLBACK (ch_ccmx_activate_cb), priv);
+	/* set verbose? */
+	if (verbose) {
+		g_setenv ("COLORHUG_VERBOSE", "1", FALSE);
+	} else {
+		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
+				   ch_ccmx_ignore_cb, NULL);
+	}
 
 	/* wait */
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);

@@ -1237,16 +1237,31 @@ out:
 }
 
 /**
+ * ch_util_ignore_cb:
+ **/
+static void
+ch_util_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
+		   const gchar *message, gpointer user_data)
+{
+}
+
+/**
  * main:
  **/
 int
 main (int argc, char *argv[])
 {
+	ChUtilPrivate *priv;
 	gboolean ret;
+	gboolean verbose = FALSE;
+	gchar *cmd_descriptions = NULL;
 	GError *error = NULL;
 	guint retval = 1;
-	ChUtilPrivate *priv;
-	gchar *cmd_descriptions = NULL;
+	const GOptionEntry options[] = {
+		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+			_("Show extra debugging information"), NULL },
+		{ NULL}
+	};
 
 	setlocale (LC_ALL, "");
 
@@ -1438,7 +1453,16 @@ main (int argc, char *argv[])
 
 	/* TRANSLATORS: program name */
 	g_set_application_name (_("Color Management"));
+	g_option_context_add_main_entries (priv->context, options, NULL);
 	g_option_context_parse (priv->context, &argc, &argv, NULL);
+
+	/* set verbose? */
+	if (verbose) {
+		g_setenv ("COLORHUG_VERBOSE", "1", FALSE);
+	} else {
+		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
+				   ch_util_ignore_cb, NULL);
+	}
 
 	/* get connection to colord */
 	priv->client = ch_client_new ();

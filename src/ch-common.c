@@ -298,7 +298,11 @@ ch_device_reply_cb (GObject *source_object,
 	}
 
 	/* parse the reply */
-	ch_print_data_buffer ("reply", helper->buffer, actual_len);
+	if (g_getenv ("COLORHUG_VERBOSE") != NULL) {
+		ch_print_data_buffer ("reply",
+				      helper->buffer,
+				      actual_len);
+	}
 
 	/* parse */
 	if (helper->buffer[CH_BUFFER_OUTPUT_RETVAL] != CH_ERROR_NONE ||
@@ -422,9 +426,11 @@ ch_device_write_command_async (GUsbDevice *device,
 	}
 
 	/* request */
-	ch_print_data_buffer ("request",
-			      helper->buffer,
-			      buffer_in_len + 1);
+	if (g_getenv ("COLORHUG_VERBOSE") != NULL) {
+		ch_print_data_buffer ("request",
+				      helper->buffer,
+				      buffer_in_len + 1);
+	}
 	g_usb_device_interrupt_transfer_async (helper->device,
 					       CH_USB_HID_EP_OUT,
 					       helper->buffer,
