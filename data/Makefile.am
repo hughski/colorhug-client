@@ -1,6 +1,9 @@
 SUBDIRS = 						\
 	icons
 
+bashcompletiondir = ${SYSCONFDIR}/bash_completion.d
+dist_bashcompletion_DATA = colorhug-completion.bash
+
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files =					\

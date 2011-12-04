@@ -50,6 +50,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_datadir}/icons/hicolor/*/apps/colorhug.png
 %{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
 %{_mandir}/man1/*.1.gz
+%{_sysconfdir}/bash_completion.d/*-completion.bash
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#

@@ -95,6 +95,11 @@ PKG_CHECK_MODULES(LCMS, lcms2)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 
 dnl ---------------------------------------------------------------------------
+dnl - Make paths available for source files
+dnl ---------------------------------------------------------------------------
+AC_SUBST(SYSCONFDIR, $sysconfdir)
+
+dnl ---------------------------------------------------------------------------
 dnl - Is docbook2man available?
 dnl ---------------------------------------------------------------------------
 AC_PATH_PROG(DOCBOOK2MAN, docbook2man, no)
