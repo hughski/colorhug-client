@@ -31,6 +31,7 @@
 #include <stdlib.h>
 
 #include "ch-common.h"
+#include "ch-markdown.h"
 
 /* don't change this unless you want to provide firmware updates */
 #define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/firmware/"
@@ -52,6 +53,7 @@ typedef struct {
 	guint		 flash_idx;
 	gsize		 flash_chunk_len;
 	guint8		 flash_buffer[64];
+	ChMarkdown	*markdown;
 } ChFlashPrivate;
 
 static void	 ch_flash_read_firmware_chunk	(ChFlashPrivate *priv);
@@ -1261,7 +1263,11 @@ ch_flash_activate_link_cb (GtkLabel *label,
 {
 	GtkWindow *window;
 	GtkWidget *dialog;
+	gchar *format;
 
+	/* the update text is markdown formatted */
+	format = ch_markdown_parse (priv->markdown,
+				    priv->update_details->str);
 	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_flash"));
 	dialog = gtk_message_dialog_new (window,
 					 GTK_DIALOG_MODAL,
@@ -1269,9 +1275,10 @@ ch_flash_activate_link_cb (GtkLabel *label,
 					 GTK_BUTTONS_CLOSE, "%s",
 					 _("Update details"));
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s",
-						  priv->update_details->str);
+						  format);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
+	g_free (format);
 	return TRUE;
 }
 
@@ -1472,6 +1479,7 @@ main (int argc, char **argv)
 
 	priv = g_new0 (ChFlashPrivate, 1);
 	priv->update_details = g_string_new ("");
+	priv->markdown = ch_markdown_new ();
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
 	g_signal_connect (priv->device_list, "device-added",
@@ -1508,6 +1516,8 @@ main (int argc, char **argv)
 		g_object_unref (priv->builder);
 	if (priv->session != NULL)
 		g_object_unref (priv->session);
+	if (priv->markdown != NULL)
+		g_object_unref (priv->markdown);
 	g_free (priv->filename);
 	g_free (priv->firmware_data);
 	g_free (priv);

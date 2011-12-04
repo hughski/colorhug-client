@@ -59,6 +59,8 @@ colorhug_gui_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_flash_SOURCES =				\
+	ch-markdown.c					\
+	ch-markdown.h					\
 	ch-flash.c
 
 colorhug_flash_LDADD =					\
