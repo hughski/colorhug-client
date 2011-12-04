@@ -941,13 +941,13 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 	if (ch_flash_get_packed_version (tmp) >
 	    ch_flash_get_packed_version (priv->firmware_version))
 		ret = TRUE;
-out:
 	g_debug ("%i.%i.%i compared to %i.%i.%i = %s",
 		 tmp[0], tmp[1], tmp[2],
 		 priv->firmware_version[0],
 		 priv->firmware_version[1],
 		 priv->firmware_version[2],
 		 ret ? "newer" : "older");
+out:
 	g_strfreev (split);
 	return ret;
 }
