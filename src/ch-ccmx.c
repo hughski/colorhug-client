@@ -356,10 +356,12 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	cmsHANDLE ccmx = NULL;
 	const gchar *description;
 	const gchar *sheet_type;
+	const gchar *type_tmp;
 	gboolean ret;
 	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
-	guint8 buffer[60];
+	guint8 buffer[62];
+	guint8 types = 0;
 	guint i, j;
 
 	/* load file */
@@ -386,7 +388,7 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	}
 
 	/* get the description from the ccmx file */
-	description = CMSEXPORT cmsIT8GetProperty(ccmx, "DISPLAY");
+	description = cmsIT8GetProperty (ccmx, "DISPLAY");
 	if (description == NULL) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
@@ -394,7 +396,19 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 		goto out;
 	}
 
+	/* get the types */
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_LCD;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_CRT;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_PROJECTOR");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_PROJECTOR;
+
 	/* write the index */
+	memset (buffer, 0x00, sizeof (buffer));
 	memcpy (buffer + 0, &cal_idx, 2);
 
 	/* write the calibration values */
@@ -402,15 +416,18 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 		for (i = 0; i < 3; i++) {
 			cal_idx = sizeof (guint16) + (((j * 3) + i) * sizeof (ChPackedFloat));
 			ch_double_to_packed_float (cmsIT8GetDataRowColDbl(ccmx, j, i),
-						   (ChPackedFloat *) buffer + cal_idx);
+						   (ChPackedFloat *) (buffer + cal_idx));
 		}
 	}
 
+	/* write types */
+	buffer[9*4 + 2] = types;
+
 	/* write the description */
-	cal_idx = sizeof (guint16) + 9 * sizeof (ChPackedFloat);
+	cal_idx = sizeof (guint16) + (9 * sizeof (ChPackedFloat)) + 1;
 	g_utf8_strncpy ((gchar *) buffer + cal_idx,
 			description,
-			24);
+			CH_CALIBRATION_DESCRIPTION_LEN);
 
 	/* set to HW */
 	ch_device_write_command_async (priv->device,
