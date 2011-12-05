@@ -1353,7 +1353,7 @@ main (int argc, char **argv)
 
 	g_object_unref (priv->application);
 	if (priv->hash != NULL)
-		g_object_unref (priv->hash);
+		g_hash_table_destroy (priv->hash);
 	if (priv->device_list != NULL)
 		g_object_unref (priv->device_list);
 	if (priv->usb_ctx != NULL)
