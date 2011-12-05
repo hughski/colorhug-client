@@ -707,7 +707,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
 	if (ccmx == NULL) {
 		ret = FALSE;
-		g_set_error (error, 1, 0, "Cannot open %s", values[0]);
+		g_set_error (error, 1, 0, "Cannot open %s", values[1]);
 		goto out;
 	}
 
@@ -716,7 +716,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
 		ret = FALSE;
 		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
-			     values[0], sheet_type);
+			     values[1], sheet_type);
 		goto out;
 	}
 
