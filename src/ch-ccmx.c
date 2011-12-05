@@ -499,12 +499,6 @@ ch_ccmx_get_profile_filename (GtkWindow *window)
 					      NULL);
 	gtk_file_chooser_set_create_folders (GTK_FILE_CHOOSER(dialog), FALSE);
 
-	/* setup the filter */
-	filter = gtk_file_filter_new ();
-	/* TRANSLATORS: filter name on the file->open dialog */
-	gtk_file_filter_set_name (filter, _("Supported CCMX files"));
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(dialog), filter);
-
 	/* setup the all files filter */
 	filter = gtk_file_filter_new ();
 	gtk_file_filter_add_pattern (filter, "*.ccmx");
