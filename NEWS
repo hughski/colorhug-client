@@ -1,3 +1,22 @@
+Version 0.1.2
+~~~~~~~~~~~~~
+Released: 2011-12-09
+
+New Features:
+ - Add a new command GetHardwareVersion (Richard Hughes)
+ - Add a 'colorhug clear-calibration' functionality (Richard Hughes)
+ - Add a 'colorhug list-calibration' functionality (Richard Hughes)
+ - Get a list of potential CCMX files from a remote server (Richard Hughes)
+ - Add a bash completion script for the colorhug tool (Richard Hughes)
+ - Add a --verbose command line option to the tools (Richard Hughes)
+ - The update text is markdown formatted, so add a simple markdown parser (Richard Hughes)
+
+Bugfixes:
+ - Fix the version comparison in colorhug-flash (Richard Hughes)
+ - Allow the user to unplug and plug in colorhug-flash (Richard Hughes)
+ - Remove the duplicate file filter from the import dialog (Richard Hughes)
+ - Fix the error messages when importing a ccmx file fails (Richard Hughes)
+
 Version 0.1.1
 ~~~~~~~~~~~~~
 Released: 2011-11-30
