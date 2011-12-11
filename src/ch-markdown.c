@@ -66,7 +66,6 @@ typedef enum {
 struct ChMarkdownPrivate
 {
 	ChMarkdownMode		 mode;
-	gint			 max_lines;
 	gint			 line_count;
 	gboolean		 smart_quoting;
 	gboolean		 escape;
@@ -408,10 +407,6 @@ static gboolean
 ch_markdown_add_pending (ChMarkdown *markdown, const gchar *line)
 {
 	gchar *copy;
-
-	/* would put us over the limit */
-	if (markdown->priv->line_count >= markdown->priv->max_lines)
-		return FALSE;
 
 	copy = g_strdup (line);
 
@@ -766,7 +761,6 @@ ch_markdown_init (ChMarkdown *markdown)
 	markdown->priv->mode = CH_MARKDOWN_MODE_UNKNOWN;
 	markdown->priv->pending = g_string_new ("");
 	markdown->priv->processed = g_string_new ("");
-	markdown->priv->max_lines = -1;
 	markdown->priv->smart_quoting = FALSE;
 	markdown->priv->escape = FALSE;
 	markdown->priv->autocode = FALSE;

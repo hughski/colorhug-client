@@ -1022,7 +1022,7 @@ ch_flash_got_manifest_cb (SoupSession *session,
 			continue;
 		if (lines[i][0] == '\t') {
 			g_string_append_printf (priv->update_details,
-						"• %s\n", lines[i] + 1);
+						"%s\n", lines[i] + 1);
 			continue;
 		}
 
