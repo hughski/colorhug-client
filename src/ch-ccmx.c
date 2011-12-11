@@ -770,6 +770,8 @@ fake_device:
 	gtk_widget_show (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	gtk_label_set_label (GTK_LABEL (widget), _("Getting calibration from device..."));
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	gtk_widget_show (widget);
 
 	/* start getting the calibration matrices */
 	ch_ccmx_refresh_calibration_data (priv);
@@ -1239,6 +1241,8 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_header"));
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_import"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	gtk_widget_hide (widget);
 
 	/* is the colorhug already plugged in? */
