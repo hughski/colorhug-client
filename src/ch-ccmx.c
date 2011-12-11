@@ -1309,12 +1309,13 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
-	context = g_option_context_new ("ColorHug CCMX loader");
+	context = g_option_context_new (_("ColorHug CCMX loader"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
 	ret = g_option_context_parse (context, &argc, &argv, &error);
 	if (!ret) {
-		g_warning ("failed to parse options: %s", error->message);
+		g_warning (_("Failed to parse command line options: %s"),
+			   error->message);
 		g_error_free (error);
 	}
 	g_option_context_free (context);
