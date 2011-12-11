@@ -374,6 +374,39 @@ ch_device_request_cb (GObject *source_object,
 }
 
 /**
+ * ch_device_emulate_cb:
+ **/
+static gboolean
+ch_device_emulate_cb (gpointer user_data)
+{
+	ChDeviceHelper *helper = (ChDeviceHelper *) user_data;
+
+	switch (helper->cmd) {
+	case CH_CMD_GET_SERIAL_NUMBER:
+		helper->buffer_out[6] = 42;
+		break;
+	case CH_CMD_GET_FIRMWARE_VERSION:
+		helper->buffer_out[0] = 0x01;
+		helper->buffer_out[4] = 0x01;
+		break;
+	case CH_CMD_GET_HARDWARE_VERSION:
+		helper->buffer_out[0] = 0xff;
+		break;
+	default:
+		g_debug ("Ignoring command %s",
+			 ch_command_to_string (helper->cmd));
+		break;
+	}
+
+	/* success */
+	g_simple_async_result_set_op_res_gboolean (helper->res, TRUE);
+	g_simple_async_result_complete_in_idle (helper->res);
+	ch_device_free_helper (helper);
+
+	return FALSE;
+}
+
+/**
  * ch_device_write_command_async:
  * @device:		A #GUsbDevice
  * @cmd:		The command to use, e.g. %CH_CMD_GET_COLOR_SELECT
@@ -431,6 +464,14 @@ ch_device_write_command_async (GUsbDevice *device,
 				      helper->buffer,
 				      buffer_in_len + 1);
 	}
+
+	/* dummy hardware */
+	if (g_getenv ("COLORHUG_EMULATE") != NULL) {
+		g_timeout_add (20, ch_device_emulate_cb, helper);
+		return;
+	}
+
+	/* do interrupt transfer */
 	g_usb_device_interrupt_transfer_async (helper->device,
 					       CH_USB_HID_EP_OUT,
 					       helper->buffer,

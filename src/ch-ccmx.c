@@ -723,6 +723,10 @@ ch_ccmx_got_device (ChCcmxPrivate *priv)
 	GError *error = NULL;
 	GtkWidget *widget;
 
+	/* fake device */
+	if (g_getenv ("COLORHUG_EMULATE") != NULL)
+		goto fake_device;
+
 	/* open device */
 	ret = g_usb_device_open (priv->device, &error);
 	if (!ret) {
@@ -754,6 +758,7 @@ ch_ccmx_got_device (ChCcmxPrivate *priv)
 		return;
 	}
 
+fake_device:
 	/* update the UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_connect"));
 	gtk_widget_hide (widget);
@@ -1123,6 +1128,25 @@ out:
 }
 
 /**
+ * ch_ccmx_get_fake_device:
+ **/
+static GUsbDevice *
+ch_ccmx_get_fake_device (ChCcmxPrivate *priv)
+{
+	GPtrArray *array;
+	GUsbDevice *device = NULL;
+
+	/* just return the first device */
+	array = g_usb_device_list_get_devices (priv->device_list);
+	if (array->len == 0)
+		goto out;
+	device = g_object_ref (g_ptr_array_index (array, 0));
+out:
+	g_ptr_array_unref (array);
+	return device;
+}
+
+/**
  * ch_ccmx_startup_cb:
  **/
 static void
@@ -1229,6 +1253,12 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 				      _("Failed to setup networking"),
 				      NULL);
 		goto out;
+	}
+
+	/* emulate a device */
+	if (g_getenv ("COLORHUG_EMULATE") != NULL) {
+		priv->device = ch_ccmx_get_fake_device (priv);
+		ch_ccmx_got_device (priv);
 	}
 
 	/* show main UI */

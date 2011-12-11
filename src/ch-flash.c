@@ -1086,16 +1086,24 @@ ch_flash_get_firmware_version_cb (GObject *source,
 
 	/* update product label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_detected"));
-	if (priv->hardware_version == 0) {
+	switch (priv->hardware_version) {
+	case 0x00:
 		/* TRANSLATORS: pre-production hardware */
 		str = g_strdup (_("Prototype ColorHug Detected"));
-	} else if (priv->hardware_version == 0) {
+		break;
+	case 0x01:
 		/* TRANSLATORS: first release hardware */
 		str = g_strdup (_("ColorHug Detected"));
-	} else {
+		break;
+	case 0xff:
+		/* TRANSLATORS: fake hardware */
+		str = g_strdup (_("Emulated ColorHug Detected"));
+		break;
+	default:
 		/* TRANSLATORS: new-issue hardware */
 		str = g_strdup_printf (_("ColorHug v%i Detected"),
 				       priv->hardware_version);
+		break;
 	}
 	gtk_label_set_label (GTK_LABEL (widget), str);
 	g_free (str);
@@ -1191,6 +1199,25 @@ out:
 }
 
 /**
+ * ch_flash_get_fake_device:
+ **/
+static GUsbDevice *
+ch_flash_get_fake_device (ChFlashPrivate *priv)
+{
+	GPtrArray *array;
+	GUsbDevice *device = NULL;
+
+	/* just return the first device */
+	array = g_usb_device_list_get_devices (priv->device_list);
+	if (array->len == 0)
+		goto out;
+	device = g_object_ref (g_ptr_array_index (array, 0));
+out:
+	g_ptr_array_unref (array);
+	return device;
+}
+
+/**
  * ch_flash_got_device:
  **/
 static void
@@ -1199,6 +1226,10 @@ ch_flash_got_device (ChFlashPrivate *priv)
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
+
+	/* fake device */
+	if (g_getenv ("COLORHUG_EMULATE") != NULL)
+		goto fake_device;
 
 	/* open device */
 	ret = g_usb_device_open (priv->device, &error);
@@ -1231,6 +1262,7 @@ ch_flash_got_device (ChFlashPrivate *priv)
 		return;
 	}
 
+fake_device:
 	/* initial detection */
 	if (!priv->planned_replug) {
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
@@ -1385,6 +1417,12 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 				      _("Failed to setup networking"),
 				      NULL);
 		goto out;
+	}
+
+	/* emulate a device */
+	if (g_getenv ("COLORHUG_EMULATE") != NULL) {
+		priv->device = ch_flash_get_fake_device (priv);
+		ch_flash_got_device (priv);
 	}
 
 	/* show main UI */
