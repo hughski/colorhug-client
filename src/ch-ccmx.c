@@ -873,6 +873,7 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 				break;
 		}
 		if (i == CH_CALIBRATION_MAX) {
+			gtk_combo_box_set_active (combo, -1);
 			ch_ccmx_error_dialog (priv,
 					      _("No space left on device"),
 					      _("All 64 slots are used up!"));
@@ -882,6 +883,7 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 		/* load this ccmx file as the new calibration */
 		ret = ch_ccmx_set_calibration_file (priv, i, local_filename, &error);
 		if (!ret) {
+			gtk_combo_box_set_active (combo, -1);
 			ch_ccmx_error_dialog (priv,
 					       _("Failed to load file"),
 					       error->message);
