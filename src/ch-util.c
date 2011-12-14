@@ -170,7 +170,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	guint16 integral_time = 0;
 	guint16 major, minor, micro;
 	gdouble red, green, blue;
-	guint64 serial_number = 0;
+	guint32 serial_number = 0;
 	guint8 leds;
 	guint i, j;
 

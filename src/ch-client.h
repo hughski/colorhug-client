@@ -122,10 +122,10 @@ gboolean	 ch_client_set_post_scale	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_serial_number	(ChClient	*client,
-						 guint64	*serial_number,
+						 guint32	*serial_number,
 						 GError		**error);
 gboolean	 ch_client_set_serial_number	(ChClient	*client,
-						 guint64	 serial_number,
+						 guint32	 serial_number,
 						 GError		**error);
 
 gboolean	 ch_client_get_leds		(ChClient	*client,

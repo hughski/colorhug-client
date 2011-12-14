@@ -669,7 +669,7 @@ out:
  **/
 gboolean
 ch_client_get_serial_number (ChClient *client,
-			     guint64 *serial_number,
+			     guint32 *serial_number,
 			     GError **error)
 {
 	gboolean ret;
@@ -691,7 +691,6 @@ ch_client_get_serial_number (ChClient *client,
 				       error);
 	if (!ret)
 		goto out;
-	/* XXX: 32 vs. 64 bits? */
 	*serial_number = GUINT32_FROM_LE (serial_le);
 out:
 	return ret;
@@ -702,7 +701,7 @@ out:
  **/
 gboolean
 ch_client_set_serial_number (ChClient *client,
-			     guint64 serial_number,
+			     guint32 serial_number,
 			     GError **error)
 {
 	gboolean ret;

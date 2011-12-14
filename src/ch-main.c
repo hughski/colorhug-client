@@ -764,13 +764,13 @@ static gboolean
 ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint64 serial_number;
+	guint32 serial_number;
 
 	/* get from HW */
 	ret = ch_client_get_serial_number (priv->client, &serial_number, error);
 	if (!ret)
 		goto out;
-	g_print ("%li\n", serial_number);
+	g_print ("%i\n", serial_number);
 out:
 	return ret;
 }
@@ -782,7 +782,7 @@ static gboolean
 ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint64 serial_number;
+	guint32 serial_number;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -794,7 +794,7 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 	serial_number = atol (values[0]);
 
 	/* set to HW */
-	g_print ("setting serial number to %li\n", serial_number);
+	g_print ("setting serial number to %i\n", serial_number);
 	ret = ch_client_set_serial_number (priv->client, serial_number, error);
 	if (!ret)
 		goto out;
