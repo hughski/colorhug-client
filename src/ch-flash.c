@@ -44,6 +44,7 @@ typedef struct {
 	guint16		 firmware_version[3];
 	guint8		 hardware_version;
 	guint8		*firmware_data;
+	guint32		 serial_number;
 	gsize		 firmware_len;
 	gboolean	 planned_replug;
 	GUsbContext	*usb_ctx;
@@ -1058,32 +1059,168 @@ out:
 }
 
 /**
- * ch_flash_get_firmware_version_cb:
+ * ch_flash_set_lost_or_stolen_cb:
  **/
 static void
-ch_flash_get_firmware_version_cb (GObject *source,
-				  GAsyncResult *res,
-				  gpointer user_data)
+ch_flash_set_lost_or_stolen_cb (GObject *source,
+				GAsyncResult *res,
+				gpointer user_data)
 {
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
-	gchar *str = NULL;
-	gchar *uri = NULL;
 	GError *error = NULL;
+	GString *msg = NULL;
 	GtkWidget *widget;
 	GUsbDevice *device = G_USB_DEVICE (source);
-	SoupMessage *msg = NULL;
-	SoupURI *base_uri = NULL;
 
 	/* get data */
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
+		ch_flash_error_do_not_panic (priv);
 		ch_flash_error_dialog (priv,
-				       _("Failed to contact ColorHug"),
+				       _("Failed to set the device as lost or stolen"),
 				       error->message);
 		g_error_free (error);
 		goto out;
 	}
+
+	/* setup UI */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_warning"));
+	gtk_widget_show (widget);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_warning"));
+	msg = g_string_new ("");
+	g_string_append_printf (msg, "<span weight='bold' size='x-large'>%s</span>",
+				_("This ColorHug has been registered as lost or stolen."));
+	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
+	g_string_free (msg, TRUE);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+	msg = g_string_new ("");
+	g_string_append_printf (msg, "<b>%s</b>",
+				_("The device has now been deactivated."));
+	g_string_append_printf (msg, "\n\n%s",
+				_("Please contact <tt>info@hughski.com</tt> for more details."));
+	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
+	gtk_widget_set_sensitive (widget, TRUE);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
+	gtk_widget_hide (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
+	gtk_widget_hide (widget);
+out:
+	if (msg != NULL)
+		g_string_free (msg, TRUE);
+}
+
+/**
+ * ch_flash_set_lost_or_stolen:
+ **/
+static void
+ch_flash_set_lost_or_stolen (ChFlashPrivate *priv)
+{
+	guint8 flash_success = 0xff;
+
+	/* TODO: need to erase device as well */
+	ch_device_write_command_async (priv->device,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       &flash_success,
+				       1,
+				       NULL, /* buffer_out */
+				       0, /* buffer_out_len */
+				       NULL, /* cancellable */
+				       ch_flash_set_lost_or_stolen_cb,
+				       priv);
+}
+
+/**
+ * ch_flash_got_blacklist_cb:
+ **/
+static void
+ch_flash_got_blacklist_cb (SoupSession *session,
+			   SoupMessage *msg,
+			   gpointer user_data)
+{
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	gchar **lines = NULL;
+	gchar *uri = NULL;
+	guint i;
+	guint tmp;
+	SoupURI *base_uri = NULL;
+
+	/* we failed */
+	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+		ch_flash_error_no_network (priv);
+		ch_flash_error_dialog (priv,
+				       _("Failed to get blacklist"),
+				       soup_status_get_phrase (msg->status_code));
+		goto out;
+	}
+
+	/* empty file */
+	if (msg->response_body->length == 0)
+		goto out;
+
+	/* read file */
+	lines = g_strsplit (msg->response_body->data, "\n", -1);
+	for (i = 0; lines[i] != NULL; i++) {
+		if (lines[i][0] == '\0')
+			continue;
+		/* check if matches serial number */
+		tmp = atoi (lines[i]);
+		if (tmp == priv->serial_number) {
+			ch_flash_set_lost_or_stolen (priv);
+			goto out;
+		}
+	}
+
+	/* get the latest manifest file */
+	uri = g_build_filename (COLORHUG_FIRMWARE_LOCATION,
+				"MANIFEST",
+				NULL);
+	base_uri = soup_uri_new (uri);
+
+	/* GET file */
+	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
+	if (msg == NULL) {
+		ch_flash_error_dialog (priv,
+				       _("Failed to setup message"),
+				       NULL);
+		goto out;
+	}
+
+	/* send sync */
+	soup_session_queue_message (priv->session, msg,
+				    ch_flash_got_manifest_cb, priv);
+out:
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
+	g_free (uri);
+	g_strfreev (lines);
+}
+
+/**
+ * ch_flash_got_device_data:
+ **/
+static void
+ch_flash_got_device_data (ChFlashPrivate *priv)
+{
+	gchar *str = NULL;
+	gchar *uri = NULL;
+	gchar *user_agent = NULL;
+	GtkWidget *widget;
+	SoupMessage *msg = NULL;
+	SoupURI *base_uri = NULL;
+
+	/* set user agent */
+	user_agent = g_strdup_printf ("colorhug-flash-hw%i-fw%i.%i.%i-sn%i",
+				      priv->hardware_version,
+				      priv->firmware_version[0],
+				      priv->firmware_version[1],
+				      priv->firmware_version[2],
+				      priv->serial_number);
+	g_object_set (priv->session, "user-agent", user_agent, NULL);
 
 	/* update product label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_detected"));
@@ -1136,9 +1273,9 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_show (widget);
 
-	/* get the latest manifest file */
+	/* get the latest blacklist file */
 	uri = g_build_filename (COLORHUG_FIRMWARE_LOCATION,
-				"MANIFEST",
+				"BLACKLIST",
 				NULL);
 	base_uri = soup_uri_new (uri);
 
@@ -1153,13 +1290,87 @@ ch_flash_get_firmware_version_cb (GObject *source,
 
 	/* send sync */
 	soup_session_queue_message (priv->session, msg,
-				    ch_flash_got_manifest_cb, priv);
+				    ch_flash_got_blacklist_cb, priv);
 out:
 	/* reset the flag */
 	priv->planned_replug = FALSE;
-	soup_uri_free (base_uri);
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
+	g_free (user_agent);
 	g_free (str);
 	g_free (uri);
+}
+
+/**
+ * ch_flash_get_serial_number_cb:
+ **/
+static void
+ch_flash_get_serial_number_cb (GObject *source,
+			       GAsyncResult *res,
+			       gpointer user_data)
+{
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	gboolean ret;
+	GError *error = NULL;
+	GUsbDevice *device = G_USB_DEVICE (source);
+
+	/* get data */
+	ret = ch_device_write_command_finish (device, res, &error);
+	if (!ret) {
+		ch_flash_error_dialog (priv,
+				       _("Failed to contact ColorHug"),
+				       error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* show device data */
+	ch_flash_got_device_data (priv);
+out:
+	return;
+}
+
+/**
+ * ch_flash_get_firmware_version_cb:
+ **/
+static void
+ch_flash_get_firmware_version_cb (GObject *source,
+				  GAsyncResult *res,
+				  gpointer user_data)
+{
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	gboolean ret;
+	GError *error = NULL;
+	GUsbDevice *device = G_USB_DEVICE (source);
+
+	/* get data */
+	ret = ch_device_write_command_finish (device, res, &error);
+	if (!ret) {
+		ch_flash_error_dialog (priv,
+				       _("Failed to contact ColorHug"),
+				       error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* bootloader mode has no idea what the serial number is */
+	if (priv->firmware_version[0] == 0) {
+		ch_flash_got_device_data (priv);
+		goto out;
+	}
+
+	/* get the serial number */
+	ch_device_write_command_async (priv->device,
+				       CH_CMD_GET_SERIAL_NUMBER,
+				       NULL, /* buffer_in */
+				       0, /* buffer_in_len */
+				       (guint8 *) &priv->serial_number,
+				       4,
+				       NULL, /* cancellable */
+				       ch_flash_get_serial_number_cb,
+				       priv);
+out:
+	return;
 }
 
 /**
