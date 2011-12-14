@@ -509,6 +509,14 @@ ch_client_clear_calibration (ChClient *client,
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (client->priv->device != NULL, FALSE);
 
+	/* factory calibration needs to be hard to erase */
+	if (calibration_index == 0) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "You cannot clear the factory calibration");
+		goto out;
+	}
+
 	/* write index */
 	memcpy (buffer, &calibration_index, sizeof(guint16));
 
