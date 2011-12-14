@@ -86,6 +86,9 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_NO_CALIBRATION:
 		str = "No calibration";
 		break;
+	case CH_ERROR_DEVICE_DEACTIVATED:
+		str = "Device deactivated";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
