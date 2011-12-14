@@ -1010,7 +1010,8 @@ ch_ccmx_download_file (ChCcmxPrivate *priv, const gchar *uri)
 	soup_session_queue_message (priv->session, msg,
 				    ch_ccmx_got_file_cb, priv);
 out:
-	soup_uri_free (base_uri);
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
 }
 
 /**
@@ -1127,7 +1128,8 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	soup_session_queue_message (priv->session, msg,
 				    ch_ccmx_got_index_cb, priv);
 out:
-	soup_uri_free (base_uri);
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
 	g_free (uri);
 }
 

@@ -909,7 +909,8 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 				    ch_flash_got_firmware_cb, priv);
 out:
 	g_free (uri);
-	soup_uri_free (base_uri);
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
 }
 
 /**
