@@ -266,6 +266,9 @@ ch_device_write_command_finish (GUsbDevice *device,
 static void
 ch_device_free_helper (ChDeviceHelper *helper)
 {
+	/* clear busy flag */
+	g_object_steal_data (G_OBJECT (helper->device),
+			     "ChCommonDeviceBusy");
 	if (helper->cancellable != NULL)
 		g_object_unref (helper->cancellable);
 	g_object_unref (helper->device);
@@ -435,6 +438,7 @@ ch_device_write_command_async (GUsbDevice *device,
 			       gpointer user_data)
 {
 	ChDeviceHelper *helper;
+	gpointer device_busy;
 
 	g_return_if_fail (G_USB_IS_DEVICE (device));
 	g_return_if_fail (cmd != 0);
@@ -451,6 +455,16 @@ ch_device_write_command_async (GUsbDevice *device,
 						 ch_device_write_command_async);
 	if (cancellable != NULL)
 		helper->cancellable = g_object_ref (cancellable);
+
+	/* device busy processing another command */
+	device_busy = g_object_get_data (G_OBJECT (device),
+					 "ChCommonDeviceBusy");
+	if (device_busy != NULL) {
+		g_simple_async_result_set_error (helper->res, 1, 0, "Device busy!");
+		g_simple_async_result_complete_in_idle (helper->res);
+		ch_device_free_helper (helper);
+		return;
+	}
 
 	/* set command */
 	helper->cmd = cmd;
@@ -473,6 +487,11 @@ ch_device_write_command_async (GUsbDevice *device,
 		g_timeout_add (20, ch_device_emulate_cb, helper);
 		return;
 	}
+
+	/* set a private flag so we don't do reentrancy */
+	g_object_set_data (G_OBJECT (device),
+			   "ChCommonDeviceBusy",
+			   GUINT_TO_POINTER (TRUE));
 
 	/* do interrupt transfer */
 	g_usb_device_interrupt_transfer_async (helper->device,
