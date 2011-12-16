@@ -686,7 +686,7 @@ ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 				       _("Failed to load file"),
 				       error->message);
 		g_error_free (error);
-		return;
+		goto out;
 	}
 out:
 	g_free (filename);
