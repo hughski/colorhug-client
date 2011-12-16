@@ -827,12 +827,10 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 		g_error_free (error);
 		goto out;
 	}
-
+out:
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
 	gtk_widget_set_sensitive (widget, TRUE);
-out:
-	return;
 }
 
 /**
