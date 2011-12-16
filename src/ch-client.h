@@ -129,10 +129,10 @@ gboolean	 ch_client_set_serial_number	(ChClient	*client,
 						 GError		**error);
 
 gboolean	 ch_client_get_leds		(ChClient	*client,
-						 guint8		*leds,
+						 ChStatusLed	*leds,
 						 GError		**error);
 gboolean	 ch_client_set_leds		(ChClient	*client,
-						 guint8		 leds,
+						 ChStatusLed	 leds,
 						 guint8		 repeat,
 						 guint8		 on_time,
 						 guint8		 off_time,

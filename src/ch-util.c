@@ -33,7 +33,7 @@ typedef struct {
 	GtkBuilder	*builder;
 	GtkApplication	*application;
 	ChClient	*client;
-	guint8		 leds_old;
+	ChStatusLed	 leds_old;
 	gdouble		 red_max;
 	gdouble		 green_max;
 	gdouble		 blue_max;
@@ -171,7 +171,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	guint16 major, minor, micro;
 	gdouble red, green, blue;
 	guint32 serial_number = 0;
-	guint8 leds;
+	ChStatusLed leds;
 	guint i, j;
 
 	/* get leds from HW */
@@ -820,7 +820,7 @@ ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	gboolean ret;
 	GError *error = NULL;
 
-	priv->leds_old ^= 0x01;
+	priv->leds_old ^= CH_STATUS_LED_GREEN;
 
 	/* set to HW */
 	ret = ch_client_set_leds (priv->client,
@@ -846,7 +846,7 @@ ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	gboolean ret;
 	GError *error = NULL;
 
-	priv->leds_old ^= 0x02;
+	priv->leds_old ^= CH_STATUS_LED_RED;
 
 	/* set to HW */
 	ret = ch_client_set_leds (priv->client,

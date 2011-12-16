@@ -897,7 +897,7 @@ static gboolean
 ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint8 leds = 0xff;
+	ChStatusLed leds = 0xff;
 
 	/* get from HW */
 	ret = ch_client_get_leds (priv->client, &leds, error);
@@ -922,7 +922,7 @@ static gboolean
 ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint8 leds;
+	ChStatusLed leds;
 	guint8 repeat = 0;
 	guint8 time_on = 0x00;
 	guint8 time_off = 0x00;
@@ -933,19 +933,27 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect "
-				     "'<leds> <repeat> <time_on> <time_off>' or "
+				     "'<red|green|both> <repeat> <time_on> <time_off>' or "
 				     "'<leds>'");
 		goto out;
 	}
 
 	/* get the LEDs value */
-	leds = atoi (values[0]);
-	if (leds > 3) {
-		ret = FALSE;
-		g_set_error (error, 1, 0,
-			     "invalid leds value %i",
-			     leds);
-		goto out;
+	if (g_strcmp0 (values[0], "red") == 0) {
+		leds = CH_STATUS_LED_RED;
+	} else if (g_strcmp0 (values[0], "green") == 0) {
+		leds = CH_STATUS_LED_GREEN;
+	} else if (g_strcmp0 (values[0], "both") == 0) {
+		leds = CH_STATUS_LED_RED | CH_STATUS_LED_GREEN;
+	} else {
+		leds = atoi (values[0]);
+		if (leds > 3) {
+			ret = FALSE;
+			g_set_error (error, 1, 0,
+				     "invalid leds value %i",
+				     leds);
+			goto out;
+		}
 	}
 
 	/* get the optional other parameters */

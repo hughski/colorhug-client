@@ -523,6 +523,12 @@ typedef enum {
 	CH_COLOR_SELECT_GREEN
 } ChColorSelect;
 
+/* which color to select */
+typedef enum {
+	CH_STATUS_LED_GREEN	= 1 << 0,
+	CH_STATUS_LED_RED	= 1 << 1
+} ChStatusLed;
+
 /* what frequency divider to use */
 typedef enum {
 	CH_FREQ_SCALE_0,
