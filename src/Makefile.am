@@ -122,10 +122,4 @@ TESTS = ch-self-test
 MAINTAINERCLEANFILES =					\
 	$(srcdir)/libchshared.a
 
-pkgdata_DATA =						\
-	ch-util.ui
-
-EXTRA_DIST =						\
-	$(pkgdata_DATA)
-
 -include $(top_srcdir)/git.mk

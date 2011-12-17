@@ -12,6 +12,7 @@ desktop_in_files =					\
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 pkgdata_DATA =						\
+	ch-util.ui					\
 	ch-ccmx.ui					\
 	ch-flash.ui
 
