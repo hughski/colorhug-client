@@ -518,6 +518,38 @@ ch_ccmx_get_profile_filename (GtkWindow *window)
 }
 
 /**
+ * ch_ccmx_set_calibration_map_cb:
+ **/
+static void
+ch_ccmx_set_calibration_map_cb (GObject *source,
+				GAsyncResult *res,
+				gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	gboolean ret;
+	GError *error = NULL;
+	GtkWidget *widget;
+	GUsbDevice *device = G_USB_DEVICE (source);
+
+	/* get data */
+	ret = ch_device_write_command_finish (device, res, &error);
+	if (!ret) {
+		ch_ccmx_error_dialog (priv,
+				       _("Failed to set the calibration map"),
+				       error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* update the combos */
+	ch_ccmx_refresh_calibration_data (priv);
+out:
+	/* update UI */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
+	gtk_widget_set_sensitive (widget, TRUE);
+}
+
+/**
  * ch_ccmx_set_calibration_cb:
  **/
 static void
@@ -528,6 +560,7 @@ ch_ccmx_set_calibration_cb (GObject *source,
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
+	GtkWidget *widget;
 	GUsbDevice *device = G_USB_DEVICE (source);
 
 	/* get data */
@@ -540,8 +573,20 @@ ch_ccmx_set_calibration_cb (GObject *source,
 		goto out;
 	}
 
-	/* update the combos */
-	ch_ccmx_refresh_calibration_data (priv);
+	/* assign it here */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
+	gtk_widget_set_sensitive (widget, FALSE);
+
+	/* hit hardware */
+	ch_device_write_command_async (priv->device,
+				       CH_CMD_SET_CALIBRATION_MAP,
+				       (const guint8 *) priv->calibration_map,
+				       sizeof(priv->calibration_map),
+				       NULL, /* buffer_out */
+				       0, /* buffer_out_len */
+				       NULL, /* cancellable */
+				       ch_ccmx_set_calibration_map_cb,
+				       priv);
 out:
 	return;
 }
@@ -688,6 +733,9 @@ ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
+
+	/* update the combos */
+	ch_ccmx_refresh_calibration_data (priv);
 out:
 	g_free (filename);
 }
@@ -699,6 +747,10 @@ static void
 ch_ccmx_refresh_calibration_data (ChCcmxPrivate *priv)
 {
 	GtkListStore *list_store;
+
+	/* regetting state */
+	priv->done_get_cal = FALSE;
+	g_hash_table_remove_all (priv->hash);
 
 	/* clear existing */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
@@ -805,35 +857,6 @@ ch_ccmx_set_combo_simple_text (GtkWidget *combo_box)
 }
 
 /**
- * ch_ccmx_set_calibration_map_cb:
- **/
-static void
-ch_ccmx_set_calibration_map_cb (GObject *source,
-				GAsyncResult *res,
-				gpointer user_data)
-{
-	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to set the calibration map"),
-				       error->message);
-		g_error_free (error);
-		goto out;
-	}
-out:
-	/* update UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
-	gtk_widget_set_sensitive (widget, TRUE);
-}
-
-/**
  * ch_ccmx_combo_changed_cb:
  **/
 static void
@@ -895,8 +918,11 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 				    COLUMN_TYPE, NULL,
 				    -1);
 
-		/* now map with this */
-		idx_tmp = i;
+		/* update the map */
+		cal_index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (combo),
+								"colorhug-ccmx-idx"));
+		priv->calibration_map[cal_index] = i;
+		goto out;
 	}
 
 	/* update the map */
