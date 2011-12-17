@@ -136,6 +136,34 @@ out:
 }
 
 /**
+ * ch_ccmx_find_by_desc:
+ **/
+static gboolean
+ch_ccmx_find_by_desc (GtkTreeModel *model,
+		      GtkTreeIter *iter_found,
+		      const gchar *desc)
+{
+	gboolean ret;
+	gchar *desc_tmp = NULL;
+	GtkTreeIter iter;
+
+	ret = gtk_tree_model_get_iter_first (model, &iter);
+	while (ret) {
+		gtk_tree_model_get (model, &iter,
+				    COLUMN_DESCRIPTION, &desc_tmp,
+				    -1);
+		ret = g_strcmp0 (desc_tmp, desc) == 0;
+		g_free (desc_tmp);
+		if (ret) {
+			*iter_found = iter;
+			break;
+		}
+		ret = gtk_tree_model_iter_next (model, &iter);
+	}
+	return ret;
+}
+
+/**
  * ch_ccmx_add_local_file:
  **/
 static gboolean
@@ -208,7 +236,11 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	/* is suitable for LCD */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
 	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
-		gtk_list_store_append (list_store, &iter);
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, -1,
@@ -225,7 +257,11 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	/* is suitable for CRT */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
 	if ((types & CH_CALIBRATION_TYPE_CRT) > 0) {
-		gtk_list_store_append (list_store, &iter);
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, -1,
@@ -237,7 +273,11 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	/* is suitable for projector */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
 	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0) {
-		gtk_list_store_append (list_store, &iter);
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, -1,
@@ -245,6 +285,9 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 				    COLUMN_LOCAL_FILENAME, filename,
 				    -1);
 	}
+
+	/* success */
+	ret = TRUE;
 out:
 	g_free (ccmx_data);
 	if (ccmx != NULL)
@@ -397,7 +440,11 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	/* is suitable for LCD */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
 	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
-		gtk_list_store_append (list_store, &iter);
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
@@ -409,7 +456,11 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	/* is suitable for CRT */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
 	if ((types & CH_CALIBRATION_TYPE_CRT) > 0) {
-		gtk_list_store_append (list_store, &iter);
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
@@ -421,7 +472,11 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	/* is suitable for projector */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
 	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0) {
-		gtk_list_store_append (list_store, &iter);
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
 		gtk_list_store_set (list_store, &iter,
 				    COLUMN_DESCRIPTION, description,
 				    COLUMN_INDEX, priv->ccmx_idx,
@@ -746,21 +801,8 @@ out:
 static void
 ch_ccmx_refresh_calibration_data (ChCcmxPrivate *priv)
 {
-	GtkListStore *list_store;
-
-	/* regetting state */
-	priv->done_get_cal = FALSE;
-	g_hash_table_remove_all (priv->hash);
-
-	/* clear existing */
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
-	gtk_list_store_clear (list_store);
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
-	gtk_list_store_clear (list_store);
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
-	gtk_list_store_clear (list_store);
-
 	/* get latest from device */
+	priv->done_get_cal = FALSE;
 	priv->ccmx_idx = 0;
 	ch_ccmx_get_calibration_idx (priv);
 }
