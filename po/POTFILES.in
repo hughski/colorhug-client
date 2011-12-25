@@ -1,10 +1,10 @@
 [encoding: UTF-8]
 [type: gettext/glade]data/ch-ccmx.ui
 [type: gettext/glade]data/ch-flash.ui
+[type: gettext/glade]data/ch-util.ui
 data/colorhug-ccmx.desktop.in
 data/colorhug-flash.desktop.in
 src/ch-ccmx.c
 src/ch-flash.c
 src/ch-main.c
 src/ch-util.c
-[type: gettext/glade]src/ch-util.ui
