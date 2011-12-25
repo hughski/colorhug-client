@@ -252,7 +252,7 @@ ch_test_state_func (void)
 	gboolean ret;
 	GError *error = NULL;
 	guint16 integral_time = 0;
-	guint8 leds;
+	ChStatusLed leds;
 
 	/* new device */
 	client = ch_client_new ();
@@ -344,7 +344,7 @@ ch_test_eeprom_func (void)
 	gdouble post_scale_tmp = 0;
 	gdouble pre_scale = 0;
 	gdouble pre_scale_tmp = 0;
-	guint64 serial_number = 0;
+	guint32 serial_number = 0;
 	gdouble calibration[9];
 	gdouble calibration_tmp[9];
 	gchar desc[24];
@@ -363,6 +363,18 @@ ch_test_eeprom_func (void)
 	}
 	g_assert_no_error (error);
 	g_assert (ret);
+
+	/* only run the destructive tests on a device that is blank */
+	ret = ch_client_get_serial_number (client,
+					   &serial_number,
+					   &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	if (serial_number != 0) {
+		g_debug ("not resetting device as bad serial, skipping tests");
+		g_error_free (error);
+		return;
+	}
 
 	/* write eeprom with wrong code */
 	ret = ch_client_write_eeprom (client,
