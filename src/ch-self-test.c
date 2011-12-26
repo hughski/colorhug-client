@@ -252,7 +252,7 @@ ch_test_state_func (void)
 	gboolean ret;
 	GError *error = NULL;
 	guint16 integral_time = 0;
-	ChStatusLed leds;
+	ChStatusLed leds = 0;
 
 	/* new device */
 	client = ch_client_new ();
@@ -372,7 +372,6 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 	if (serial_number != 0) {
 		g_debug ("not resetting device as bad serial, skipping tests");
-		g_error_free (error);
 		return;
 	}
 
