@@ -1,3 +1,22 @@
+Version 0.1.3
+~~~~~~~~~~~~~
+Released: 2011-12-26
+
+New Features:
+ - Add an 'auto' argument to set-serial-number (Richard Hughes)
+ - Allow the GUI command line tools to run without hardware attached (Richard Hughes)
+ - Deactivate devices that have been identified as missing or stolen (Richard Hughes)
+
+Bugfixes:
+ - Add a new device error for bootloader >= 0.1.1 (Richard Hughes)
+ - Assign the LEDs colors (Richard Hughes)
+ - Do not allow the user to easily clear the calibration data (Richard Hughes)
+ - Do not show the refresh button when no device is inserted (Richard Hughes)
+ - Do not try to issue two commands in parallel when using colorhug-ccmx (Richard Hughes)
+ - Fix getting the serial number (Richard Hughes)
+ - Fix the markdown parser (Richard Hughes)
+ - Fix to actually include the UI files in the translations (Łukasz Jernaś)
+
 Version 0.1.2
 ~~~~~~~~~~~~~
 Released: 2011-12-09
