@@ -1,0 +1,7 @@
+[main]
+host = http://www.transifex.net
+
+[colorhug-client.master]
+file_filter = po/<lang>.po
+source_file = po/colorhug-client.pot
+source_lang = en

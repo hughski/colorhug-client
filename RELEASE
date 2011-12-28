@@ -18,6 +18,7 @@ Bugfixes:
 
 3. Commit changes in git:
 
+tx pull --all
 git commit -a -m "Release version 0.1.4"
 git tag -s COLORHUG_CLIENT_0_1_4 -m "==== Version 0.1.4 ===="
 <wait>
@@ -38,6 +39,7 @@ scp *.tar.xz hughsient@people.freedesktop.org:public_html/releases/
 
 git commit -a -m "trivial: Post release version bump"
 git push
+tx push --source
 
 8. Send an email to colorhug-users
 
