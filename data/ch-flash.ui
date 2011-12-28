@@ -241,7 +241,7 @@ do not turn off the computer.</property>
               <object class="GtkLabel" id="label_details">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;a href="#"&gt;See details about the update&lt;/a&gt;</property>
+                <property name="label">&lt;a href="#"&gt;See details about the update&lt;/a&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>

@@ -1565,8 +1565,10 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	GtkWidget *main_window;
 	GtkWidget *widget;
 	GdkPixbuf *pixbuf;
+	GString *string;
 
 	/* get UI */
+	string = g_string_new ("");
 	priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (priv->builder,
 					    CH_DATA "/ch-flash.ui",
@@ -1597,6 +1599,9 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_flash_flash_button_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_details"));
+	g_string_append_printf (string, "<a href=\"#\">%s</a>",
+				_("See details about the update"));
+	gtk_label_set_markup (GTK_LABEL (widget), string->str);
 	g_signal_connect (widget, "activate-link",
 			  G_CALLBACK (ch_flash_activate_link_cb), priv);
 
@@ -1642,7 +1647,7 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	/* show main UI */
 	gtk_widget_show (main_window);
 out:
-	return;
+	g_string_free (string, TRUE);
 }
 
 /**
