@@ -1487,7 +1487,7 @@ main (int argc, char *argv[])
 	ch_util_add (priv->cmd_array,
 		     "take-readings",
 		     /* TRANSLATORS: command description */
-		     _("Takes all color readings (to dRGB)"),
+		     _("Takes all color readings (to device RGB)"),
 		     ch_util_take_readings);
 	ch_util_add (priv->cmd_array,
 		     "take-readings-xyz",

@@ -92,7 +92,7 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 
 	msg = g_strdup_printf ("<b>%s</b>\n%s\n%s\n%s",
 			       _("Flashing the device failed"),
-			       _("First, do not panic as the ColorHug is not damaged."),
+			       _("The ColorHug is not damaged."),
 			       _("If there were any problems flashing the device, it will enter a bootloader mode."),
 			       _("Just remove the ColorHug device from the computer, reinsert it and re-run this program."));
 
@@ -1249,12 +1249,14 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	/* update firmware label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_firmware"));
 	if (priv->firmware_version[0] == 0) {
-		str = g_strdup_printf (_("Bootloader version %i.%i.%i"),
+		str = g_strdup_printf ("%s %i.%i.%i",
+				       _("Bootloader version"),
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
 	} else {
-		str = g_strdup_printf (_("Firmware version %i.%i.%i"),
+		str = g_strdup_printf ("%s %i.%i.%i",
+				       _("Firmware version"),
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
@@ -1717,7 +1719,7 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
-	context = g_option_context_new (_("ColorHug Flash program"));
+	context = g_option_context_new (_("ColorHug Flash Program"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
 	ret = g_option_context_parse (context, &argc, &argv, &error);

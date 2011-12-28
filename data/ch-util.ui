@@ -91,8 +91,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;LEDs:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">LEDs:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -106,8 +108,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Color select:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Color select:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -184,8 +188,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Multiplier:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Multiplier:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -217,8 +223,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Integral time&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Integral time</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -251,8 +259,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Firmware version:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Firmware version:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -266,8 +276,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Serial number:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Serial number:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -281,8 +293,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Dark offset:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Dark offset:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -319,7 +333,7 @@
                               <object class="GtkLabel" id="label_dark_red">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">1</property>
+                                <property name="label">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -331,7 +345,7 @@
                               <object class="GtkLabel" id="label_dark_green">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">2</property>
+                                <property name="label">2</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -343,7 +357,7 @@
                               <object class="GtkLabel" id="label_dark_blue">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">3</property>
+                                <property name="label">3</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -364,8 +378,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Calibration:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Calibration:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -385,7 +401,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">1.0000</property>
+                                <property name="label">1.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -399,7 +415,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">1.0000</property>
+                                <property name="label">1.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -413,7 +429,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">1.0000</property>
+                                <property name="label">1.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -427,7 +443,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -441,7 +457,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -455,7 +471,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -469,7 +485,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -483,7 +499,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -497,7 +513,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -523,7 +539,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">1</property>
+                                <property name="label">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -536,7 +552,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">.</property>
+                                <property name="label">.</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -549,7 +565,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">1</property>
+                                <property name="label">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -562,7 +578,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">.</property>
+                                <property name="label">.</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -575,7 +591,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">1</property>
+                                <property name="label">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -596,8 +612,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Sample duration:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Sample duration:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -611,7 +629,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">0ms</property>
+                            <property name="label">0ms</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -629,7 +647,7 @@
                               <object class="GtkLabel" id="label_sample_x">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -641,7 +659,7 @@
                               <object class="GtkLabel" id="label_sample_y">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -653,7 +671,7 @@
                               <object class="GtkLabel" id="label_sample_z">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">0.0000</property>
+                                <property name="label">0.0000</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -674,8 +692,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Last sample:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Last sample:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -689,8 +709,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Sample mode:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Sample mode:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -751,8 +773,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Pre scale:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Pre scale:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -766,7 +790,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">0.0000</property>
+                            <property name="label">0.0000</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -780,8 +804,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">&lt;span color="darkgray"&gt;Post scale:&lt;/span&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Post scale:</property>
+                            <attributes>
+                              <attribute name="foreground" value="#a9a9a9a9a9a9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -795,7 +821,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">0.0000</property>
+                            <property name="label">0.0000</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -812,8 +838,10 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Device State&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Device State</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                 </child>
               </object>

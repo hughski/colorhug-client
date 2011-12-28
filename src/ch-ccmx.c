@@ -775,7 +775,7 @@ ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	if (i == CH_CALIBRATION_MAX) {
 		ch_ccmx_error_dialog (priv,
 				      _("No space left on device"),
-				      _("All 64 slots are used up!"));
+				      _("All 64 slots are used up."));
 		goto out;
 	}
 
@@ -1017,7 +1017,7 @@ ch_ccmx_got_file_cb (SoupSession *session,
 	/* empty file */
 	if (msg->response_body->length == 0) {
 		ch_ccmx_error_dialog (priv,
-				      _("File has zero size: %s"),
+				      _("File has zero size"),
 				      soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
@@ -1108,7 +1108,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 	/* empty file */
 	if (msg->response_body->length == 0) {
 		ch_ccmx_error_dialog (priv,
-				      _("INDEX has zero size: %s"),
+				      _("Index has zero size: %s"),
 				      soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
