@@ -1366,6 +1366,7 @@ main (int argc, char *argv[])
 	guint retval = 1;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+			/* TRANSLATORS: command line option */
 			_("Show extra debugging information"), NULL },
 		{ NULL}
 	};

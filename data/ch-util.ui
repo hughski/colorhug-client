@@ -92,7 +92,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">LEDs:</property>
+                            <property name="label" translatable="yes" comments="Device status indicators">LEDs:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -109,7 +109,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Color select:</property>
+                            <property name="xpad">3</property>
+                            <property name="label" translatable="yes" comments="Switch the sensor in raw mode to measure different colors">Color select:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -128,7 +129,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton_led0">
-                                <property name="label" translatable="yes">Green</property>
+                                <property name="label" translatable="yes" comments="Green color indicator">Green</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -144,7 +145,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton_led1">
-                                <property name="label" translatable="yes">Red</property>
+                                <property name="label" translatable="yes" comments="Red color indicator">Red</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -189,7 +190,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Multiplier:</property>
+                            <property name="label" translatable="yes" comments="Set the multiplier scaling factor">Multiplier:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -224,7 +225,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Integral time</property>
+                            <property name="label" translatable="yes" comments="Set the time to collect each reading for">Integral time:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -294,7 +295,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Dark offset:</property>
+                            <property name="label" translatable="yes" comments="This is the zero-offset when measuring perfect black">Dark offset:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -379,7 +380,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Calibration:</property>
+                            <property name="label" translatable="yes" comments="This is the device calibration matrix">Calibration:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -613,7 +614,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Sample duration:</property>
+                            <property name="label" translatable="yes" comments="This is the time that the last sample took">Sample duration:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -693,7 +694,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Last sample:</property>
+                            <property name="label" translatable="yes" comments="This is the last XYZ color measured by the device">Last sample:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -710,7 +711,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Sample mode:</property>
+                            <property name="label" translatable="yes" comments="The sample mode enables us to switch off the calibration matrix if required">Sample mode:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -729,7 +730,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton_mode_raw">
-                                <property name="label" translatable="yes">Raw</property>
+                                <property name="label" translatable="yes" comments="A sample is taken without the calibration matrix">Raw</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -746,7 +747,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton_mode_device">
-                                <property name="label" translatable="yes">With calibration matrix</property>
+                                <property name="label" translatable="yes" comments="The sample is converted with an internal calibration matrix">With calibration matrix</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -774,7 +775,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Pre scale:</property>
+                            <property name="label" translatable="yes" comments="This is a scale value applied after the reading has been taken">Pre scale:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -805,7 +806,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Post scale:</property>
+                            <property name="label" translatable="yes" comments="This is a scale value applied after the dRGB reading has been converted to XYZ">Post scale:</property>
                             <attributes>
                               <attribute name="foreground" value="#a9a9a9a9a9a9"/>
                             </attributes>
@@ -861,7 +862,7 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="button_write">
-                    <property name="label" translatable="yes">Write EEPROM</property>
+                    <property name="label" translatable="yes" comments="This writes any changed settings to the internal memory">Write EEPROM</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -875,7 +876,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="button_measure">
-                    <property name="label" translatable="yes">Measure Sample</property>
+                    <property name="label" translatable="yes" comments="This reads a color using the sensor">Measure Sample</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -889,7 +890,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="button_dark_offset">
-                    <property name="label" translatable="yes">Measure Dark</property>
+                    <property name="label" translatable="yes" comments="This measures the perfect black reading and sets it.">Measure Dark</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -903,7 +904,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="button_calibrate">
-                    <property name="label" translatable="yes">Calibrate</property>
+                    <property name="label" translatable="yes" comments="Calibrate the hardware">Calibrate</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -917,7 +918,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="button_reset">
-                    <property name="label" translatable="yes">Reset Processor</property>
+                    <property name="label" translatable="yes" comments="Switch the device from firmware to bootloader mode">Reset Processor</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -931,7 +932,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="button_flash_firmware">
-                    <property name="label" translatable="yes">Flash Firmware</property>
+                    <property name="label" translatable="yes" comments="Choose a firmware file to flash">Flash Firmware</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -963,7 +964,8 @@
                   <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Red</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes" comments="The last color reading in raw mode">Red</property>
                     <property name="angle">90</property>
                   </object>
                   <packing>
@@ -977,7 +979,7 @@
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Green</property>
+                    <property name="label" translatable="yes" comments="The last color reading in raw mode">Green</property>
                     <property name="angle">90</property>
                   </object>
                   <packing>
@@ -991,7 +993,8 @@
                   <object class="GtkLabel" id="label15">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Blue</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes" comments="The last color reading in raw mode">Blue</property>
                     <property name="angle">90</property>
                   </object>
                   <packing>

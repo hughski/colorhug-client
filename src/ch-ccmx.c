@@ -372,6 +372,7 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 				GAsyncResult *res,
 				gpointer user_data)
 {
+	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -381,9 +382,10 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 	/* get data */
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to get the calibration map"),
-				       error->message);
+		/* TRANSLATORS: the calibration map is an array that
+		 * maps a specific matrix to a display type */
+		title = _("Failed to get the calibration map");
+		ch_ccmx_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -580,6 +582,7 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 				GAsyncResult *res,
 				gpointer user_data)
 {
+	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -589,9 +592,10 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 	/* get data */
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to set the calibration map"),
-				       error->message);
+		/* TRANSLATORS: the calibration map is an array that
+		 * maps a specific matrix to a display type */
+		title = _("Failed to set the calibration map");
+		ch_ccmx_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -622,7 +626,7 @@ ch_ccmx_set_calibration_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_ccmx_error_dialog (priv,
-				       _("Failed to set the CCMX calibration"),
+				       _("Failed to set the calibration matrix"),
 				       error->message);
 		g_error_free (error);
 		goto out;
@@ -813,6 +817,7 @@ ch_ccmx_refresh_calibration_data (ChCcmxPrivate *priv)
 static void
 ch_ccmx_got_device (ChCcmxPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
@@ -824,9 +829,9 @@ ch_ccmx_got_device (ChCcmxPrivate *priv)
 	/* open device */
 	ret = g_usb_device_open (priv->device, &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to open device"),
-				       error->message);
+		/* TRANSLATORS: permissions error perhaps? */
+		title = _("Failed to open device");
+		ch_ccmx_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -834,9 +839,9 @@ ch_ccmx_got_device (ChCcmxPrivate *priv)
 					      CH_USB_CONFIG,
 					      &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to set configuration"),
-				       error->message);
+		/* TRANSLATORS: we can't set the device config */
+		title = _("Failed to set configuration");
+		ch_ccmx_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -845,9 +850,9 @@ ch_ccmx_got_device (ChCcmxPrivate *priv)
 					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
 					    &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to claim interface"),
-				       error->message);
+		/* TRANSLATORS: we can't claim the interface for our sole usage */
+		title = _("Failed to claim interface");
+		ch_ccmx_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -863,7 +868,9 @@ fake_device:
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
 	gtk_widget_show (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Getting calibration from device..."));
+	/* TRANSLATORS: get the calibration matrices from the device */
+	title = _("Getting calibration from device...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	gtk_widget_show (widget);
 
@@ -904,6 +911,7 @@ ch_ccmx_set_combo_simple_text (GtkWidget *combo_box)
 static void
 ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	gchar *local_filename = NULL;
 	GError *error = NULL;
@@ -937,9 +945,11 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 		}
 		if (i == CH_CALIBRATION_MAX) {
 			gtk_combo_box_set_active (combo, -1);
-			ch_ccmx_error_dialog (priv,
-					      _("No space left on device"),
-					      _("All 64 slots are used up!"));
+			/* TRANSLATORS: You can only store 64 calibration
+			 * matrices on the device at any one time */
+			title = _("No space left on device");
+			ch_ccmx_error_dialog (priv, title,
+					      _("All 64 slots are used up."));
 			goto out;
 		}
 
@@ -1009,7 +1019,7 @@ ch_ccmx_got_file_cb (SoupSession *session,
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		ch_ccmx_error_dialog (priv,
-				      _("Failed to get file"),
+				      _("Failed to download file"),
 				      soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
@@ -1059,6 +1069,7 @@ out:
 static void
 ch_ccmx_download_file (ChCcmxPrivate *priv, const gchar *uri)
 {
+	const gchar *title;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
 
@@ -1066,9 +1077,9 @@ ch_ccmx_download_file (ChCcmxPrivate *priv, const gchar *uri)
 	base_uri = soup_uri_new (uri);
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
 	if (msg == NULL) {
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to setup message"),
-				      uri);
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		title = _("Failed to setup message");
+		ch_ccmx_error_dialog (priv, title, uri);
 		goto out;
 	}
 
@@ -1088,6 +1099,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 		      SoupMessage *msg,
 		      gpointer user_data)
 {
+	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
 	gchar *filename_tmp;
@@ -1099,17 +1111,17 @@ ch_ccmx_got_index_cb (SoupSession *session,
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to get manifest"),
-				      soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: could not download the directory listing */
+		title = _("Failed to get the list of firmware files");
+		ch_ccmx_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
 	/* empty file */
 	if (msg->response_body->length == 0) {
-		ch_ccmx_error_dialog (priv,
-				      _("Index has zero size: %s"),
-				      soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: the directory listing returned no results */
+		title = _("Firmware list has zero size");
+		ch_ccmx_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
@@ -1165,13 +1177,16 @@ out:
 static void
 ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
+	const gchar *title;
 	gchar *uri = NULL;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
 
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Getting latest data from the web..."));
+	/* TRANSLATORS: get the list of firmwares from the internet */
+	title = _("Getting latest data from the web...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
 	gtk_widget_show_all (widget);
 
@@ -1184,9 +1199,9 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	/* GET file */
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
 	if (msg == NULL) {
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to setup message"),
-				      NULL);
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		title = _("Failed to setup message");
+		ch_ccmx_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -1224,6 +1239,7 @@ out:
 static void
 ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 {
+	const gchar *title;
 	GError *error = NULL;
 	gint retval;
 	GtkWidget *main_window;
@@ -1323,9 +1339,9 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 							    SOUP_SESSION_TIMEOUT, 5000,
 							    NULL);
 	if (priv->session == NULL) {
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to setup networking"),
-				      NULL);
+		/* TRANSLATORS: internal error when setting up HTTP */
+		title = _("Failed to setup networking");
+		ch_ccmx_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -1401,6 +1417,7 @@ main (int argc, char **argv)
 	int status = 0;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+			/* TRANSLATORS: command line option */
 			_("Show extra debugging information"), NULL },
 		{ NULL}
 	};
@@ -1413,12 +1430,15 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
+	/* TRANSLATORS: A program to load on CCMX correction matrices
+	 * onto the hardware */
 	context = g_option_context_new (_("ColorHug CCMX loader"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
 	ret = g_option_context_parse (context, &argc, &argv, &error);
 	if (!ret) {
-		g_warning (_("Failed to parse command line options: %s"),
+		g_warning ("%s: %s",
+			   _("Failed to parse command line options"),
 			   error->message);
 		g_error_free (error);
 	}

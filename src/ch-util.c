@@ -73,6 +73,7 @@ ch_util_activate_cb (GApplication *application, ChUtilPrivate *priv)
 static void
 ch_util_set_default_calibration (ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 	gdouble calibration[9];
@@ -98,9 +99,9 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 					 "Default unity value",
 					 &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set calibration"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set calibration");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -110,9 +111,9 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 					post_scale,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set post scale"),
-				      error->message);
+		/* TRANSLATORS: post scale is applied after the XYZ conversion */
+		title = _("Failed to set post scale");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -122,9 +123,10 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 				       pre_scale,
 				       &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set pre scale"),
-				      error->message);
+		/* TRANSLATORS: pre scale is applied after the dRGB
+		 * sample but before the XYZ conversion */
+		title = _("Failed to set pre scale");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -140,9 +142,9 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 					     calibration_map,
 					     &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set calibration map"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set calibration map");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -156,6 +158,7 @@ out:
 static void
 ch_util_refresh (ChUtilPrivate *priv)
 {
+	const gchar *title;
 	ChColorSelect color_select = 0;
 	ChFreqScale multiplier = 0;
 	gboolean ret;
@@ -179,9 +182,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 				  &leds,
 				  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get LED status"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get LED status");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -198,9 +201,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 					  &color_select,
 					  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get color select"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get color select");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -212,9 +215,10 @@ ch_util_refresh (ChUtilPrivate *priv)
 					&multiplier,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get multiplier"),
-				      error->message);
+		/* TRANSLATORS: the multiplier is the scale factor used
+		 * when using the sensor */
+		title = _("Failed to get multiplier");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -228,9 +232,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 					  &micro,
 					  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get firmware version"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get firmware version");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -250,9 +254,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	/* get firmware version */
 	ret = ch_client_get_serial_number (priv->client, &serial_number, &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get serial number"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get serial number");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -270,9 +274,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 					  &blue,
 					  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get dark offsets"),
-				      error->message);
+		/* TRANSLATORS: failed to get the absolute black offset */
+		title = _("Failed to get dark offsets");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -297,9 +301,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 					 NULL,
 					 &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get calibration data, setting unity"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get calibration data, resetting");
+		ch_util_error_dialog (priv, title, error->message);
 		g_clear_error (&error);
 		ch_util_set_default_calibration (priv);
 	}
@@ -319,9 +323,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 				       &pre_scale,
 				       &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get pre scale"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get pre scale");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -335,9 +339,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 					&post_scale,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get post scale"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get post scale");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -351,9 +355,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 					   &integral_time,
 					   &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to get integral time"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to get integral time");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -409,6 +413,7 @@ ch_util_close_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_write_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 
@@ -416,9 +421,9 @@ ch_util_write_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 				      CH_WRITE_EEPROM_MAGIC,
 				      &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to write EEPROM"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to write EEPROM");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -429,6 +434,7 @@ ch_util_write_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_measure_raw (ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
@@ -441,9 +447,9 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 					CH_FREQ_SCALE_100,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to turn on sensor"),
-				      error->message);
+		/* TRANSLATORS: we have to enable the sensor */
+		title = _("Failed to turn on sensor");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -456,9 +462,9 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 				       &blue,
 				       &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to take readings"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to take readings");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -512,6 +518,7 @@ out:
 static void
 ch_util_measure_device (ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
@@ -524,9 +531,9 @@ ch_util_measure_device (ChUtilPrivate *priv)
 					CH_FREQ_SCALE_100,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to turn on sensor"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to turn on sensor");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -540,9 +547,9 @@ ch_util_measure_device (ChUtilPrivate *priv)
 					   &blue,
 					   &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to take readings"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to take readings");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -595,6 +602,7 @@ ch_util_measure_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	gdouble red, green, blue;
 	GError *error = NULL;
@@ -604,9 +612,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					  0, 0, 0,
 					  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to reset dark offsets"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to reset dark offsets");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -616,9 +624,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					CH_FREQ_SCALE_100,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to turn on sensor"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to turn on sensor");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -630,9 +638,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 				       &blue,
 				       &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to take readings"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to take readings");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -642,9 +650,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					  red, green, blue,
 					  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set dark offsets"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set dark offsets");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -671,6 +679,7 @@ ch_util_calibrate_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_reset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 
@@ -678,9 +687,9 @@ ch_util_reset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ret = ch_client_reset (priv->client,
 			       &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to reset processor"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to reset processor");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -739,6 +748,7 @@ ch_util_get_firmware_filename (GtkWindow *window)
 static void
 ch_util_flash_firmware_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 	GtkWindow *window;
@@ -754,9 +764,9 @@ ch_util_flash_firmware_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					filename,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to flash new firmware"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to flash new firmware");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -773,6 +783,7 @@ out:
 static void
 ch_util_color_select_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	ChColorSelect color_select;
 	gboolean ret;
 	GError *error = NULL;
@@ -784,9 +795,9 @@ ch_util_color_select_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					  color_select,
 					  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set color select"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set color select");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -797,6 +808,7 @@ ch_util_color_select_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_adjustment_value_changed_cb (GtkAdjustment *adjustment, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	gdouble value;
 	GError *error = NULL;
@@ -804,9 +816,9 @@ ch_util_adjustment_value_changed_cb (GtkAdjustment *adjustment, ChUtilPrivate *p
 	value = gtk_adjustment_get_value (adjustment);
 	ret = ch_client_set_serial_number (priv->client, (guint64) value, &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set serial number"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set serial number");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -817,6 +829,7 @@ ch_util_adjustment_value_changed_cb (GtkAdjustment *adjustment, ChUtilPrivate *p
 static void
 ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 
@@ -830,9 +843,9 @@ ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 				  0xff,
 				  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set LEDs"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set LEDs");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -843,6 +856,7 @@ ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 
@@ -856,9 +870,9 @@ ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 				  0xff,
 				  &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set LEDs"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set LEDs");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -869,6 +883,7 @@ ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_multiplier_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	ChFreqScale multiplier;
 	gboolean ret;
 	GError *error = NULL;
@@ -880,9 +895,9 @@ ch_util_multiplier_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					multiplier,
 					&error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set multiplier"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set multiplier");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -908,6 +923,7 @@ ch_util_mode_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gint idx;
 	guint16 integral_time = 0;
 	gboolean ret;
@@ -944,9 +960,9 @@ ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					   integral_time,
 					   &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to set integral time"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to set integral time");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
 }
@@ -957,6 +973,7 @@ ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 static void
 ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 	gint retval;
@@ -989,9 +1006,9 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	/* connect to device */
 	ret = ch_client_load (priv->client, &error);
 	if (!ret) {
-		ch_util_error_dialog (priv,
-				      _("Failed to connect"),
-				      error->message);
+		/* TRANSLATORS: internal device error */
+		title = _("Failed to connect to device");
+		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		gtk_widget_destroy (main_window);
 		goto out;
@@ -1079,11 +1096,13 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
+	/* TRANSLATORS: A program to do low level commands on the hardware */
 	context = g_option_context_new (_("ColorHug command line tool"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	ret = g_option_context_parse (context, &argc, &argv, &error);
 	if (!ret) {
-		g_warning (_("Failed to parse command line options: %s"),
+		g_warning ("%s: %s",
+			   _("Failed to parse command line options"),
 			   error->message);
 		g_error_free (error);
 	}

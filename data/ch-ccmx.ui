@@ -20,7 +20,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button_import">
-                <property name="label" translatable="yes">Import file</property>
+                <property name="label" translatable="yes" comments="Button to import a CCMX file">Import file</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -109,7 +109,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Selecting a correction matrix maximises the accuracy of the ColorHug.</property>
+                        <property name="label" translatable="yes" comments="A correction matrix is used alongside the calibration matrix to better adapt the colorimeter primaries to a new device type.">Selecting a correction matrix maximises the accuracy of the ColorHug.</property>
                         <property name="wrap">True</property>
                         <attributes>
                           <attribute name="foreground" value="#828282828282"/>
@@ -126,7 +126,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Using the default matrix will give most users an acceptable calibration result.</property>
+                        <property name="label" translatable="yes" comments="Only advanced users have to change this...">Using the default matrix will give most users an acceptable calibration result.</property>
                         <property name="wrap">True</property>
                         <attributes>
                           <attribute name="foreground" value="#828282828282"/>
@@ -164,7 +164,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">LCD</property>
+                    <property name="label" translatable="yes" comments="Default liquid crystal display matrix">LCD</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans 10"/>
                       <attribute name="foreground" value="#828282828282"/>
@@ -182,7 +182,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">CRT</property>
+                    <property name="label" translatable="yes" comments="Default cathode ray tube (ask your parents...) matrix">CRT</property>
                     <attributes>
                       <attribute name="foreground" value="#828282828282"/>
                     </attributes>
@@ -199,7 +199,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Projector</property>
+                    <property name="label" translatable="yes" comments="Default projector (beamer etc) matrix">Projector</property>
                     <attributes>
                       <attribute name="foreground" value="#828282828282"/>
                     </attributes>

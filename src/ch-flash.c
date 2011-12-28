@@ -87,14 +87,21 @@ ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *me
 static void
 ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 {
-	gchar *msg = NULL;
+	const gchar *title;
+	GString *msg = NULL;
 	GtkWidget *widget;
 
-	msg = g_strdup_printf ("<b>%s</b>\n%s\n%s\n%s",
-			       _("Flashing the device failed"),
-			       _("The ColorHug is not damaged."),
-			       _("If there were any problems flashing the device, it will enter a bootloader mode."),
-			       _("Just remove the ColorHug device from the computer, reinsert it and re-run this program."));
+	/* TRANSLATORS: we broke the device */
+	title = _("Flashing the device failed but the ColorHug is not damaged.");
+	g_string_append_printf (msg, "<b>%s</b>\n", title);
+
+	/* TRANSLATORS: this explains the flashy light thing */
+	title = _("If there were any problems flashing the device, it will enter a bootloader mode.");
+	g_string_append_printf (msg, "%s\n", title);
+
+	/* TRANSLATORS: hopefully we can "fix" this automatically */
+	title = _("Just remove the ColorHug device from the computer, reinsert it and re-run this program.");
+	g_string_append_printf (msg, "%s", title);
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
@@ -116,8 +123,8 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_status"));
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_markup (GTK_LABEL (widget), msg);
-	g_free (msg);
+	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
+	g_string_free (msg, TRUE);
 }
 
 /**
@@ -126,6 +133,7 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 static void
 ch_flash_error_no_network (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 
 	/* update UI */
@@ -146,7 +154,9 @@ ch_flash_error_no_network (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_status"));
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_markup (GTK_LABEL (widget), _("Connect to the internet to check for updates"));
+	/* TRANSLATORS: the user has to be online to get firmware */
+	title = _("Connect to the internet to check for updates");
+	gtk_label_set_markup (GTK_LABEL (widget), title);
 }
 
 /**
@@ -193,6 +203,7 @@ ch_flash_write_flash_cb (GObject *source,
 			 GAsyncResult *res,
 			 gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -202,9 +213,9 @@ ch_flash_write_flash_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to write the flash"),
-				       error->message);
+		/* TRANSLATORS: the flash write failed */
+		title = _("Failed to write the flash");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -254,6 +265,7 @@ ch_flash_read_flash_cb (GObject *source,
 			GAsyncResult *res,
 			gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	gchar *str = NULL;
@@ -265,9 +277,9 @@ ch_flash_read_flash_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to verify the flash"),
-				       error->message);
+		/* TRANSLATORS: the flash failed and the checksum is wrong */
+		title = _("Failed to verify the flash");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -276,6 +288,7 @@ ch_flash_read_flash_cb (GObject *source,
 	expected_checksum = ch_flash_calculate_checksum (priv->flash_buffer + 1,
 							 priv->flash_chunk_len);
 	if (priv->flash_buffer[0] != expected_checksum) {
+		/* TRANSLATORS: the write failed */
 		str = g_strdup_printf (_("Checksum failed at 0x%04x"),
 				       CH_EEPROM_ADDR_RUNCODE + priv->flash_idx);
 		ch_flash_error_do_not_panic (priv);
@@ -289,13 +302,14 @@ ch_flash_read_flash_cb (GObject *source,
 	if (memcmp (priv->firmware_data + priv->flash_idx,
 		    priv->flash_buffer + 1,
 		    priv->flash_chunk_len) != 0) {
+		/* TRANSLATORS: the write failed */
 		str = g_strdup_printf (_("Verification failed at 0x%04x (len %i)"),
 				       CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
 				       (guint) priv->flash_chunk_len);
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to verify the flash"),
-				       str);
+		/* TRANSLATORS: the write failed */
+		title = _("Failed to verify the flash");
+		ch_flash_error_dialog (priv, title, str);
 		goto out;
 	}
 
@@ -343,6 +357,7 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 				 GAsyncResult *res,
 				 gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -353,16 +368,19 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to set the flash success true"),
-				       error->message);
+		/* TRANSLATORS: we can only set the flash success
+		 * flag when the *new* firmware is running */
+		title = _("Failed to set the flash success true");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
 
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Device successfully updated"));
+	/* TRANSLATORS: we've uploaded new firmware */
+	title = _("Device successfully updated");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
 	gtk_widget_set_sensitive (widget, TRUE);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
@@ -377,12 +395,15 @@ out:
 static void
 ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 	guint8 flash_success = 0x01;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Setting flash success..."));
+	/* TRANSLATORS: tell the hardware we succeeded */
+	title = _("Setting flash success...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* need to boot into bootloader */
 	ch_device_write_command_async (priv->device,
@@ -402,14 +423,16 @@ ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 static gboolean
 ch_flash_boot_flash_delay_cb (gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 
 	/* we failed to come back up */
 	if (priv->device == NULL) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to startup the ColorHug"),
-				       NULL);
+		/* TRANSLATORS: the device failed to boot up with the
+		 * new firmware */
+		title = _("Failed to startup the ColorHug");
+		ch_flash_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -427,6 +450,7 @@ ch_flash_boot_flash_cb (GObject *source,
 			GAsyncResult *res,
 			gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -436,9 +460,9 @@ ch_flash_boot_flash_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to boot the ColorHug"),
-				       error->message);
+		/* TRANSLATORS: the new firmware will not load */
+		title = _("Failed to boot the ColorHug");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -455,6 +479,7 @@ out:
 static void
 ch_flash_read_firmware_chunk (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 	gfloat complete;
 
@@ -488,7 +513,9 @@ ch_flash_read_firmware_chunk (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_details"));
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Starting the new firmware..."));
+	/* TRANSLATORS: boot into the new firmware */
+	title = _("Starting the new firmware...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
 	gtk_widget_show (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_msg"));
@@ -517,6 +544,7 @@ out:
 static void
 ch_flash_write_firmware_chunk (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 	gfloat complete;
 
@@ -557,7 +585,10 @@ ch_flash_write_firmware_chunk (ChFlashPrivate *priv)
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Verifying new firmware..."));
+	/* TRANSLATORS: now we've written the firmware, we have to
+	 * verify it before we tell the device it was successfull */
+	title = _("Verifying new firmware...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.0f);
 
@@ -577,6 +608,7 @@ ch_flash_erase_flash_cb (GObject *source,
 			 GAsyncResult *res,
 			 gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -587,16 +619,18 @@ ch_flash_erase_flash_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to erase the flash"),
-				       error->message);
+		/* TRANSLATORS: clear enough flash for the new firmware */
+		title = _("Failed to erase the flash");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Writing new firmware..."));
+	/* TRANSLATORS: now write the new firmware chunks */
+	title = _("Writing new firmware...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* write in 32 byte chunks */
 	priv->flash_idx = 0;
@@ -614,6 +648,7 @@ ch_flash_set_flash_success_0_cb (GObject *source,
 				 GAsyncResult *res,
 				 gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -626,9 +661,10 @@ ch_flash_set_flash_success_0_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to set the flash success false"),
-				       error->message);
+		/* TRANSLATORS: tell the device the firmware is no
+		 * longer known working */
+		title = _("Failed to set the flash success false");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -659,12 +695,15 @@ out:
 static void
 ch_flash_set_flash_success_0 (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 	guint8 flash_success = 0x00;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Clearing flash success..."));
+	/* TRANSLATORS: tell the device the firmware is no longer known working */
+	title = _("Clearing flash success...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* need to boot into bootloader */
 	ch_device_write_command_async (priv->device,
@@ -684,14 +723,15 @@ ch_flash_set_flash_success_0 (ChFlashPrivate *priv)
 static gboolean
 ch_flash_reset_delay_cb (gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 
 	/* we failed to come back up */
 	if (priv->device == NULL) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to reboot the ColorHug"),
-				       NULL);
+		/* TRANSLATORS: the device failed to come back alive */
+		title = _("Failed to reboot the ColorHug");
+		ch_flash_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -709,6 +749,7 @@ ch_flash_reset_cb (GObject *source,
 		   GAsyncResult *res,
 		   gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -718,9 +759,9 @@ ch_flash_reset_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to reset the ColorHug"),
-				       error->message);
+		/* TRANSLATORS: we restart the device in bootloader mode */
+		title = _("Failed to reset the ColorHug");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -737,11 +778,14 @@ out:
 static void
 ch_flash_reset_into_bootloader (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Resetting into bootloader..."));
+	/* TRANSLATORS: switch from firmware mode into bootloader mode */
+	title = _("Resetting into bootloader...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* this is planned */
 	priv->planned_replug = TRUE;
@@ -766,23 +810,24 @@ ch_flash_got_firmware_cb (SoupSession *session,
 			  SoupMessage *msg,
 			  gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		ch_flash_error_no_network (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to get firmware"),
-				       soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: failed to get the firmware file */
+		title = _("Failed to get firmware");
+		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
 	/* empty file */
 	if (msg->response_body->length == 0) {
 		ch_flash_error_no_network (priv);
-		ch_flash_error_dialog (priv,
-				       _("Firmware has zero size"),
-				       soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: the server gave us an invalid file */
+		title = _("Firmware has zero size");
+		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
@@ -858,6 +903,7 @@ out:
 static void
 ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 {
+	const gchar *title;
 	SoupURI *base_uri = NULL;
 	SoupMessage *msg = NULL;
 	gchar *uri = NULL;
@@ -878,7 +924,10 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_warning"));
 	gtk_widget_show (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Downloading update..."));
+	/* TRANSLATORS: downloading the firmware binary file from a
+	 * remote server */
+	title = _("Downloading update...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* set progressbar to zero */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
@@ -894,9 +943,9 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	/* GET file */
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
 	if (msg == NULL) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to setup message"),
-				       NULL);
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		title = _("Failed to setup message");
+		ch_flash_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -962,11 +1011,14 @@ out:
 static void
 ch_flash_no_updates (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("There are no updates available."));
+	/* TRANSLATORS: the user is already running the latest firmware */
+	title = _("There are no updates available.");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 }
 
 /**
@@ -975,6 +1027,7 @@ ch_flash_no_updates (ChFlashPrivate *priv)
 static void
 ch_flash_has_updates (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_hide (widget);
@@ -983,7 +1036,9 @@ ch_flash_has_updates (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
 	gtk_widget_show (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("A firmware update is available."));
+	/* TRANSLATORS: the user is running an old firmware version */
+	title = _("A firmware update is available.");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 }
 
 /**
@@ -994,6 +1049,7 @@ ch_flash_got_manifest_cb (SoupSession *session,
 			  SoupMessage *msg,
 			  gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gchar **lines = NULL;
 	gchar **tmp;
@@ -1002,18 +1058,18 @@ ch_flash_got_manifest_cb (SoupSession *session,
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		ch_flash_error_no_network (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to get manifest"),
-				       soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: the HTTP request failed */
+		title = _("Failed to get the listing of firmware files");
+		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
 	/* empty file */
 	if (msg->response_body->length == 0) {
 		ch_flash_error_no_network (priv);
-		ch_flash_error_dialog (priv,
-				       _("Manifest has zero size"),
-				       soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: we got an invalid response from the server */
+		title = _("The firmware listing has zero size");
+		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
@@ -1066,6 +1122,7 @@ ch_flash_set_lost_or_stolen_cb (GObject *source,
 				GAsyncResult *res,
 				gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -1077,9 +1134,10 @@ ch_flash_set_lost_or_stolen_cb (GObject *source,
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to set the device as lost or stolen"),
-				       error->message);
+		/* TRANSLATORS: the device refused our request to mark
+		 * it lost or stolen */
+		title = _("Failed to set the device as lost or stolen");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -1092,16 +1150,24 @@ ch_flash_set_lost_or_stolen_cb (GObject *source,
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_warning"));
 	msg = g_string_new ("");
+	/* TRANSLATORS: we have a blacklist that we match the device against */
+	title = _("This ColorHug has been registered as lost or stolen.");
 	g_string_append_printf (msg, "<span weight='bold' size='x-large'>%s</span>",
-				_("This ColorHug has been registered as lost or stolen."));
+				title);
 	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
 	g_string_free (msg, TRUE);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	msg = g_string_new ("");
+	/* TRANSLATORS: We disable the device so it can't go into
+	 * firmware mode without a magic incantation */
+	title = _("The device has now been deactivated.");
 	g_string_append_printf (msg, "<b>%s</b>",
-				_("The device has now been deactivated."));
+				title);
+	/* TRANSLATORS: We can tell the user the magic incantation if we've
+	 * made a mistake */
+	title = _("Please contact <tt>info@hughski.com</tt> for more details.");
 	g_string_append_printf (msg, "\n\n%s",
-				_("Please contact <tt>info@hughski.com</tt> for more details."));
+				title);
 	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
 	gtk_widget_set_sensitive (widget, TRUE);
@@ -1142,6 +1208,7 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 			   SoupMessage *msg,
 			   gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gchar **lines = NULL;
 	gchar *uri = NULL;
@@ -1152,9 +1219,9 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		ch_flash_error_no_network (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to get blacklist"),
-				       soup_status_get_phrase (msg->status_code));
+		/* TRANSLATORS: we failed to get the blacklist from the server */
+		title = _("Failed to get device blacklist");
+		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		goto out;
 	}
 
@@ -1184,9 +1251,9 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 	/* GET file */
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
 	if (msg == NULL) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to setup message"),
-				       NULL);
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		title = _("Failed to setup message");
+		ch_flash_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -1206,6 +1273,7 @@ out:
 static void
 ch_flash_got_device_data (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	gchar *str = NULL;
 	gchar *uri = NULL;
 	gchar *user_agent = NULL;
@@ -1249,14 +1317,18 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	/* update firmware label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_firmware"));
 	if (priv->firmware_version[0] == 0) {
+		/* TRANSLATORS: the device is in bootloader mode */
+		title = _("Bootloader version");
 		str = g_strdup_printf ("%s %i.%i.%i",
-				       _("Bootloader version"),
+				       title,
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
 	} else {
+		/* TRANSLATORS: the device is in firmware mode */
+		title = _("Firmware version");
 		str = g_strdup_printf ("%s %i.%i.%i",
-				       _("Firmware version"),
+				       title,
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
@@ -1271,7 +1343,10 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Checking for updates..."));
+	/* TRANSLATORS: Check for newer version of the firmware compared
+	 * to what is installed on the device */
+	title = _("Checking for updates...");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_show (widget);
 
@@ -1284,9 +1359,9 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	/* GET file */
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
 	if (msg == NULL) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to setup message"),
-				       NULL);
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		title = _("Failed to setup message");
+		ch_flash_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -1311,6 +1386,7 @@ ch_flash_get_serial_number_cb (GObject *source,
 			       GAsyncResult *res,
 			       gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -1319,9 +1395,9 @@ ch_flash_get_serial_number_cb (GObject *source,
 	/* get data */
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to contact ColorHug"),
-				       error->message);
+		/* TRANSLATORS: the request failed */
+		title = _("Failed to contact ColorHug");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -1340,6 +1416,7 @@ ch_flash_get_firmware_version_cb (GObject *source,
 				  GAsyncResult *res,
 				  gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -1348,9 +1425,9 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	/* get data */
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to contact ColorHug"),
-				       error->message);
+		/* TRANSLATORS: the request failed */
+		title = _("Failed to contact ColorHug");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -1383,6 +1460,7 @@ ch_flash_get_hardware_version_cb (GObject *source,
 				  GAsyncResult *res,
 				  gpointer user_data)
 {
+	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
@@ -1391,9 +1469,9 @@ ch_flash_get_hardware_version_cb (GObject *source,
 	/* get data */
 	ret = ch_device_write_command_finish (device, res, &error);
 	if (!ret) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to contact ColorHug"),
-				       error->message);
+		/* TRANSLATORS: the request failed */
+		title = _("Failed to contact ColorHug");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -1437,6 +1515,7 @@ out:
 static void
 ch_flash_got_device (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
@@ -1448,9 +1527,9 @@ ch_flash_got_device (ChFlashPrivate *priv)
 	/* open device */
 	ret = g_usb_device_open (priv->device, &error);
 	if (!ret) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to open device"),
-				       error->message);
+		/* TRANSLATORS: permissions error perhaps? */
+		title = _("Failed to open device");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -1458,9 +1537,9 @@ ch_flash_got_device (ChFlashPrivate *priv)
 					      CH_USB_CONFIG,
 					      &error);
 	if (!ret) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to set configuration"),
-				       error->message);
+		/* TRANSLATORS: we can't set the device config */
+		title = _("Failed to set configuration");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -1469,9 +1548,9 @@ ch_flash_got_device (ChFlashPrivate *priv)
 					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
 					    &error);
 	if (!ret) {
-		ch_flash_error_dialog (priv,
-				       _("Failed to claim interface"),
-				       error->message);
+		/* TRANSLATORS: we can't claim the interface for our sole usage */
+		title = _("Failed to claim interface");
+		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;
 	}
@@ -1484,7 +1563,9 @@ fake_device:
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
 		gtk_widget_show (widget);
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-		gtk_label_set_label (GTK_LABEL (widget), _("Getting firmware version..."));
+		/* TRANSLATORS: request the firmware version from the device */
+		title = _("Getting firmware version...");
+		gtk_label_set_label (GTK_LABEL (widget), title);
 	}
 
 	/* get the firmware version */
@@ -1507,6 +1588,7 @@ ch_flash_activate_link_cb (GtkLabel *label,
 			   const gchar *uri,
 			   ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWindow *window;
 	GtkWidget *dialog;
 	gchar *format;
@@ -1515,11 +1597,14 @@ ch_flash_activate_link_cb (GtkLabel *label,
 	format = ch_markdown_parse (priv->markdown,
 				    priv->update_details->str);
 	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_flash"));
+	/* TRANSLATORS: the long details about all the updates that
+	 * are newer than the version the user has installed */
+	title = _("Update details");
 	dialog = gtk_message_dialog_new (window,
 					 GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_INFO,
 					 GTK_BUTTONS_CLOSE, "%s",
-					 _("Update details"));
+					 title);
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s",
 						  format);
 	gtk_dialog_run (GTK_DIALOG (dialog));
@@ -1534,6 +1619,7 @@ ch_flash_activate_link_cb (GtkLabel *label,
 static void
 ch_flash_please_attach_device (ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GtkWidget *widget;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
@@ -1551,7 +1637,9 @@ ch_flash_please_attach_device (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	gtk_label_set_label (GTK_LABEL (widget), _("Please connect your ColorHug"));
+	/* TRANSLATORS: device is not connected to the computer */
+	title = _("Please connect your ColorHug");
+	gtk_label_set_label (GTK_LABEL (widget), title);
 }
 
 /**
@@ -1560,6 +1648,7 @@ ch_flash_please_attach_device (ChFlashPrivate *priv)
 static void
 ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 {
+	const gchar *title;
 	GError *error = NULL;
 	gint retval;
 	GtkWidget *main_window;
@@ -1599,8 +1688,9 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_flash_flash_button_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_details"));
-	g_string_append_printf (string, "<a href=\"#\">%s</a>",
-				_("See details about the update"));
+	/* TRANSLATORS: show the user some markdown formatted text */
+	title = _("See details about the update");
+	g_string_append_printf (string, "<a href=\"#\">%s</a>", title);
 	gtk_label_set_markup (GTK_LABEL (widget), string->str);
 	g_signal_connect (widget, "activate-link",
 			  G_CALLBACK (ch_flash_activate_link_cb), priv);
@@ -1632,9 +1722,9 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 							    SOUP_SESSION_TIMEOUT, 5000,
 							    NULL);
 	if (priv->session == NULL) {
-		ch_flash_error_dialog (priv,
-				      _("Failed to setup networking"),
-				      NULL);
+		/* TRANSLATORS: internal error when setting up HTTP */
+		title = _("Failed to setup networking");
+		ch_flash_error_dialog (priv, title, NULL);
 		goto out;
 	}
 
@@ -1712,6 +1802,7 @@ main (int argc, char **argv)
 	int status = 0;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+			/* TRANSLATORS: command line option */
 			_("Show extra debugging information"), NULL },
 		{ NULL}
 	};
@@ -1724,12 +1815,14 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
+	/* TRANSLATORS: a program to update the firmware flash on the device */
 	context = g_option_context_new (_("ColorHug Flash Program"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
 	ret = g_option_context_parse (context, &argc, &argv, &error);
 	if (!ret) {
-		g_warning (_("Failed to parse command line options: %s"),
+		g_warning ("%s: %s",
+			   _("Failed to parse command line options"),
 			   error->message);
 		g_error_free (error);
 	}
