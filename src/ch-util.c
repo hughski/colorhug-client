@@ -143,7 +143,7 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 					     &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
-		title = _("Failed to set calibration map");
+		title = _("Failed to set the calibration map");
 		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
