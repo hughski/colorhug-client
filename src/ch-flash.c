@@ -91,6 +91,9 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 	GString *msg = NULL;
 	GtkWidget *widget;
 
+	/* create empty string for long message */
+	msg = g_string_new ("");
+
 	/* TRANSLATORS: we broke the device */
 	title = _("Flashing the device failed but the ColorHug is not damaged.");
 	g_string_append_printf (msg, "<b>%s</b>\n", title);
