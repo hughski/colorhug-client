@@ -1408,12 +1408,12 @@ main (int argc, char *argv[])
 	ch_util_add (priv->cmd_array,
 		     "get-integral-time",
 		     /* TRANSLATORS: command description */
-		     _("Gets the sensor integral time"),
+		     _("Gets the sensor sample read time"),
 		     ch_util_get_integral_time);
 	ch_util_add (priv->cmd_array,
 		     "set-integral-time",
 		     /* TRANSLATORS: command description */
-		     _("Sets the sensor integral time"),
+		     _("Sets the sensor sample read time"),
 		     ch_util_set_integral_time);
 	ch_util_add (priv->cmd_array,
 		     "get-firmware-version",

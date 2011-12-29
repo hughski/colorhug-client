@@ -356,7 +356,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
-		title = _("Failed to get integral time");
+		title = _("Failed to get sample read time");
 		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
@@ -961,7 +961,7 @@ ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
-		title = _("Failed to set integral time");
+		title = _("Failed to set sample read time");
 		ch_util_error_dialog (priv, title, error->message);
 		g_error_free (error);
 	}
