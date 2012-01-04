@@ -984,17 +984,15 @@ static gboolean
 ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble red, green, blue;
+	CdColorRGB value;
 
 	/* get from HW */
 	ret = ch_device_cmd_get_dark_offsets (priv->device,
-					      &red,
-					      &green,
-					      &blue,
+					      &value,
 					      error);
 	if (!ret)
 		goto out;
-	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
+	g_print ("R:%.4f G:%.4f B:%.4f\n", value.R, value.G, value.B);
 out:
 	return ret;
 }
@@ -1006,7 +1004,7 @@ static gboolean
 ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble red, green, blue;
+	CdColorRGB value;
 
 	/* parse */
 	if (g_strv_length (values) != 3) {
@@ -1015,15 +1013,13 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	red = atof (values[0]);
-	green = atof (values[1]);
-	blue = atof (values[2]);
+	value.R = atof (values[0]);
+	value.G = atof (values[1]);
+	value.B = atof (values[2]);
 
 	/* set to HW */
 	ret = ch_device_cmd_set_dark_offsets (priv->device,
-					      red,
-					      green,
-					      blue,
+					      &value,
 					      error);
 	if (!ret)
 		goto out;
@@ -1080,17 +1076,15 @@ static gboolean
 ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble red, green, blue;
+	CdColorRGB value;
 
 	/* get from HW */
 	ret = ch_device_cmd_take_readings (priv->device,
-					   &red,
-					   &green,
-					   &blue,
+					   &value,
 					   error);
 	if (!ret)
 		goto out;
-	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
+	g_print ("R:%.4f G:%.4f B:%.4f\n", value.R, value.G, value.B);
 out:
 	return ret;
 }
@@ -1102,7 +1096,7 @@ static gboolean
 ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble red, green, blue;
+	CdColorXYZ value;
 	guint16 calibration_index = 0;
 
 	/* parse */
@@ -1117,13 +1111,11 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* get from HW */
 	ret = ch_device_cmd_take_readings_xyz (priv->device,
 					       calibration_index,
-					       &red,
-					       &green,
-					       &blue,
+					       &value,
 					       error);
 	if (!ret)
 		goto out;
-	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
+	g_print ("X:%.4f Y:%.4f Z:%.4f\n", value.X, value.Y, value.Z);
 out:
 	return ret;
 }

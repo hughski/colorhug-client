@@ -34,9 +34,7 @@ typedef struct {
 	GtkApplication	*application;
 	ChClient	*client;
 	ChStatusLed	 leds_old;
-	gdouble		 red_max;
-	gdouble		 green_max;
-	gdouble		 blue_max;
+	CdColorRGB	 value_max;
 	GUsbDevice	*device;
 } ChUtilPrivate;
 
@@ -173,7 +171,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	GtkWidget *widget;
 	guint16 integral_time = 0;
 	guint16 major, minor, micro;
-	gdouble red, green, blue;
+	CdColorRGB value;
 	guint32 serial_number = 0;
 	ChStatusLed leds;
 	guint i, j;
@@ -270,9 +268,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 
 	/* get dark offsets */
 	ret = ch_device_cmd_get_dark_offsets (priv->device,
-					      &red,
-					      &green,
-					      &blue,
+					      &value,
 					      &error);
 	if (!ret) {
 		/* TRANSLATORS: failed to get the absolute black offset */
@@ -281,15 +277,15 @@ ch_util_refresh (ChUtilPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
-	tmp = g_strdup_printf ("%.4f", red);
+	tmp = g_strdup_printf ("%.4f", value.R);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_red"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", green);
+	tmp = g_strdup_printf ("%.4f", value.G);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_green"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", blue);
+	tmp = g_strdup_printf ("%.4f", value.B);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_dark_blue"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
@@ -439,7 +435,7 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
-	gdouble red, green, blue;
+	CdColorRGB value;
 	GtkWidget *widget;
 	GTimer *timer = NULL;
 
@@ -458,9 +454,7 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	/* get from HW */
 	timer = g_timer_new ();
 	ret = ch_device_cmd_take_readings (priv->device,
-					   &red,
-					   &green,
-					   &blue,
+					   &value,
 					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
@@ -477,34 +471,34 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* update maximum values */
-	if (red > priv->red_max)
-		priv->red_max = red;
-	if (green > priv->green_max)
-		priv->green_max = green;
-	if (blue > priv->blue_max)
-		priv->blue_max = blue;
+	if (value.R > priv->value_max.R)
+		priv->value_max.R = value.R;
+	if (value.G > priv->value_max.G)
+		priv->value_max.G = value.G;
+	if (value.B > priv->value_max.B)
+		priv->value_max.B = value.B;
 
 	/* update sliders */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_red"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
-				       red / priv->red_max);
+				       value.R / priv->value_max.R);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_green"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
-				       green / priv->green_max);
+				       value.G / priv->value_max.G);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_blue"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget),
-				       blue / priv->blue_max);
+				       value.B / priv->value_max.B);
 
 	/* update sample */
-	tmp = g_strdup_printf ("%.4f", red);
+	tmp = g_strdup_printf ("%.4f", value.R);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_x"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", green);
+	tmp = g_strdup_printf ("%.4f", value.G);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_y"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", blue);
+	tmp = g_strdup_printf ("%.4f", value.B);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_z"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
@@ -523,7 +517,7 @@ ch_util_measure_device (ChUtilPrivate *priv)
 	gboolean ret;
 	gchar *tmp;
 	GError *error = NULL;
-	gdouble red, green, blue;
+	CdColorXYZ value;
 	GtkWidget *widget;
 	GTimer *timer = NULL;
 
@@ -543,9 +537,7 @@ ch_util_measure_device (ChUtilPrivate *priv)
 	timer = g_timer_new ();
 	ret = ch_device_cmd_take_readings_xyz (priv->device,
 					       0,
-					       &red,
-					       &green,
-					       &blue,
+					       &value,
 					       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
@@ -562,15 +554,15 @@ ch_util_measure_device (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* update sample */
-	tmp = g_strdup_printf ("%.4f", red);
+	tmp = g_strdup_printf ("%.4f", value.X);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_x"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", green);
+	tmp = g_strdup_printf ("%.4f", value.Y);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_y"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
-	tmp = g_strdup_printf ("%.4f", blue);
+	tmp = g_strdup_printf ("%.4f", value.Z);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_sample_z"));
 	gtk_label_set_label (GTK_LABEL (widget), tmp);
 	g_free (tmp);
@@ -605,12 +597,15 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 {
 	const gchar *title;
 	gboolean ret;
-	gdouble red, green, blue;
+	CdColorRGB value;
 	GError *error = NULL;
 
 	/* reset to zero */
+	value.R = 0.0f;
+	value.G = 0.0f;
+	value.B = 0.0f;
 	ret = ch_device_cmd_set_dark_offsets (priv->device,
-					      0, 0, 0,
+					      &value,
 					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
@@ -634,9 +629,7 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 
 	/* get from HW */
 	ret = ch_device_cmd_take_readings (priv->device,
-					   &red,
-					   &green,
-					   &blue,
+					   &value,
 					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
@@ -648,7 +641,7 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 
 	/* set new values */
 	ret = ch_device_cmd_set_dark_offsets (priv->device,
-					      red, green, blue,
+					      &value,
 					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
@@ -1109,9 +1102,9 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChUtilPrivate, 1);
-	priv->red_max = 0.0f;
-	priv->green_max = 0.0f;
-	priv->blue_max = 0.0f;
+	priv->value_max.R = 0.0f;
+	priv->value_max.G = 0.0f;
+	priv->value_max.B = 0.0f;
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("com.hughski.ColorHug.Util", 0);

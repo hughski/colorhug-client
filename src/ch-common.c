@@ -1296,18 +1296,14 @@ out:
  **/
 gboolean
 ch_device_cmd_get_dark_offsets (GUsbDevice *device,
-				gdouble *red,
-				gdouble *green,
-				gdouble *blue,
+				CdColorRGB *value,
 				GError **error)
 {
 	gboolean ret;
 	guint16 buffer[3];
 
 	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
-	g_return_val_if_fail (red != NULL, FALSE);
-	g_return_val_if_fail (green != NULL, FALSE);
-	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	/* hit hardware */
@@ -1323,9 +1319,9 @@ ch_device_cmd_get_dark_offsets (GUsbDevice *device,
 		goto out;
 
 	/* convert back into floating point */
-	*red = (gdouble) buffer[0] / (gdouble) 0xffff;
-	*green = (gdouble) buffer[1] / (gdouble) 0xffff;
-	*blue = (gdouble) buffer[2] / (gdouble) 0xffff;
+	value->R = (gdouble) buffer[0] / (gdouble) 0xffff;
+	value->G = (gdouble) buffer[1] / (gdouble) 0xffff;
+	value->B = (gdouble) buffer[2] / (gdouble) 0xffff;
 out:
 	return ret;
 }
@@ -1335,9 +1331,7 @@ out:
  **/
 gboolean
 ch_device_cmd_set_dark_offsets (GUsbDevice *device,
-				gdouble red,
-				gdouble green,
-				gdouble blue,
+				CdColorRGB *value,
 				GError **error)
 {
 	gboolean ret;
@@ -1347,9 +1341,9 @@ ch_device_cmd_set_dark_offsets (GUsbDevice *device,
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	/* hit hardware */
-	buffer[0] = red * (gdouble) 0xffff;
-	buffer[1] = green * (gdouble) 0xffff;
-	buffer[2] = blue * (gdouble) 0xffff;
+	buffer[0] = value->R * (gdouble) 0xffff;
+	buffer[1] = value->G * (gdouble) 0xffff;
+	buffer[2] = value->B * (gdouble) 0xffff;
 	ret = ch_device_write_command (device,
 				       CH_CMD_SET_DARK_OFFSETS,
 				       (const guint8 *) buffer,	/* buffer in */
@@ -1401,18 +1395,14 @@ out:
  **/
 gboolean
 ch_device_cmd_take_readings (GUsbDevice *device,
-			     gdouble *red,
-			     gdouble *green,
-			     gdouble *blue,
+			     CdColorRGB *value,
 			     GError **error)
 {
 	gboolean ret;
 	ChPackedFloat buffer[3];
 
 	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
-	g_return_val_if_fail (red != NULL, FALSE);
-	g_return_val_if_fail (green != NULL, FALSE);
-	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	/* hit hardware */
@@ -1428,9 +1418,9 @@ ch_device_cmd_take_readings (GUsbDevice *device,
 		goto out;
 
 	/* convert back into floating point */
-	ch_packed_float_to_double (&buffer[0], red);
-	ch_packed_float_to_double (&buffer[1], green);
-	ch_packed_float_to_double (&buffer[2], blue);
+	ch_packed_float_to_double (&buffer[0], &value->R);
+	ch_packed_float_to_double (&buffer[1], &value->G);
+	ch_packed_float_to_double (&buffer[2], &value->B);
 out:
 	return ret;
 }
@@ -1441,18 +1431,14 @@ out:
 gboolean
 ch_device_cmd_take_readings_xyz (GUsbDevice *device,
 				 guint16 calibration_index,
-				 gdouble *red,
-				 gdouble *green,
-				 gdouble *blue,
+				 CdColorXYZ *value,
 				 GError **error)
 {
 	gboolean ret;
 	ChPackedFloat buffer[3];
 
 	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
-	g_return_val_if_fail (red != NULL, FALSE);
-	g_return_val_if_fail (green != NULL, FALSE);
-	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	/* hit hardware */
@@ -1468,9 +1454,9 @@ ch_device_cmd_take_readings_xyz (GUsbDevice *device,
 		goto out;
 
 	/* convert back into floating point */
-	ch_packed_float_to_double (&buffer[0], red);
-	ch_packed_float_to_double (&buffer[1], green);
-	ch_packed_float_to_double (&buffer[2], blue);
+	ch_packed_float_to_double (&buffer[0], &value->X);
+	ch_packed_float_to_double (&buffer[1], &value->Y);
+	ch_packed_float_to_double (&buffer[2], &value->Z);
 out:
 	return ret;
 }

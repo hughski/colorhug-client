@@ -338,9 +338,7 @@ ch_test_eeprom_func (void)
 	guint16 micro = 0;
 	guint16 minor = 0;
 	guint8 types = 0;
-	gdouble red = 0;
-	gdouble green = 0;
-	gdouble blue = 0;
+	CdColorRGB value;
 	gdouble post_scale = 0;
 	gdouble post_scale_tmp = 0;
 	gdouble pre_scale = 0;
@@ -411,21 +409,22 @@ ch_test_eeprom_func (void)
 	g_assert_cmpint (micro, >, 0);
 
 	/* verify dark offsets */
+	value.R = 0.12;
+	value.G = 0.34;
+	value.B = 0.56;
 	ret = ch_device_cmd_set_dark_offsets (device,
-					      0.12, 0.34, 0.56,
+					      &value,
 					      &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ret = ch_device_cmd_get_dark_offsets (device,
-					      &red,
-					      &green,
-					      &blue,
+					      &value,
 					      &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpint (red, ==, 0.12);
-	g_assert_cmpint (green, ==, 0.34);
-	g_assert_cmpint (blue, ==, 0.56);
+	g_assert_cmpint (value.R, ==, 0.12);
+	g_assert_cmpint (value.G, ==, 0.34);
+	g_assert_cmpint (value.B, ==, 0.56);
 
 	/* verify calibration */
 	calibration[0] = 1.0f;
@@ -596,14 +595,15 @@ ch_test_reading_xyz_func (void)
 	ChClient *client;
 	gboolean ret;
 	gdouble calibration[9];
-	gdouble reading1[3];
-	gdouble reading2[3];
+	CdColorXYZ reading1;
+	CdColorXYZ reading2;
 	gdouble scaling_factor_actual;
 	GError *error = NULL;
 	guint16 calibration_map[6];
 	guint16 post_scale;
 	guint i;
 	GUsbDevice *device;
+	CdColorRGB value;
 
 	/* new device */
 	client = ch_client_new ();
@@ -649,8 +649,11 @@ ch_test_reading_xyz_func (void)
 	g_assert (ret);
 
 	/* set dark offsets */
+	value.R = 0.0f;
+	value.G = 0.0f;
+	value.B = 0.0f;
 	ret = ch_device_cmd_set_dark_offsets (device,
-					      0.0, 0.0, 0.0,
+					      &value,
 					      &error);
 	g_assert_no_error (error);
 	g_assert (ret);
@@ -672,15 +675,13 @@ ch_test_reading_xyz_func (void)
 	/* take a reading from the hardware */
 	ret = ch_device_cmd_take_readings_xyz (device,
 					       0,
-					       &reading1[0],
-					       &reading1[1],
-					       &reading1[2],
+					       &reading1,
 					       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert_cmpfloat (reading1[0], >, 0.0f);
-	g_assert_cmpfloat (reading1[1], >, 0.0f);
-	g_assert_cmpfloat (reading1[2], >, 0.0f);
+	g_assert_cmpfloat (reading1.X, >, 0.0f);
+	g_assert_cmpfloat (reading1.Y, >, 0.0f);
+	g_assert_cmpfloat (reading1.Z, >, 0.0f);
 
 	/* set post scale much higher */
 	for (post_scale = 1; post_scale < 2000; post_scale *= 2) {
@@ -694,24 +695,37 @@ ch_test_reading_xyz_func (void)
 		/* take a reading from the hardware */
 		ret = ch_device_cmd_take_readings_xyz (device,
 						       0,
-						       &reading2[0],
-						       &reading2[1],
-						       &reading2[2],
+						       &reading2,
 						       &error);
 		g_assert_no_error (error);
 		g_assert (ret);
 
-		for (i = 0; i < 3; i++) {
-			scaling_factor_actual = reading2[i] / reading1[i];
-			g_debug ("scale %i: %f, scale 1: %f so effective %f",
-				 post_scale,
-				 reading2[i],
-				 reading1[i],
-				 scaling_factor_actual);
-			g_assert_cmpfloat (scaling_factor_actual, >, 0.9);
-			g_assert_cmpfloat (scaling_factor_actual, <, 1.1);
-			reading1[i] = reading2[i] * 2;
-		}
+		/* X */
+		scaling_factor_actual = reading2.X / reading1.X;
+		g_debug ("scale %i: %f, scale 1: %f so effective %f",
+			 post_scale, reading2.X, reading1.X,
+			 scaling_factor_actual);
+		g_assert_cmpfloat (scaling_factor_actual, >, 0.9);
+		g_assert_cmpfloat (scaling_factor_actual, <, 1.1);
+		reading1.X = reading2.X * 2;
+
+		/* Y */
+		scaling_factor_actual = reading2.Y / reading1.Y;
+		g_debug ("scale %i: %f, scale 1: %f so effective %f",
+			 post_scale, reading2.Y, reading1.Y,
+			 scaling_factor_actual);
+		g_assert_cmpfloat (scaling_factor_actual, >, 0.9);
+		g_assert_cmpfloat (scaling_factor_actual, <, 1.1);
+		reading1.Y = reading2.Y * 2;
+
+		/* Z */
+		scaling_factor_actual = reading2.Z / reading1.Z;
+		g_debug ("scale %i: %f, scale 1: %f so effective %f",
+			 post_scale, reading2.Z, reading1.Z,
+			 scaling_factor_actual);
+		g_assert_cmpfloat (scaling_factor_actual, >, 0.9);
+		g_assert_cmpfloat (scaling_factor_actual, <, 1.1);
+		reading1.Z = reading2.Z * 2;
 	}
 	g_object_unref (client);
 	g_object_unref (device);

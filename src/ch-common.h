@@ -24,6 +24,7 @@
 
 #include <glib.h>
 #include <gusb.h>
+#include <colord.h>
 
 /* device constants */
 #define	CH_USB_VID				0x04d8
@@ -661,14 +662,10 @@ gboolean	 ch_device_cmd_set_leds		(GUsbDevice	*device,
 						 guint8		 off_time,
 						 GError		**error);
 gboolean	 ch_device_cmd_get_dark_offsets	(GUsbDevice	*device,
-						 gdouble	*red,
-						 gdouble	*green,
-						 gdouble	*blue,
+						 CdColorRGB	*value,
 						 GError		**error);
 gboolean	 ch_device_cmd_set_dark_offsets	(GUsbDevice	*device,
-						 gdouble	 red,
-						 gdouble	 green,
-						 gdouble	 blue,
+						 CdColorRGB	*value,
 						 GError		**error);
 gboolean	 ch_device_cmd_write_eeprom	(GUsbDevice	*device,
 						 const gchar	*magic,
@@ -677,15 +674,11 @@ gboolean	 ch_device_cmd_take_reading_raw	(GUsbDevice	*device,
 						 guint16	*take_reading,
 						 GError		**error);
 gboolean	 ch_device_cmd_take_readings	(GUsbDevice	*device,
-						 gdouble	*red,
-						 gdouble	*green,
-						 gdouble	*blue,
+						 CdColorRGB	*value,
 						 GError		**error);
 gboolean	 ch_device_cmd_take_readings_xyz (GUsbDevice	*device,
 						 guint16	 calibration_index,
-						 gdouble	*red,
-						 gdouble	*green,
-						 gdouble	*blue,
+						 CdColorXYZ	*value,
 						 GError		**error);
 gboolean	 ch_device_cmd_reset		(GUsbDevice	*device,
 						 GError		**error);
