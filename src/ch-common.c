@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "ch-common.h"
+#include "ch-math.h"
 
 /**
  * ch_strerror:
@@ -526,7 +527,7 @@ ch_device_write_command_finish_cb (GObject *source,
 }
 
 /**
- * ch_client_write_command:
+ * ch_device_write_command:
  *
  * @client:		A #ChClient
  * @cmd:		The command to use, e.g. %CH_CMD_GET_COLOR_SELECT
@@ -572,4 +573,1137 @@ ch_device_write_command (GUsbDevice *device,
 	g_main_loop_unref (helper.loop);
 
 	return helper.ret;
+}
+
+/**********************************************************************/
+
+/**
+ * ch_device_cmd_get_color_select:
+ **/
+gboolean
+ch_device_cmd_get_color_select (GUsbDevice *device,
+				ChColorSelect *color_select,
+				GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (color_select != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_COLOR_SELECT,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) color_select,
+				       1,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_color_select:
+ **/
+gboolean
+ch_device_cmd_set_color_select (GUsbDevice *device,
+				ChColorSelect color_select,
+				GError **error)
+{
+	gboolean ret;
+	guint8 csel8 = color_select;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_COLOR_SELECT,
+				       &csel8,	/* buffer in */
+				       1,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_multiplier:
+ **/
+gboolean
+ch_device_cmd_get_multiplier (GUsbDevice *device,
+			      ChFreqScale *multiplier,
+			      GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (multiplier != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_MULTIPLIER,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) multiplier,
+				       1,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_multiplier:
+ **/
+gboolean
+ch_device_cmd_set_multiplier (GUsbDevice *device,
+			      ChFreqScale multiplier,
+			      GError **error)
+{
+	gboolean ret;
+	guint8 mult8 = multiplier;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_MULTIPLIER,
+				       &mult8,	/* buffer in */
+				       1,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_integral_time:
+ **/
+gboolean
+ch_device_cmd_get_integral_time (GUsbDevice *device,
+				 guint16 *integral_time,
+				 GError **error)
+{
+	gboolean ret;
+	guint16 integral_le;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (integral_time != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_INTEGRAL_TIME,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &integral_le,
+				       2,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+	*integral_time = GUINT16_FROM_LE (integral_le);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_integral_time:
+ **/
+gboolean
+ch_device_cmd_set_integral_time (GUsbDevice *device,
+				 guint16 integral_time,
+				 GError **error)
+{
+	gboolean ret;
+	guint16 integral_le;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (integral_time > 0, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	integral_le = GUINT16_TO_LE (integral_time);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_INTEGRAL_TIME,
+				       (const guint8 *) &integral_le,	/* buffer in */
+				       sizeof(guint16),	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_calibration_map:
+ **/
+gboolean
+ch_device_cmd_get_calibration_map (GUsbDevice *device,
+				   guint16 *calibration_map,
+				   GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (calibration_map != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_CALIBRATION_MAP,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) calibration_map,
+				       6 * sizeof(guint16),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_calibration_map:
+ **/
+gboolean
+ch_device_cmd_set_calibration_map (GUsbDevice *device,
+				   guint16 *calibration_map,
+				   GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (calibration_map != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_CALIBRATION_MAP,
+				       (const guint8 *) calibration_map,	/* buffer in */
+				       6 * sizeof(guint16),	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_firmware_ver:
+ **/
+gboolean
+ch_device_cmd_get_firmware_ver (GUsbDevice *device,
+				guint16 *major,
+				guint16 *minor,
+				guint16 *micro,
+				GError **error)
+{
+	gboolean ret;
+	guint16 buffer[3];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (major != NULL, FALSE);
+	g_return_val_if_fail (minor != NULL, FALSE);
+	g_return_val_if_fail (micro != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_FIRMWARE_VERSION,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* parse */
+	*major = GUINT16_FROM_LE (buffer[0]);
+	*minor = GUINT16_FROM_LE (buffer[1]);
+	*micro = GUINT16_FROM_LE (buffer[2]);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_calibration:
+ **/
+gboolean
+ch_device_cmd_get_calibration (GUsbDevice *device,
+			       guint16 calibration_index,
+			       gdouble *calibration,
+			       guint8 *types,
+			       gchar *description,
+			       GError **error)
+{
+	gboolean ret;
+	guint8 buffer[9*4 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
+	guint i;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_CALIBRATION,
+				       (guint8 *) &calibration_index,
+				       sizeof(guint16),
+				       (guint8 *) buffer,
+				       sizeof(buffer),
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	if (calibration != NULL) {
+		for (i = 0; i < 9; i++) {
+			ch_packed_float_to_double ((ChPackedFloat *) &buffer[i*4],
+						   &calibration[i]);
+		}
+	}
+
+	/* get the supported types */
+	if (types != NULL)
+		*types = buffer[9*4];
+
+	/* get the description */
+	if (description != NULL) {
+		strncpy (description,
+			 (const char *) buffer + 9*4 + 1,
+			 CH_CALIBRATION_DESCRIPTION_LEN);
+	}
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_calibration:
+ **/
+gboolean
+ch_device_cmd_set_calibration (GUsbDevice *device,
+			       guint16 calibration_index,
+			       const gdouble *calibration,
+			       guint8 types,
+			       const gchar *description,
+			       GError **error)
+{
+	gboolean ret;
+	guint8 buffer[9*4 + 2 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
+	guint i;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
+	g_return_val_if_fail (calibration != NULL, FALSE);
+	g_return_val_if_fail (description != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* write index */
+	memcpy (buffer, &calibration_index, sizeof(guint16));
+
+	/* convert from float to signed value */
+	for (i = 0; i < 9; i++) {
+		ch_double_to_packed_float (calibration[i],
+					   (ChPackedFloat *) &buffer[i*4 + 2]);
+	}
+
+	/* write types */
+	buffer[9*4 + 2] = types;
+
+	/* write description */
+	strncpy ((gchar *) buffer + 9*4 + 2 + 1,
+		 description,
+		 CH_CALIBRATION_DESCRIPTION_LEN);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_CALIBRATION,
+				       (guint8 *) buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_clear_calibration:
+ **/
+gboolean
+ch_device_cmd_clear_calibration (GUsbDevice *device,
+				 guint16 calibration_index,
+				 GError **error)
+{
+	gboolean ret;
+	guint8 buffer[9*4 + 2 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (calibration_index < CH_CALIBRATION_MAX, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* factory calibration needs to be hard to erase */
+	if (calibration_index == 0) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "You cannot clear the factory calibration");
+		goto out;
+	}
+
+	/* write index */
+	memcpy (buffer, &calibration_index, sizeof(guint16));
+
+	/* clear data */
+	memset (buffer + 2, 0xff, sizeof (buffer) - 2);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_CALIBRATION,
+				       (guint8 *) buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_pre_scale:
+ **/
+gboolean
+ch_device_cmd_get_pre_scale (GUsbDevice *device,
+			     gdouble *pre_scale,
+			     GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (pre_scale != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_PRE_SCALE,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	ch_packed_float_to_double (&buffer, pre_scale);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_pre_scale:
+ **/
+gboolean
+ch_device_cmd_set_pre_scale (GUsbDevice *device,
+			     gdouble pre_scale,
+			     GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* convert from float to signed value */
+	ch_double_to_packed_float (pre_scale, &buffer);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_PRE_SCALE,
+				       (guint8 *) &buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_post_scale:
+ **/
+gboolean
+ch_device_cmd_get_post_scale (GUsbDevice *device,
+			      gdouble *post_scale,
+			      GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (post_scale != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_POST_SCALE,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	ch_packed_float_to_double (&buffer, post_scale);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_post_scale:
+ **/
+gboolean
+ch_device_cmd_set_post_scale (GUsbDevice *device,
+			      gdouble post_scale,
+			      GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* convert from float to signed value */
+	ch_double_to_packed_float (post_scale, &buffer);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_POST_SCALE,
+				       (guint8 *) &buffer,
+				       sizeof(buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_serial_number:
+ **/
+gboolean
+ch_device_cmd_get_serial_number (GUsbDevice *device,
+				 guint32 *serial_number,
+				 GError **error)
+{
+	gboolean ret;
+	guint32 serial_le;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (serial_number != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_SERIAL_NUMBER,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &serial_le,
+				       sizeof(serial_le),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+	*serial_number = GUINT32_FROM_LE (serial_le);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_serial_number:
+ **/
+gboolean
+ch_device_cmd_set_serial_number (GUsbDevice *device,
+				 guint32 serial_number,
+				 GError **error)
+{
+	gboolean ret;
+	guint32 serial_le;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (serial_number > 0, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	serial_le = GUINT32_TO_LE (serial_number);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_SERIAL_NUMBER,
+				       (const guint8 *) &serial_le,	/* buffer in */
+				       sizeof(serial_le),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_leds:
+ **/
+gboolean
+ch_device_cmd_get_leds (GUsbDevice *device,
+			ChStatusLed *leds,
+			GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (leds != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_LEDS,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) leds,
+				       1,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_leds:
+ **/
+gboolean
+ch_device_cmd_set_leds (GUsbDevice *device,
+			ChStatusLed leds,
+			guint8 repeat,
+			guint8 on_time,
+			guint8 off_time,
+			GError **error)
+{
+	gboolean ret;
+	guint8 buffer[4];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (leds < 0x04, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	buffer[0] = leds;
+	buffer[1] = repeat;
+	buffer[2] = on_time;
+	buffer[3] = off_time;
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_LEDS,
+				       (const guint8 *) buffer,
+				       sizeof (buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_write_eeprom:
+ **/
+gboolean
+ch_device_cmd_write_eeprom (GUsbDevice *device,
+			    const gchar *magic,
+			    GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (magic != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_WRITE_EEPROM,
+				       (const guint8 *) magic,	/* buffer in */
+				       strlen(magic),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_dark_offsets:
+ **/
+gboolean
+ch_device_cmd_get_dark_offsets (GUsbDevice *device,
+				gdouble *red,
+				gdouble *green,
+				gdouble *blue,
+				GError **error)
+{
+	gboolean ret;
+	guint16 buffer[3];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (red != NULL, FALSE);
+	g_return_val_if_fail (green != NULL, FALSE);
+	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_DARK_OFFSETS,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	*red = (gdouble) buffer[0] / (gdouble) 0xffff;
+	*green = (gdouble) buffer[1] / (gdouble) 0xffff;
+	*blue = (gdouble) buffer[2] / (gdouble) 0xffff;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_dark_offsets:
+ **/
+gboolean
+ch_device_cmd_set_dark_offsets (GUsbDevice *device,
+				gdouble red,
+				gdouble green,
+				gdouble blue,
+				GError **error)
+{
+	gboolean ret;
+	guint16 buffer[3];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	buffer[0] = red * (gdouble) 0xffff;
+	buffer[1] = green * (gdouble) 0xffff;
+	buffer[2] = blue * (gdouble) 0xffff;
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_DARK_OFFSETS,
+				       (const guint8 *) buffer,	/* buffer in */
+				       sizeof(buffer),	/* size of input buffer */
+				       NULL,
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_take_reading_raw:
+ **/
+gboolean
+ch_device_cmd_take_reading_raw (GUsbDevice *device,
+				guint16 *take_reading,
+				GError **error)
+{
+	gboolean ret;
+	guint16 reading_le;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (take_reading != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_TAKE_READING_RAW,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) &reading_le,
+				       sizeof(reading_le),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	*take_reading = GUINT16_FROM_LE (reading_le);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_take_readings:
+ **/
+gboolean
+ch_device_cmd_take_readings (GUsbDevice *device,
+			     gdouble *red,
+			     gdouble *green,
+			     gdouble *blue,
+			     GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer[3];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (red != NULL, FALSE);
+	g_return_val_if_fail (green != NULL, FALSE);
+	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_TAKE_READINGS,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) buffer,
+				       sizeof(buffer),	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	ch_packed_float_to_double (&buffer[0], red);
+	ch_packed_float_to_double (&buffer[1], green);
+	ch_packed_float_to_double (&buffer[2], blue);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_take_readings_xyz:
+ **/
+gboolean
+ch_device_cmd_take_readings_xyz (GUsbDevice *device,
+				 guint16 calibration_index,
+				 gdouble *red,
+				 gdouble *green,
+				 gdouble *blue,
+				 GError **error)
+{
+	gboolean ret;
+	ChPackedFloat buffer[3];
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (red != NULL, FALSE);
+	g_return_val_if_fail (green != NULL, FALSE);
+	g_return_val_if_fail (blue != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_TAKE_READING_XYZ,
+				       (guint8 *) &calibration_index,
+				       sizeof(guint16),
+				       (guint8 *) buffer,
+				       sizeof(buffer),
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* convert back into floating point */
+	ch_packed_float_to_double (&buffer[0], red);
+	ch_packed_float_to_double (&buffer[1], green);
+	ch_packed_float_to_double (&buffer[2], blue);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_reset:
+ **/
+gboolean
+ch_device_cmd_reset (GUsbDevice *device,
+		     GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_RESET,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	return ret;
+}
+
+/**
+ * ch_device_cmd_calculate_checksum:
+ **/
+static guint8
+ch_device_cmd_calculate_checksum (guint8 *data,
+			      gsize len)
+{
+	guint8 checksum = 0xff;
+	guint i;
+	for (i = 0; i < len; i++)
+		checksum ^= data[i];
+	return checksum;
+}
+
+/**
+ * ch_device_cmd_write_flash:
+ **/
+gboolean
+ch_device_cmd_write_flash (GUsbDevice *device,
+			   guint16 address,
+			   guint8 *data,
+			   gsize len,
+			   GError **error)
+{
+	gboolean ret;
+	guint16 addr_le;
+	guint8 buffer_tx[64];
+
+	/* set address, length, checksum, data */
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
+	buffer_tx[2] = len;
+	buffer_tx[3] = ch_device_cmd_calculate_checksum (data, len);
+	memcpy (buffer_tx + 4, data, len);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_WRITE_FLASH,
+				       buffer_tx,
+				       len + 4,
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	return ret;
+}
+
+/**
+ * ch_device_cmd_read_flash:
+ **/
+gboolean
+ch_device_cmd_read_flash (GUsbDevice *device,
+			  guint16 address,
+			  guint8 *data,
+			  gsize len,
+			  GError **error)
+{
+	gboolean ret;
+	guint8 buffer_rx[64];
+	guint8 buffer_tx[3];
+	guint8 expected_checksum;
+	guint16 addr_le;
+
+	/* set address, length, checksum, data */
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
+	buffer_tx[2] = len;
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_READ_FLASH,
+				       buffer_tx,
+				       sizeof(buffer_tx),
+				       buffer_rx,
+				       len + 1,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* verify checksum */
+	expected_checksum = ch_device_cmd_calculate_checksum (buffer_rx + 1, len);
+	if (buffer_rx[0] != expected_checksum) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Checksum @0x%04x invalid",
+			     address);
+		goto out;
+	}
+	memcpy (data, buffer_rx + 1, len);
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_erase_flash:
+ **/
+gboolean
+ch_device_cmd_erase_flash (GUsbDevice *device,
+			   guint16 address,
+			   gsize len,
+			   GError **error)
+{
+	gboolean ret;
+	guint8 buffer_tx[4];
+	guint16 addr_le;
+	guint16 len_le;
+
+	/* set address, length, checksum, data */
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
+	len_le = GUINT16_TO_LE (len);
+	memcpy (buffer_tx + 2, &len_le, 2);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_ERASE_FLASH,
+				       buffer_tx,
+				       sizeof(buffer_tx),
+				       NULL,
+				       0,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_flash_success:
+ **/
+gboolean
+ch_device_cmd_set_flash_success (GUsbDevice *device,
+				 gboolean value,
+				 GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* set flash success true */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       (guint8 *) &value, 1,
+				       NULL, 0,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_boot_flash:
+ **/
+gboolean
+ch_device_cmd_boot_flash (GUsbDevice *device,
+			  GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* boot into new code */
+	ret = ch_device_write_command (device,
+				       CH_CMD_BOOT_FLASH,
+				       NULL, 0,
+				       NULL, 0,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_hardware_version:
+ **/
+gboolean
+ch_device_cmd_get_hardware_version (GUsbDevice *device,
+				    guint8 *hw_version,
+				    GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (hw_version != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_HARDWARE_VERSION,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       hw_version,
+				       1,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
 }

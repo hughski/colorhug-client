@@ -37,6 +37,7 @@ typedef struct {
 	gdouble		 red_max;
 	gdouble		 green_max;
 	gdouble		 blue_max;
+	GUsbDevice	*device;
 } ChUtilPrivate;
 
 /**
@@ -92,12 +93,12 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	calibration[8] = 1.0f;
 
 	/* set to HW */
-	ret = ch_client_set_calibration (priv->client,
-					 0,
-					 calibration,
-					 CH_CALIBRATION_TYPE_ALL,
-					 "Default unity value",
-					 &error);
+	ret = ch_device_cmd_set_calibration (priv->device,
+					     0,
+					     calibration,
+					     CH_CALIBRATION_TYPE_ALL,
+					     "Default unity value",
+					     &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set calibration");
@@ -107,9 +108,9 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_post_scale (priv->client,
-					post_scale,
-					&error);
+	ret = ch_device_cmd_set_post_scale (priv->device,
+					    post_scale,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: post scale is applied after the XYZ conversion */
 		title = _("Failed to set post scale");
@@ -119,9 +120,9 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_pre_scale (priv->client,
-				       pre_scale,
-				       &error);
+	ret = ch_device_cmd_set_pre_scale (priv->device,
+					   pre_scale,
+					   &error);
 	if (!ret) {
 		/* TRANSLATORS: pre scale is applied after the dRGB
 		 * sample but before the XYZ conversion */
@@ -138,9 +139,9 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	calibration_map[3] = 0x00;
 	calibration_map[4] = 0x00;
 	calibration_map[5] = 0x00;
-	ret = ch_client_set_calibration_map (priv->client,
-					     calibration_map,
-					     &error);
+	ret = ch_device_cmd_set_calibration_map (priv->device,
+						 calibration_map,
+						 &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set the calibration map");
@@ -178,9 +179,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	guint i, j;
 
 	/* get leds from HW */
-	ret = ch_client_get_leds (priv->client,
-				  &leds,
-				  &error);
+	ret = ch_device_cmd_get_leds (priv->device,
+				      &leds,
+				      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get LED status");
@@ -197,9 +198,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	priv->leds_old = leds;
 
 	/* get color select from HW */
-	ret = ch_client_get_color_select (priv->client,
-					  &color_select,
-					  &error);
+	ret = ch_device_cmd_get_color_select (priv->device,
+					      &color_select,
+					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get color select");
@@ -211,9 +212,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), color_select);
 
 	/* get multiplier from HW */
-	ret = ch_client_get_multiplier (priv->client,
-					&multiplier,
-					&error);
+	ret = ch_device_cmd_get_multiplier (priv->device,
+					    &multiplier,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: the multiplier is the scale factor used
 		 * when using the sensor */
@@ -226,11 +227,11 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), multiplier);
 
 	/* get firmware */
-	ret = ch_client_get_firmware_ver (priv->client,
-					  &major,
-					  &minor,
-					  &micro,
-					  &error);
+	ret = ch_device_cmd_get_firmware_ver (priv->device,
+					      &major,
+					      &minor,
+					      &micro,
+					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get firmware version");
@@ -252,7 +253,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* get firmware version */
-	ret = ch_client_get_serial_number (priv->client, &serial_number, &error);
+	ret = ch_device_cmd_get_serial_number (priv->device, &serial_number, &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get serial number");
@@ -268,11 +269,11 @@ ch_util_refresh (ChUtilPrivate *priv)
 	gtk_adjustment_set_value (adj, serial_number);
 
 	/* get dark offsets */
-	ret = ch_client_get_dark_offsets (priv->client,
-					  &red,
-					  &green,
-					  &blue,
-					  &error);
+	ret = ch_device_cmd_get_dark_offsets (priv->device,
+					      &red,
+					      &green,
+					      &blue,
+					      &error);
 	if (!ret) {
 		/* TRANSLATORS: failed to get the absolute black offset */
 		title = _("Failed to get dark offsets");
@@ -294,12 +295,12 @@ ch_util_refresh (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* get calibration */
-	ret = ch_client_get_calibration (priv->client,
-					 0,
-					 calibration,
-					 NULL,
-					 NULL,
-					 &error);
+	ret = ch_device_cmd_get_calibration (priv->device,
+					     0,
+					     calibration,
+					     NULL,
+					     NULL,
+					     &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get calibration data, resetting");
@@ -319,9 +320,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	}
 
 	/* get pre scale */
-	ret = ch_client_get_pre_scale (priv->client,
-				       &pre_scale,
-				       &error);
+	ret = ch_device_cmd_get_pre_scale (priv->device,
+					   &pre_scale,
+					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get pre scale");
@@ -335,9 +336,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* get post scale */
-	ret = ch_client_get_post_scale (priv->client,
-					&post_scale,
-					&error);
+	ret = ch_device_cmd_get_post_scale (priv->device,
+					    &post_scale,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get post scale");
@@ -351,9 +352,9 @@ ch_util_refresh (ChUtilPrivate *priv)
 	g_free (tmp);
 
 	/* get integral time */
-	ret = ch_client_get_integral_time (priv->client,
-					   &integral_time,
-					   &error);
+	ret = ch_device_cmd_get_integral_time (priv->device,
+					       &integral_time,
+					       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get sample read time");
@@ -417,9 +418,9 @@ ch_util_write_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	gboolean ret;
 	GError *error = NULL;
 
-	ret = ch_client_write_eeprom (priv->client,
-				      CH_WRITE_EEPROM_MAGIC,
-				      &error);
+	ret = ch_device_cmd_write_eeprom (priv->device,
+					  CH_WRITE_EEPROM_MAGIC,
+					  &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to write EEPROM");
@@ -443,9 +444,9 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	GTimer *timer = NULL;
 
 	/* turn on sensor */
-	ret = ch_client_set_multiplier (priv->client,
-					CH_FREQ_SCALE_100,
-					&error);
+	ret = ch_device_cmd_set_multiplier (priv->device,
+					    CH_FREQ_SCALE_100,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: we have to enable the sensor */
 		title = _("Failed to turn on sensor");
@@ -456,11 +457,11 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 
 	/* get from HW */
 	timer = g_timer_new ();
-	ret = ch_client_take_readings (priv->client,
-				       &red,
-				       &green,
-				       &blue,
-				       &error);
+	ret = ch_device_cmd_take_readings (priv->device,
+					   &red,
+					   &green,
+					   &blue,
+					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to take readings");
@@ -527,9 +528,9 @@ ch_util_measure_device (ChUtilPrivate *priv)
 	GTimer *timer = NULL;
 
 	/* turn on sensor */
-	ret = ch_client_set_multiplier (priv->client,
-					CH_FREQ_SCALE_100,
-					&error);
+	ret = ch_device_cmd_set_multiplier (priv->device,
+					    CH_FREQ_SCALE_100,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to turn on sensor");
@@ -540,12 +541,12 @@ ch_util_measure_device (ChUtilPrivate *priv)
 
 	/* get from HW */
 	timer = g_timer_new ();
-	ret = ch_client_take_readings_xyz (priv->client,
-					   0,
-					   &red,
-					   &green,
-					   &blue,
-					   &error);
+	ret = ch_device_cmd_take_readings_xyz (priv->device,
+					       0,
+					       &red,
+					       &green,
+					       &blue,
+					       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to take readings");
@@ -608,9 +609,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	GError *error = NULL;
 
 	/* reset to zero */
-	ret = ch_client_set_dark_offsets (priv->client,
-					  0, 0, 0,
-					  &error);
+	ret = ch_device_cmd_set_dark_offsets (priv->device,
+					      0, 0, 0,
+					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to reset dark offsets");
@@ -620,9 +621,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	}
 
 	/* turn on sensor */
-	ret = ch_client_set_multiplier (priv->client,
-					CH_FREQ_SCALE_100,
-					&error);
+	ret = ch_device_cmd_set_multiplier (priv->device,
+					    CH_FREQ_SCALE_100,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to turn on sensor");
@@ -632,11 +633,11 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	}
 
 	/* get from HW */
-	ret = ch_client_take_readings (priv->client,
-				       &red,
-				       &green,
-				       &blue,
-				       &error);
+	ret = ch_device_cmd_take_readings (priv->device,
+					   &red,
+					   &green,
+					   &blue,
+					   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to take readings");
@@ -646,9 +647,9 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	}
 
 	/* set new values */
-	ret = ch_client_set_dark_offsets (priv->client,
-					  red, green, blue,
-					  &error);
+	ret = ch_device_cmd_set_dark_offsets (priv->device,
+					      red, green, blue,
+					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set dark offsets");
@@ -684,8 +685,8 @@ ch_util_reset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	GError *error = NULL;
 
 	/* set to HW */
-	ret = ch_client_reset (priv->client,
-			       &error);
+	ret = ch_device_cmd_reset (priv->device,
+				   &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to reset processor");
@@ -791,9 +792,9 @@ ch_util_color_select_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	color_select = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 
 	/* set to HW */
-	ret = ch_client_set_color_select (priv->client,
-					  color_select,
-					  &error);
+	ret = ch_device_cmd_set_color_select (priv->device,
+					      color_select,
+					      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set color select");
@@ -814,7 +815,7 @@ ch_util_adjustment_value_changed_cb (GtkAdjustment *adjustment, ChUtilPrivate *p
 	GError *error = NULL;
 
 	value = gtk_adjustment_get_value (adjustment);
-	ret = ch_client_set_serial_number (priv->client, (guint64) value, &error);
+	ret = ch_device_cmd_set_serial_number (priv->device, (guint64) value, &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set serial number");
@@ -836,12 +837,12 @@ ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	priv->leds_old ^= CH_STATUS_LED_GREEN;
 
 	/* set to HW */
-	ret = ch_client_set_leds (priv->client,
-				  priv->leds_old,
-				  0,
-				  0xff,
-				  0xff,
-				  &error);
+	ret = ch_device_cmd_set_leds (priv->device,
+				      priv->leds_old,
+				      0,
+				      0xff,
+				      0xff,
+				      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set LEDs");
@@ -863,12 +864,12 @@ ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	priv->leds_old ^= CH_STATUS_LED_RED;
 
 	/* set to HW */
-	ret = ch_client_set_leds (priv->client,
-				  priv->leds_old,
-				  0,
-				  0xff,
-				  0xff,
-				  &error);
+	ret = ch_device_cmd_set_leds (priv->device,
+				      priv->leds_old,
+				      0,
+				      0xff,
+				      0xff,
+				      &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set LEDs");
@@ -891,9 +892,9 @@ ch_util_multiplier_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	multiplier = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 
 	/* set to HW */
-	ret = ch_client_set_multiplier (priv->client,
-					multiplier,
-					&error);
+	ret = ch_device_cmd_set_multiplier (priv->device,
+					    multiplier,
+					    &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set multiplier");
@@ -956,9 +957,9 @@ ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_integral_time (priv->client,
-					   integral_time,
-					   &error);
+	ret = ch_device_cmd_set_integral_time (priv->device,
+					       integral_time,
+					       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set sample read time");
@@ -974,7 +975,6 @@ static void
 ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 {
 	const gchar *title;
-	gboolean ret;
 	GError *error = NULL;
 	gint retval;
 	GtkWidget *main_window;
@@ -1004,8 +1004,8 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	gtk_widget_hide (main_window);
 
 	/* connect to device */
-	ret = ch_client_load (priv->client, &error);
-	if (!ret) {
+	priv->device = ch_client_get_default (priv->client, &error);
+	if (priv->device == NULL) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to connect to device");
 		ch_util_error_dialog (priv, title, error->message);
@@ -1131,6 +1131,8 @@ main (int argc, char **argv)
 		g_object_unref (priv->builder);
 	if (priv->client != NULL)
 		g_object_unref (priv->client);
+	if (priv->device != NULL)
+		g_object_unref (priv->device);
 	g_free (priv);
 	return status;
 }

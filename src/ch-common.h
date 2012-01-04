@@ -585,4 +585,128 @@ gboolean	ch_device_write_command		(GUsbDevice	*device,
 						 GCancellable	*cancellable,
 						 GError		**error);
 
+/* command utility functions */
+gboolean	 ch_device_cmd_get_color_select	(GUsbDevice	*device,
+						 ChColorSelect	*color_select,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_hardware_version	(GUsbDevice	*device,
+						 guint8		*hw_version,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_color_select	(GUsbDevice	*device,
+						 ChColorSelect	 color_select,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_multiplier	(GUsbDevice	*device,
+						 ChFreqScale	*multiplier,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_multiplier	(GUsbDevice	*device,
+						 ChFreqScale	 multiplier,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_integral_time (GUsbDevice	*device,
+						 guint16	*integral_time,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_integral_time (GUsbDevice	*device,
+						 guint16	 integral_time,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_calibration_map(GUsbDevice	*device,
+						 guint16	*calibration_map,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_calibration_map (GUsbDevice	*device,
+						 guint16	*calibration_map,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_firmware_ver	(GUsbDevice	*device,
+						 guint16	*major,
+						 guint16	*minor,
+						 guint16	*micro,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_calibration	(GUsbDevice	*device,
+						 guint16	 calibration_index,
+						 gdouble	*calibration,
+						 guint8		*types,
+						 gchar		*description,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_calibration	(GUsbDevice	*device,
+						 guint16	 calibration_index,
+						 const gdouble	*calibration,
+						 guint8		 types,
+						 const gchar	*description,
+						 GError		**error);
+gboolean	 ch_device_cmd_clear_calibration (GUsbDevice	*device,
+						 guint16	 calibration_index,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_pre_scale	(GUsbDevice	*device,
+						 gdouble	*pre_scale,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_pre_scale	(GUsbDevice	*device,
+						 gdouble	 pre_scale,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_post_scale	(GUsbDevice	*device,
+						 gdouble	*post_scale,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_post_scale	(GUsbDevice	*device,
+						 gdouble	 post_scale,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_serial_number (GUsbDevice	*device,
+						 guint32	*serial_number,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_serial_number (GUsbDevice	*device,
+						 guint32	 serial_number,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_leds		(GUsbDevice	*device,
+						 ChStatusLed	*leds,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_leds		(GUsbDevice	*device,
+						 ChStatusLed	 leds,
+						 guint8		 repeat,
+						 guint8		 on_time,
+						 guint8		 off_time,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_dark_offsets	(GUsbDevice	*device,
+						 gdouble	*red,
+						 gdouble	*green,
+						 gdouble	*blue,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_dark_offsets	(GUsbDevice	*device,
+						 gdouble	 red,
+						 gdouble	 green,
+						 gdouble	 blue,
+						 GError		**error);
+gboolean	 ch_device_cmd_write_eeprom	(GUsbDevice	*device,
+						 const gchar	*magic,
+						 GError		**error);
+gboolean	 ch_device_cmd_take_reading_raw	(GUsbDevice	*device,
+						 guint16	*take_reading,
+						 GError		**error);
+gboolean	 ch_device_cmd_take_readings	(GUsbDevice	*device,
+						 gdouble	*red,
+						 gdouble	*green,
+						 gdouble	*blue,
+						 GError		**error);
+gboolean	 ch_device_cmd_take_readings_xyz (GUsbDevice	*device,
+						 guint16	 calibration_index,
+						 gdouble	*red,
+						 gdouble	*green,
+						 gdouble	*blue,
+						 GError		**error);
+gboolean	 ch_device_cmd_reset		(GUsbDevice	*device,
+						 GError		**error);
+gboolean	 ch_device_cmd_boot_flash	(GUsbDevice	*device,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_flash_success (GUsbDevice	*device,
+						 gboolean	 value,
+						 GError		**error);
+gboolean	 ch_device_cmd_write_flash	(GUsbDevice	*device,
+						guint16		 address,
+						guint8		*data,
+						gsize		 len,
+						GError		**error);
+gboolean	 ch_device_cmd_read_flash	(GUsbDevice	*device,
+						guint16		 address,
+						guint8		*data,
+						gsize		 len,
+						GError		**error);
+gboolean	 ch_device_cmd_erase_flash	(GUsbDevice	*device,
+						guint16		 address,
+						gsize		 len,
+						GError		**error);
+
 #endif

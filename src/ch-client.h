@@ -25,6 +25,7 @@
 #include "ch-common.h"
 
 #include <glib-object.h>
+#include <gusb.h>
 
 G_BEGIN_DECLS
 
@@ -51,136 +52,10 @@ struct _ChClientClass
 GType		 ch_client_get_type		(void);
 ChClient	*ch_client_new			(void);
 
-gboolean	 ch_client_load			(ChClient	*client,
+GUsbDevice	*ch_client_get_default		(ChClient	*client,
 						 GError		**error);
-
-gboolean	 ch_client_get_color_select	(ChClient	*client,
-						 ChColorSelect	*color_select,
-						 GError		**error);
-gboolean	 ch_client_get_hardware_version	(ChClient	*client,
-						 guint8		*hw_version,
-						 GError		**error);
-gboolean	 ch_client_set_color_select	(ChClient	*client,
-						 ChColorSelect	 color_select,
-						 GError		**error);
-
-gboolean	 ch_client_get_multiplier	(ChClient	*client,
-						 ChFreqScale	*multiplier,
-						 GError		**error);
-gboolean	 ch_client_set_multiplier	(ChClient	*client,
-						 ChFreqScale	 multiplier,
-						 GError		**error);
-
-gboolean	 ch_client_get_integral_time	(ChClient	*client,
-						 guint16	*integral_time,
-						 GError		**error);
-gboolean	 ch_client_set_integral_time	(ChClient	*client,
-						 guint16	 integral_time,
-						 GError		**error);
-
-gboolean	 ch_client_get_calibration_map	(ChClient	*client,
-						 guint16	*calibration_map,
-						 GError		**error);
-gboolean	 ch_client_set_calibration_map	(ChClient	*client,
-						 guint16	*calibration_map,
-						 GError		**error);
-
-gboolean	 ch_client_get_firmware_ver	(ChClient	*client,
-						 guint16	*major,
-						 guint16	*minor,
-						 guint16	*micro,
-						 GError		**error);
-
-gboolean	 ch_client_get_calibration	(ChClient	*client,
-						 guint16	 calibration_index,
-						 gdouble	*calibration,
-						 guint8		*types,
-						 gchar		*description,
-						 GError		**error);
-gboolean	 ch_client_set_calibration	(ChClient	*client,
-						 guint16	 calibration_index,
-						 const gdouble	*calibration,
-						 guint8		 types,
-						 const gchar	*description,
-						 GError		**error);
-gboolean	 ch_client_clear_calibration	(ChClient	*client,
-						 guint16	 calibration_index,
-						 GError		**error);
-
-gboolean	 ch_client_get_pre_scale	(ChClient	*client,
-						 gdouble	*pre_scale,
-						 GError		**error);
-gboolean	 ch_client_set_pre_scale	(ChClient	*client,
-						 gdouble	 pre_scale,
-						 GError		**error);
-
-gboolean	 ch_client_get_post_scale	(ChClient	*client,
-						 gdouble	*post_scale,
-						 GError		**error);
-gboolean	 ch_client_set_post_scale	(ChClient	*client,
-						 gdouble	 post_scale,
-						 GError		**error);
-
-gboolean	 ch_client_get_serial_number	(ChClient	*client,
-						 guint32	*serial_number,
-						 GError		**error);
-gboolean	 ch_client_set_serial_number	(ChClient	*client,
-						 guint32	 serial_number,
-						 GError		**error);
-
-gboolean	 ch_client_get_leds		(ChClient	*client,
-						 ChStatusLed	*leds,
-						 GError		**error);
-gboolean	 ch_client_set_leds		(ChClient	*client,
-						 ChStatusLed	 leds,
-						 guint8		 repeat,
-						 guint8		 on_time,
-						 guint8		 off_time,
-						 GError		**error);
-
-gboolean	 ch_client_get_dark_offsets	(ChClient	*client,
-						 gdouble	*red,
-						 gdouble	*green,
-						 gdouble	*blue,
-						 GError		**error);
-gboolean	 ch_client_set_dark_offsets	(ChClient	*client,
-						 gdouble	 red,
-						 gdouble	 green,
-						 gdouble	 blue,
-						 GError		**error);
-
-gboolean	 ch_client_write_eeprom		(ChClient	*client,
-						 const gchar	*magic,
-						 GError		**error);
-
-gboolean	 ch_client_take_reading_raw	(ChClient	*client,
-						 guint16	*take_reading,
-						 GError		**error);
-
-gboolean	 ch_client_take_readings	(ChClient	*client,
-						 gdouble	*red,
-						 gdouble	*green,
-						 gdouble	*blue,
-						 GError		**error);
-gboolean	 ch_client_take_readings_xyz	(ChClient	*client,
-						 guint16	 calibration_index,
-						 gdouble	*red,
-						 gdouble	*green,
-						 gdouble	*blue,
-						 GError		**error);
-
-gboolean	 ch_client_reset		(ChClient	*client,
-						 GError		**error);
-
 gboolean	 ch_client_flash_firmware	(ChClient	*client,
 						 const gchar	*filename,
-						 GError		**error);
-
-gboolean	 ch_client_boot_flash		(ChClient	*client,
-						 GError		**error);
-
-gboolean	 ch_client_set_flash_success	(ChClient	*client,
-						 gboolean	 value,
 						 GError		**error);
 
 G_END_DECLS

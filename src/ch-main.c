@@ -36,6 +36,7 @@ typedef struct {
 	ChClient		*client;
 	GOptionContext		*context;
 	GPtrArray		*cmd_array;
+	GUsbDevice		*device;
 } ChUtilPrivate;
 
 typedef gboolean (*ChUtilPrivateCb)	(ChUtilPrivate	*util,
@@ -186,7 +187,7 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChColorSelect color_select;
 
 	/* get from HW */
-	ret = ch_client_get_color_select (priv->client, &color_select, error);
+	ret = ch_device_cmd_get_color_select (priv->device, &color_select, error);
 	if (!ret)
 		goto out;
 
@@ -223,9 +224,9 @@ ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **erro
 	guint8 hw_version = 0;
 
 	/* get from HW */
-	ret = ch_client_get_hardware_version (priv->client,
-					      &hw_version,
-					      error);
+	ret = ch_device_cmd_get_hardware_version (priv->device,
+						  &hw_version,
+						  error);
 	if (!ret)
 		goto out;
 
@@ -273,7 +274,7 @@ ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_color_select (priv->client, color_select, error);
+	ret = ch_device_cmd_set_color_select (priv->device, color_select, error);
 	if (!ret)
 		goto out;
 out:
@@ -290,7 +291,7 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChFreqScale multiplier;
 
 	/* get from HW */
-	ret = ch_client_get_multiplier (priv->client, &multiplier, error);
+	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
 	if (!ret)
 		goto out;
 
@@ -350,7 +351,7 @@ ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_multiplier (priv->client, multiplier, error);
+	ret = ch_device_cmd_set_multiplier (priv->device, multiplier, error);
 	if (!ret)
 		goto out;
 out:
@@ -367,7 +368,7 @@ ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 integral_time = 0;
 
 	/* get from HW */
-	ret = ch_client_get_integral_time (priv->client, &integral_time, error);
+	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
 	if (!ret)
 		goto out;
 	g_print ("%i\n", integral_time);
@@ -394,7 +395,7 @@ ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 	integral_time = atoi (values[0]);
 
 	/* set to HW */
-	ret = ch_client_set_integral_time (priv->client, integral_time, error);
+	ret = ch_device_cmd_set_integral_time (priv->device, integral_time, error);
 	if (!ret)
 		goto out;
 out:
@@ -414,9 +415,9 @@ ch_util_get_calibration_map (ChUtilPrivate *priv,
 	guint i;
 
 	/* get from HW */
-	ret = ch_client_get_calibration_map (priv->client,
-					     calibration_map,
-					     error);
+	ret = ch_device_cmd_get_calibration_map (priv->device,
+						 calibration_map,
+						 error);
 	if (!ret)
 		goto out;
 	for (i = 0; i < 6; i++)
@@ -448,9 +449,9 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 		calibration_map[i] = atoi (values[i]);
 
 	/* set to HW */
-	ret = ch_client_set_calibration_map (priv->client,
-					     calibration_map,
-					     error);
+	ret = ch_device_cmd_set_calibration_map (priv->device,
+						 calibration_map,
+						 error);
 	if (!ret)
 		goto out;
 out:
@@ -467,11 +468,11 @@ ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 major, minor, micro;
 
 	/* get from HW */
-	ret = ch_client_get_firmware_ver (priv->client,
-					  &major,
-					  &minor,
-					  &micro,
-					  error);
+	ret = ch_device_cmd_get_firmware_ver (priv->device,
+					      &major,
+					      &minor,
+					      &micro,
+					      error);
 	if (!ret)
 		goto out;
 	g_print ("%i.%i.%i\n", major, minor, micro);
@@ -517,12 +518,12 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = atoi (values[0]);
 
 	/* get from HW */
-	ret = ch_client_get_calibration (priv->client,
-					 calibration_index,
-					 calibration,
-					 &types,
-					 description,
-					 error);
+	ret = ch_device_cmd_get_calibration (priv->device,
+					     calibration_index,
+					     calibration,
+					     &types,
+					     description,
+					     error);
 	if (!ret)
 		goto out;
 	g_print ("index: %i\n", calibration_index);
@@ -592,12 +593,12 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_calibration (priv->client,
-					 calibration_index,
-					 calibration,
-					 types,
-					 values[11],
-					 error);
+	ret = ch_device_cmd_set_calibration (priv->device,
+					     calibration_index,
+					     calibration,
+					     types,
+					     values[11],
+					     error);
 	if (!ret)
 		goto out;
 	ch_util_show_calibration (calibration);
@@ -624,9 +625,9 @@ ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = atoi (values[0]);
 
 	/* set to HW */
-	ret = ch_client_clear_calibration (priv->client,
-					   calibration_index,
-					   error);
+	ret = ch_device_cmd_clear_calibration (priv->device,
+					       calibration_index,
+					       error);
 	if (!ret)
 		goto out;
 out:
@@ -646,12 +647,12 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	string = g_string_new ("");
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
-		ret = ch_client_get_calibration (priv->client,
-						 i,
-						 NULL,
-						 NULL,
-						 description,
-						 NULL);
+		ret = ch_device_cmd_get_calibration (priv->device,
+						     i,
+						     NULL,
+						     NULL,
+						     description,
+						     NULL);
 		if (ret) {
 			g_string_append_printf (string, "%i\t%s\n",
 						i, description);
@@ -742,12 +743,12 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	calibration[8] = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
 
 	/* set to HW */
-	ret = ch_client_set_calibration (priv->client,
-					 calibration_index,
-					 calibration,
-					 CH_CALIBRATION_TYPE_ALL,
-					 description,
-					 error);
+	ret = ch_device_cmd_set_calibration (priv->device,
+					     calibration_index,
+					     calibration,
+					     CH_CALIBRATION_TYPE_ALL,
+					     description,
+					     error);
 	if (!ret)
 		goto out;
 	ch_util_show_calibration (calibration);
@@ -768,7 +769,7 @@ ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint32 serial_number;
 
 	/* get from HW */
-	ret = ch_client_get_serial_number (priv->client, &serial_number, error);
+	ret = ch_device_cmd_get_serial_number (priv->device, &serial_number, error);
 	if (!ret)
 		goto out;
 	g_print ("%06i\n", serial_number);
@@ -883,7 +884,7 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* set to HW */
 	g_print ("setting serial number to %i\n", serial_number);
-	ret = ch_client_set_serial_number (priv->client, serial_number, error);
+	ret = ch_device_cmd_set_serial_number (priv->device, serial_number, error);
 	if (!ret)
 		goto out;
 out:
@@ -900,7 +901,7 @@ ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChStatusLed leds = 0xff;
 
 	/* get from HW */
-	ret = ch_client_get_leds (priv->client, &leds, error);
+	ret = ch_device_cmd_get_leds (priv->device, &leds, error);
 	if (!ret)
 		goto out;
 	if (leds > 3) {
@@ -964,12 +965,12 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_leds (priv->client,
-				  leds,
-				  repeat,
-				  time_on,
-				  time_off,
-				  error);
+	ret = ch_device_cmd_set_leds (priv->device,
+				      leds,
+				      repeat,
+				      time_on,
+				      time_off,
+				      error);
 	if (!ret)
 		goto out;
 out:
@@ -986,11 +987,11 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble red, green, blue;
 
 	/* get from HW */
-	ret = ch_client_get_dark_offsets (priv->client,
-					  &red,
-					  &green,
-					  &blue,
-					  error);
+	ret = ch_device_cmd_get_dark_offsets (priv->device,
+					      &red,
+					      &green,
+					      &blue,
+					      error);
 	if (!ret)
 		goto out;
 	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
@@ -1019,11 +1020,11 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 	blue = atof (values[2]);
 
 	/* set to HW */
-	ret = ch_client_set_dark_offsets (priv->client,
-					  red,
-					  green,
-					  blue,
-					  error);
+	ret = ch_device_cmd_set_dark_offsets (priv->device,
+					      red,
+					      green,
+					      blue,
+					      error);
 	if (!ret)
 		goto out;
 out:
@@ -1047,7 +1048,7 @@ ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_write_eeprom (priv->client, values[0], error);
+	ret = ch_device_cmd_write_eeprom (priv->device, values[0], error);
 	if (!ret)
 		goto out;
 out:
@@ -1064,7 +1065,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 take_reading;
 
 	/* get from HW */
-	ret = ch_client_take_reading_raw (priv->client, &take_reading, error);
+	ret = ch_device_cmd_take_reading_raw (priv->device, &take_reading, error);
 	if (!ret)
 		goto out;
 	g_print ("%i\n", take_reading);
@@ -1082,11 +1083,11 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble red, green, blue;
 
 	/* get from HW */
-	ret = ch_client_take_readings (priv->client,
-				       &red,
-				       &green,
-				       &blue,
-				       error);
+	ret = ch_device_cmd_take_readings (priv->device,
+					   &red,
+					   &green,
+					   &blue,
+					   error);
 	if (!ret)
 		goto out;
 	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
@@ -1114,12 +1115,12 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = atoi (values[0]);
 
 	/* get from HW */
-	ret = ch_client_take_readings_xyz (priv->client,
-					   calibration_index,
-					   &red,
-					   &green,
-					   &blue,
-					   error);
+	ret = ch_device_cmd_take_readings_xyz (priv->device,
+					       calibration_index,
+					       &red,
+					       &green,
+					       &blue,
+					       error);
 	if (!ret)
 		goto out;
 	g_print ("R:%.4f G:%.4f B:%.4f\n", red, green, blue);
@@ -1136,8 +1137,8 @@ ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 
 	/* this may return with an error */
-	ret = ch_client_reset (priv->client,
-			       error);
+	ret = ch_device_cmd_reset (priv->device,
+				   error);
 	if (!ret)
 		goto out;
 out:
@@ -1180,9 +1181,9 @@ ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble pre_scale;
 
 	/* get from HW */
-	ret = ch_client_get_pre_scale (priv->client,
-				       &pre_scale,
-				       error);
+	ret = ch_device_cmd_get_pre_scale (priv->device,
+					   &pre_scale,
+					   error);
 	if (!ret)
 		goto out;
 	g_print ("Pre Scale: %f\n", pre_scale);
@@ -1216,9 +1217,9 @@ ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_pre_scale (priv->client,
-				       pre_scale,
-				       error);
+	ret = ch_device_cmd_set_pre_scale (priv->device,
+					   pre_scale,
+					   error);
 	if (!ret)
 		goto out;
 out:
@@ -1235,9 +1236,9 @@ ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble post_scale;
 
 	/* get from HW */
-	ret = ch_client_get_post_scale (priv->client,
-					&post_scale,
-					error);
+	ret = ch_device_cmd_get_post_scale (priv->device,
+					    &post_scale,
+					    error);
 	if (!ret)
 		goto out;
 	g_print ("Post Scale: %f\n", post_scale);
@@ -1271,9 +1272,9 @@ ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_post_scale (priv->client,
-					post_scale,
-					error);
+	ret = ch_device_cmd_set_post_scale (priv->device,
+					    post_scale,
+					    error);
 	if (!ret)
 		goto out;
 out:
@@ -1289,8 +1290,8 @@ ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 
 	/* set to HW */
-	ret = ch_client_boot_flash (priv->client,
-				    error);
+	ret = ch_device_cmd_boot_flash (priv->device,
+					error);
 	if (!ret)
 		goto out;
 out:
@@ -1323,9 +1324,9 @@ ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_set_flash_success (priv->client,
-					   flash_success,
-					   error);
+	ret = ch_device_cmd_set_flash_success (priv->device,
+					       flash_success,
+					       error);
 	if (!ret)
 		goto out;
 out:
@@ -1575,8 +1576,8 @@ main (int argc, char *argv[])
 
 	/* get connection to colord */
 	priv->client = ch_client_new ();
-	ret = ch_client_load (priv->client, &error);
-	if (!ret) {
+	priv->device = ch_client_get_default (priv->client, &error);
+	if (priv->device == NULL) {
 		/* TRANSLATORS: no colord available */
 		g_print ("%s %s\n", _("No connection to device:"),
 			 error->message);
@@ -1599,6 +1600,8 @@ out:
 		g_object_unref (priv->client);
 		if (priv->cmd_array != NULL)
 			g_ptr_array_unref (priv->cmd_array);
+		if (priv->device != NULL)
+			g_object_unref (priv->device);
 		g_option_context_free (priv->context);
 		g_free (priv);
 	}
