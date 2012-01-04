@@ -46,6 +46,13 @@
     </para>
   </refsect1>
   <refsect1>
+    <title>ENVIRONMENT</title>
+    <para>
+      Setting <command>COLORHUG_EMULATE</command> will allow you to run
+      this tool without any real hardware attached.
+    </para>
+  </refsect1>
+  <refsect1>
     <title>AUTHOR</title>
     <para>This manual page was written by Michal Cihar <email>nijel@debian.org</email>.
     </para>

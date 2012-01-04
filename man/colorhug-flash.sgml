@@ -46,6 +46,14 @@
     </para>
   </refsect1>
   <refsect1>
+    <title>ENVIRONMENT</title>
+    <para>
+      Setting <command>COLORHUG_EMULATE</command> will allow you to run
+      this tool without any real hardware attached, although the program
+      will fail when the flash write is verified.
+    </para>
+  </refsect1>
+  <refsect1>
     <title>AUTHOR</title>
     <para>This manual page was written by Richard Hughes <email>richard@hughsie.com</email>.
     </para>
