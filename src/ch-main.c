@@ -771,7 +771,7 @@ ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 	ret = ch_client_get_serial_number (priv->client, &serial_number, error);
 	if (!ret)
 		goto out;
-	g_print ("%i\n", serial_number);
+	g_print ("%06i\n", serial_number);
 out:
 	return ret;
 }
