@@ -777,10 +777,10 @@ out:
 }
 
 /**
- * ch_util_set_serial_number_auto:
+ * ch_util_get_next_serial_number:
  **/
 static guint32
-ch_util_set_serial_number_auto (GError **error)
+ch_util_get_next_serial_number (GError **error)
 {
 	const gchar *statement;
 	gboolean ret;
@@ -865,7 +865,7 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 		goto out;
 	}
 	if (g_strcmp0 (values[0], "auto") == 0) {
-		serial_number = ch_util_set_serial_number_auto (error);
+		serial_number = ch_util_get_next_serial_number (error);
 		if (serial_number == 0) {
 			ret = FALSE;
 			goto out;
