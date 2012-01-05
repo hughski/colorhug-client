@@ -681,14 +681,8 @@ out:
 static gboolean
 ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	cmsHANDLE ccmx = NULL;
-	const gchar *description;
-	const gchar *sheet_type;
 	gboolean ret;
-	gchar *ccmx_data = NULL;
-	gdouble calibration[9];
-	gsize ccmx_size;
-	guint16 calibration_index = 0;
+	guint16 calibration_index;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
@@ -700,62 +694,15 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 
 	/* load file */
 	calibration_index = atoi (values[0]);
-	ret = g_file_get_contents (values[1],
-				   &ccmx_data,
-				   &ccmx_size,
-				   error);
-	if (!ret)
-		goto out;
-	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
-	if (ccmx == NULL) {
-		ret = FALSE;
-		g_set_error (error, 1, 0, "Cannot open %s", values[1]);
-		goto out;
-	}
-
-	/* select correct sheet */
-	sheet_type = cmsIT8GetSheetType (ccmx);
-	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
-		ret = FALSE;
-		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
-			     values[1], sheet_type);
-		goto out;
-	}
-
-	/* get the description from the ccmx file */
-	description = CMSEXPORT cmsIT8GetProperty(ccmx, "DISPLAY");
-	if (description == NULL) {
-		ret = FALSE;
-		g_set_error_literal (error, 1, 0,
-				     "CCMX file does not have DISPLAY");
-		goto out;
-	}
-
-	/* get the values */
-	calibration[0] = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
-	calibration[1] = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
-	calibration[2] = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
-	calibration[3] = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
-	calibration[4] = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
-	calibration[5] = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
-	calibration[6] = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
-	calibration[7] = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
-	calibration[8] = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
 
 	/* set to HW */
-	ret = ch_device_cmd_set_calibration (priv->device,
-					     calibration_index,
-					     calibration,
-					     CH_CALIBRATION_TYPE_ALL,
-					     description,
-					     error);
+	ret = ch_device_cmd_set_calibration_ccmx (priv->device,
+						  calibration_index,
+						  values[1],
+						  error);
 	if (!ret)
 		goto out;
-	ch_util_show_calibration (calibration);
 out:
-	g_free (ccmx_data);
-	if (ccmx != NULL)
-		cmsIT8Free (ccmx);
 	return ret;
 }
 

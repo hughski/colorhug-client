@@ -631,6 +631,10 @@ gboolean	 ch_device_cmd_set_calibration	(GUsbDevice	*device,
 						 guint8		 types,
 						 const gchar	*description,
 						 GError		**error);
+gboolean	 ch_device_cmd_set_calibration_ccmx (GUsbDevice	*device,
+						 guint16	 calibration_index,
+						 const gchar	*filename,
+						 GError		**error);
 gboolean	 ch_device_cmd_clear_calibration (GUsbDevice	*device,
 						 guint16	 calibration_index,
 						 GError		**error);

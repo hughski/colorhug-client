@@ -55,6 +55,7 @@ colorhug_gui_LDADD =					\
 	$(GLIB_LIBS)					\
 	$(GTK_LIBS)					\
 	$(GUSB_LIBS)					\
+	$(LCMS_LIBS)					\
 	-lm
 
 colorhug_gui_CFLAGS =					\
@@ -72,6 +73,7 @@ colorhug_flash_LDADD =					\
 	$(GTK_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(SOUP_LIBS)					\
+	$(LCMS_LIBS)					\
 	-lm
 
 colorhug_flash_CFLAGS =					\
@@ -113,6 +115,7 @@ ch_self_test_LDADD =					\
 	libchshared.a					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\
+	$(LCMS_LIBS)					\
 	-lm
 
 ch_self_test_CFLAGS = $(WARNINGFLAGS_C)

@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <gusb.h>
 #include <string.h>
+#include <lcms2.h>
 
 #include "ch-common.h"
 #include "ch-math.h"
@@ -956,6 +957,86 @@ ch_device_cmd_set_calibration (GUsbDevice *device,
 	if (!ret)
 		goto out;
 out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_calibration_ccmx:
+ **/
+gboolean
+ch_device_cmd_set_calibration_ccmx (GUsbDevice *device,
+				    guint16 calibration_index,
+				    const gchar *filename,
+				    GError **error)
+{
+	cmsHANDLE ccmx = NULL;
+	const gchar *description;
+	const gchar *sheet_type;
+	gboolean ret;
+	gchar *ccmx_data = NULL;
+	gdouble calibration[9];
+	gsize ccmx_size;
+
+	g_return_val_if_fail (calibration != NULL, FALSE);
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* load file */
+	ret = g_file_get_contents (filename,
+				   &ccmx_data,
+				   &ccmx_size,
+				   error);
+	if (!ret)
+		goto out;
+	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
+	if (ccmx == NULL) {
+		ret = FALSE;
+		g_set_error (error, 1, 0, "Cannot open %s", filename);
+		goto out;
+	}
+
+	/* select correct sheet */
+	sheet_type = cmsIT8GetSheetType (ccmx);
+	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
+		ret = FALSE;
+		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
+			     filename, sheet_type);
+		goto out;
+	}
+
+	/* get the description from the ccmx file */
+	description = CMSEXPORT cmsIT8GetProperty(ccmx, "DISPLAY");
+	if (description == NULL) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "CCMX file does not have DISPLAY");
+		goto out;
+	}
+
+	/* get the values */
+	calibration[0] = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
+	calibration[1] = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
+	calibration[2] = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
+	calibration[3] = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
+	calibration[4] = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
+	calibration[5] = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
+	calibration[6] = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
+	calibration[7] = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
+	calibration[8] = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
+
+	/* set to HW */
+	ret = ch_device_cmd_set_calibration (device,
+					     calibration_index,
+					     calibration,
+					     CH_CALIBRATION_TYPE_ALL,
+					     description,
+					     error);
+	if (!ret)
+		goto out;
+out:
+	g_free (ccmx_data);
+	if (ccmx != NULL)
+		cmsIT8Free (ccmx);
 	return ret;
 }
 
