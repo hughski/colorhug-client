@@ -685,7 +685,7 @@ gboolean	 ch_device_cmd_reset		(GUsbDevice	*device,
 gboolean	 ch_device_cmd_boot_flash	(GUsbDevice	*device,
 						 GError		**error);
 gboolean	 ch_device_cmd_set_flash_success (GUsbDevice	*device,
-						 gboolean	 value,
+						 guint8		 value,
 						 GError		**error);
 gboolean	 ch_device_cmd_write_flash	(GUsbDevice	*device,
 						guint16		 address,

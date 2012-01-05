@@ -1619,7 +1619,7 @@ out:
  **/
 gboolean
 ch_device_cmd_set_flash_success (GUsbDevice *device,
-				 gboolean value,
+				 guint8 value,
 				 GError **error)
 {
 	gboolean ret;
