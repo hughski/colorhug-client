@@ -28,6 +28,39 @@
 #include "ch-common.h"
 
 /**
+ * ch_packed_float_get_value:
+ *
+ * @pf: A %ChPackedFloat
+ *
+ * Returns packed value to host byte order.
+ */
+gint32
+ch_packed_float_get_value (const ChPackedFloat *pf)
+{
+	return (pf->bytes[3] << 24) |
+	       (pf->bytes[2] << 16) |
+	       (pf->bytes[1] << 8) |
+	       (pf->bytes[0]);
+}
+
+/**
+ * ch_packed_float_set_value:
+ *
+ * @pf: A %ChPackedFloat
+ * @value: a value in packed format in host byte order.
+ *
+ * Stores value in host byte order into packed format for device.
+ */
+void
+ch_packed_float_set_value (ChPackedFloat *pf, const gint32 value)
+{
+	pf->bytes[0] = (value & 0xff);
+	pf->bytes[1] = ((value >> 8) & 0xff);
+	pf->bytes[2] = ((value >> 16) & 0xff);
+	pf->bytes[3] = ((value >> 24) & 0xff);
+}
+
+/**
  * ch_packed_float_to_double:
  *
  * @pf: A %ChPackedFloat
@@ -40,7 +73,7 @@ ch_packed_float_to_double (const ChPackedFloat *pf, gdouble *value)
 {
 	g_return_if_fail (value != NULL);
 	g_return_if_fail (pf != NULL);
-	*value = pf->raw / (gdouble) 0x10000;
+	*value = ch_packed_float_get_value (pf) / (gdouble) 0x10000;
 }
 
 /**
@@ -57,7 +90,7 @@ ch_double_to_packed_float (gdouble value, ChPackedFloat *pf)
 	g_return_if_fail (pf != NULL);
 	g_return_if_fail (value <= 0x8000);
 	g_return_if_fail (value >= -0x8000);
-	pf->raw = value * (gdouble) 0x10000;
+	ch_packed_float_set_value (pf, value * (gdouble) 0x10000);
 }
 
 /**
@@ -84,13 +117,15 @@ ch_packed_float_add (const ChPackedFloat *pf1,
 	g_return_val_if_fail (result != NULL, CH_ERROR_INVALID_VALUE);
 
 	/* check overflow */
-	pf1_tmp = pf1->raw / 0x10000;
-	pf2_tmp = pf2->raw / 0x10000;
+	pf1_tmp = ch_packed_float_get_value (pf1) / 0x10000;
+	pf2_tmp = ch_packed_float_get_value (pf2) / 0x10000;
 	if (pf1_tmp + pf2_tmp > 0x8000)
 		return CH_ERROR_OVERFLOW_ADDITION;
 
 	/* do the proper result */
-	result->raw = pf1->raw + pf2->raw;
+	ch_packed_float_set_value (result,
+				   ch_packed_float_get_value (pf1) +
+				   ch_packed_float_get_value (pf2));
 	return CH_ERROR_NONE;
 }
 
@@ -112,14 +147,15 @@ ch_packed_float_multiply (const ChPackedFloat *pf1,
 {
 	ChPackedFloat pf1_tmp;
 	ChPackedFloat pf2_tmp;
+	gint32 tmp;
 
 	g_return_val_if_fail (pf1 != NULL, CH_ERROR_INVALID_VALUE);
 	g_return_val_if_fail (pf2 != NULL, CH_ERROR_INVALID_VALUE);
 	g_return_val_if_fail (result != NULL, CH_ERROR_INVALID_VALUE);
 
 	/* make positive */
-	pf1_tmp.raw = ABS(pf1->raw);
-	pf2_tmp.raw = ABS(pf2->raw);
+	pf1_tmp.raw = ABS(ch_packed_float_get_value (pf1));
+	pf2_tmp.raw = ABS(ch_packed_float_get_value (pf2));
 
 	/* check for overflow */
 	if (pf1_tmp.offset > 0 &&
@@ -127,17 +163,18 @@ ch_packed_float_multiply (const ChPackedFloat *pf1,
 		return CH_ERROR_OVERFLOW_MULTIPLY;
 
 	/* do long multiplication on each 16 bit part */
-	result->raw = ((guint32) pf1_tmp.fraction *
-		       (guint32) pf2_tmp.fraction) / 0x10000;
-	result->raw += ((guint32) pf1_tmp.offset *
-			(guint32) pf2_tmp.offset) * 0x10000;
-	result->raw += (guint32) pf1_tmp.fraction *
-		       (guint32) pf2_tmp.offset;
-	result->raw += (guint32) pf1_tmp.offset *
-		       (guint32) pf2_tmp.fraction;
+	tmp = ((guint32) pf1_tmp.fraction *
+	       (guint32) pf2_tmp.fraction) / 0x10000;
+	tmp += ((guint32) pf1_tmp.offset *
+		(guint32) pf2_tmp.offset) * 0x10000;
+	tmp += (guint32) pf1_tmp.fraction *
+	       (guint32) pf2_tmp.offset;
+	tmp += (guint32) pf1_tmp.offset *
+	       (guint32) pf2_tmp.fraction;
 
 	/* correct sign bit */
 	if ((pf1->raw < 0) ^ (pf2->raw < 0))
-		result->raw = -result->raw;
+		tmp = -tmp;
+	ch_packed_float_set_value (result, tmp);
 	return CH_ERROR_NONE;
 }

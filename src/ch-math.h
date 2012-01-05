@@ -32,6 +32,9 @@ G_BEGIN_DECLS
  * with a precision of at least 0.000015 */
 typedef union {
 	struct {
+		guint8	bytes[4];
+	};
+	struct {
 		guint16	fraction;
 		gint16	offset;
 	};
@@ -39,6 +42,10 @@ typedef union {
 		gint32	raw;
 	};
 } ChPackedFloat;
+
+gint32		 ch_packed_float_get_value	(const ChPackedFloat	*pf);
+void		 ch_packed_float_set_value	(ChPackedFloat		*pf,
+						 const gint32		 value);
 
 void		 ch_packed_float_to_double	(const ChPackedFloat	*pf,
 						 gdouble		*value);
