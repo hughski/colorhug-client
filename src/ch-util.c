@@ -77,7 +77,7 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	GError *error = NULL;
 	gdouble calibration[9];
 	gdouble pre_scale = 5.0f;
-	gdouble post_scale = 1.0f;
+	gdouble post_scale = 3000.0f;
 	guint16 calibration_map[6];
 
 	calibration[0] = 1.0f;
