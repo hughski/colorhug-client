@@ -1,3 +1,18 @@
+Version 0.1.4
+~~~~~~~~~~~~~
+Released: 2011-01-10
+
+New Features:
+ - A massive number of new translations from Transifex, thanks!
+ - Add a missing manpage for colorhug-ccmx (Michal Čihař)
+
+Bugfixes:
+ - Add transifex integration (Richard Hughes)
+ - Add some button tooltips (Richard Hughes)
+ - Move the command helpers out of ChClient (Richard Hughes)
+ - Ensure we never delete the factory calibration matrix in colorhug-ccmx (Richard Hughes)
+ - Allow the user to repair a device without a factory calibration matrix (Richard Hughes)
+
 Version 0.1.3
 ~~~~~~~~~~~~~
 Released: 2011-12-26
