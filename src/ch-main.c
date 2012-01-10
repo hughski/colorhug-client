@@ -442,7 +442,7 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 	if (g_strv_length (values) != 6) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'value'");
+				     "invalid input, expect '#lcd' '#crt' '#projector' '0' '0' '0'");
 		goto out;
 	}
 	for (i = 0; i < 6; i++)
