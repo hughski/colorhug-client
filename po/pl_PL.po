@@ -1,0 +1,804 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: colorhug-client\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-12-28 11:51+0000\n"
+"PO-Revision-Date: 2011-12-28 11:27+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+
+#: ../data/ch-ccmx.ui.h:1
+msgid "CRT"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:2
+msgid "ColorHug CCMX Loader"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:3
+msgid "Import file"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:4
+msgid "LCD"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:5 ../src/ch-flash.c:1554
+msgid "Please connect your ColorHug"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:6
+msgid "Projector"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:7
+msgid ""
+"Selecting a correction matrix maximises the accuracy of the ColorHug.\n"
+"Using the default matrix will give most users an acceptable calibration result."
+msgstr ""
+
+#: ../data/ch-flash.ui.h:1
+msgid "<a href=\"#\">See details about the update</a>"
+msgstr ""
+
+#: ../data/ch-flash.ui.h:2
+msgid "ColorHug Firmware Updater"
+msgstr ""
+
+#: ../data/ch-flash.ui.h:3
+msgid ""
+"Do not unplug the device and\n"
+"do not turn off the computer."
+msgstr ""
+
+#: ../data/ch-flash.ui.h:5
+msgid "Firmware version unknown"
+msgstr ""
+
+#: ../data/ch-flash.ui.h:6
+msgid "Update!"
+msgstr ""
+
+#: ../data/ch-util.ui.h:1
+msgid "Blue"
+msgstr ""
+
+#: ../data/ch-util.ui.h:2
+msgid "Calibrate"
+msgstr ""
+
+#: ../data/ch-util.ui.h:3
+msgid "Calibration:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:4
+msgid "Color select:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:5
+msgid "ColorHug Utility"
+msgstr ""
+
+#: ../data/ch-util.ui.h:6
+msgid "Dark offset:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:7
+msgid "Device State"
+msgstr ""
+
+#: ../data/ch-util.ui.h:8
+msgid "Firmware version:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:9
+msgid "Flash Firmware"
+msgstr ""
+
+#: ../data/ch-util.ui.h:10
+msgid "Green"
+msgstr ""
+
+#: ../data/ch-util.ui.h:11
+msgid "Integral time"
+msgstr ""
+
+#: ../data/ch-util.ui.h:12
+msgid "LEDs:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:13
+msgid "Last sample:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:14
+msgid "Measure Dark"
+msgstr ""
+
+#: ../data/ch-util.ui.h:15
+msgid "Measure Sample"
+msgstr ""
+
+#: ../data/ch-util.ui.h:16
+msgid "Multiplier:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:17
+msgid "Post scale:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:18
+msgid "Pre scale:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:19
+msgid "Raw"
+msgstr ""
+
+#: ../data/ch-util.ui.h:20
+msgid "Red"
+msgstr ""
+
+#: ../data/ch-util.ui.h:21
+msgid "Reset Processor"
+msgstr ""
+
+#: ../data/ch-util.ui.h:22
+msgid "Sample duration:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:23
+msgid "Sample mode:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:24
+msgid "Serial number:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:25
+msgid "With calibration matrix"
+msgstr ""
+
+#: ../data/ch-util.ui.h:26
+msgid "Write EEPROM"
+msgstr ""
+
+#: ../data/colorhug-ccmx.desktop.in.h:1
+msgid "CCMX Loader"
+msgstr ""
+
+#: ../data/colorhug-ccmx.desktop.in.h:2
+msgid "Modify the calibration matrices on the ColorHug device"
+msgstr ""
+
+#: ../data/colorhug-flash.desktop.in.h:1
+msgid "Firmware Updater"
+msgstr ""
+
+#: ../data/colorhug-flash.desktop.in.h:2
+msgid "Update the firmware on the ColorHug colorimeter"
+msgstr ""
+
+#: ../src/ch-ccmx.c:128
+msgid "Failed to create directory"
+msgstr ""
+
+#: ../src/ch-ccmx.c:385
+msgid "Failed to get the calibration map"
+msgstr ""
+
+#. TRANSLATORS: dialog for chosing the correction matrix
+#: ../src/ch-ccmx.c:550
+msgid "Select correction matrix"
+msgstr ""
+
+#. TRANSLATORS: filter name on the file->open dialog
+#: ../src/ch-ccmx.c:561
+msgid "Correction matrices"
+msgstr ""
+
+#: ../src/ch-ccmx.c:593
+msgid "Failed to set the calibration map"
+msgstr ""
+
+#: ../src/ch-ccmx.c:625
+msgid "Failed to set the CCMX calibration"
+msgstr ""
+
+#: ../src/ch-ccmx.c:777 ../src/ch-ccmx.c:941
+msgid "No space left on device"
+msgstr ""
+
+#: ../src/ch-ccmx.c:778
+msgid "All 64 slots are used up."
+msgstr ""
+
+#: ../src/ch-ccmx.c:786 ../src/ch-ccmx.c:951
+msgid "Failed to load file"
+msgstr ""
+
+#: ../src/ch-ccmx.c:828 ../src/ch-flash.c:1452
+msgid "Failed to open device"
+msgstr ""
+
+#: ../src/ch-ccmx.c:838 ../src/ch-flash.c:1462
+msgid "Failed to set configuration"
+msgstr ""
+
+#: ../src/ch-ccmx.c:849 ../src/ch-flash.c:1473
+msgid "Failed to claim interface"
+msgstr ""
+
+#: ../src/ch-ccmx.c:866
+msgid "Getting calibration from device..."
+msgstr ""
+
+#: ../src/ch-ccmx.c:942
+msgid "All 64 slots are used up!"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1012
+msgid "Failed to get file"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1020
+msgid "File has zero size"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1038
+msgid "Failed to write file"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1070 ../src/ch-ccmx.c:1188 ../src/ch-flash.c:898
+#: ../src/ch-flash.c:1188 ../src/ch-flash.c:1288
+msgid "Failed to setup message"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1103 ../src/ch-flash.c:1006
+msgid "Failed to get manifest"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1111
+#, c-format
+msgid "Index has zero size: %s"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1174
+msgid "Getting latest data from the web..."
+msgstr ""
+
+#: ../src/ch-ccmx.c:1327 ../src/ch-flash.c:1631
+msgid "Failed to setup networking"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1404 ../src/ch-flash.c:1710 ../src/ch-main.c:1369
+msgid "Show extra debugging information"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1416
+msgid "ColorHug CCMX loader"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1421 ../src/ch-flash.c:1727 ../src/ch-util.c:1086
+#, c-format
+msgid "Failed to parse command line options: %s"
+msgstr ""
+
+#: ../src/ch-flash.c:94
+msgid "Flashing the device failed"
+msgstr ""
+
+#: ../src/ch-flash.c:95
+msgid "The ColorHug is not damaged."
+msgstr ""
+
+#: ../src/ch-flash.c:96
+msgid ""
+"If there were any problems flashing the device, it will enter a bootloader "
+"mode."
+msgstr ""
+
+#: ../src/ch-flash.c:97
+msgid ""
+"Just remove the ColorHug device from the computer, reinsert it and re-run "
+"this program."
+msgstr ""
+
+#: ../src/ch-flash.c:149
+msgid "Connect to the internet to check for updates"
+msgstr ""
+
+#: ../src/ch-flash.c:206
+msgid "Failed to write the flash"
+msgstr ""
+
+#: ../src/ch-flash.c:269 ../src/ch-flash.c:297
+msgid "Failed to verify the flash"
+msgstr ""
+
+#: ../src/ch-flash.c:279
+#, c-format
+msgid "Checksum failed at 0x%04x"
+msgstr ""
+
+#: ../src/ch-flash.c:283
+msgid "Failed to verify the checksum"
+msgstr ""
+
+#: ../src/ch-flash.c:292
+#, c-format
+msgid "Verification failed at 0x%04x (len %i)"
+msgstr ""
+
+#: ../src/ch-flash.c:357
+msgid "Failed to set the flash success true"
+msgstr ""
+
+#: ../src/ch-flash.c:365
+msgid "Device successfully updated"
+msgstr ""
+
+#: ../src/ch-flash.c:385
+msgid "Setting flash success..."
+msgstr ""
+
+#: ../src/ch-flash.c:411
+msgid "Failed to startup the ColorHug"
+msgstr ""
+
+#: ../src/ch-flash.c:440
+msgid "Failed to boot the ColorHug"
+msgstr ""
+
+#: ../src/ch-flash.c:491
+msgid "Starting the new firmware..."
+msgstr ""
+
+#: ../src/ch-flash.c:560
+msgid "Verifying new firmware..."
+msgstr ""
+
+#: ../src/ch-flash.c:591
+msgid "Failed to erase the flash"
+msgstr ""
+
+#: ../src/ch-flash.c:599
+msgid "Writing new firmware..."
+msgstr ""
+
+#: ../src/ch-flash.c:630
+msgid "Failed to set the flash success false"
+msgstr ""
+
+#: ../src/ch-flash.c:667
+msgid "Clearing flash success..."
+msgstr ""
+
+#: ../src/ch-flash.c:693
+msgid "Failed to reboot the ColorHug"
+msgstr ""
+
+#: ../src/ch-flash.c:722
+msgid "Failed to reset the ColorHug"
+msgstr ""
+
+#: ../src/ch-flash.c:744
+msgid "Resetting into bootloader..."
+msgstr ""
+
+#: ../src/ch-flash.c:775
+msgid "Failed to get firmware"
+msgstr ""
+
+#: ../src/ch-flash.c:784
+msgid "Firmware has zero size"
+msgstr ""
+
+#: ../src/ch-flash.c:881
+msgid "Downloading update..."
+msgstr ""
+
+#: ../src/ch-flash.c:969
+msgid "There are no updates available."
+msgstr ""
+
+#: ../src/ch-flash.c:986
+msgid "A firmware update is available."
+msgstr ""
+
+#: ../src/ch-flash.c:1015
+msgid "Manifest has zero size"
+msgstr ""
+
+#: ../src/ch-flash.c:1081
+msgid "Failed to set the device as lost or stolen"
+msgstr ""
+
+#: ../src/ch-flash.c:1096
+msgid "This ColorHug has been registered as lost or stolen."
+msgstr ""
+
+#: ../src/ch-flash.c:1102
+msgid "The device has now been deactivated."
+msgstr ""
+
+#: ../src/ch-flash.c:1104
+msgid "Please contact <tt>info@hughski.com</tt> for more details."
+msgstr ""
+
+#: ../src/ch-flash.c:1156
+msgid "Failed to get blacklist"
+msgstr ""
+
+#. TRANSLATORS: pre-production hardware
+#: ../src/ch-flash.c:1230
+msgid "Prototype ColorHug Detected"
+msgstr ""
+
+#. TRANSLATORS: first release hardware
+#: ../src/ch-flash.c:1234
+msgid "ColorHug Detected"
+msgstr ""
+
+#. TRANSLATORS: fake hardware
+#: ../src/ch-flash.c:1238
+msgid "Emulated ColorHug Detected"
+msgstr ""
+
+#. TRANSLATORS: new-issue hardware
+#: ../src/ch-flash.c:1242
+#, c-format
+msgid "ColorHug v%i Detected"
+msgstr ""
+
+#: ../src/ch-flash.c:1253
+msgid "Bootloader version"
+msgstr ""
+
+#: ../src/ch-flash.c:1259
+msgid "Firmware version"
+msgstr ""
+
+#: ../src/ch-flash.c:1274
+msgid "Checking for updates..."
+msgstr ""
+
+#: ../src/ch-flash.c:1323 ../src/ch-flash.c:1352 ../src/ch-flash.c:1395
+msgid "Failed to contact ColorHug"
+msgstr ""
+
+#: ../src/ch-flash.c:1487
+msgid "Getting firmware version..."
+msgstr ""
+
+#: ../src/ch-flash.c:1522
+msgid "Update details"
+msgstr ""
+
+#: ../src/ch-flash.c:1722
+msgid "ColorHug Flash Program"
+msgstr ""
+
+#. TRANSLATORS: this is a command alias
+#: ../src/ch-main.c:90
+#, c-format
+msgid "Alias to %s"
+msgstr ""
+
+#: ../src/ch-main.c:168
+msgid "Command not found, valid commands are:"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1390
+msgid "Gets the sensor color filter"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1395
+msgid "Sets the sensor color filter"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1400
+msgid "Gets the sensor multiplier"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1405
+msgid "Sets the sensor multiplier"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1410
+msgid "Gets the sensor integral time"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1415
+msgid "Sets the sensor integral time"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1420
+msgid "Gets the sensor firmware version"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1425
+msgid "Gets the sensor calibration matrix"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1430
+msgid "Sets the sensor calibration matrix"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1435
+msgid "Clear the sensor calibration matrix"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1440
+msgid "List the sensor calibration matrices"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1445
+msgid "Sets the sensor calibration matrix from a CCMX file"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1450
+msgid "Gets the sensor serial number"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1455
+msgid "Sets the sensor serial number"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1460
+msgid "Gets the LED values"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1465
+msgid "Sets the LEDs"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1470
+msgid "Gets the dark offset values"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1475
+msgid "Sets the dark offset values"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1480
+msgid "Writes the EEPROM with updated values"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1485
+msgid "Takes a reading"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1490
+msgid "Takes all color readings (to device RGB)"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1495
+msgid "Takes all color readings (to XYZ)"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1500
+msgid "Reset the processor back to the bootloader"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1505
+msgid "Flash firmware into the processor"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1510
+msgid "Gets the pre scale constant"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1515
+msgid "Sets the pre scale constant"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1520
+msgid "Gets the post scale constant"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1525
+msgid "Sets the post scale constant"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1530
+msgid "Sets the flash success"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1535
+msgid "Boots from the bootloader into the firmware"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1540
+msgid "Gets the sensor calibration map"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1545
+msgid "Sets the sensor calibration map"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1550
+msgid "Gets the hardware version"
+msgstr ""
+
+#. TRANSLATORS: program name
+#: ../src/ch-main.c:1563
+msgid "Color Management"
+msgstr ""
+
+#. TRANSLATORS: no colord available
+#: ../src/ch-main.c:1580
+msgid "No connection to device:"
+msgstr ""
+
+#: ../src/ch-util.c:102
+msgid "Failed to set calibration"
+msgstr ""
+
+#: ../src/ch-util.c:114
+msgid "Failed to set post scale"
+msgstr ""
+
+#: ../src/ch-util.c:126
+msgid "Failed to set pre scale"
+msgstr ""
+
+#: ../src/ch-util.c:144
+msgid "Failed to set calibration map"
+msgstr ""
+
+#: ../src/ch-util.c:183
+msgid "Failed to get LED status"
+msgstr ""
+
+#: ../src/ch-util.c:202
+msgid "Failed to get color select"
+msgstr ""
+
+#: ../src/ch-util.c:216
+msgid "Failed to get multiplier"
+msgstr ""
+
+#: ../src/ch-util.c:232
+msgid "Failed to get firmware version"
+msgstr ""
+
+#: ../src/ch-util.c:254
+msgid "Failed to get serial number"
+msgstr ""
+
+#: ../src/ch-util.c:274
+msgid "Failed to get dark offsets"
+msgstr ""
+
+#: ../src/ch-util.c:301
+msgid "Failed to get calibration data, setting unity"
+msgstr ""
+
+#: ../src/ch-util.c:323
+msgid "Failed to get pre scale"
+msgstr ""
+
+#: ../src/ch-util.c:339
+msgid "Failed to get post scale"
+msgstr ""
+
+#: ../src/ch-util.c:355
+msgid "Failed to get integral time"
+msgstr ""
+
+#: ../src/ch-util.c:420
+msgid "Failed to write EEPROM"
+msgstr ""
+
+#: ../src/ch-util.c:445 ../src/ch-util.c:528 ../src/ch-util.c:620
+msgid "Failed to turn on sensor"
+msgstr ""
+
+#: ../src/ch-util.c:460 ../src/ch-util.c:544 ../src/ch-util.c:634
+msgid "Failed to take readings"
+msgstr ""
+
+#: ../src/ch-util.c:608
+msgid "Failed to reset dark offsets"
+msgstr ""
+
+#: ../src/ch-util.c:646
+msgid "Failed to set dark offsets"
+msgstr ""
+
+#: ../src/ch-util.c:682
+msgid "Failed to reset processor"
+msgstr ""
+
+#. TRANSLATORS: dialog for chosing the firmware
+#: ../src/ch-util.c:705
+msgid "Select firmware file"
+msgstr ""
+
+#. TRANSLATORS: filter name on the file->open dialog
+#: ../src/ch-util.c:715
+msgid "Supported firmware files"
+msgstr ""
+
+#. TRANSLATORS: filter name on the file->open dialog
+#: ../src/ch-util.c:722
+msgid "Firmware images"
+msgstr ""
+
+#: ../src/ch-util.c:758
+msgid "Failed to flash new firmware"
+msgstr ""
+
+#: ../src/ch-util.c:788
+msgid "Failed to set color select"
+msgstr ""
+
+#: ../src/ch-util.c:808
+msgid "Failed to set serial number"
+msgstr ""
+
+#: ../src/ch-util.c:834 ../src/ch-util.c:860
+msgid "Failed to set LEDs"
+msgstr ""
+
+#: ../src/ch-util.c:884
+msgid "Failed to set multiplier"
+msgstr ""
+
+#: ../src/ch-util.c:948
+msgid "Failed to set integral time"
+msgstr ""
+
+#: ../src/ch-util.c:993
+msgid "Failed to connect"
+msgstr ""
+
+#: ../src/ch-util.c:1082
+msgid "ColorHug command line tool"
+msgstr ""
+
+

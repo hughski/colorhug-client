@@ -1,0 +1,952 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: colorhug-client\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-12-29 11:15+0000\n"
+"PO-Revision-Date: 2011-12-29 11:33+0000\n"
+"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: da\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#. Default cathode ray tube (ask your parents...) matrix
+#: ../data/ch-ccmx.ui.h:2
+msgid "CRT"
+msgstr "CRT"
+
+#: ../data/ch-ccmx.ui.h:3 ../data/ch-flash.ui.h:1 ../data/ch-util.ui.h:7
+msgid "Close this window"
+msgstr "Luk dette vindue"
+
+#: ../data/ch-ccmx.ui.h:4
+msgid "ColorHug CCMX Loader"
+msgstr "ColorHug CCMX Loader"
+
+#: ../data/ch-ccmx.ui.h:5
+msgid "Import a local CCMX file"
+msgstr "Importér lokal CCMX-fil"
+
+#. Button to import a CCMX file
+#: ../data/ch-ccmx.ui.h:7
+msgid "Import file"
+msgstr "Hent fil"
+
+#. Default liquid crystal display matrix
+#: ../data/ch-ccmx.ui.h:9
+msgid "LCD"
+msgstr "LCD"
+
+#. TRANSLATORS: device is not connected to the computer
+#: ../data/ch-ccmx.ui.h:10 ../src/ch-flash.c:1644
+msgid "Please connect your ColorHug"
+msgstr "Forbind venligst ColorHug"
+
+#. Default projector (beamer etc) matrix
+#: ../data/ch-ccmx.ui.h:12
+msgid "Projector"
+msgstr "Projektor"
+
+#: ../data/ch-ccmx.ui.h:13
+msgid "Refresh the list of matrices from the device"
+msgstr "Genopfrisk listen af matricer fra enheden"
+
+#. A correction matrix is used alongside the calibration matrix to better
+#. adapt the colorimeter primaries to a new device type.
+#: ../data/ch-ccmx.ui.h:15
+msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
+msgstr "ColorHug skal bruge en korrektionsmatrix for størst mulig præcision"
+
+#. Only advanced users have to change this...
+#: ../data/ch-ccmx.ui.h:17
+msgid ""
+"Using the default matrix will give most users an acceptable calibration "
+"result."
+msgstr ""
+"Standardmatricen giver i de fleste tilfælde et acceptabelt "
+"kalibreringsresultat"
+
+#: ../data/ch-flash.ui.h:2
+msgid "ColorHug Firmware Updater"
+msgstr "ColorHug Firmware Updater"
+
+#. We are flashing the device, so we have to be careful
+#: ../data/ch-flash.ui.h:4
+msgid "Do not unplug the device and do not turn off the computer."
+msgstr "Afbryd ikke enheden og sluk ikke computeren"
+
+#: ../data/ch-flash.ui.h:5
+msgid "Firmware version unknown"
+msgstr "Firmware version ukendt"
+
+#: ../data/ch-flash.ui.h:6
+msgid "Flash new firmware to the device"
+msgstr "Skriv ny firmware til enheden"
+
+#. Button to update to a newer version of the firmware
+#: ../data/ch-flash.ui.h:8
+msgid "Update!"
+msgstr "Updater!"
+
+#. The last color reading in raw mode
+#: ../data/ch-util.ui.h:2
+msgid "Blue"
+msgstr "Blå"
+
+#. Calibrate the hardware
+#: ../data/ch-util.ui.h:4
+msgid "Calibrate"
+msgstr "Kalibrer"
+
+#. This is the device calibration matrix
+#: ../data/ch-util.ui.h:6
+msgid "Calibration:"
+msgstr "Kalibrering:"
+
+#. Switch the sensor in raw mode to measure different colors
+#: ../data/ch-util.ui.h:9
+msgid "Color select:"
+msgstr "Farvevalg:"
+
+#: ../data/ch-util.ui.h:10
+msgid "ColorHug Utility"
+msgstr "ColorHug værktøj"
+
+#. This is the zero-offset when measuring perfect black
+#: ../data/ch-util.ui.h:12
+msgid "Dark offset:"
+msgstr "Dark offset:"
+
+#: ../data/ch-util.ui.h:13
+msgid "Device State"
+msgstr "Enhedstilstand"
+
+#: ../data/ch-util.ui.h:14
+msgid "Firmware version:"
+msgstr "Firmware version:"
+
+#. Choose a firmware file to flash
+#: ../data/ch-util.ui.h:16
+msgid "Flash Firmware"
+msgstr "Flash Firmware"
+
+#. The last color reading in raw mode
+#: ../data/ch-util.ui.h:18
+msgid "Green"
+msgstr "Grøn"
+
+#. Device status indicators
+#: ../data/ch-util.ui.h:20
+msgid "LEDs:"
+msgstr "LED'er:"
+
+#. This is the last XYZ color measured by the device
+#: ../data/ch-util.ui.h:22
+msgid "Last sample:"
+msgstr "Seneste måling:"
+
+#. This measures the perfect black reading and sets it.
+#: ../data/ch-util.ui.h:24
+msgid "Measure Dark"
+msgstr "Mål mørk"
+
+#. This reads a color using the sensor
+#: ../data/ch-util.ui.h:26
+msgid "Measure Sample"
+msgstr "Mål prøve"
+
+#. Set the multiplier scaling factor
+#: ../data/ch-util.ui.h:28
+msgid "Multiplier:"
+msgstr "Multiplier:"
+
+#. This is a scale value applied after the dRGB reading has been converted to
+#. XYZ
+#: ../data/ch-util.ui.h:30
+msgid "Post scale:"
+msgstr "Post scale:"
+
+#. This is a scale value applied after the reading has been taken
+#: ../data/ch-util.ui.h:32
+msgid "Pre scale:"
+msgstr "Pre scale:"
+
+#. A sample is taken without the calibration matrix
+#: ../data/ch-util.ui.h:34
+msgid "Raw"
+msgstr "Rå"
+
+#. The last color reading in raw mode
+#: ../data/ch-util.ui.h:36
+msgid "Red"
+msgstr "Rød"
+
+#. Switch the device from firmware to bootloader mode
+#: ../data/ch-util.ui.h:38
+msgid "Reset Processor"
+msgstr "Nulstil processor"
+
+#. This is the time that the last sample took
+#: ../data/ch-util.ui.h:40
+msgid "Sample duration:"
+msgstr "Varighed af måling"
+
+#. The sample mode enables us to switch off the calibration matrix if required
+#: ../data/ch-util.ui.h:42
+msgid "Sample mode:"
+msgstr "Måletilstand"
+
+#. Set the time to collect each reading for
+#: ../data/ch-util.ui.h:44
+msgid "Sample read time:"
+msgstr ""
+
+#: ../data/ch-util.ui.h:45
+msgid "Serial number:"
+msgstr "Serienummer:"
+
+#. The sample is converted with an internal calibration matrix
+#: ../data/ch-util.ui.h:47
+msgid "With calibration matrix"
+msgstr "Med kalibreringsmatrix"
+
+#. This writes any changed settings to the internal memory
+#: ../data/ch-util.ui.h:49
+msgid "Write EEPROM"
+msgstr "Skriv EEPROM"
+
+#: ../data/colorhug-ccmx.desktop.in.h:1
+msgid "CCMX Loader"
+msgstr "CCMX Loader"
+
+#: ../data/colorhug-ccmx.desktop.in.h:2
+msgid "Modify the calibration matrices on the ColorHug device"
+msgstr "Ændrer kalibreringsmatricerne på ColorHug enheden"
+
+#: ../data/colorhug-flash.desktop.in.h:1
+msgid "Firmware Updater"
+msgstr "Firmware Updater"
+
+#: ../data/colorhug-flash.desktop.in.h:2
+msgid "Update the firmware on the ColorHug colorimeter"
+msgstr "Opdater firmware på ColorHug colorimeter"
+
+#: ../src/ch-ccmx.c:128
+msgid "Failed to create directory"
+msgstr "Kunne ikke oprette mappe"
+
+#. TRANSLATORS: the calibration map is an array that
+#. * maps a specific matrix to a display type
+#: ../src/ch-ccmx.c:387
+msgid "Failed to get the calibration map"
+msgstr "Kunne ikke tilgå kalibreringskortet"
+
+#. TRANSLATORS: dialog for chosing the correction matrix
+#: ../src/ch-ccmx.c:552
+msgid "Select correction matrix"
+msgstr "Vælg korrektionsmatrix"
+
+#. TRANSLATORS: filter name on the file->open dialog
+#: ../src/ch-ccmx.c:563
+msgid "Correction matrices"
+msgstr "Korrektionsmatricer"
+
+#. TRANSLATORS: the calibration map is an array that
+#. * maps a specific matrix to a display type
+#. TRANSLATORS: internal device error
+#: ../src/ch-ccmx.c:597 ../src/ch-util.c:146
+msgid "Failed to set the calibration map"
+msgstr "Kunne ikke stille kalibreringskortet"
+
+#: ../src/ch-ccmx.c:629
+msgid "Failed to set the calibration matrix"
+msgstr "Kunne ikke sætte kalibrations-matricen"
+
+#. TRANSLATORS: You can only store 64 calibration
+#. * matrices on the device at any one time
+#: ../src/ch-ccmx.c:781 ../src/ch-ccmx.c:950
+msgid "No space left on device"
+msgstr "Ikke mere plads på enheden"
+
+#: ../src/ch-ccmx.c:782 ../src/ch-ccmx.c:952
+msgid "All 64 slots are used up."
+msgstr "Alle 64 plader er i brug"
+
+#: ../src/ch-ccmx.c:790 ../src/ch-ccmx.c:961
+msgid "Failed to load file"
+msgstr "Kunne ikke læse fil"
+
+#. TRANSLATORS: permissions error perhaps?
+#: ../src/ch-ccmx.c:833 ../src/ch-flash.c:1534
+msgid "Failed to open device"
+msgstr "Kunne ikke tilgå enhed"
+
+#. TRANSLATORS: we can't set the device config
+#: ../src/ch-ccmx.c:843 ../src/ch-flash.c:1544
+msgid "Failed to set configuration"
+msgstr "Kunne ikke stille konfiguration"
+
+#. TRANSLATORS: we can't claim the interface for our sole usage
+#: ../src/ch-ccmx.c:854 ../src/ch-flash.c:1555
+msgid "Failed to claim interface"
+msgstr "Failed to claim interface"
+
+#. TRANSLATORS: get the calibration matrices from the device
+#: ../src/ch-ccmx.c:872
+msgid "Getting calibration from device..."
+msgstr "Henter kalibrering fra enheden..."
+
+#: ../src/ch-ccmx.c:1022
+msgid "Failed to download file"
+msgstr "Kunne ikke hente filen"
+
+#: ../src/ch-ccmx.c:1030
+msgid "File has zero size"
+msgstr "Filen er tom"
+
+#: ../src/ch-ccmx.c:1048
+msgid "Failed to write file"
+msgstr "Kunne ikke skrive fil"
+
+#. TRANSLATORS: internal error when setting up HTTP request
+#: ../src/ch-ccmx.c:1081 ../src/ch-ccmx.c:1203 ../src/ch-flash.c:950
+#: ../src/ch-flash.c:1258 ../src/ch-flash.c:1366
+msgid "Failed to setup message"
+msgstr "Failed to setup message"
+
+#. TRANSLATORS: could not download the directory listing
+#: ../src/ch-ccmx.c:1115
+msgid "Failed to get the list of firmware files"
+msgstr "Kunne ikke hente listen af firmware-filer"
+
+#. TRANSLATORS: the directory listing returned no results
+#: ../src/ch-ccmx.c:1123
+msgid "Firmware list has zero size"
+msgstr "Firmware-listen er tom"
+
+#. TRANSLATORS: get the list of firmwares from the internet
+#: ../src/ch-ccmx.c:1188
+msgid "Getting latest data from the web..."
+msgstr "Hent seneste data fra nettet..."
+
+#. TRANSLATORS: internal error when setting up HTTP
+#: ../src/ch-ccmx.c:1343 ../src/ch-flash.c:1729
+msgid "Failed to setup networking"
+msgstr "Kunne ikke opsætte netværk"
+
+#. TRANSLATORS: command line option
+#: ../src/ch-ccmx.c:1421 ../src/ch-flash.c:1809 ../src/ch-main.c:1370
+msgid "Show extra debugging information"
+msgstr "Vis ekstra debugging information"
+
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+#: ../src/ch-ccmx.c:1435
+msgid "ColorHug CCMX loader"
+msgstr "ColorHug CCMX loader"
+
+#: ../src/ch-ccmx.c:1441 ../src/ch-flash.c:1828 ../src/ch-util.c:1105
+msgid "Failed to parse command line options"
+msgstr "Kunne ikke parse kommando-linjen"
+
+#. TRANSLATORS: we broke the device
+#: ../src/ch-flash.c:98
+msgid "Flashing the device failed but the ColorHug is not damaged."
+msgstr ""
+
+#. TRANSLATORS: this explains the flashy light thing
+#: ../src/ch-flash.c:102
+msgid ""
+"If there were any problems flashing the device, it will enter a bootloader "
+"mode."
+msgstr ""
+"Hvis der er problemer med at flashe enheden, vil den starte bootloader "
+"tilstand"
+
+#. TRANSLATORS: hopefully we can "fix" this automatically
+#: ../src/ch-flash.c:106
+msgid ""
+"Just remove the ColorHug device from the computer, reinsert it and re-run "
+"this program."
+msgstr ""
+"Fjern ColorHug fra computeren, forbind den igen og genstart dette program"
+
+#. TRANSLATORS: the user has to be online to get firmware
+#: ../src/ch-flash.c:161
+msgid "Connect to the internet to check for updates"
+msgstr "Forbind til internettet for at søge efter opdateringer"
+
+#. TRANSLATORS: the flash write failed
+#: ../src/ch-flash.c:220
+msgid "Failed to write the flash"
+msgstr "Kunne ikke skrive til flash"
+
+#. TRANSLATORS: the flash failed and the checksum is wrong
+#. TRANSLATORS: the write failed
+#: ../src/ch-flash.c:284 ../src/ch-flash.c:314
+msgid "Failed to verify the flash"
+msgstr "Kunne ikke verificere flash"
+
+#. TRANSLATORS: the write failed
+#: ../src/ch-flash.c:295
+#, c-format
+msgid "Checksum failed at 0x%04x"
+msgstr "Checksum failed at 0x%04x"
+
+#: ../src/ch-flash.c:299
+msgid "Failed to verify the checksum"
+msgstr "Kunne ikke verificere checksum"
+
+#. TRANSLATORS: the write failed
+#: ../src/ch-flash.c:309
+#, c-format
+msgid "Verification failed at 0x%04x (len %i)"
+msgstr "Verification failed at 0x%04x (len %i)"
+
+#. TRANSLATORS: we can only set the flash success
+#. * flag when the *new* firmware is running
+#: ../src/ch-flash.c:376
+msgid "Failed to set the flash success true"
+msgstr "Failed to set the flash success true"
+
+#. TRANSLATORS: we've uploaded new firmware
+#: ../src/ch-flash.c:385
+msgid "Device successfully updated"
+msgstr "Enheden er nu opdateret"
+
+#. TRANSLATORS: tell the hardware we succeeded
+#: ../src/ch-flash.c:408
+msgid "Setting flash success..."
+msgstr "Setting flash success..."
+
+#. TRANSLATORS: the device failed to boot up with the
+#. * new firmware
+#: ../src/ch-flash.c:437
+msgid "Failed to startup the ColorHug"
+msgstr "Kunne ikke starte ColorHug"
+
+#. TRANSLATORS: the new firmware will not load
+#: ../src/ch-flash.c:467
+msgid "Failed to boot the ColorHug"
+msgstr "Kunne ikke boote ColorHug"
+
+#. TRANSLATORS: boot into the new firmware
+#: ../src/ch-flash.c:520
+msgid "Starting the new firmware..."
+msgstr "Starter den ny firmware..."
+
+#. TRANSLATORS: now we've written the firmware, we have to
+#. * verify it before we tell the device it was successfull
+#: ../src/ch-flash.c:593
+msgid "Verifying new firmware..."
+msgstr "Verificerer ny firmware..."
+
+#. TRANSLATORS: clear enough flash for the new firmware
+#: ../src/ch-flash.c:626
+msgid "Failed to erase the flash"
+msgstr "Kunne ikke slette flash"
+
+#. TRANSLATORS: now write the new firmware chunks
+#: ../src/ch-flash.c:635
+msgid "Writing new firmware..."
+msgstr "Skriver ny firmware..."
+
+#. TRANSLATORS: tell the device the firmware is no
+#. * longer known working
+#: ../src/ch-flash.c:669
+msgid "Failed to set the flash success false"
+msgstr "Failed to set the flash success false"
+
+#. TRANSLATORS: tell the device the firmware is no longer known working
+#: ../src/ch-flash.c:708
+msgid "Clearing flash success..."
+msgstr "Clearing flash success..."
+
+#. TRANSLATORS: the device failed to come back alive
+#: ../src/ch-flash.c:736
+msgid "Failed to reboot the ColorHug"
+msgstr "Kunne ikke genstarte ColorHug"
+
+#. TRANSLATORS: we restart the device in bootloader mode
+#: ../src/ch-flash.c:766
+msgid "Failed to reset the ColorHug"
+msgstr "Kunne ikke resette ColorHug"
+
+#. TRANSLATORS: switch from firmware mode into bootloader mode
+#: ../src/ch-flash.c:790
+msgid "Resetting into bootloader..."
+msgstr "Resetting into bootloader..."
+
+#. TRANSLATORS: failed to get the firmware file
+#: ../src/ch-flash.c:823
+msgid "Failed to get firmware"
+msgstr "Kunne ikke hente firmware"
+
+#. TRANSLATORS: the server gave us an invalid file
+#: ../src/ch-flash.c:832
+msgid "Firmware has zero size"
+msgstr "Firmware has zero size"
+
+#. TRANSLATORS: downloading the firmware binary file from a
+#. * remote server
+#: ../src/ch-flash.c:932
+msgid "Downloading update..."
+msgstr "Downloading update..."
+
+#. TRANSLATORS: the user is already running the latest firmware
+#: ../src/ch-flash.c:1023
+msgid "There are no updates available."
+msgstr "Der er ingen tilgængelige opdateringer."
+
+#. TRANSLATORS: the user is running an old firmware version
+#: ../src/ch-flash.c:1043
+msgid "A firmware update is available."
+msgstr "Der er en firmware opdatering tilgængelig"
+
+#. TRANSLATORS: the HTTP request failed
+#: ../src/ch-flash.c:1065
+msgid "Failed to get the listing of firmware files"
+msgstr ""
+
+#. TRANSLATORS: we got an invalid response from the server
+#: ../src/ch-flash.c:1074
+msgid "The firmware listing has zero size"
+msgstr "Firmware-listen indeholder ingen elementer"
+
+#. TRANSLATORS: the device refused our request to mark
+#. * it lost or stolen
+#: ../src/ch-flash.c:1142
+msgid "Failed to set the device as lost or stolen"
+msgstr "Kunne ikke registrere enheden som forsvundet eller stjålet"
+
+#. TRANSLATORS: we have a blacklist that we match the device against
+#: ../src/ch-flash.c:1157
+msgid "This ColorHug has been registered as lost or stolen."
+msgstr "Denne ColorHug er registreret som forsvundet eller stjålet"
+
+#. TRANSLATORS: We disable the device so it can't go into
+#. * firmware mode without a magic incantation
+#: ../src/ch-flash.c:1166
+msgid "The device has now been deactivated."
+msgstr "Enheden er nu blevet deaktiveret"
+
+#. TRANSLATORS: We can tell the user the magic incantation if we've
+#. * made a mistake
+#: ../src/ch-flash.c:1171
+msgid "Please contact <tt>info@hughski.com</tt> for more details."
+msgstr "Kontakt venligst <tt>info@hughski.com</tt> for flere oplysninger."
+
+#. TRANSLATORS: we failed to get the blacklist from the server
+#: ../src/ch-flash.c:1226
+msgid "Failed to get device blacklist"
+msgstr ""
+
+#. TRANSLATORS: pre-production hardware
+#: ../src/ch-flash.c:1301
+msgid "Prototype ColorHug Detected"
+msgstr "Prototype ColorHug Detekteret"
+
+#. TRANSLATORS: first release hardware
+#: ../src/ch-flash.c:1305
+msgid "ColorHug Detected"
+msgstr "ColorHug Detekteret"
+
+#. TRANSLATORS: fake hardware
+#: ../src/ch-flash.c:1309
+msgid "Emulated ColorHug Detected"
+msgstr "Emuleret ColorHug Detekteret"
+
+#. TRANSLATORS: new-issue hardware
+#: ../src/ch-flash.c:1313
+#, c-format
+msgid "ColorHug v%i Detected"
+msgstr "ColorHug v%i Detekteret"
+
+#. TRANSLATORS: the device is in bootloader mode
+#: ../src/ch-flash.c:1324
+msgid "Bootloader version"
+msgstr "Bootloader version"
+
+#. TRANSLATORS: the device is in firmware mode
+#: ../src/ch-flash.c:1332
+msgid "Firmware version"
+msgstr "Firmware version"
+
+#. TRANSLATORS: Check for newer version of the firmware compared
+#. * to what is installed on the device
+#: ../src/ch-flash.c:1351
+msgid "Checking for updates..."
+msgstr "Checking for updates..."
+
+#. TRANSLATORS: the request failed
+#: ../src/ch-flash.c:1402 ../src/ch-flash.c:1432 ../src/ch-flash.c:1476
+msgid "Failed to contact ColorHug"
+msgstr "Kunne ikke kontakte ColorHug"
+
+#. TRANSLATORS: request the firmware version from the device
+#: ../src/ch-flash.c:1570
+msgid "Getting firmware version..."
+msgstr "Henter firmware version..."
+
+#. TRANSLATORS: the long details about all the updates that
+#. * are newer than the version the user has installed
+#: ../src/ch-flash.c:1605
+msgid "Update details"
+msgstr "Update details"
+
+#. TRANSLATORS: show the user some markdown formatted text
+#: ../src/ch-flash.c:1695
+msgid "See details about the update"
+msgstr "See details about the update"
+
+#. TRANSLATORS: a program to update the firmware flash on the device
+#: ../src/ch-flash.c:1822
+msgid "ColorHug Flash Program"
+msgstr "ColorHug Flash Program"
+
+#. TRANSLATORS: this is a command alias
+#: ../src/ch-main.c:90
+#, c-format
+msgid "Alias to %s"
+msgstr "Alias til %s"
+
+#: ../src/ch-main.c:168
+msgid "Command not found, valid commands are:"
+msgstr "Kommando ikke fundet, mulige kommandoer:"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1391
+msgid "Gets the sensor color filter"
+msgstr "Henter sensorens farvefilter"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1396
+msgid "Sets the sensor color filter"
+msgstr "Sætter sensorens farvefilter"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1401
+msgid "Gets the sensor multiplier"
+msgstr "Henter sensorens multiplier"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1406
+msgid "Sets the sensor multiplier"
+msgstr "Sætter sensorens multiplier"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1411
+msgid "Gets the sensor sample read time"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1416
+msgid "Sets the sensor sample read time"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1421
+msgid "Gets the sensor firmware version"
+msgstr "Henter sensorens firmware version"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1426
+msgid "Gets the sensor calibration matrix"
+msgstr "Henter sensorens kalibreringsmatrix"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1431
+msgid "Sets the sensor calibration matrix"
+msgstr "Sætter sensorens kalibreringsmatrix"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1436
+msgid "Clear the sensor calibration matrix"
+msgstr "Nulstil sensorens kalibreringsmatrix"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1441
+msgid "List the sensor calibration matrices"
+msgstr "Vis sensorens kalibreringsmatricer"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1446
+msgid "Sets the sensor calibration matrix from a CCMX file"
+msgstr "Stiller sensorens kalibreringsmatirx fra en CCMX fil"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1451
+msgid "Gets the sensor serial number"
+msgstr "Henter sensorens serienummer"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1456
+msgid "Sets the sensor serial number"
+msgstr "Sætter sensorens serienummer"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1461
+msgid "Gets the LED values"
+msgstr "Henter LED-værdier"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1466
+msgid "Sets the LEDs"
+msgstr "Sætter LED'er"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1471
+msgid "Gets the dark offset values"
+msgstr "Henter \"dark offset\" værdier"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1476
+msgid "Sets the dark offset values"
+msgstr "Sætter \"dark offset\" værdier"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1481
+msgid "Writes the EEPROM with updated values"
+msgstr "Skriver opdaterede værdier til EEPROM"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1486
+msgid "Takes a reading"
+msgstr "Udfører en læsning"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1491
+msgid "Takes all color readings (to device RGB)"
+msgstr "Tager alle farvelæsninger (til enhedens RGB)"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1496
+msgid "Takes all color readings (to XYZ)"
+msgstr "Udlæser alle farvelæsninger (til XYZ)"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1501
+msgid "Reset the processor back to the bootloader"
+msgstr "Nulstil processor til bootloaderen"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1506
+msgid "Flash firmware into the processor"
+msgstr "Flash firmware til processoren"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1511
+msgid "Gets the pre scale constant"
+msgstr "Henter \"pre scale\" konstanten"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1516
+msgid "Sets the pre scale constant"
+msgstr "Stiller \"pre scale\" konstanten"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1521
+msgid "Gets the post scale constant"
+msgstr "Henter \"post scale\" konstanten"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1526
+msgid "Sets the post scale constant"
+msgstr "Stiller \"post scale\" konstanten"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1531
+msgid "Sets the flash success"
+msgstr "Sets the flash success"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1536
+msgid "Boots from the bootloader into the firmware"
+msgstr "Booter fra bootloader til firmware"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1541
+msgid "Gets the sensor calibration map"
+msgstr "Henter sensorens kalibreringskort"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1546
+msgid "Sets the sensor calibration map"
+msgstr "stiller sensorens kalibreringskort"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:1551
+msgid "Gets the hardware version"
+msgstr "Henter hardwareversion"
+
+#. TRANSLATORS: program name
+#: ../src/ch-main.c:1564
+msgid "Color Management"
+msgstr "Farvestyring"
+
+#. TRANSLATORS: no colord available
+#: ../src/ch-main.c:1581
+msgid "No connection to device:"
+msgstr "Ingen forbindelse til enheden"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:103
+msgid "Failed to set calibration"
+msgstr "Kunne ikke stille kalibrering"
+
+#. TRANSLATORS: post scale is applied after the XYZ conversion
+#: ../src/ch-util.c:115
+msgid "Failed to set post scale"
+msgstr "Kunne ikke stille \"post scale\""
+
+#. TRANSLATORS: pre scale is applied after the dRGB
+#. * sample but before the XYZ conversion
+#: ../src/ch-util.c:128
+msgid "Failed to set pre scale"
+msgstr "Kunne ikke stille \"pre scale\""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:186
+msgid "Failed to get LED status"
+msgstr "Kunne ikke tilgå LED status"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:205
+msgid "Failed to get color select"
+msgstr "Kunne ikke tilgå farvevalg"
+
+#. TRANSLATORS: the multiplier is the scale factor used
+#. * when using the sensor
+#: ../src/ch-util.c:220
+msgid "Failed to get multiplier"
+msgstr "Kunne ikke tilgå multiplier"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:236
+msgid "Failed to get firmware version"
+msgstr "Kunne ikke tilgå firmware version"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:258
+msgid "Failed to get serial number"
+msgstr "Kunne ikke tilgå serienummer"
+
+#. TRANSLATORS: failed to get the absolute black offset
+#: ../src/ch-util.c:278
+msgid "Failed to get dark offsets"
+msgstr "Kunne ikke tilgå \"dark offsets\""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:305
+msgid "Failed to get calibration data, resetting"
+msgstr "Kunne ikke hente kalibrations-data, nulstiller"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:327
+msgid "Failed to get pre scale"
+msgstr "Kunne ikke hente \"pre scale\""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:343
+msgid "Failed to get post scale"
+msgstr "Kunne ikke hente \"post scale\""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:359
+msgid "Failed to get sample read time"
+msgstr ""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:425
+msgid "Failed to write EEPROM"
+msgstr "Kunne ikke skrive til EEPROM"
+
+#. TRANSLATORS: we have to enable the sensor
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:451 ../src/ch-util.c:535 ../src/ch-util.c:628
+msgid "Failed to turn on sensor"
+msgstr "Kunne ikke starte sensor"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:466 ../src/ch-util.c:551 ../src/ch-util.c:642
+msgid "Failed to take readings"
+msgstr "Kunne ikke tilgå læsninger"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:616
+msgid "Failed to reset dark offsets"
+msgstr "Kunne ikke nulstille \"dark offsets\""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:654
+msgid "Failed to set dark offsets"
+msgstr "Kunne ikke stille \"dark offsets\""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:691
+msgid "Failed to reset processor"
+msgstr "Kunne ikke nulstille processor"
+
+#. TRANSLATORS: dialog for chosing the firmware
+#: ../src/ch-util.c:714
+msgid "Select firmware file"
+msgstr "Vælg firmware fil"
+
+#. TRANSLATORS: filter name on the file->open dialog
+#: ../src/ch-util.c:724
+msgid "Supported firmware files"
+msgstr "Mulige firmware filer"
+
+#. TRANSLATORS: filter name on the file->open dialog
+#: ../src/ch-util.c:731
+msgid "Firmware images"
+msgstr "Firmware images"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:768
+msgid "Failed to flash new firmware"
+msgstr "Kunne ikke flashe ny firmware"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:799
+msgid "Failed to set color select"
+msgstr "Kunne ikke stille farvevalg"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:820
+msgid "Failed to set serial number"
+msgstr "Kunne ikke stille serienummer"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:847 ../src/ch-util.c:874
+msgid "Failed to set LEDs"
+msgstr "Kunne ikke stille LED'er"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:899
+msgid "Failed to set multiplier"
+msgstr "Kunne ikke stille multiplier"
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:964
+msgid "Failed to set sample read time"
+msgstr ""
+
+#. TRANSLATORS: internal device error
+#: ../src/ch-util.c:1010
+msgid "Failed to connect to device"
+msgstr "Kunne ikke forbinde til enheden"
+
+#. TRANSLATORS: A program to do low level commands on the hardware
+#: ../src/ch-util.c:1100
+msgid "ColorHug command line tool"
+msgstr "ColorHug command line værktøj"
+
+
