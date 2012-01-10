@@ -491,6 +491,9 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	g_hash_table_insert (priv->hash,
 			     g_strdup (description),
 			     GINT_TO_POINTER (1));
+
+	/* success */
+	ret = TRUE;
 out:
 	/* track if it's in use so we can find a spare slot on import */
 	priv->in_use[priv->ccmx_idx] = ret;
