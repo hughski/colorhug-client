@@ -36,6 +36,7 @@
 
 /* don't change this unless you want to provide ccmx files */
 #define COLORHUG_CCMX_LOCATION		"http://www.hughski.com/downloads/colorhug/ccmx/"
+#define COLORHUG_ARCHIVE_LOCATION	"http://www.hughski.com/downloads/colorhug/archive/"
 
 typedef struct {
 	GtkApplication	*application;
@@ -50,6 +51,8 @@ typedef struct {
 	guint		 ccmx_idx;
 	guint8		 ccmx_buffer[64];
 	GHashTable	*hash;
+	guint32		 serial_number;
+	gboolean	 needs_repair;
 } ChCcmxPrivate;
 
 enum {
@@ -62,6 +65,10 @@ enum {
 
 static void	 ch_ccmx_get_calibration_idx		(ChCcmxPrivate *priv);
 static void	 ch_ccmx_refresh_calibration_data	(ChCcmxPrivate *priv);
+static gboolean	 ch_ccmx_set_calibration_file		(ChCcmxPrivate *priv,
+							 guint16 cal_idx,
+							 const gchar *filename,
+							 GError **error);
 
 /**
  * ch_ccmx_error_dialog:
@@ -365,6 +372,184 @@ ch_ccmx_set_combo_from_index (GtkComboBox *combo, guint idx)
 }
 
 /**
+ * ch_ccmx_got_factory_calibration_cb:
+ **/
+static void
+ch_ccmx_got_factory_calibration_cb (SoupSession *session,
+				    SoupMessage *msg,
+				    gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	gboolean ret;
+	gchar *basename = NULL;
+	gchar *location = NULL;
+	GError *error = NULL;
+	SoupURI *uri;
+
+	/* we failed */
+	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+		uri = soup_message_get_uri (msg);
+		location = g_strdup_printf ("%s: %s",
+					    soup_status_get_phrase (msg->status_code),
+					    uri->path);
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to download file"),
+				      location);
+		goto out;
+	}
+
+	/* empty file */
+	if (msg->response_body->length == 0) {
+		ch_ccmx_error_dialog (priv,
+				      _("File has zero size"),
+				      soup_status_get_phrase (msg->status_code));
+		goto out;
+	}
+
+	/* write file */
+	uri = soup_message_get_uri (msg);
+	basename = g_path_get_basename (soup_uri_get_path (uri));
+	location = g_build_filename (g_get_tmp_dir (),
+				     basename,
+				     NULL);
+	ret = g_file_set_contents (location,
+				   msg->response_body->data,
+				   msg->response_body->length,
+				   &error);
+	if (!ret) {
+		ch_ccmx_error_dialog (priv,
+				      _("Failed to write file"),
+				      error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* update UI */
+	ret = ch_ccmx_set_calibration_file (priv, 0, location, &error);
+	if (!ret) {
+		ch_ccmx_error_dialog (priv,
+				       _("Failed to load file"),
+				       error->message);
+		g_error_free (error);
+		goto out;
+	}
+out:
+	g_free (basename);
+	g_free (location);
+}
+
+/**
+ * ch_ccmx_get_serial_number_cb:
+ **/
+static void
+ch_ccmx_get_serial_number_cb (GObject *source,
+			      GAsyncResult *res,
+			      gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	const gchar *title;
+	gboolean ret;
+	GError *error = NULL;
+	GUsbDevice *device = G_USB_DEVICE (source);
+	SoupMessage *msg = NULL;
+	SoupURI *base_uri = NULL;
+	gchar *uri = NULL;
+
+	/* get data */
+	ret = ch_device_write_command_finish (device, res, &error);
+	if (!ret) {
+		/* TRANSLATORS: the request failed */
+		title = _("Failed to contact ColorHug");
+		ch_ccmx_error_dialog (priv, title, error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* download the correct factory calibration file */
+	uri = g_strdup_printf ("%scalibration-%06i.ccmx",
+			       COLORHUG_ARCHIVE_LOCATION,
+			       priv->serial_number);
+	base_uri = soup_uri_new (uri);
+	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
+	if (msg == NULL) {
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		title = _("Failed to setup message");
+		ch_ccmx_error_dialog (priv, title, uri);
+		goto out;
+	}
+
+	/* send sync */
+	soup_session_queue_message (priv->session, msg,
+				    ch_ccmx_got_factory_calibration_cb, priv);
+out:
+	g_free (uri);
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
+}
+
+/**
+ * ch_ccmx_device_repair_cb:
+ **/
+static void
+ch_ccmx_device_repair_cb (GtkDialog *dialog,
+			  GtkResponseType response_id,
+			  ChCcmxPrivate *priv)
+{
+	if (response_id != GTK_RESPONSE_YES)
+		goto out;
+
+	/* get the serial number */
+	ch_device_write_command_async (priv->device,
+				       CH_CMD_GET_SERIAL_NUMBER,
+				       NULL, /* buffer_in */
+				       0, /* buffer_in_len */
+				       (guint8 *) &priv->serial_number,
+				       4,
+				       NULL, /* cancellable */
+				       ch_ccmx_get_serial_number_cb,
+				       priv);
+
+out:
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+/**
+ * ch_ccmx_device_repair:
+ **/
+static void
+ch_ccmx_device_repair (ChCcmxPrivate *priv)
+{
+	const gchar *message;
+	GtkWidget *dialog;
+	GtkWindow *window;
+
+	/* TRANSLATORS: device is broken and needs fixing */
+	message = _("The ColorHug is missing the factory calibration values.");
+	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_ccmx"));
+	dialog = gtk_message_dialog_new (window,
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_NONE,
+					 /* TRANSLATORS: the device is missing
+					  * it's calibration matrix */
+					 "%s", _("Device calibration error"));
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+						  "%s", message);
+
+	/* TRANSLATORS: this is a button */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Ignore"), GTK_RESPONSE_NO);
+
+	/* TRANSLATORS: this is a button */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Repair"), GTK_RESPONSE_YES);
+
+	/* wait async */
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (ch_ccmx_device_repair_cb),
+			  priv);
+	gtk_widget_show (dialog);
+}
+
+/**
  * ch_ccmx_get_calibration_map_cb:
  **/
 static void
@@ -406,6 +591,10 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 
 	/* we've setup */
 	priv->done_get_cal = TRUE;
+
+	/* offer to repair the device */
+	if (priv->needs_repair)
+		ch_ccmx_device_repair (priv);
 out:
 	return;
 }
@@ -485,6 +674,12 @@ ch_ccmx_get_calibration_cb (GObject *source,
 				    COLUMN_TYPE, NULL,
 				    COLUMN_LOCAL_FILENAME, NULL,
 				    -1);
+	}
+
+	/* does this device need repairing */
+	if (priv->ccmx_idx == 0) {
+		if (g_strcmp0 (description, "Factory Calibration") == 0)
+			priv->needs_repair = FALSE;
 	}
 
 	/* insert into hash */
@@ -1452,6 +1647,7 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChCcmxPrivate, 1);
+	priv->needs_repair = TRUE;
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
