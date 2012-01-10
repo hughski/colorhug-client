@@ -1021,9 +1021,13 @@ ch_ccmx_got_file_cb (SoupSession *session,
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+		uri = soup_message_get_uri (msg);
+		location = g_strdup_printf ("%s: %s",
+					    soup_status_get_phrase (msg->status_code),
+					    uri->path);
 		ch_ccmx_error_dialog (priv,
 				      _("Failed to download file"),
-				      soup_status_get_phrase (msg->status_code));
+				      location);
 		goto out;
 	}
 
