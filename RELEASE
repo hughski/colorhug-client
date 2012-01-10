@@ -2,10 +2,10 @@ PackageKit Release Notes
 
 1. Write NEWS entries in the same format as usual.
 
-git shortlog COLORHUG_CLIENT_0_1_3.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog COLORHUG_CLIENT_0_1_4.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 0.1.4
+Version 0.1.5
 ~~~~~~~~~~~~~
 Released: 2011-xx-xx
 
@@ -19,8 +19,8 @@ Bugfixes:
 3. Commit changes in git:
 
 tx pull --all
-git commit -a -m "Release version 0.1.4"
-git tag -s COLORHUG_CLIENT_0_1_4 -m "==== Version 0.1.4 ===="
+git commit -a -m "Release version 0.1.5"
+git tag -s COLORHUG_CLIENT_0_1_5 -m "==== Version 0.1.5 ===="
 <wait>
 git push --tags
 git push
@@ -44,7 +44,7 @@ tx push --source
 8. Send an email to colorhug-users
 
 =================================================
-colorhug-client 0.1.4 released!
+colorhug-client 0.1.5 released!
 
 This package includes the client tools which allows the user to upgrade
 the firmware on the sensor or to access the sensor from command line
