@@ -32,6 +32,7 @@
 
 #include "ch-common.h"
 #include "ch-markdown.h"
+#include "ch-flash-md.h"
 
 /* don't change this unless you want to provide firmware updates */
 #define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/firmware/"
@@ -1045,17 +1046,18 @@ ch_flash_has_updates (ChFlashPrivate *priv)
 }
 
 /**
- * ch_flash_got_manifest_cb:
+ * ch_flash_got_metadata_cb:
  **/
 static void
-ch_flash_got_manifest_cb (SoupSession *session,
+ch_flash_got_metadata_cb (SoupSession *session,
 			  SoupMessage *msg,
 			  gpointer user_data)
 {
-	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gchar **lines = NULL;
-	gchar **tmp;
+	ChFlashUpdate *update;
+	const gchar *title;
+	GError *error = NULL;
+	GPtrArray *updates = NULL;
 	guint i;
 
 	/* we failed */
@@ -1076,32 +1078,34 @@ ch_flash_got_manifest_cb (SoupSession *session,
 		goto out;
 	}
 
-	/* write file */
-	lines = g_strsplit (msg->response_body->data, "\n", -1);
-	for (i = 0; lines[i] != NULL; i++) {
-		if (lines[i][0] == '\0')
-			continue;
-		if (lines[i][0] == '\t') {
-			g_string_append_printf (priv->update_details,
-						"%s\n", lines[i] + 1);
-			continue;
-		}
+	/* parse file */
+	updates = ch_flash_md_parse_data (msg->response_body->data,
+					  &error);
+	if (updates == NULL) {
+		/* TRANSLATORS: the XML file was corrupt */
+		title = _("Failed to parse the update metadata");
+		ch_flash_error_dialog (priv, title, error->message);
+		g_error_free (error);
+		goto out;
+	}
+	for (i = 0; i < updates->len; i++) {
+		update = g_ptr_array_index (updates, i);
 
-		/* split up version, date, filename */
-		tmp = g_strsplit (lines[i], "\t", -1);
-		if (g_strv_length (tmp) != 3)
-			continue;
-		if (!ch_flash_version_is_newer (priv, tmp[0])) {
-			g_strfreev (tmp);
+		/* this version is older than what we have now */
+		if (!ch_flash_version_is_newer (priv, update->version))
 			break;
-		}
-		if (i == 0)
-			priv->filename = g_strdup (tmp[2]);
-		g_strfreev (tmp);
+
+		/* add changelog text */
+		g_string_append_printf (priv->update_details,
+					"%s\n", update->changelog->str);
+
+		/* save newest available firmware */
+		if (priv->filename == NULL)
+			priv->filename = g_strdup (update->filename);
 	}
 
 	/* no updates */
-	if (priv->update_details->len == 0) {
+	if (priv->filename == NULL) {
 		ch_flash_no_updates (priv);
 		goto out;
 	}
@@ -1113,8 +1117,8 @@ ch_flash_got_manifest_cb (SoupSession *session,
 	/* setup UI */
 	ch_flash_has_updates (priv);
 out:
-	g_strfreev (lines);
-	return;
+	if (updates != NULL)
+		g_ptr_array_unref (updates);
 }
 
 /**
@@ -1247,7 +1251,7 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 
 	/* get the latest manifest file */
 	uri = g_build_filename (COLORHUG_FIRMWARE_LOCATION,
-				"MANIFEST",
+				"metadata.xml",
 				NULL);
 	base_uri = soup_uri_new (uri);
 
@@ -1262,7 +1266,7 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 
 	/* send sync */
 	soup_session_queue_message (priv->session, msg,
-				    ch_flash_got_manifest_cb, priv);
+				    ch_flash_got_metadata_cb, priv);
 out:
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
