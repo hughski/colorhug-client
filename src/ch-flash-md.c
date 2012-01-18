@@ -31,6 +31,7 @@ typedef enum {
 	CH_FLASH_MD_POS_UPDATE,
 	CH_FLASH_MD_POS_VERSION,
 	CH_FLASH_MD_POS_FILENAME,
+	CH_FLASH_MD_POS_CHECKSUM,
 	CH_FLASH_MD_POS_CHANGELOG,
 	CH_FLASH_MD_POS_ITEM,
 } ChFlashMdPos;
@@ -57,6 +58,8 @@ ch_flash_md_pos_to_text (ChFlashMdPos pos)
 		return "version";
 	if (pos == CH_FLASH_MD_POS_FILENAME)
 		return "filename";
+	if (pos == CH_FLASH_MD_POS_CHECKSUM)
+		return "checksum";
 	if (pos == CH_FLASH_MD_POS_CHANGELOG)
 		return "changelog";
 	if (pos == CH_FLASH_MD_POS_ITEM)
@@ -131,8 +134,6 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 			return;
 		if (g_strcmp0 (element_name, "size") == 0)
 			return;
-		if (g_strcmp0 (element_name, "checksum") == 0)
-			return;
 		if (g_strcmp0 (element_name, "timestamp") == 0)
 			return;
 		if (g_strcmp0 (element_name, "version") == 0) {
@@ -141,6 +142,10 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 		}
 		if (g_strcmp0 (element_name, "filename") == 0) {
 			priv->pos = CH_FLASH_MD_POS_FILENAME;
+			return;
+		}
+		if (g_strcmp0 (element_name, "checksum") == 0) {
+			priv->pos = CH_FLASH_MD_POS_CHECKSUM;
 			return;
 		}
 		if (g_strcmp0 (element_name, "changelog") == 0) {
@@ -192,8 +197,6 @@ ch_flash_md_end_element_cb (GMarkupParseContext *context,
 			return;
 		if (g_strcmp0 (element_name, "size") == 0)
 			return;
-		if (g_strcmp0 (element_name, "checksum") == 0)
-			return;
 		if (g_strcmp0 (element_name, "timestamp") == 0)
 			return;
 		if (g_strcmp0 (element_name, "update") == 0) {
@@ -219,6 +222,14 @@ ch_flash_md_end_element_cb (GMarkupParseContext *context,
 			return;
 		}
 		g_debug ("unknown end tag %s for filename", element_name);
+		return;
+	}
+	if (priv->pos == CH_FLASH_MD_POS_CHECKSUM) {
+		if (g_strcmp0 (element_name, "checksum") == 0) {
+			priv->pos = CH_FLASH_MD_POS_UPDATE;
+			return;
+		}
+		g_debug ("unknown end tag %s for checksum", element_name);
 		return;
 	}
 	if (priv->pos == CH_FLASH_MD_POS_CHANGELOG) {
@@ -273,6 +284,10 @@ ch_flash_md_text_cb (GMarkupParseContext *context,
 	}
 	if (priv->pos == CH_FLASH_MD_POS_FILENAME) {
 		priv->update_tmp->filename = g_strdup (tmp);
+		goto out;
+	}
+	if (priv->pos == CH_FLASH_MD_POS_CHECKSUM) {
+		priv->update_tmp->checksum = g_strdup (tmp);
 		goto out;
 	}
 	if (priv->pos == CH_FLASH_MD_POS_ITEM) {

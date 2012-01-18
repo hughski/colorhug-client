@@ -39,6 +39,7 @@
 
 typedef struct {
 	gchar		*filename;
+	gchar		*checksum;
 	GString		*update_details;
 	GtkApplication	*application;
 	GtkBuilder	*builder;
@@ -814,8 +815,10 @@ ch_flash_got_firmware_cb (SoupSession *session,
 			  SoupMessage *msg,
 			  gpointer user_data)
 {
-	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	const gchar *title;
+	gchar *checksum_tmp = NULL;
+	gchar *message = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -835,6 +838,19 @@ ch_flash_got_firmware_cb (SoupSession *session,
 		goto out;
 	}
 
+	/* check checksum */
+	checksum_tmp = g_compute_checksum_for_data (G_CHECKSUM_SHA1,
+						    (const guchar *) msg->response_body->data,
+						    msg->response_body->length);
+	if (g_strcmp0 (priv->checksum, checksum_tmp) != 0) {
+		/* TRANSLATORS: the server gave us an invalid file */
+		title = _("Firmware has incorrect checksum");
+		message = g_strdup_printf ("Expected %s, got %s",
+					   priv->checksum, checksum_tmp);
+		ch_flash_error_dialog (priv, title, message);
+		goto out;
+	}
+
 	/* success */
 	priv->firmware_data = g_new0 (guint8, msg->response_body->length);
 	priv->firmware_len = msg->response_body->length;
@@ -851,7 +867,8 @@ ch_flash_got_firmware_cb (SoupSession *session,
 	/* reset into the bootloader where we can load the firmware */
 	ch_flash_reset_into_bootloader (priv);
 out:
-	return;
+	g_free (message);
+	g_free (checksum_tmp);
 }
 
 /**
@@ -1100,8 +1117,10 @@ ch_flash_got_metadata_cb (SoupSession *session,
 					"%s\n", update->changelog->str);
 
 		/* save newest available firmware */
-		if (priv->filename == NULL)
+		if (priv->filename == NULL) {
 			priv->filename = g_strdup (update->filename);
+			priv->checksum = g_strdup (update->checksum);
+		}
 	}
 
 	/* no updates */
@@ -1877,6 +1896,7 @@ main (int argc, char **argv)
 	if (priv->markdown != NULL)
 		g_object_unref (priv->markdown);
 	g_free (priv->filename);
+	g_free (priv->checksum);
 	g_free (priv->firmware_data);
 	g_free (priv);
 	return status;
