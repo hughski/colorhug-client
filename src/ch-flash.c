@@ -1618,8 +1618,8 @@ ch_flash_activate_link_cb (GtkLabel *label,
 					 GTK_MESSAGE_INFO,
 					 GTK_BUTTONS_CLOSE, "%s",
 					 title);
-	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s",
-						  format);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s",
+						    format);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 	g_free (format);
