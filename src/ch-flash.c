@@ -575,19 +575,6 @@ ch_flash_write_firmware_chunk (ChFlashPrivate *priv)
 		goto out;
 	};
 
-	/* flush to 64 byte chunk */
-	if ((priv->flash_idx & CH_FLASH_TRANSFER_BLOCK_SIZE) == 0) {
-		priv->flash_idx -= priv->flash_chunk_len;
-		priv->flash_idx += CH_FLASH_TRANSFER_BLOCK_SIZE;
-		g_debug ("Flushing at %04x",
-			 CH_EEPROM_ADDR_RUNCODE + priv->flash_idx);
-		ch_flash_write_flash (priv,
-				      CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
-				      (guint8 *) priv->firmware_data,
-				      0);
-		goto out;
-	}
-
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: now we've written the firmware, we have to

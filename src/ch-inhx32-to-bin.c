@@ -169,6 +169,11 @@ ch_inhx32_to_bin (const gchar *hex_fn,
 		offset = ptr - data;
 	}
 
+	/* ensure flash finishes on a 64 byte boundary */
+	end = string->len % CH_FLASH_WRITE_BLOCK_SIZE;
+	for (i = 0; i < end; i++)
+		g_string_append_len (string, "\0", 1);
+
 	/* save file */
 	ret = g_file_set_contents (bin_fn,
 				   string->str,

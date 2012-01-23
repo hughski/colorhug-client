@@ -160,7 +160,9 @@ ch_client_flash_firmware (ChClient *client,
 	if (!ret)
 		goto out;
 
-	/* write in 32 byte chunks */
+	/* just write in 32 byte chunks, as we're sure that the firmware
+	 * image has been prepared to end on a 64 byte chunk with
+	 * colorhug-inhx32-to-bin >= 0.1.5 */
 	idx = 0;
 	chunk_len = CH_FLASH_TRANSFER_BLOCK_SIZE;
 	do {
@@ -178,22 +180,6 @@ ch_client_flash_firmware (ChClient *client,
 			goto out;
 		idx += chunk_len;
 	} while (idx < len);
-
-	/* flush to 64 byte chunk */
-	if ((idx & CH_FLASH_TRANSFER_BLOCK_SIZE) == 0) {
-		idx -= chunk_len;
-		idx += CH_FLASH_TRANSFER_BLOCK_SIZE;
-		g_debug ("Flushing at %04x",
-			 CH_EEPROM_ADDR_RUNCODE + idx);
-		ret = ch_device_cmd_write_flash (device,
-						 CH_EEPROM_ADDR_RUNCODE + idx,
-						 (guint8 *) data,
-						 0,
-						 error);
-		if (!ret)
-			goto out;
-
-	}
 
 	/* read in 60 byte chunks */
 	idx = 0;
