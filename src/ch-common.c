@@ -29,6 +29,9 @@
 #include "ch-common.h"
 #include "ch-math.h"
 
+/* the default timeout */
+#define CH_DEVICE_USB_TIMEOUT	5000 /* ms */
+
 /**
  * ch_strerror:
  **/
@@ -220,9 +223,6 @@ ch_print_data_buffer (const gchar *title,
 
 	g_print ("%c[%dm\n", 0x1B, 0);
 }
-
-/* the default timeout */
-#define CH_DEVICE_USB_TIMEOUT	2000
 
 typedef struct {
 	GUsbDevice		*device;

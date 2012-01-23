@@ -45,7 +45,7 @@ struct _ChClientPrivate
 	GUsbContext			*usb_ctx;
 };
 
-#define	CH_CLIENT_USB_TIMEOUT		2000
+#define	CH_CLIENT_USB_TIMEOUT		5000 /* ms */
 
 G_DEFINE_TYPE (ChClient, ch_client, G_TYPE_OBJECT)
 
