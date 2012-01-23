@@ -53,6 +53,7 @@ typedef struct {
 	GHashTable	*hash;
 	guint32		 serial_number;
 	gboolean	 needs_repair;
+	gboolean	 force_repair;
 } ChCcmxPrivate;
 
 enum {
@@ -488,10 +489,10 @@ out:
 }
 
 /**
- * ch_ccmx_device_repair_cb:
+ * ch_ccmx_device_needs_repair_cb:
  **/
 static void
-ch_ccmx_device_repair_cb (GtkDialog *dialog,
+ch_ccmx_device_needs_repair_cb (GtkDialog *dialog,
 			  GtkResponseType response_id,
 			  ChCcmxPrivate *priv)
 {
@@ -514,10 +515,10 @@ out:
 }
 
 /**
- * ch_ccmx_device_repair:
+ * ch_ccmx_device_needs_repair:
  **/
 static void
-ch_ccmx_device_repair (ChCcmxPrivate *priv)
+ch_ccmx_device_needs_repair (ChCcmxPrivate *priv)
 {
 	const gchar *message;
 	GtkWidget *dialog;
@@ -544,7 +545,43 @@ ch_ccmx_device_repair (ChCcmxPrivate *priv)
 
 	/* wait async */
 	g_signal_connect (dialog, "response",
-			  G_CALLBACK (ch_ccmx_device_repair_cb),
+			  G_CALLBACK (ch_ccmx_device_needs_repair_cb),
+			  priv);
+	gtk_widget_show (dialog);
+}
+
+/**
+ * ch_ccmx_device_force_repair:
+ **/
+static void
+ch_ccmx_device_force_repair (ChCcmxPrivate *priv)
+{
+	const gchar *message;
+	GtkWidget *dialog;
+	GtkWindow *window;
+
+	/* TRANSLATORS: device is broken and needs fixing */
+	message = _("Update the factory calibration values?");
+	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_ccmx"));
+	dialog = gtk_message_dialog_new (window,
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_QUESTION,
+					 GTK_BUTTONS_NONE,
+					 /* TRANSLATORS: the device has an
+					  * updated calibration matrix */
+					 "%s", _("Device calibration update"));
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+						  "%s", message);
+
+	/* TRANSLATORS: this is a button */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Cancel"), GTK_RESPONSE_NO);
+
+	/* TRANSLATORS: this is a button */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Update"), GTK_RESPONSE_YES);
+
+	/* wait async */
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (ch_ccmx_device_needs_repair_cb),
 			  priv);
 	gtk_widget_show (dialog);
 }
@@ -594,7 +631,9 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 
 	/* offer to repair the device */
 	if (priv->needs_repair)
-		ch_ccmx_device_repair (priv);
+		ch_ccmx_device_needs_repair (priv);
+	else if (priv->force_repair)
+		ch_ccmx_device_force_repair (priv);
 out:
 	return;
 }
@@ -1614,6 +1653,7 @@ main (int argc, char **argv)
 	ChCcmxPrivate *priv;
 	gboolean ret;
 	gboolean verbose = FALSE;
+	gboolean force_repair = FALSE;
 	GError *error = NULL;
 	GOptionContext *context;
 	int status = 0;
@@ -1621,6 +1661,9 @@ main (int argc, char **argv)
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */
 			_("Show extra debugging information"), NULL },
+		{ "repair", 'r', 0, G_OPTION_ARG_NONE, &force_repair,
+			/* TRANSLATORS: command line option */
+			_("Repair the factory calibration matrix"), NULL },
 		{ NULL}
 	};
 
@@ -1648,6 +1691,7 @@ main (int argc, char **argv)
 
 	priv = g_new0 (ChCcmxPrivate, 1);
 	priv->needs_repair = TRUE;
+	priv->force_repair = force_repair;
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
