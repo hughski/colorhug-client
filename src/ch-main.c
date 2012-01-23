@@ -1273,6 +1273,170 @@ out:
 }
 
 /**
+ * ch_util_eeprom_write:
+ **/
+static gboolean
+ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gsize len;
+	guint16 address;
+	guint8 *data = NULL;
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 2) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
+		goto out;
+	}
+
+	/* read flash */
+	address = strtol(values[0], NULL, 16);
+	if (address < CH_EEPROM_ADDR_RUNCODE) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid address 0x%04x",
+			     address);
+		goto out;
+	}
+	len = atoi (values[1]);
+	if (len < 1 || len > 60) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
+			     len);
+		goto out;
+	}
+
+	/* just write zeros */
+	data = g_new0 (guint8, len);
+	ret = ch_device_cmd_write_flash (priv->device,
+					 address,
+					 data,
+					 len,
+					 error);
+	if (!ret)
+		goto out;
+
+	/* flush */
+	ret = ch_device_cmd_write_flash (priv->device,
+					 address | CH_FLASH_TRANSFER_BLOCK_SIZE,
+					 data,
+					 len,
+					 error);
+	if (!ret)
+		goto out;
+
+	g_print ("Wrote:\n");
+	for (i=0; i< len; i++)
+		g_print ("0x%04x = %02x\n", address + i, data[i]);
+out:
+	g_free (data);
+	return ret;
+}
+
+/**
+ * ch_util_eeprom_erase:
+ **/
+static gboolean
+ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gsize len;
+	guint16 address;
+
+	/* parse */
+	if (g_strv_length (values) != 2) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
+		goto out;
+	}
+
+	/* read flash */
+	address = strtol(values[0], NULL, 16);
+	if (address < CH_EEPROM_ADDR_RUNCODE) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid address 0x%04x",
+			     address);
+		goto out;
+	}
+	len = atoi (values[1]);
+	if (len < 1 || len > 0xffff) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
+			     len);
+		goto out;
+	}
+	ret = ch_device_cmd_erase_flash (priv->device,
+					 address,
+					 len,
+					 error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_eeprom_read:
+ **/
+static gboolean
+ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gsize len;
+	guint16 address;
+	guint8 *data = NULL;
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 2) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
+		goto out;
+	}
+
+	/* read flash */
+	address = strtol(values[0], NULL, 16);
+	if (address < CH_EEPROM_ADDR_RUNCODE) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid address 0x%04x",
+			     address);
+		goto out;
+	}
+	len = atoi (values[1]);
+	if (len < 1 || len > 60) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
+			     len);
+		goto out;
+	}
+	data = g_new0 (guint8, len);
+	ret = ch_device_cmd_read_flash (priv->device,
+					address,
+					data,
+					len,
+					error);
+	if (!ret)
+		goto out;
+
+	g_print ("Read:\n");
+	for (i=0; i< len; i++)
+		g_print ("0x%04x = %02x\n", address + i, data[i]);
+out:
+	g_free (data);
+	return ret;
+}
+
+/**
  * ch_util_ignore_cb:
  **/
 static void
@@ -1445,6 +1609,21 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Flash firmware into the processor"),
 		     ch_util_flash_firmware);
+	ch_util_add (priv->cmd_array,
+		     "eeprom-read",
+		     /* TRANSLATORS: command description */
+		     _("Read EEPROM at a specified address"),
+		     ch_util_eeprom_read);
+	ch_util_add (priv->cmd_array,
+		     "eeprom-erase",
+		     /* TRANSLATORS: command description */
+		     _("Erase EEPROM at a specified address"),
+		     ch_util_eeprom_erase);
+	ch_util_add (priv->cmd_array,
+		     "eeprom-write",
+		     /* TRANSLATORS: command description */
+		     _("Write EEPROM at a specified address"),
+		     ch_util_eeprom_write);
 	ch_util_add (priv->cmd_array,
 		     "get-pre-scale",
 		     /* TRANSLATORS: command description */

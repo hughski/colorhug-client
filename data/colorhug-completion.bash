@@ -22,6 +22,9 @@
 __colorhug_commandlist="
     boot-flash
     clear-calibration
+    eeprom-read
+    eeprom-write
+    eeprom-erase
     flash-firmware
     get-calibration
     get-calibration-map

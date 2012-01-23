@@ -151,6 +151,8 @@ ch_client_flash_firmware (ChClient *client,
 		goto out;
 
 	/* erase flash */
+	g_debug ("Erasing at %04x size %li",
+		 CH_EEPROM_ADDR_RUNCODE, len);
 	ret = ch_device_cmd_erase_flash (device,
 					 CH_EEPROM_ADDR_RUNCODE,
 					 len,
