@@ -41,6 +41,7 @@ typedef struct {
 	gchar		*filename;
 	gchar		*checksum;
 	GString		*update_details;
+	GString		*warning_details;
 	GtkApplication	*application;
 	GtkBuilder	*builder;
 	guint16		 firmware_version[3];
@@ -906,6 +907,47 @@ out:
 }
 
 /**
+ * ch_flash_show_warning_dialog:
+ **/
+static gboolean
+ch_flash_show_warning_dialog (ChFlashPrivate *priv)
+{
+	const gchar *title;
+	GtkWindow *window;
+	GtkWidget *dialog;
+	gchar *format;
+	GtkResponseType response;
+
+	/* anything to show? */
+	if (priv->warning_details->len == 0)
+		return TRUE;
+
+	/* the update text is markdown formatted */
+	format = ch_markdown_parse (priv->markdown,
+				    priv->warning_details->str);
+	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_flash"));
+	/* TRANSLATORS: the long details about all the updates that
+	 * are newer than the version the user has installed */
+	title = _("Warnings about this update");
+	dialog = gtk_message_dialog_new (window,
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_NONE, "%s",
+					 title);
+	/* TRANSLATORS: this is the button text to continue the flash
+	 * after showing the user a warning */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Flash anyway"), GTK_RESPONSE_OK);
+	/* TRANSLATORS: this is the button text to abort the flash process */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Do not flash"), GTK_RESPONSE_CANCEL);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s",
+						    format);
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+	g_free (format);
+	return (response == GTK_RESPONSE_OK);
+}
+
+/**
  * ch_flash_flash_button_cb:
  **/
 static void
@@ -914,7 +956,13 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	const gchar *title;
 	SoupURI *base_uri = NULL;
 	SoupMessage *msg = NULL;
+	gboolean ret;
 	gchar *uri = NULL;
+
+	/* show the user any warning dialog */
+	ret = ch_flash_show_warning_dialog (priv);
+	if (!ret)
+		goto out;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
@@ -1099,9 +1147,11 @@ ch_flash_got_metadata_cb (SoupSession *session,
 		if (!ch_flash_version_is_newer (priv, update->version))
 			break;
 
-		/* add changelog text */
+		/* add info text */
 		g_string_append_printf (priv->update_details,
-					"%s\n", update->changelog->str);
+					"%s\n", update->info->str);
+		g_string_append_printf (priv->warning_details,
+					"%s\n", update->warning->str);
 
 		/* save newest available firmware */
 		if (priv->filename == NULL) {
@@ -1117,8 +1167,14 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	}
 
 	/* remove trailing space */
-	g_string_set_size (priv->update_details,
-			   priv->update_details->len - 1);
+	if (priv->update_details->len > 1) {
+		g_string_set_size (priv->update_details,
+				   priv->update_details->len - 1);
+	}
+	if (priv->warning_details->len > 1) {
+		g_string_set_size (priv->warning_details,
+			   priv->warning_details->len - 1);
+	}
 
 	/* setup UI */
 	ch_flash_has_updates (priv);
@@ -1843,6 +1899,7 @@ main (int argc, char **argv)
 
 	priv = g_new0 (ChFlashPrivate, 1);
 	priv->update_details = g_string_new ("");
+	priv->warning_details = g_string_new ("");
 	priv->markdown = ch_markdown_new ();
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
@@ -1872,6 +1929,8 @@ main (int argc, char **argv)
 	g_object_unref (priv->application);
 	if (priv->update_details != NULL)
 		g_string_free (priv->update_details, TRUE);
+	if (priv->warning_details != NULL)
+		g_string_free (priv->warning_details, TRUE);
 	if (priv->device_list != NULL)
 		g_object_unref (priv->device_list);
 	if (priv->usb_ctx != NULL)

@@ -33,7 +33,8 @@ typedef enum {
 	CH_FLASH_MD_POS_FILENAME,
 	CH_FLASH_MD_POS_CHECKSUM,
 	CH_FLASH_MD_POS_CHANGELOG,
-	CH_FLASH_MD_POS_ITEM,
+	CH_FLASH_MD_POS_INFO,
+	CH_FLASH_MD_POS_WARNING,
 } ChFlashMdPos;
 
 typedef struct {
@@ -62,8 +63,10 @@ ch_flash_md_pos_to_text (ChFlashMdPos pos)
 		return "checksum";
 	if (pos == CH_FLASH_MD_POS_CHANGELOG)
 		return "changelog";
-	if (pos == CH_FLASH_MD_POS_ITEM)
-		return "item";
+	if (pos == CH_FLASH_MD_POS_INFO)
+		return "info";
+	if (pos == CH_FLASH_MD_POS_WARNING)
+		return "warning";
 	g_assert_not_reached ();
 }
 
@@ -76,7 +79,8 @@ ch_flash_update_free (ChFlashUpdate *update)
 	g_free (update->version);
 	g_free (update->checksum);
 	g_free (update->filename);
-	g_string_free (update->changelog, TRUE);
+	g_string_free (update->info, TRUE);
+	g_string_free (update->warning, TRUE);
 	g_free (update);
 }
 
@@ -121,7 +125,8 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 		if (g_strcmp0 (element_name, "update") == 0) {
 			priv->pos = CH_FLASH_MD_POS_UPDATE;
 			priv->update_tmp = g_new0 (ChFlashUpdate, 1);
-			priv->update_tmp->changelog = g_string_new ("");
+			priv->update_tmp->info = g_string_new ("");
+			priv->update_tmp->warning = g_string_new ("");
 			return;
 		}
 		g_debug ("unknown start tag %s for updates", element_name);
@@ -156,8 +161,12 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 		return;
 	}
 	if (priv->pos == CH_FLASH_MD_POS_CHANGELOG) {
-		if (g_strcmp0 (element_name, "item") == 0) {
-			priv->pos = CH_FLASH_MD_POS_ITEM;
+		if (g_strcmp0 (element_name, "info") == 0) {
+			priv->pos = CH_FLASH_MD_POS_INFO;
+			return;
+		}
+		if (g_strcmp0 (element_name, "warning") == 0) {
+			priv->pos = CH_FLASH_MD_POS_WARNING;
 			return;
 		}
 		g_debug ("unknown start tag %s for updates", element_name);
@@ -237,15 +246,23 @@ ch_flash_md_end_element_cb (GMarkupParseContext *context,
 			priv->pos = CH_FLASH_MD_POS_UPDATE;
 			return;
 		}
-		g_debug ("unknown end tag %s for changelog", element_name);
+		g_debug ("unknown end tag %s for info", element_name);
 		return;
 	}
-	if (priv->pos == CH_FLASH_MD_POS_ITEM) {
-		if (g_strcmp0 (element_name, "item") == 0) {
+	if (priv->pos == CH_FLASH_MD_POS_INFO) {
+		if (g_strcmp0 (element_name, "info") == 0) {
 			priv->pos = CH_FLASH_MD_POS_CHANGELOG;
 			return;
 		}
-		g_debug ("unknown end tag %s for item", element_name);
+		g_debug ("unknown end tag %s for info", element_name);
+		return;
+	}
+	if (priv->pos == CH_FLASH_MD_POS_WARNING) {
+		if (g_strcmp0 (element_name, "warning") == 0) {
+			priv->pos = CH_FLASH_MD_POS_CHANGELOG;
+			return;
+		}
+		g_debug ("unknown end tag %s for warning", element_name);
 		return;
 	}
 	g_debug ("unknown end pos value: %s",
@@ -290,8 +307,13 @@ ch_flash_md_text_cb (GMarkupParseContext *context,
 		priv->update_tmp->checksum = g_strdup (tmp);
 		goto out;
 	}
-	if (priv->pos == CH_FLASH_MD_POS_ITEM) {
-		g_string_append_printf (priv->update_tmp->changelog,
+	if (priv->pos == CH_FLASH_MD_POS_INFO) {
+		g_string_append_printf (priv->update_tmp->info,
+					"* %s\n", tmp);
+		goto out;
+	}
+	if (priv->pos == CH_FLASH_MD_POS_WARNING) {
+		g_string_append_printf (priv->update_tmp->warning,
 					"* %s\n", tmp);
 		goto out;
 	}

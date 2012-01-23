@@ -28,7 +28,8 @@ typedef struct {
 	gchar		*version;
 	gchar		*checksum;
 	gchar		*filename;
-	GString		*changelog;
+	GString		*info;
+	GString		*warning;
 } ChFlashUpdate;
 
 GPtrArray	*ch_flash_md_parse_filename	(const gchar	*filename,
