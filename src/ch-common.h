@@ -36,6 +36,9 @@
 #define	CH_USB_HID_EP_OUT			(CH_USB_HID_EP | 0x00)
 #define	CH_USB_HID_EP_SIZE			64
 
+/* constants for ownership tags */
+#define CH_OWNER_LENGTH_MAX			60
+
 /**
  * CH_CMD_GET_COLOR_SELECT:
  *
@@ -228,6 +231,54 @@
  * This command is only available in firmware mode.
  **/
 #define	CH_CMD_SET_DARK_OFFSETS			0x10
+
+/**
+ * CH_CMD_GET_OWNER_NAME:
+ *
+ * Get User's Name
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][60:owner-name]
+ *
+ * This command is only available in firmware mode.
+ **/
+#define	CH_CMD_GET_OWNER_NAME			0x11
+
+/**
+ * CH_CMD_SET_OWNER_NAME:
+ *
+ * Set User's Name
+ *
+ * IN:  [1:cmd][60:owner-name]
+ * OUT: [1:retval][1:cmd]
+ *
+ * This command is only available in firmware mode.
+ **/
+#define	CH_CMD_SET_OWNER_NAME			0x12
+
+/**
+ * CH_CMD_GET_OWNER_EMAIL:
+ *
+ * Get User's Email Address
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][60:owner-email]
+ *
+ * This command is only available in firmware mode.
+ **/
+#define	CH_CMD_GET_OWNER_EMAIL			0x13
+
+/**
+ * CH_CMD_SET_OWNER_NAME:
+ *
+ * Set User's Email Address
+ *
+ * IN:  [1:cmd][60:owner-email]
+ * OUT: [1:retval][1:cmd]
+ *
+ * This command is only available in firmware mode.
+ **/
+#define	CH_CMD_SET_OWNER_EMAIL			0x14
 
 /**
  * CH_CMD_WRITE_EEPROM:
@@ -705,5 +756,17 @@ gboolean	 ch_device_cmd_erase_flash	(GUsbDevice	*device,
 						guint16		 address,
 						gsize		 len,
 						GError		**error);
+gboolean	 ch_device_cmd_set_owner_name	(GUsbDevice	*device,
+						 const gchar	*name,
+						 GError	 	**error);
+gboolean	 ch_device_cmd_get_owner_name	(GUsbDevice	*device,
+						 gchar		*name,
+						 GError	 	**error);
+gboolean	 ch_device_cmd_set_owner_email	(GUsbDevice	*device,
+						 const gchar	*email,
+						 GError	 	**error);
+gboolean	 ch_device_cmd_get_owner_email	(GUsbDevice	*device,
+						 gchar		*email,
+						 GError	 	**error);
 
 #endif

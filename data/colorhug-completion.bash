@@ -35,6 +35,8 @@ __colorhug_commandlist="
     get-integral-time
     get-leds
     get-multiplier
+    get-owner-email
+    get-owner-name
     get-post-scale
     get-pre-scale
     get-serial-number
@@ -49,6 +51,8 @@ __colorhug_commandlist="
     set-integral-time
     set-leds
     set-multiplier
+    set-owner-email
+    set-owner-name
     set-post-scale
     set-pre-scale
     set-serial-number

@@ -839,6 +839,104 @@ out:
 }
 
 /**
+ * ch_util_get_owner_name:
+ **/
+static gboolean
+ch_util_get_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gchar name[CH_OWNER_LENGTH_MAX];
+
+	/* get from HW */
+	ret = ch_device_cmd_get_owner_name (priv->device, name, error);
+	if (!ret)
+		goto out;
+	g_print ("%s\n", name);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_owner_name:
+ **/
+static gboolean
+ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gchar name[CH_OWNER_LENGTH_MAX];
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'name'");
+		goto out;
+	}
+	if(strlen(values[0]) >= CH_OWNER_LENGTH_MAX) {
+		g_print ("truncating name to %d characters\n", CH_OWNER_LENGTH_MAX-1);
+	}
+	memset(name, 0, CH_OWNER_LENGTH_MAX);
+	g_strlcpy(name, values[0], CH_OWNER_LENGTH_MAX);
+
+	/* set to HW */
+	g_print ("setting name to %s\n", name);
+	ret = ch_device_cmd_set_owner_name (priv->device, name, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_util_get_owner_email:
+ **/
+static gboolean
+ch_util_get_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gchar email[CH_OWNER_LENGTH_MAX];
+
+	/* get from HW */
+	ret = ch_device_cmd_get_owner_email (priv->device, email, error);
+	if (!ret)
+		goto out;
+	g_print ("%s\n", email);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_owner_email:
+ **/
+static gboolean
+ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gchar email[CH_OWNER_LENGTH_MAX];
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'email'");
+		goto out;
+	}
+	if(strlen(values[0]) >= CH_OWNER_LENGTH_MAX) {
+		g_print ("truncating email to %d characters\n", CH_OWNER_LENGTH_MAX-1);
+	}
+	memset (email, 0, CH_OWNER_LENGTH_MAX);
+	g_strlcpy (email, values[0], CH_OWNER_LENGTH_MAX);
+
+	/* set to HW */
+	g_print ("setting email to %s\n", email);
+	ret = ch_device_cmd_set_owner_email (priv->device, email, error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_leds:
  **/
 static gboolean
@@ -1559,6 +1657,26 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the sensor serial number"),
 		     ch_util_set_serial_number);
+	ch_util_add (priv->cmd_array,
+		     "get-owner-name",
+		     /* TRANSLATORS: command description */
+		     _("Gets the owner's name"),
+		     ch_util_get_owner_name);
+	ch_util_add (priv->cmd_array,
+		     "set-owner-name",
+		     /* TRANSLATORS: command description */
+		     _("Sets the owner's name"),
+		     ch_util_set_owner_name);
+	ch_util_add (priv->cmd_array,
+		     "get-owner-email",
+		     /* TRANSLATORS: command description */
+		     _("Gets the owner's email address"),
+		     ch_util_get_owner_email);
+	ch_util_add (priv->cmd_array,
+		     "set-owner-email",
+		     /* TRANSLATORS: command description */
+		     _("Sets the owner's email address"),
+		     ch_util_set_owner_email);
 	ch_util_add (priv->cmd_array,
 		     "get-leds",
 		     /* TRANSLATORS: command description */
