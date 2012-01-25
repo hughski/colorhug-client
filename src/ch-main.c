@@ -1119,14 +1119,45 @@ out:
 static gboolean
 ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 {
+	ChColorSelect color_select = 0;
+	ChFreqScale multiplier = 0;
 	gboolean ret;
+	guint16 integral_time = 0;
 	guint16 take_reading;
+
+	/* get from HW */
+	ret = ch_device_cmd_get_color_select (priv->device, &color_select, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the enabled sensor color */
+	g_print ("%s:\t\t%s\n", _("Color"),
+		 ch_color_select_to_string (color_select));
+
+	/* get from HW */
+	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the sensor scale factor */
+	g_print ("%s:\t%s\n", _("Multiplier"),
+		 ch_multiplier_to_string (multiplier));
+
+	/* get from HW */
+	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the sensor sample time */
+	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 
 	/* get from HW */
 	ret = ch_device_cmd_take_reading_raw (priv->device, &take_reading, error);
 	if (!ret)
 		goto out;
-	g_print ("%i\n", take_reading);
+
+	/* TRANSLATORS: this is the number of pulses detected */
+	g_print ("%s:\t\t%i\n", _("Pulses"), take_reading);
 out:
 	return ret;
 }
@@ -1137,8 +1168,27 @@ out:
 static gboolean
 ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	CdColorRGB value;
+	ChFreqScale multiplier = 0;
+	gboolean ret;
+	guint16 integral_time = 0;
+
+	/* get from HW */
+	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the sensor scale factor */
+	g_print ("%s:\t%s\n", _("Multiplier"),
+		 ch_multiplier_to_string (multiplier));
+
+	/* get from HW */
+	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the sensor sample time */
+	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 
 	/* get from HW */
 	ret = ch_device_cmd_take_readings (priv->device,
