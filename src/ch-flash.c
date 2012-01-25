@@ -766,13 +766,19 @@ out:
 }
 
 /**
- * ch_flash_reset_into_bootloader:
+ * ch_flash_got_firmware_data:
  **/
 static void
-ch_flash_reset_into_bootloader (ChFlashPrivate *priv)
+ch_flash_got_firmware_data (ChFlashPrivate *priv)
 {
 	const gchar *title;
 	GtkWidget *widget;
+
+	/* we can shortcut as we're already in bootloader mode */
+	if (priv->firmware_version[0] == 0) {
+		ch_flash_set_flash_success_0 (priv);
+		return;
+	}
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
@@ -845,15 +851,7 @@ ch_flash_got_firmware_cb (SoupSession *session,
 	memcpy (priv->firmware_data,
 		msg->response_body->data,
 		priv->firmware_len);
-
-	/* we can shortcut as we're already in bootloader mode */
-	if (priv->firmware_version[0] == 0) {
-		ch_flash_set_flash_success_0 (priv);
-		goto out;
-	}
-
-	/* reset into the bootloader where we can load the firmware */
-	ch_flash_reset_into_bootloader (priv);
+	ch_flash_got_firmware_data (priv);
 out:
 	g_free (message);
 	g_free (checksum_tmp);
@@ -1173,7 +1171,7 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	}
 	if (priv->warning_details->len > 1) {
 		g_string_set_size (priv->warning_details,
-			   priv->warning_details->len - 1);
+				   priv->warning_details->len - 1);
 	}
 
 	/* setup UI */
@@ -1277,10 +1275,13 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 			   SoupMessage *msg,
 			   gpointer user_data)
 {
-	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	const gchar *title;
+	gboolean ret;
 	gchar **lines = NULL;
 	gchar *uri = NULL;
+	GError *error = NULL;
+	GtkWidget *widget;
 	guint i;
 	guint tmp;
 	SoupURI *base_uri = NULL;
@@ -1309,6 +1310,28 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 			ch_flash_set_lost_or_stolen (priv);
 			goto out;
 		}
+	}
+
+	/* we've manually specified a local firmware file */
+	if (priv->filename != NULL) {
+		/* TRANSLATORS: we've specified a local file */
+		title = _("Flashing firmware file...");
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+		gtk_label_set_label (GTK_LABEL (widget), title);
+		ret = g_file_get_contents (priv->filename,
+					   (gchar **) &priv->firmware_data,
+					   &priv->firmware_len,
+					   &error);
+		if (!ret) {
+			/* TRANSLATORS: file read error when reading
+			 * local firmware file */
+			title = _("Failed to load file");
+			ch_flash_error_dialog (priv, title, error->message);
+			g_error_free (error);
+			goto out;
+		}
+		ch_flash_got_firmware_data (priv);
+		goto out;
 	}
 
 	/* get the latest manifest file */
@@ -1866,11 +1889,15 @@ main (int argc, char **argv)
 	ChFlashPrivate *priv;
 	gboolean ret;
 	gboolean verbose = FALSE;
+	gchar *filename = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
 	int status = 0;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+			/* TRANSLATORS: command line option */
+			_("Show extra debugging information"), NULL },
+		{ "filename", 'f', 0, G_OPTION_ARG_STRING, &filename,
 			/* TRANSLATORS: command line option */
 			_("Show extra debugging information"), NULL },
 		{ NULL}
@@ -1898,6 +1925,7 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChFlashPrivate, 1);
+	priv->filename = filename;
 	priv->update_details = g_string_new ("");
 	priv->warning_details = g_string_new ("");
 	priv->markdown = ch_markdown_new ();

@@ -1183,12 +1183,50 @@ out:
 }
 
 /**
+ * ch_util_get_prompt:
+ **/
+static gboolean
+ch_util_get_prompt (const gchar *question, gboolean defaultyes)
+{
+	gboolean ret = FALSE;
+	gboolean valid = FALSE;
+	gchar value;
+
+	g_print ("%s %s ",
+		 question,
+		 defaultyes ? "[Y/n]" : "[N/y]");
+	while (!valid) {
+		value = getchar ();
+		if (value == 'y' || value == 'Y') {
+			valid = TRUE;
+			ret = TRUE;
+		}
+		if (value == 'n' || value == 'N') {
+			valid = TRUE;
+			ret = FALSE;
+		}
+	}
+	return ret;
+}
+
+/**
  * ch_util_flash_firmware:
  **/
 static gboolean
 ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
+
+	/* print warning */
+	g_print ("WARNING: Do not shutdown the computer or unplug the device.\n");
+
+	/* TRANSLATORS: confirmation */
+	ret = ch_util_get_prompt (_("Flash the device?"), FALSE);
+	if (!ret) {
+		g_set_error_literal (error, 1, 0,
+				     "user declined");
+		goto out;
+	}
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -1204,6 +1242,9 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 	if (!ret)
 		goto out;
+
+	/* print success */
+	g_print ("INFO: Flashing was successful.\n");
 out:
 	return ret;
 }
