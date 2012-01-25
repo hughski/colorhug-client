@@ -37,6 +37,7 @@ colorhug_SOURCES =					\
 
 colorhug_LDADD =					\
 	libchshared.a					\
+	$(COLORD_LIBS)					\
 	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\

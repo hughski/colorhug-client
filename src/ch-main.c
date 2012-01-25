@@ -1060,6 +1060,84 @@ out:
 }
 
 /**
+ * ch_util_set_dark_offsets_auto:
+ **/
+static gboolean
+ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
+{
+	gboolean ret;
+	CdColorRGB value_old;
+	CdColorRGB value;
+
+	/* get from HW */
+	ret = ch_device_cmd_get_dark_offsets (priv->device,
+					      &value_old,
+					      error);
+	if (!ret)
+		goto out;
+
+	/* set dark offsets */
+	cd_color_set_rgb (&value, 0.0f, 0.0f, 0.0f);
+
+	/* set to HW */
+	ret = ch_device_cmd_set_dark_offsets (priv->device,
+					      &value,
+					      error);
+	if (!ret)
+		goto out;
+
+	/* setup HW */
+	ret = ch_device_cmd_set_integral_time (priv->device,
+					       CH_INTEGRAL_TIME_VALUE_MAX,
+					       error);
+	if (!ret)
+		goto out;
+	ret = ch_device_cmd_set_multiplier (priv->device,
+					    CH_FREQ_SCALE_100,
+					    error);
+	if (!ret)
+		goto out;
+
+	/* get from HW */
+	ret = ch_device_cmd_take_readings (priv->device,
+					   &value,
+					   error);
+	if (!ret)
+		goto out;
+	g_print ("Values: R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
+
+	/* TRANSLATORS: ask before we set these */
+	ret = ch_util_get_prompt (_("Set these values as the dark offsets"), FALSE);
+	if (!ret) {
+		/* restore HW */
+		ret = ch_device_cmd_set_dark_offsets (priv->device,
+						      &value_old,
+						      error);
+		if (!ret)
+			goto out;
+		g_set_error_literal (error, 1, 0,
+				     "user declined");
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_device_cmd_set_dark_offsets (priv->device,
+					      &value,
+					      error);
+	if (!ret)
+		goto out;
+
+	/* save EEPROM */
+	ret = ch_device_cmd_write_eeprom (priv->device,
+					  CH_WRITE_EEPROM_MAGIC,
+					  error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_set_dark_offsets:
  **/
 static gboolean
@@ -1067,6 +1145,12 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	CdColorRGB value;
+
+	/* be interactive */
+	if (g_strv_length (values) == 0) {
+		ret = ch_util_set_dark_offsets_auto (priv, error);
+		goto out;
+	}
 
 	/* parse */
 	if (g_strv_length (values) != 3) {
