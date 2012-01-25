@@ -211,7 +211,7 @@ static gboolean
 ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	ChColorSelect color_select;
+	ChColorSelect color_select = 0;
 
 	/* get from HW */
 	ret = ch_device_cmd_get_color_select (priv->device, &color_select, error);
@@ -220,16 +220,10 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	switch (color_select) {
 	case CH_COLOR_SELECT_BLUE:
-		g_print ("Blue\n");
-		break;
 	case CH_COLOR_SELECT_RED:
-		g_print ("Red\n");
-		break;
 	case CH_COLOR_SELECT_GREEN:
-		g_print ("Green\n");
-		break;
 	case CH_COLOR_SELECT_WHITE:
-		g_print ("White\n");
+		g_print ("%s\n", ch_color_select_to_string (color_select));
 		break;
 	default:
 		ret = FALSE;
@@ -327,13 +321,9 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("0%% (disabled)\n");
 		break;
 	case CH_FREQ_SCALE_2:
-		g_print ("2%%\n");
-		break;
 	case CH_FREQ_SCALE_20:
-		g_print ("20%%\n");
-		break;
 	case CH_FREQ_SCALE_100:
-		g_print ("100%%\n");
+		g_print ("%s\n", ch_multiplier_to_string (multiplier));
 		break;
 	default:
 		ret = FALSE;

@@ -102,6 +102,60 @@ ch_strerror (ChError error_enum)
 }
 
 /**
+ * ch_color_select_to_string:
+ **/
+const gchar *
+ch_color_select_to_string (ChColorSelect color_select)
+{
+	const char *str = NULL;
+	switch (color_select) {
+	case CH_COLOR_SELECT_BLUE:
+		str = "Blue";
+		break;
+	case CH_COLOR_SELECT_RED:
+		str = "Red";
+		break;
+	case CH_COLOR_SELECT_GREEN:
+		str = "Green";
+		break;
+	case CH_COLOR_SELECT_WHITE:
+		str = "White";
+		break;
+	default:
+		str = "Unknown";
+		break;
+	}
+	return str;
+}
+
+/**
+ * ch_multiplier_to_string:
+ **/
+const gchar *
+ch_multiplier_to_string (ChFreqScale multiplier)
+{
+	const char *str = NULL;
+	switch (multiplier) {
+	case CH_FREQ_SCALE_0:
+		str = "0%";
+		break;
+	case CH_FREQ_SCALE_2:
+		str = "2%";
+		break;
+	case CH_FREQ_SCALE_20:
+		str = "20%";
+		break;
+	case CH_FREQ_SCALE_100:
+		str = "100%";
+		break;
+	default:
+		str = "Unknown%";
+		break;
+	}
+	return str;
+}
+
+/**
  * ch_command_to_string:
  **/
 const gchar *

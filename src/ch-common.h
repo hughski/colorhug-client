@@ -615,6 +615,8 @@ typedef enum {
 /* prototypes */
 const gchar	*ch_strerror			(ChError	 error_enum);
 const gchar	*ch_command_to_string		(guint8		 cmd);
+const gchar	*ch_multiplier_to_string	(ChFreqScale	 multiplier);
+const gchar	*ch_color_select_to_string	(ChColorSelect	 color_select);
 
 void		ch_device_write_command_async	(GUsbDevice	*device,
 						 guint8		 cmd,
