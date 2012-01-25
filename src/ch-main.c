@@ -1037,7 +1037,7 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 					      error);
 	if (!ret)
 		goto out;
-	g_print ("R:%.4f G:%.4f B:%.4f\n", value.R, value.G, value.B);
+	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 out:
 	return ret;
 }
@@ -1129,7 +1129,7 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 					   error);
 	if (!ret)
 		goto out;
-	g_print ("R:%.4f G:%.4f B:%.4f\n", value.R, value.G, value.B);
+	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 out:
 	return ret;
 }
@@ -1160,7 +1160,7 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 					       error);
 	if (!ret)
 		goto out;
-	g_print ("X:%.4f Y:%.4f Z:%.4f\n", value.X, value.Y, value.Z);
+	g_print ("X:%.5f Y:%.5f Z:%.5f\n", value.X, value.Y, value.Z);
 out:
 	return ret;
 }
