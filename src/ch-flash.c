@@ -841,7 +841,8 @@ ch_flash_got_firmware_cb (SoupSession *session,
 	checksum_tmp = g_compute_checksum_for_data (G_CHECKSUM_SHA1,
 						    (const guchar *) msg->response_body->data,
 						    msg->response_body->length);
-	if (g_strcmp0 (priv->checksum, checksum_tmp) != 0) {
+	if (priv->checksum != NULL &&
+	    g_strcmp0 (priv->checksum, checksum_tmp) != 0) {
 		/* TRANSLATORS: the server gave us an invalid file */
 		title = _("Firmware has incorrect checksum");
 		message = g_strdup_printf ("Expected %s, got %s",
