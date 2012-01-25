@@ -106,12 +106,8 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 	title = _("Flashing the device failed but the ColorHug is not damaged.");
 	g_string_append_printf (msg, "<b>%s</b>\n", title);
 
-	/* TRANSLATORS: this explains the flashy light thing */
-	title = _("If there were any problems flashing the device, it will enter a bootloader mode.");
-	g_string_append_printf (msg, "%s\n", title);
-
 	/* TRANSLATORS: hopefully we can "fix" this automatically */
-	title = _("Just remove the ColorHug device from the computer, reinsert it and re-run this program.");
+	title = _("Remove the ColorHug device from the computer, reinsert it and re-run this program.");
 	g_string_append_printf (msg, "%s", title);
 
 	/* update UI */
