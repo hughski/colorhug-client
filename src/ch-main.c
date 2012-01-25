@@ -178,6 +178,33 @@ out:
 }
 
 /**
+ * ch_util_get_prompt:
+ **/
+static gboolean
+ch_util_get_prompt (const gchar *question, gboolean defaultyes)
+{
+	gboolean ret = FALSE;
+	gboolean valid = FALSE;
+	gchar value;
+
+	g_print ("%s %s ",
+		 question,
+		 defaultyes ? "[Y/n]" : "[N/y]");
+	while (!valid) {
+		value = getchar ();
+		if (value == 'y' || value == 'Y') {
+			valid = TRUE;
+			ret = TRUE;
+		}
+		if (value == 'n' || value == 'N') {
+			valid = TRUE;
+			ret = FALSE;
+		}
+	}
+	return ret;
+}
+
+/**
  * ch_util_get_color_select:
  **/
 static gboolean
@@ -1179,33 +1206,6 @@ ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (!ret)
 		goto out;
 out:
-	return ret;
-}
-
-/**
- * ch_util_get_prompt:
- **/
-static gboolean
-ch_util_get_prompt (const gchar *question, gboolean defaultyes)
-{
-	gboolean ret = FALSE;
-	gboolean valid = FALSE;
-	gchar value;
-
-	g_print ("%s %s ",
-		 question,
-		 defaultyes ? "[Y/n]" : "[N/y]");
-	while (!valid) {
-		value = getchar ();
-		if (value == 'y' || value == 'Y') {
-			valid = TRUE;
-			ret = TRUE;
-		}
-		if (value == 'n' || value == 'N') {
-			valid = TRUE;
-			ret = FALSE;
-		}
-	}
 	return ret;
 }
 
