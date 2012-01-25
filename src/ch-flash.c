@@ -70,6 +70,7 @@ static void
 ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *message)
 {
 	GtkWindow *window;
+	GtkWidget *widget;
 	GtkWidget *dialog;
 
 	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_flash"));
@@ -82,6 +83,10 @@ ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *me
 						  "%s", message);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
+
+	/* close main window */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_flash"));
+	gtk_widget_destroy (widget);
 }
 
 /**
