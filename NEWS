@@ -1,3 +1,29 @@
+Version 0.1.5
+~~~~~~~~~~~~~
+Released: 2011-01-26
+
+Notes:
+ - We've now switched to a XML manifest format which allows us to check
+   the size and sha1sum of the firmware file, and also to show the user
+   any warnings about the new firmware.
+
+New Features:
+ - Add an interactive version of 'colorhug set-dark-offsets' (Richard Hughes)
+ - Add a --repair command line argument to colorhug-ccmx (Richard Hughes)
+ - Add a simple HID client example (Richard Hughes)
+ - Added name and email fields in client (Matthew Hirsch)
+ - Add icons for the application/x-ccmx mime type (Richard Hughes)
+ - Add some raw EEPROM commands to the command line tool (Richard Hughes)
+ - Allow the user to flash stand alone files with colorhug-flash (Richard Hughes)
+ - Check the SHA1 of the firmware before using it (Richard Hughes)
+ - Show warning messages about firmware in a modal dialog box (Richard Hughes)
+
+Bugfixes:
+ - Always pad the flash .bin file to a 64 byte chunk (Richard Hughes)
+ - Fix handing device endianess (Michal Čihař)
+ - Increase the USB timeout for dark reads (Richard Hughes)
+ - Show the user the sensor conditions before showing CLI results (Richard Hughes)
+
 Version 0.1.4
 ~~~~~~~~~~~~~
 Released: 2011-01-10
