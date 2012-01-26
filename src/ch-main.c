@@ -1291,9 +1291,11 @@ out:
 static gboolean
 ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	CdColorXYZ value;
+	ChFreqScale multiplier = 0;
+	gboolean ret;
 	guint16 calibration_index = 0;
+	guint16 integral_time = 0;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -1303,6 +1305,23 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 		goto out;
 	}
 	calibration_index = atoi (values[0]);
+
+	/* get from HW */
+	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the sensor scale factor */
+	g_print ("%s:\t%s\n", _("Multiplier"),
+		 ch_multiplier_to_string (multiplier));
+
+	/* get from HW */
+	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
+	if (!ret)
+		goto out;
+
+	/* TRANSLATORS: this is the sensor sample time */
+	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 
 	/* get from HW */
 	ret = ch_device_cmd_take_readings_xyz (priv->device,
