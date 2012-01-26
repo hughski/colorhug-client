@@ -79,8 +79,10 @@ ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *me
 					 GTK_MESSAGE_ERROR,
 					 GTK_BUTTONS_CLOSE,
 					 "%s", title);
-	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-						  "%s", message);
+	if (message != NULL) {
+		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+							  "%s", message);
+	}
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 
