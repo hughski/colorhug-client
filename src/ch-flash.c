@@ -476,7 +476,8 @@ ch_flash_boot_flash_cb (GObject *source,
 	}
 
 	/* wait one second */
-	g_timeout_add (1000, ch_flash_boot_flash_delay_cb, priv);
+	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
+		       ch_flash_boot_flash_delay_cb, priv);
 out:
 	return;
 }
@@ -762,7 +763,8 @@ ch_flash_reset_cb (GObject *source,
 	}
 
 	/* wait one second */
-	g_timeout_add (1000, ch_flash_reset_delay_cb, priv);
+	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
+		       ch_flash_reset_delay_cb, priv);
 out:
 	return;
 }

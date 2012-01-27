@@ -218,7 +218,7 @@ ch_client_flash_firmware (ChClient *client,
 
 	/* wait for the device to reconnect */
 	g_object_unref (device);
-	g_usleep (1 * G_USEC_PER_SEC);
+	g_usleep (CH_FLASH_RECONNECT_TIMEOUT * 1000);
 	device = ch_client_get_default (client, error);
 	if (!ret)
 		goto out;
