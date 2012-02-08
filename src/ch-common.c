@@ -30,7 +30,9 @@
 #include "ch-math.h"
 
 /* the default timeout */
-#define CH_DEVICE_USB_TIMEOUT	5000 /* ms */
+#define CH_DEVICE_USB_TIMEOUT		5000 /* ms */
+#define CH_DEVICE_DETERMINANT_AVE	21.53738
+#define CH_DEVICE_DETERMINANT_ERROR	10.00000
 
 /**
  * ch_strerror:
@@ -926,12 +928,13 @@ out:
 gboolean
 ch_device_cmd_get_calibration (GUsbDevice *device,
 			       guint16 calibration_index,
-			       gdouble *calibration,
+			       CdMat3x3 *calibration,
 			       guint8 *types,
 			       gchar *description,
 			       GError **error)
 {
 	gboolean ret;
+	gdouble *calibration_tmp;
 	guint8 buffer[9*4 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
 	guint i;
 
@@ -953,9 +956,10 @@ ch_device_cmd_get_calibration (GUsbDevice *device,
 
 	/* convert back into floating point */
 	if (calibration != NULL) {
+		calibration_tmp = cd_mat33_get_data (calibration);
 		for (i = 0; i < 9; i++) {
 			ch_packed_float_to_double ((ChPackedFloat *) &buffer[i*4],
-						   &calibration[i]);
+						   &calibration_tmp[i]);
 		}
 	}
 
@@ -979,12 +983,13 @@ out:
 gboolean
 ch_device_cmd_set_calibration (GUsbDevice *device,
 			       guint16 calibration_index,
-			       const gdouble *calibration,
+			       const CdMat3x3 *calibration,
 			       guint8 types,
 			       const gchar *description,
 			       GError **error)
 {
 	gboolean ret;
+	gdouble *calibration_tmp;
 	guint8 buffer[9*4 + 2 + 1 + CH_CALIBRATION_DESCRIPTION_LEN];
 	guint i;
 
@@ -999,7 +1004,8 @@ ch_device_cmd_set_calibration (GUsbDevice *device,
 
 	/* convert from float to signed value */
 	for (i = 0; i < 9; i++) {
-		ch_double_to_packed_float (calibration[i],
+		calibration_tmp = cd_mat33_get_data (calibration);
+		ch_double_to_packed_float (calibration_tmp[i],
 					   (ChPackedFloat *) &buffer[i*4 + 2]);
 	}
 
@@ -1035,15 +1041,18 @@ ch_device_cmd_set_calibration_ccmx (GUsbDevice *device,
 				    const gchar *filename,
 				    GError **error)
 {
+	CdMat3x3 calibration;
 	cmsHANDLE ccmx = NULL;
 	const gchar *description;
 	const gchar *sheet_type;
 	gboolean ret;
+	gdouble *calibration_tmp;
+	gdouble det;
 	gchar *ccmx_data = NULL;
-	gdouble calibration[9];
 	gsize ccmx_size;
+	guint i;
 
-	g_return_val_if_fail (calibration != NULL, FALSE);
+	g_return_val_if_fail (filename != NULL, FALSE);
 	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -1080,20 +1089,42 @@ ch_device_cmd_set_calibration_ccmx (GUsbDevice *device,
 	}
 
 	/* get the values */
-	calibration[0] = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
-	calibration[1] = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
-	calibration[2] = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
-	calibration[3] = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
-	calibration[4] = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
-	calibration[5] = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
-	calibration[6] = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
-	calibration[7] = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
-	calibration[8] = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
+	calibration.m00 = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
+	calibration.m01 = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
+	calibration.m02 = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
+	calibration.m10 = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
+	calibration.m11 = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
+	calibration.m12 = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
+	calibration.m20 = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
+	calibration.m21 = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
+	calibration.m22 = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
+
+	/* check for sanity */
+	calibration_tmp = cd_mat33_get_data (&calibration);
+	for (i = 0; i < 9; i++) {
+		if (calibration_tmp[i] < -10.0f ||
+		    calibration_tmp[i] > 10.0f) {
+			ret = FALSE;
+			g_set_error (error, 1, 0,
+				     "Matrix value %i out of range %f",
+				     i, calibration_tmp[i]);
+			goto out;
+		}
+	}
+
+	/* check the scale is correct */
+	det = cd_mat33_determinant (&calibration);
+	if (ABS (det - CH_DEVICE_DETERMINANT_AVE) > CH_DEVICE_DETERMINANT_ERROR) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Matrix determinant out of range: %f", det);
+		goto out;
+	}
 
 	/* set to HW */
 	ret = ch_device_cmd_set_calibration (device,
 					     calibration_index,
-					     calibration,
+					     &calibration,
 					     CH_CALIBRATION_TYPE_ALL,
 					     description,
 					     error);

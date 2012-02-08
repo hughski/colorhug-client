@@ -356,8 +356,8 @@ ch_test_eeprom_func (void)
 	gdouble pre_scale = 0;
 	gdouble pre_scale_tmp = 0;
 	guint32 serial_number = 0;
-	gdouble calibration[9];
-	gdouble calibration_tmp[9];
+	CdMat3x3 calibration;
+	CdMat3x3 calibration_tmp;
 	gchar desc[24];
 	GUsbDevice *device;
 
@@ -439,18 +439,18 @@ ch_test_eeprom_func (void)
 	g_assert_cmpint (value.B, ==, 0.56);
 
 	/* verify calibration */
-	calibration[0] = 1.0f;
-	calibration[1] = 2.0f;
-	calibration[2] = 3.0f;
-	calibration[3] = 4.0f;
-	calibration[4] = 5.0f;
-	calibration[5] = 6.0f;
-	calibration[6] = 7.0f;
-	calibration[7] = 8.0f;
-	calibration[8] = 9.0f;
+	calibration.m00 = 1.0f;
+	calibration.m01 = 2.0f;
+	calibration.m02 = 3.0f;
+	calibration.m10 = 4.0f;
+	calibration.m11 = 5.0f;
+	calibration.m12 = 6.0f;
+	calibration.m20 = 7.0f;
+	calibration.m21 = 8.0f;
+	calibration.m22 = 9.0f;
 	ret = ch_device_cmd_set_calibration (device,
 					     60,
-					     calibration,
+					     &calibration,
 					     CH_CALIBRATION_TYPE_CRT,
 					     "test0",
 					     &error);
@@ -458,7 +458,7 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 	ret = ch_device_cmd_set_calibration (device,
 					     61,
-					     calibration,
+					     &calibration,
 					     CH_CALIBRATION_TYPE_PROJECTOR,
 					     "test1",
 					     &error);
@@ -466,7 +466,7 @@ ch_test_eeprom_func (void)
 	g_assert (ret);
 	ret = ch_device_cmd_set_calibration (device,
 					     60,
-					     calibration,
+					     &calibration,
 					     CH_CALIBRATION_TYPE_CRT,
 					     "test0",
 					     &error);
@@ -476,27 +476,27 @@ ch_test_eeprom_func (void)
 	/* read back data */
 	ret = ch_device_cmd_get_calibration (device,
 					     60,
-					     calibration_tmp,
+					     &calibration_tmp,
 					     &types,
 					     desc,
 					     &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert (memcmp (calibration_tmp,
-			  calibration,
+	g_assert (memcmp (&calibration_tmp,
+			  &calibration,
 			  sizeof (gfloat) * 9) == 0);
 	g_assert_cmpint (types, ==, CH_CALIBRATION_TYPE_CRT);
 	g_assert_cmpstr (desc, ==, "test0");
 	ret = ch_device_cmd_get_calibration (device,
 					     61,
-					     calibration_tmp,
+					     &calibration_tmp,
 					     &types,
 					     desc,
 					     &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	g_assert (memcmp (calibration_tmp,
-			  calibration,
+	g_assert (memcmp (&calibration_tmp,
+			  &calibration,
 			  sizeof (gfloat) * 9) == 0);
 	g_assert_cmpint (types, ==, CH_CALIBRATION_TYPE_PROJECTOR);
 	g_assert_cmpstr (desc, ==, "test1");
@@ -606,7 +606,7 @@ ch_test_reading_xyz_func (void)
 {
 	ChClient *client;
 	gboolean ret;
-	gdouble calibration[9];
+	CdMat3x3 calibration;
 	CdColorXYZ reading1;
 	CdColorXYZ reading2;
 	gdouble scaling_factor_actual;
@@ -633,18 +633,10 @@ ch_test_reading_xyz_func (void)
 	g_assert (device != NULL);
 
 	/* set unity calibration */
-	calibration[0] = 1.0f;
-	calibration[1] = 0.0f;
-	calibration[2] = 0.0f;
-	calibration[3] = 0.0f;
-	calibration[4] = 1.0f;
-	calibration[5] = 0.0f;
-	calibration[6] = 0.0f;
-	calibration[7] = 0.0f;
-	calibration[8] = 1.0f;
+	cd_mat33_set_identity (&calibration);
 	ret = ch_device_cmd_set_calibration (device,
 					     60,
-					     calibration,
+					     &calibration,
 					     CH_CALIBRATION_TYPE_ALL,
 					     "test0",
 					     &error);

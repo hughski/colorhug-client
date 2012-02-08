@@ -501,13 +501,15 @@ out:
  * ch_util_show_calibration:
  **/
 static void
-ch_util_show_calibration (const gdouble *calibration)
+ch_util_show_calibration (const CdMat3x3 *calibration)
 {
+	gdouble *calibration_tmp;
 	guint i, j;
+	calibration_tmp = cd_mat33_get_data (calibration);
 	for (j = 0; j < 3; j++) {
 		g_print ("( ");
 		for (i = 0; i < 3; i++) {
-			g_print ("%.2f\t", calibration[j*3 + i]);
+			g_print ("%.2f\t", calibration_tmp[j*3 + i]);
 		}
 		g_print (")\n");
 	}
@@ -520,7 +522,7 @@ static gboolean
 ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble calibration[9];
+	CdMat3x3 calibration;
 	guint16 calibration_index = 0;
 	gchar description[24];
 	guint8 types;
@@ -537,7 +539,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* get from HW */
 	ret = ch_device_cmd_get_calibration (priv->device,
 					     calibration_index,
-					     calibration,
+					     &calibration,
 					     &types,
 					     description,
 					     error);
@@ -548,7 +550,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	g_print ("supports CRT: %i\n", (types & 0x02) > 0);
 	g_print ("supports projector: %i\n", (types & 0x04) > 0);
 	g_print ("description: %s\n", description);
-	ch_util_show_calibration (calibration);
+	ch_util_show_calibration (&calibration);
 out:
 	return ret;
 }
@@ -559,11 +561,12 @@ out:
 static gboolean
 ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
+	CdMat3x3 calibration;
 	gboolean ret;
-	gdouble calibration[9];
+	gdouble *calibration_tmp;
 	guint16 calibration_index = 0;
-	guint types = 0;
 	guint i;
+	guint types = 0;
 
 	/* parse */
 	if (g_strv_length (values) != 12) {
@@ -587,12 +590,13 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid type, expected 'lcd', 'crt', 'projector'");
 		goto out;
 	}
+	calibration_tmp = cd_mat33_get_data (&calibration);
 	for (i = 0; i < 9; i++)
-		calibration[i] = atof (values[i+2]);
+		calibration_tmp[i] = atof (values[i+2]);
 
 	/* check is valid */
 	for (i = 0; i < 9; i++) {
-		if (calibration[i] > 0x7fff || calibration[i] < -0x7fff) {
+		if (calibration_tmp[i] > 0x7fff || calibration_tmp[i] < -0x7fff) {
 			ret = FALSE;
 			g_set_error_literal (error, 1, 0,
 					     "invalid value, expect -1.0 to +1.0");
@@ -612,13 +616,13 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* set to HW */
 	ret = ch_device_cmd_set_calibration (priv->device,
 					     calibration_index,
-					     calibration,
+					     &calibration,
 					     types,
 					     values[11],
 					     error);
 	if (!ret)
 		goto out;
-	ch_util_show_calibration (calibration);
+	ch_util_show_calibration (&calibration);
 out:
 	return ret;
 }

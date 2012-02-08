@@ -119,6 +119,7 @@ ch_self_test_LDADD =					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\
 	$(LCMS_LIBS)					\
+	$(COLORD_LIBS)					\
 	-lm
 
 ch_self_test_CFLAGS = $(WARNINGFLAGS_C)

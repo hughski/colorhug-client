@@ -674,13 +674,13 @@ gboolean	 ch_device_cmd_get_firmware_ver	(GUsbDevice	*device,
 						 GError		**error);
 gboolean	 ch_device_cmd_get_calibration	(GUsbDevice	*device,
 						 guint16	 calibration_index,
-						 gdouble	*calibration,
+						 CdMat3x3	*calibration,
 						 guint8		*types,
 						 gchar		*description,
 						 GError		**error);
 gboolean	 ch_device_cmd_set_calibration	(GUsbDevice	*device,
 						 guint16	 calibration_index,
-						 const gdouble	*calibration,
+						 const CdMat3x3	*calibration,
 						 guint8		 types,
 						 const gchar	*description,
 						 GError		**error);

@@ -75,25 +75,16 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
-	gdouble calibration[9];
+	CdMat3x3 calibration;
 	gdouble pre_scale = 5.0f;
 	gdouble post_scale = 3000.0f;
 	guint16 calibration_map[6];
 
-	calibration[0] = 1.0f;
-	calibration[1] = 0.0f;
-	calibration[2] = 0.0f;
-	calibration[3] = 0.0f;
-	calibration[4] = 1.0f;
-	calibration[5] = 0.0f;
-	calibration[6] = 0.0f;
-	calibration[7] = 0.0f;
-	calibration[8] = 1.0f;
-
 	/* set to HW */
+	cd_mat33_set_identity (&calibration);
 	ret = ch_device_cmd_set_calibration (priv->device,
 					     0,
-					     calibration,
+					     &calibration,
 					     CH_CALIBRATION_TYPE_ALL,
 					     "Default unity value",
 					     &error);
@@ -157,23 +148,24 @@ out:
 static void
 ch_util_refresh (ChUtilPrivate *priv)
 {
-	const gchar *title;
+	CdColorRGB value;
+	CdMat3x3 calibration;
 	ChColorSelect color_select = 0;
 	ChFreqScale multiplier = 0;
+	ChStatusLed leds;
+	const gchar *title;
 	gboolean ret;
 	gchar *label;
 	gchar *tmp;
-	GError *error = NULL;
-	gdouble calibration[9];
-	gdouble pre_scale;
+	gdouble *calibration_tmp;
 	gdouble post_scale;
+	gdouble pre_scale;
+	GError *error = NULL;
 	GtkAdjustment *adj;
 	GtkWidget *widget;
 	guint16 integral_time = 0;
 	guint16 major, minor, micro;
-	CdColorRGB value;
 	guint32 serial_number = 0;
-	ChStatusLed leds;
 	guint i, j;
 
 	/* get leds from HW */
@@ -293,7 +285,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	/* get calibration */
 	ret = ch_device_cmd_get_calibration (priv->device,
 					     0,
-					     calibration,
+					     &calibration,
 					     NULL,
 					     NULL,
 					     &error);
@@ -304,10 +296,11 @@ ch_util_refresh (ChUtilPrivate *priv)
 		g_clear_error (&error);
 		ch_util_set_default_calibration (priv);
 	}
+	calibration_tmp = cd_mat33_get_data (&calibration);
 	for (j = 0; j < 3; j++) {
 		for (i = 0; i < 3; i++) {
 			label = g_strdup_printf ("label_cal_%i%i", j, i);
-			tmp = g_strdup_printf ("%.4f", calibration[j*3 + i]);
+			tmp = g_strdup_printf ("%.4f", calibration_tmp[j*3 + i]);
 			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, label));
 			gtk_label_set_label (GTK_LABEL (widget), tmp);
 			g_free (tmp);
