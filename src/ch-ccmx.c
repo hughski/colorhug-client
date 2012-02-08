@@ -28,7 +28,6 @@
 #include <math.h>
 #include <gusb.h>
 #include <libsoup/soup.h>
-#include <stdlib.h>
 #include <lcms2.h>
 
 #include "ch-common.h"

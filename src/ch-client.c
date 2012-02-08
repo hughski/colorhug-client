@@ -21,7 +21,6 @@
 
 #include "config.h"
 
-#include <stdlib.h>
 #include <string.h>
 #include <glib-object.h>
 #include <gio/gio.h>

@@ -28,7 +28,6 @@
 #include <math.h>
 #include <gusb.h>
 #include <libsoup/soup.h>
-#include <stdlib.h>
 
 #include "ch-common.h"
 #include "ch-markdown.h"
@@ -1046,7 +1045,7 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 	if (g_strv_length (split) != 3)
 		goto out;
 	for (i = 0; i < 3; i++)
-		tmp[i] = atoi (split[i]);
+		tmp[i] = g_ascii_strtoull (split[i], NULL, 10);
 
 	/* check versions */
 	if (ch_flash_get_packed_version (tmp) >
@@ -1309,7 +1308,7 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 		if (lines[i][0] == '\0')
 			continue;
 		/* check if matches serial number */
-		tmp = atoi (lines[i]);
+		tmp = g_ascii_strtoull (lines[i], NULL, 10);
 		if (tmp == priv->serial_number) {
 			ch_flash_set_lost_or_stolen (priv);
 			goto out;

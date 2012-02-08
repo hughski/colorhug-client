@@ -24,7 +24,6 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <locale.h>
-#include <stdlib.h>
 #include <lcms2.h>
 #include <math.h>
 #include <sqlite3.h>
@@ -409,7 +408,7 @@ ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	integral_time = atoi (values[0]);
+	integral_time = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
 	ret = ch_device_cmd_set_integral_time (priv->device, integral_time, error);
@@ -463,7 +462,7 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 		goto out;
 	}
 	for (i = 0; i < 6; i++)
-		calibration_map[i] = atoi (values[i]);
+		calibration_map[i] = g_ascii_strtoull (values[i], NULL, 10);
 
 	/* set to HW */
 	ret = ch_device_cmd_set_calibration_map (priv->device,
@@ -534,7 +533,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'calibration_index'");
 		goto out;
 	}
-	calibration_index = atoi (values[0]);
+	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* get from HW */
 	ret = ch_device_cmd_get_calibration (priv->device,
@@ -575,7 +574,7 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'index' 'types' 'values' 'description'");
 		goto out;
 	}
-	calibration_index = atoi (values[0]);
+	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* try to parse magic constants */
 	if (g_strstr_len (values[1], -1, "lcd") != NULL)
@@ -592,7 +591,7 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 	calibration_tmp = cd_mat33_get_data (&calibration);
 	for (i = 0; i < 9; i++)
-		calibration_tmp[i] = atof (values[i+2]);
+		calibration_tmp[i] = g_ascii_strtod (values[i+2], NULL);
 
 	/* check is valid */
 	for (i = 0; i < 9; i++) {
@@ -643,7 +642,7 @@ ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'index'");
 		goto out;
 	}
-	calibration_index = atoi (values[0]);
+	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
 	ret = ch_device_cmd_clear_calibration (priv->device,
@@ -714,7 +713,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	}
 
 	/* load file */
-	calibration_index = atoi (values[0]);
+	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
 	ret = ch_device_cmd_set_calibration_ccmx (priv->device,
@@ -840,7 +839,7 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 			goto out;
 		}
 	} else {
-		serial_number = atol (values[0]);
+		serial_number = g_ascii_strtoull (values[0], NULL, 10);
 	}
 	if (serial_number == 0) {
 		ret = FALSE;
@@ -1013,7 +1012,7 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	} else if (g_strcmp0 (values[0], "both") == 0) {
 		leds = CH_STATUS_LED_RED | CH_STATUS_LED_GREEN;
 	} else {
-		leds = atoi (values[0]);
+		leds = g_ascii_strtoull (values[0], NULL, 10);
 		if (leds > 3) {
 			ret = FALSE;
 			g_set_error (error, 1, 0,
@@ -1025,9 +1024,9 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* get the optional other parameters */
 	if (g_strv_length (values) == 4) {
-		repeat = atoi (values[1]);
-		time_on = atoi (values[2]);
-		time_off = atoi (values[3]);
+		repeat = g_ascii_strtoull (values[1], NULL, 10);
+		time_on = g_ascii_strtoull (values[2], NULL, 10);
+		time_off = g_ascii_strtoull (values[3], NULL, 10);
 	}
 
 	/* set to HW */
@@ -1163,9 +1162,9 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	value.R = atof (values[0]);
-	value.G = atof (values[1]);
-	value.B = atof (values[2]);
+	value.R = g_ascii_strtod (values[0], NULL);
+	value.G = g_ascii_strtod (values[1], NULL);
+	value.B = g_ascii_strtod (values[2], NULL);
 
 	/* set to HW */
 	ret = ch_device_cmd_set_dark_offsets (priv->device,
@@ -1308,7 +1307,7 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'calibration_index'");
 		goto out;
 	}
-	calibration_index = atoi (values[0]);
+	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* get from HW */
 	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
@@ -1432,7 +1431,7 @@ ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	pre_scale = atof (values[0]);
+	pre_scale = g_ascii_strtod (values[0], NULL);
 	if (pre_scale < -0x7fff || pre_scale > 0x7fff) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1487,7 +1486,7 @@ ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	post_scale = atof (values[0]);
+	post_scale = g_ascii_strtod (values[0], NULL);
 	if (post_scale < -0x7fff || post_scale > 0x7fff) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1539,7 +1538,7 @@ ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value'");
 		goto out;
 	}
-	flash_success = atoi (values[0]);
+	flash_success = g_ascii_strtoull (values[0], NULL, 10);
 	if (flash_success > 1) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1579,7 +1578,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* read flash */
-	address = strtol(values[0], NULL, 16);
+	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address < CH_EEPROM_ADDR_RUNCODE) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1587,7 +1586,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 			     address);
 		goto out;
 	}
-	len = atoi (values[1]);
+	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1 || len > 60) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1642,7 +1641,7 @@ ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* read flash */
-	address = strtol(values[0], NULL, 16);
+	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address < CH_EEPROM_ADDR_RUNCODE) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1650,7 +1649,7 @@ ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 			     address);
 		goto out;
 	}
-	len = atoi (values[1]);
+	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1 || len > 0xffff) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1689,7 +1688,7 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* read flash */
-	address = strtol(values[0], NULL, 16);
+	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address < CH_EEPROM_ADDR_RUNCODE) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1697,7 +1696,7 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 			     address);
 		goto out;
 	}
-	len = atoi (values[1]);
+	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1 || len > 60) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
