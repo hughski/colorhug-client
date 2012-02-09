@@ -17,7 +17,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 gsettings_schemas_in_files = com.hughski.colorhug-client.gschema.xml.in
 gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
 
-pkgdata_DATA =						\
+UI_FILES =						\
 	ch-spectro-util.ui				\
 	ch-ccmx.ui					\
 	ch-flash.ui
@@ -25,7 +25,7 @@ pkgdata_DATA =						\
 EXTRA_DIST =						\
 	$(gsettings_schemas_in_files)			\
 	$(desktop_in_files)				\
-	$(pkgdata_DATA)
+	$(UI_FILES)
 
 clean-local :
 	rm -f *~

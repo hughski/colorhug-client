@@ -83,6 +83,8 @@ colorhug_cmd_CFLAGS =					\
 colorhug_flash_SOURCES =				\
 	ch-markdown.c					\
 	ch-markdown.h					\
+	ch-flash-resources.c				\
+	ch-flash-resources.h				\
 	ch-flash-md.c					\
 	ch-flash-md.h					\
 	ch-flash.c
@@ -101,6 +103,8 @@ colorhug_flash_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_ccmx_SOURCES =					\
+	ch-ccmx-resources.c				\
+	ch-ccmx-resources.h				\
 	ch-ccmx.c
 
 colorhug_ccmx_LDADD =					\
@@ -125,6 +129,29 @@ colorhug_inhx32_to_bin_LDADD =				\
 
 colorhug_inhx32_to_bin_CFLAGS =				\
 	$(WARNINGFLAGS_C)
+
+ch-flash-resources.c: colorhug-flash.gresource.xml ../data/ch-flash.ui
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-flash.gresource.xml
+ch-flash-resources.h: colorhug-flash.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-flash.gresource.xml
+
+ch-ccmx-resources.c: colorhug-ccmx.gresource.xml ../data/ch-ccmx.ui
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-ccmx.gresource.xml
+ch-ccmx-resources.h: colorhug-ccmx.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-ccmx.gresource.xml
+
+BUILT_SOURCES =						\
+	ch-ccmx-resources.c				\
+	ch-ccmx-resources.h				\
+	ch-flash-resources.c				\
+	ch-flash-resources.h
+
+EXTRA_DIST =						\
+	colorhug-ccmx.gresource.xml			\
+	colorhug-flash.gresource.xml
+
+MAINTAINERCLEANFILES =					\
+	$(srcdir)/libchshared.a
 
 install-data-hook:
 	mkdir -p $(DESTDIR)$(libexecdir);

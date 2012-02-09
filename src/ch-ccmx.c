@@ -1491,9 +1491,9 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 
 	/* get UI */
 	priv->builder = gtk_builder_new ();
-	retval = gtk_builder_add_from_file (priv->builder,
-					    CH_DATA "/ch-ccmx.ui",
-					    &error);
+	retval = gtk_builder_add_from_resource (priv->builder,
+						"/com/hughski/colorhug/ch-ccmx.ui",
+						&error);
 	if (retval == 0) {
 		g_warning ("failed to load ui: %s",
 			   error->message);

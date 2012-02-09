@@ -1347,9 +1347,9 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	/* get UI */
 	string = g_string_new ("");
 	priv->builder = gtk_builder_new ();
-	retval = gtk_builder_add_from_file (priv->builder,
-					    CH_DATA "/ch-flash.ui",
-					    &error);
+	retval = gtk_builder_add_from_resource (priv->builder,
+						"/com/hughski/colorhug/ch-flash.ui",
+						&error);
 	if (retval == 0) {
 		g_warning ("failed to load ui: %s",
 			   error->message);
