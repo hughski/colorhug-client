@@ -1047,7 +1047,9 @@ ch_device_cmd_set_calibration_ccmx (GUsbDevice *device,
 	const gchar *sheet_type;
 	gboolean ret;
 	gdouble *calibration_tmp;
+#if CD_CHECK_VERSION(0,1,17)
 	gdouble det;
+#endif
 	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
 	guint i;
@@ -1112,6 +1114,7 @@ ch_device_cmd_set_calibration_ccmx (GUsbDevice *device,
 		}
 	}
 
+#if CD_CHECK_VERSION(0,1,17)
 	/* check the scale is correct */
 	det = cd_mat33_determinant (&calibration);
 	if (ABS (det - CH_DEVICE_DETERMINANT_AVE) > CH_DEVICE_DETERMINANT_ERROR) {
@@ -1120,6 +1123,7 @@ ch_device_cmd_set_calibration_ccmx (GUsbDevice *device,
 			     "Matrix determinant out of range: %f", det);
 		goto out;
 	}
+#endif
 
 	/* set to HW */
 	ret = ch_device_cmd_set_calibration (device,
