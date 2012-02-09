@@ -631,8 +631,11 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 	/* offer to repair the device */
 	if (priv->needs_repair)
 		ch_ccmx_device_needs_repair (priv);
-	else if (priv->force_repair)
+	else if (priv->force_repair) {
 		ch_ccmx_device_force_repair (priv);
+		/* Force repair only once */
+		priv->force_repair = FALSE;
+	}
 out:
 	return;
 }
