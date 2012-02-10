@@ -940,6 +940,7 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	const gchar *sheet_type;
 	const gchar *type_tmp;
 	gboolean ret;
+	gboolean type_factory = FALSE;
 	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
 	guint8 buffer[62];
@@ -979,17 +980,20 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	}
 
 	/* get the types */
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_FACTORY");
 	if (g_strcmp0 (type_tmp, "YES") == 0)
+		type_factory = TRUE;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
+	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_LCD;
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LED");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_LED;
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_CRT;
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_PROJECTOR");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_PROJECTOR;
 
 	/* write the index */
