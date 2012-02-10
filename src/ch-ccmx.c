@@ -233,6 +233,9 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
 	if (g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_LCD;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LED");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_LED;
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
 	if (g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_CRT;
@@ -260,6 +263,22 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	g_hash_table_insert (priv->hash,
 			     g_strdup (description),
 			     GINT_TO_POINTER (1));
+
+	/* is suitable for LED */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_led"));
+	if ((types & CH_CALIBRATION_TYPE_LED) > 0) {
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, -1,
+				    COLUMN_TYPE, "web-browser",
+				    COLUMN_LOCAL_FILENAME, filename,
+				    -1);
+	}
 
 	/* is suitable for CRT */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
@@ -576,7 +595,7 @@ ch_ccmx_device_force_repair (ChCcmxPrivate *priv)
 	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Cancel"), GTK_RESPONSE_NO);
 
 	/* TRANSLATORS: this is a button */
-	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Update"), GTK_RESPONSE_YES);
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Repair"), GTK_RESPONSE_YES);
 
 	/* wait async */
 	g_signal_connect (dialog, "response",
@@ -624,6 +643,8 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[1]);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_projector"));
 	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[2]);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_led"));
+	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[3]);
 
 	/* we've setup */
 	priv->done_get_cal = TRUE;
@@ -672,6 +693,22 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	/* is suitable for LCD */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
 	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, priv->ccmx_idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
+				    -1);
+	}
+
+	/* is suitable for LED */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_led"));
+	if ((types & CH_CALIBRATION_TYPE_LED) > 0) {
 		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
 					    &iter,
 					    description);
@@ -945,6 +982,9 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
 	if (g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_LCD;
+	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LED");
+	if (g_strcmp0 (type_tmp, "YES") == 0)
+		types += CH_CALIBRATION_TYPE_LED;
 	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
 	if (g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_CRT;
@@ -1548,6 +1588,13 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	g_object_set_data (G_OBJECT (widget),
 			   "colorhug-ccmx-idx",
 			   GINT_TO_POINTER (2));
+	g_signal_connect (widget, "changed",
+			  G_CALLBACK (ch_ccmx_combo_changed_cb), priv);
+	ch_ccmx_set_combo_simple_text (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_led"));
+	g_object_set_data (G_OBJECT (widget),
+			   "colorhug-ccmx-idx",
+			   GINT_TO_POINTER (3));
 	g_signal_connect (widget, "changed",
 			  G_CALLBACK (ch_ccmx_combo_changed_cb), priv);
 	ch_ccmx_set_combo_simple_text (widget);
