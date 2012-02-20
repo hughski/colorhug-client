@@ -65,9 +65,10 @@ enum {
 
 static void	 ch_ccmx_get_calibration_idx		(ChCcmxPrivate *priv);
 static void	 ch_ccmx_refresh_calibration_data	(ChCcmxPrivate *priv);
-static gboolean	 ch_ccmx_set_calibration_file		(ChCcmxPrivate *priv,
+static gboolean	 ch_ccmx_set_calibration_data		(ChCcmxPrivate *priv,
 							 guint16 cal_idx,
-							 const gchar *filename,
+							 const guint8 *ccmx_data,
+							 gsize ccmx_size,
 							 GError **error);
 
 /**
@@ -400,7 +401,6 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
-	gchar *basename = NULL;
 	gchar *location = NULL;
 	GError *error = NULL;
 	SoupURI *uri;
@@ -425,35 +425,19 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 		goto out;
 	}
 
-	/* write file */
-	uri = soup_message_get_uri (msg);
-	basename = g_path_get_basename (soup_uri_get_path (uri));
-	location = g_build_filename (g_get_tmp_dir (),
-				     basename,
-				     NULL);
-	ret = g_file_set_contents (location,
-				   msg->response_body->data,
-				   msg->response_body->length,
-				   &error);
-	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to write file"),
-				      error->message);
-		g_error_free (error);
-		goto out;
-	}
-
 	/* update UI */
-	ret = ch_ccmx_set_calibration_file (priv, 0, location, &error);
+	ret = ch_ccmx_set_calibration_data (priv, 0,
+					    (const guint8 *) msg->response_body->data,
+					    (gsize) msg->response_body->length,
+					    &error);
 	if (!ret) {
 		ch_ccmx_error_dialog (priv,
-				       _("Failed to load file"),
+				       _("Failed to load data"),
 				       error->message);
 		g_error_free (error);
 		goto out;
 	}
 out:
-	g_free (basename);
 	g_free (location);
 }
 
@@ -927,12 +911,13 @@ out:
 }
 
 /**
- * ch_ccmx_set_calibration_file:
+ * ch_ccmx_set_calibration_data:
  **/
 static gboolean
-ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
+ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 			      guint16 cal_idx,
-			      const gchar *filename,
+			      const guint8 *ccmx_data,
+			      gsize ccmx_size,
 			      GError **error)
 {
 	cmsHANDLE ccmx = NULL;
@@ -941,23 +926,15 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	const gchar *type_tmp;
 	gboolean ret;
 	gboolean type_factory = FALSE;
-	gchar *ccmx_data = NULL;
-	gsize ccmx_size;
 	guint8 buffer[62];
 	guint8 types = 0;
 	guint i, j;
 
-	/* load file */
-	ret = g_file_get_contents (filename,
-				   &ccmx_data,
-				   &ccmx_size,
-				   error);
-	if (!ret)
-		goto out;
-	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
+	/* load from a blob, as lcms sucks at reading files */
+	ccmx = cmsIT8LoadFromMem (NULL, (void *) ccmx_data, ccmx_size);
 	if (ccmx == NULL) {
 		ret = FALSE;
-		g_set_error (error, 1, 0, "Cannot open %s", filename);
+		g_set_error_literal (error, 1, 0, "Cannot open CCMX");
 		goto out;
 	}
 
@@ -965,8 +942,8 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	sheet_type = cmsIT8GetSheetType (ccmx);
 	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
 		ret = FALSE;
-		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
-			     filename, sheet_type);
+		g_set_error (error, 1, 0, "file is not a CCMX file [%s]",
+			     sheet_type);
 		goto out;
 	}
 
@@ -1031,9 +1008,33 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	if (!ret)
 		goto out;
 out:
-	g_free (ccmx_data);
 	if (ccmx != NULL)
 		cmsIT8Free (ccmx);
+	return ret;
+}
+
+/**
+ * ch_ccmx_set_calibration_file:
+ **/
+static gboolean
+ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
+			      guint16 cal_idx,
+			      const gchar *filename,
+			      GError **error)
+{
+	gboolean ret;
+	gchar *ccmx_data = NULL;
+	gsize ccmx_size;
+
+	/* load local file */
+	ret = g_file_get_contents (filename,
+				   &ccmx_data,
+				   &ccmx_size,
+				   error);
+	if (!ret)
+		goto out;
+out:
+	g_free (ccmx_data);
 	return ret;
 }
 
