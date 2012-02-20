@@ -1363,6 +1363,14 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'filename'");
+		goto out;
+	}
+
 	/* print warning */
 	g_print ("WARNING: Do not shutdown the computer or unplug the device.\n");
 
@@ -1371,14 +1379,6 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (!ret) {
 		g_set_error_literal (error, 1, 0,
 				     "user declined");
-		goto out;
-	}
-
-	/* parse */
-	if (g_strv_length (values) != 1) {
-		ret = FALSE;
-		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'filename'");
 		goto out;
 	}
 
