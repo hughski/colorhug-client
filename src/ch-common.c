@@ -2001,3 +2001,32 @@ ch_device_cmd_set_owner_email (GUsbDevice *device,
 out:
 	return ret;
 }
+
+/**
+ * ch_device_cmd_take_reading_array:
+ **/
+gboolean
+ch_device_cmd_take_reading_array (GUsbDevice *device,
+				  guint8 *reading_array,
+				  GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (reading_array != NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_TAKE_READING_ARRAY,
+				       NULL,		/* buffer in */
+				       0,	/* size of input buffer */
+				       reading_array,
+				       30,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}

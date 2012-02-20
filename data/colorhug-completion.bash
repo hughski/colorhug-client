@@ -57,6 +57,7 @@ __colorhug_commandlist="
     set-pre-scale
     set-serial-number
     take-reading-raw
+    take-reading-array
     take-readings
     take-readings-xyz
     write-eeprom

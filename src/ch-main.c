@@ -262,6 +262,79 @@ out:
 }
 
 /**
+ * ch_util_take_reading_array:
+ **/
+static gboolean
+ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble ave = 0.0f;
+	gint i, j;
+	guint8 max = 0;
+	guint8 reading_array[30];
+	gdouble std_dev = 0.0f;
+
+	/* setup HW */
+	ret = ch_device_cmd_set_integral_time (priv->device,
+					       CH_INTEGRAL_TIME_VALUE_MAX,
+					       error);
+	if (!ret)
+		goto out;
+	ret = ch_device_cmd_set_multiplier (priv->device,
+					    CH_FREQ_SCALE_100,
+					    error);
+	if (!ret)
+		goto out;
+	ret = ch_device_cmd_set_color_select (priv->device,
+					      CH_COLOR_SELECT_WHITE,
+					      error);
+	if (!ret)
+		goto out;
+
+	/* get from HW */
+	ret = ch_device_cmd_take_reading_array (priv->device,
+					        reading_array,
+					        error);
+	if (!ret)
+		goto out;
+
+	/* show as a bar graph */
+	for (i = 0; i < 30; i++) {
+		if (reading_array[i] > max)
+			max = reading_array[i];
+		ave += reading_array[i];
+	}
+	ave /= 30;
+	for (i = 0; i < 30; i++) {
+		g_print ("%i.\t%u\t[",
+			 i + 1,
+			 reading_array[i]);
+		for (j = 0; j < reading_array[i]; j++) {
+			if (j == floor (ave)) {
+				g_print ("#");
+				continue;
+			}
+			g_print ("*");
+		}
+		for (j = reading_array[i]; j < max; j++) {
+			if (j == floor (ave)) {
+				g_print (".");
+				continue;
+			}
+			g_print (" ");
+		}
+		g_print ("]\n");
+	}
+
+	/* print standard deviation */
+	for (i = 0; i < 30; i++)
+		std_dev += pow (reading_array[i] - ave, 2);
+	g_print ("Standard deviation: %.03lf\n", sqrt (std_dev / 60));
+out:
+	return ret;
+}
+
+/**
  * ch_util_set_color_select:
  **/
 static gboolean
@@ -2008,6 +2081,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Gets the hardware version"),
 		     ch_util_get_hardware_version);
+	ch_util_add (priv->cmd_array,
+		     "take-reading-array",
+		     /* TRANSLATORS: command description */
+		     _("Gets an array of raw samples"),
+		     ch_util_take_reading_array);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
