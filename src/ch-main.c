@@ -1356,6 +1356,35 @@ out:
 }
 
 /**
+ * ch_util_flash_firmware_force:
+ **/
+static gboolean
+ch_util_flash_firmware_force (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'filename'");
+		goto out;
+	}
+
+	/* set to HW */
+	ret = ch_client_flash_firmware (priv->client,
+					values[0],
+					error);
+	if (!ret)
+		goto out;
+
+	/* print success */
+	g_print ("INFO: Flashing was successful.\n");
+out:
+	return ret;
+}
+
+/**
  * ch_util_flash_firmware:
  **/
 static gboolean
@@ -1914,6 +1943,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Flash firmware into the processor"),
 		     ch_util_flash_firmware);
+	ch_util_add (priv->cmd_array,
+		     "flash-firmware-force",
+		     /* TRANSLATORS: command description */
+		     _("Flash firmware into the processor"),
+		     ch_util_flash_firmware_force);
 	ch_util_add (priv->cmd_array,
 		     "eeprom-read",
 		     /* TRANSLATORS: command description */
