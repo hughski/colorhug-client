@@ -1,7 +1,7 @@
 [Desktop Entry]
 _Name=Firmware Updater
 _Comment=Update the firmware on the ColorHug colorimeter
-Icon=colorhug
+Icon=colorhug-flash
 Exec=colorhug-flash
 Terminal=false
 Type=Application

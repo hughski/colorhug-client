@@ -5,6 +5,7 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = 				\
+	colorhug-flash.png		\
 	colorhug.png
 
 install-data-hook:

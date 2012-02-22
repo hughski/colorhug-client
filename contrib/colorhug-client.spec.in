@@ -40,6 +40,18 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang %{name}
 
+%post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+
+%postun
+if [ $1 -eq 0 ] ; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
+
+%posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README AUTHORS NEWS COPYING
@@ -48,7 +60,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_libexecdir}/colorhug*
 %{_bindir}/colorhug*
 %{_datadir}/applications/*.desktop
-%{_datadir}/icons/hicolor/*/apps/colorhug.png
+%{_datadir}/icons/hicolor/*/apps/colorhug*.png
 %{_datadir}/icons/hicolor/*/mimetypes/application-x-ccmx.*
 %{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
 %{_mandir}/man1/*.1.gz
