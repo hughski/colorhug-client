@@ -1033,6 +1033,11 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 				   error);
 	if (!ret)
 		goto out;
+
+	ret = ch_ccmx_set_calibration_data (priv, 0,
+					    (guint8 *)ccmx_data,
+                        ccmx_size,
+					    error);
 out:
 	g_free (ccmx_data);
 	return ret;
