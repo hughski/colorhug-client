@@ -924,7 +924,7 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	const gchar *description;
 	const gchar *sheet_type;
 	const gchar *type_tmp;
-	gboolean ret;
+	gboolean ret = TRUE;
 	gboolean type_factory = FALSE;
 	guint8 buffer[62];
 	guint8 types = 0;
