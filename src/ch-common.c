@@ -1383,7 +1383,7 @@ out:
  **/
 gboolean
 ch_device_cmd_get_leds (GUsbDevice *device,
-			ChStatusLed *leds,
+			guint8 *leds,
 			GError **error)
 {
 	gboolean ret;
@@ -1399,7 +1399,7 @@ ch_device_cmd_get_leds (GUsbDevice *device,
 				       CH_CMD_GET_LEDS,
 				       NULL,	/* buffer in */
 				       0,	/* size of input buffer */
-				       (guint8 *) leds,
+				       leds,
 				       1,	/* size of output buffer */
 				       NULL,	/* cancellable */
 				       error);
@@ -1414,7 +1414,7 @@ out:
  **/
 gboolean
 ch_device_cmd_set_leds (GUsbDevice *device,
-			ChStatusLed leds,
+			guint8 leds,
 			guint8 repeat,
 			guint8 on_time,
 			guint8 off_time,

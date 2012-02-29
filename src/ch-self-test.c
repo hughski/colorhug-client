@@ -264,7 +264,7 @@ ch_test_state_func (void)
 	gboolean ret;
 	GError *error = NULL;
 	guint16 integral_time = 0;
-	ChStatusLed leds = 0;
+	guint8 leds = 0;
 	GUsbDevice *device;
 
 	/* new device */

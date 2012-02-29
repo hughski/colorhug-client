@@ -598,7 +598,7 @@ typedef enum {
 	CH_COLOR_SELECT_GREEN
 } ChColorSelect;
 
-/* which color to select */
+/* Led colors: possible bitfield values */
 typedef enum {
 	CH_STATUS_LED_GREEN	= 1 << 0,
 	CH_STATUS_LED_RED	= 1 << 1
@@ -733,10 +733,10 @@ gboolean	 ch_device_cmd_set_serial_number (GUsbDevice	*device,
 						 guint32	 serial_number,
 						 GError		**error);
 gboolean	 ch_device_cmd_get_leds		(GUsbDevice	*device,
-						 ChStatusLed	*leds,
+						 guint8		*leds,
 						 GError		**error);
 gboolean	 ch_device_cmd_set_leds		(GUsbDevice	*device,
-						 ChStatusLed	 leds,
+						 guint8		 leds,
 						 guint8		 repeat,
 						 guint8		 on_time,
 						 guint8		 off_time,

@@ -1036,7 +1036,7 @@ static gboolean
 ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	ChStatusLed leds = 0xff;
+	guint8 leds = 0;
 
 	/* get from HW */
 	ret = ch_device_cmd_get_leds (priv->device, &leds, error);
@@ -1061,7 +1061,7 @@ static gboolean
 ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	ChStatusLed leds;
+	guint8 leds;
 	guint8 repeat = 0;
 	guint8 time_on = 0x00;
 	guint8 time_off = 0x00;

@@ -33,7 +33,7 @@ typedef struct {
 	GtkBuilder	*builder;
 	GtkApplication	*application;
 	ChClient	*client;
-	ChStatusLed	 leds_old;
+	guint8		 leds_old;
 	CdColorRGB	 value_max;
 	GUsbDevice	*device;
 } ChUtilPrivate;
@@ -152,7 +152,7 @@ ch_util_refresh (ChUtilPrivate *priv)
 	CdMat3x3 calibration;
 	ChColorSelect color_select = 0;
 	ChFreqScale multiplier = 0;
-	ChStatusLed leds;
+	guint8 leds;
 	const gchar *title;
 	gboolean ret;
 	gchar *label;
