@@ -503,7 +503,7 @@ ch_flash_read_firmware_chunk (ChFlashPrivate *priv)
 	if (priv->flash_idx < priv->firmware_len) {
 		if (priv->flash_idx + priv->flash_chunk_len > priv->firmware_len)
 			priv->flash_chunk_len = priv->firmware_len - priv->flash_idx;
-		g_debug ("Reading at %04x size %li",
+		g_debug ("Reading at %04x size %" G_GSIZE_FORMAT,
 			 CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
 			 priv->flash_chunk_len);
 		ch_flash_read_flash (priv,
@@ -568,7 +568,7 @@ ch_flash_write_firmware_chunk (ChFlashPrivate *priv)
 	if (priv->flash_idx < priv->firmware_len) {
 		if (priv->flash_idx + priv->flash_chunk_len > priv->firmware_len)
 			priv->flash_chunk_len = priv->firmware_len - priv->flash_idx;
-		g_debug ("Writing at %04x size %li",
+		g_debug ("Writing at %04x size %" G_GSIZE_FORMAT,
 			 CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
 			 priv->flash_chunk_len);
 		ch_flash_write_flash (priv,

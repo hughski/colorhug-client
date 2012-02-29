@@ -150,7 +150,7 @@ ch_client_flash_firmware (ChClient *client,
 		goto out;
 
 	/* erase flash */
-	g_debug ("Erasing at %04x size %li",
+	g_debug ("Erasing at %04x size %" G_GSIZE_FORMAT,
 		 CH_EEPROM_ADDR_RUNCODE, len);
 	ret = ch_device_cmd_erase_flash (device,
 					 CH_EEPROM_ADDR_RUNCODE,
@@ -167,7 +167,7 @@ ch_client_flash_firmware (ChClient *client,
 	do {
 		if (idx + chunk_len > len)
 			chunk_len = len - idx;
-		g_debug ("Writing at %04x size %li",
+		g_debug ("Writing at %04x size %" G_GSIZE_FORMAT,
 			 CH_EEPROM_ADDR_RUNCODE + idx,
 			 chunk_len);
 		ret = ch_device_cmd_write_flash (device,
@@ -186,7 +186,7 @@ ch_client_flash_firmware (ChClient *client,
 	do {
 		if (idx + chunk_len > len)
 			chunk_len = len - idx;
-		g_debug ("Reading at %04x size %li",
+		g_debug ("Reading at %04x size %" G_GSIZE_FORMAT,
 			 CH_EEPROM_ADDR_RUNCODE + idx,
 			 chunk_len);
 		ret = ch_device_cmd_read_flash (device,
