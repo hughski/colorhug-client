@@ -1392,6 +1392,8 @@ ch_device_cmd_get_leds (GUsbDevice *device,
 	g_return_val_if_fail (leds != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
+	*leds = 0;
+
 	/* hit hardware */
 	ret = ch_device_write_command (device,
 				       CH_CMD_GET_LEDS,
