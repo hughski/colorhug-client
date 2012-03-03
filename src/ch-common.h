@@ -135,7 +135,8 @@
  *  0     Can be used with LCD panels
  *  1     Can be used with CRT monitors
  *  2     Can be used with projectors
- *  3-7   Reserved for future use
+ *  3     Can be used with LED panels
+ *  4-7   Reserved for future use
  *
  * IN:  [1:cmd][2:index]
  * OUT: [1:retval][1:cmd][2*9:matrix_value][1:types][23:description]
@@ -483,12 +484,12 @@
  * LCD		= 0
  * CRT		= 1
  * Projector	= 2
- * Custom1	= 3
- * Custom2	= 4
- * Custom3	= 5
+ * LED		= 3
+ * Custom1	= 4
+ * Custom2	= 5
  *
  * In the future CustomX may be renamed to another display technology,
- * e.g. LED or e-ink.
+ * e.g. e-ink.
  *
  * IN:  [1:cmd]
  * OUT: [1:retval][1:cmd][6*2:types]
