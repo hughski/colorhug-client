@@ -37,6 +37,7 @@ __colorhug_commandlist="
     get-multiplier
     get-owner-email
     get-owner-name
+    get-pcb-errata
     get-post-scale
     get-pre-scale
     get-serial-number
@@ -53,6 +54,7 @@ __colorhug_commandlist="
     set-multiplier
     set-owner-email
     set-owner-name
+    set-pcb-errata
     set-post-scale
     set-pre-scale
     set-serial-number

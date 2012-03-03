@@ -1116,6 +1116,76 @@ out:
 }
 
 /**
+ * ch_util_get_pcb_errata:
+ **/
+static gboolean
+ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 pcb_errata = CH_PCB_ERRATA_NONE;
+
+	/* get from HW */
+	ret = ch_device_cmd_get_pcb_errata (priv->device, &pcb_errata, error);
+	if (!ret)
+		goto out;
+	if (pcb_errata == 0) {
+		g_print ("Errata: none\n");
+		goto out;
+	}
+	if ((pcb_errata & CH_PCB_ERRATA_SWAPPED_LEDS) > 0)
+		g_print ("Errata: swapped-leds\n");
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_pcb_errata:
+ **/
+static gboolean
+ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 pcb_errata = CH_PCB_ERRATA_NONE;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'none|swapped-leds'");
+		goto out;
+	}
+
+	/* swap the green and red LEDs */
+	if (g_strstr_len (values[0], -1, "swapped-leds") != NULL) {
+		g_print ("Errata: swapped-leds\n");
+		pcb_errata += CH_PCB_ERRATA_SWAPPED_LEDS;
+	}
+
+	/* nothing known by this client version */
+	if (pcb_errata == CH_PCB_ERRATA_NONE)
+		pcb_errata = g_ascii_strtoull (values[0], NULL, 10);
+
+	if (pcb_errata == 0)
+		g_print ("Errata: none\n");
+
+	/* set to HW */
+	ret = ch_device_cmd_set_pcb_errata (priv->device,
+					    pcb_errata,
+					    error);
+	if (!ret)
+		goto out;
+
+	/* save EEPROM */
+	ret = ch_device_cmd_write_eeprom (priv->device,
+					  CH_WRITE_EEPROM_MAGIC,
+					  error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_dark_offsets:
  **/
 static gboolean
@@ -1976,6 +2046,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the LEDs"),
 		     ch_util_set_leds);
+	ch_util_add (priv->cmd_array,
+		     "get-pcb-errata",
+		     /* TRANSLATORS: command description */
+		     _("Gets the PCB errata"),
+		     ch_util_get_pcb_errata);
+	ch_util_add (priv->cmd_array,
+		     "set-pcb-errata",
+		     /* TRANSLATORS: command description */
+		     _("Sets the PCB errata"),
+		     ch_util_set_pcb_errata);
 	ch_util_add (priv->cmd_array,
 		     "get-dark-offsets",
 		     /* TRANSLATORS: command description */

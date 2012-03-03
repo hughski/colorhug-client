@@ -545,7 +545,38 @@
  *
  * This command is available in firmware mode.
  **/
-#define	CH_CMD_TAKE_READING_ARRAY			0x31
+#define	CH_CMD_TAKE_READING_ARRAY		0x31
+
+/**
+ * CH_CMD_SET_PCB_ERRATA:
+ *
+ * Sets the board errata value. Board errata is used to correct swapped
+ * LEDs and any future problems discovered that only affect some batches
+ * of hardware version 1.
+ *
+ * The errata bitmask is as follows:
+ * 0x00		= No errata for this PCB
+ * 0x01		= Leds are swapped
+ * 0x02-0xffff	= Reserved for future use
+ *
+ * IN:  [1:cmd][2:pcb_errata]
+ * OUT: [1:retval][1:cmd]
+ *
+ * This command is available in firmware mode.
+ **/
+#define	CH_CMD_SET_PCB_ERRATA			0x32
+
+/**
+ * CH_CMD_GET_PCB_ERRATA:
+ *
+ * Gets the board errata value.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][2:pcb_errata]
+ *
+ * This command is available in firmware mode.
+ **/
+#define	CH_CMD_GET_PCB_ERRATA			0x33
 
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
@@ -635,6 +666,13 @@ typedef enum {
 	CH_ERROR_DEVICE_DEACTIVATED,
 	CH_ERROR_LAST
 } ChError;
+
+/* any problems with the PCB */
+typedef enum {
+	CH_PCB_ERRATA_NONE		= 0,
+	CH_PCB_ERRATA_SWAPPED_LEDS	= 1 << 0,
+	CH_PCB_ERRATA_LAST		= 1 << 1
+} ChPcbErrata;
 
 /* prototypes */
 const gchar	*ch_strerror			(ChError	 error_enum);
@@ -741,6 +779,12 @@ gboolean	 ch_device_cmd_set_leds		(GUsbDevice	*device,
 						 guint8		 repeat,
 						 guint8		 on_time,
 						 guint8		 off_time,
+						 GError		**error);
+gboolean	 ch_device_cmd_get_pcb_errata	(GUsbDevice	*device,
+						 guint16	*pcb_errata,
+						 GError		**error);
+gboolean	 ch_device_cmd_set_pcb_errata	(GUsbDevice	*device,
+						 guint16	 pcb_errata,
 						 GError		**error);
 gboolean	 ch_device_cmd_get_dark_offsets	(GUsbDevice	*device,
 						 CdColorRGB	*value,

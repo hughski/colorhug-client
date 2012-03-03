@@ -216,6 +216,12 @@ ch_command_to_string (guint8 cmd)
 	case CH_CMD_SET_LEDS:
 		str = "set-leds";
 		break;
+	case CH_CMD_GET_PCB_ERRATA:
+		str = "get-pcb-errata";
+		break;
+	case CH_CMD_SET_PCB_ERRATA:
+		str = "set-pcb-errata";
+		break;
 	case CH_CMD_GET_DARK_OFFSETS:
 		str = "get-dark-offsets";
 		break;
@@ -1436,6 +1442,65 @@ ch_device_cmd_set_leds (GUsbDevice *device,
 				       CH_CMD_SET_LEDS,
 				       (const guint8 *) buffer,
 				       sizeof (buffer),
+				       NULL,	/* buffer out */
+				       0,	/* size of output buffer */
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_get_pcb_errata:
+ **/
+gboolean
+ch_device_cmd_get_pcb_errata (GUsbDevice *device,
+			      guint16 *pcb_errata,
+			      GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (pcb_errata != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	*pcb_errata = CH_PCB_ERRATA_NONE;
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_GET_PCB_ERRATA,
+				       NULL,	/* buffer in */
+				       0,	/* size of input buffer */
+				       (guint8 *) pcb_errata,
+				       sizeof (guint16),
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
+ * ch_device_cmd_set_pcb_errata:
+ **/
+gboolean
+ch_device_cmd_set_pcb_errata (GUsbDevice *device,
+			      guint16 pcb_errata,
+			      GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* hit hardware */
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_PCB_ERRATA,
+				       (const guint8 *) &pcb_errata,
+				       sizeof (guint16),
 				       NULL,	/* buffer out */
 				       0,	/* size of output buffer */
 				       NULL,	/* cancellable */
