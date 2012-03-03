@@ -22,9 +22,9 @@
 __colorhug_commandlist="
     boot-flash
     clear-calibration
+    eeprom-erase
     eeprom-read
     eeprom-write
-    eeprom-erase
     flash-firmware
     get-calibration
     get-calibration-map
@@ -56,8 +56,8 @@ __colorhug_commandlist="
     set-post-scale
     set-pre-scale
     set-serial-number
-    take-reading-raw
     take-reading-array
+    take-reading-raw
     take-readings
     take-readings-xyz
     write-eeprom
