@@ -1,3 +1,28 @@
+Version 0.1.6
+~~~~~~~~~~~~~
+Released: 2012-03-04
+
+New Features:
+ - Add a flash-firmware-force command (Richard Hughes)
+ - Add a new icon for colorhug-flash (Lapo Calamandrei)
+ - Add a new inactive colorimeter-colorhug icon for future use (Lapo Calamandrei)
+ - Add support for getting and setting the PCB errata value (Richard Hughes)
+ - Add support for TakeReadingArray and plot a simple graph with the results (Richard Hughes)
+ - Allow the user to set the default LED correction matrix (Richard Hughes)
+
+Bugfixes:
+ - Check the calibration determinant before writing to the device (Richard Hughes)
+ - Do not write temp files with predictable names to /tmp (Richard Hughes)
+ - Implement loading CCMX from file (Michal Čihař)
+ - Increase the device reconnect timeout after flashing (Richard Hughes)
+ - Intialize leds to 0 in ch_device_cmd_get_leds() (Jussi Kukkonen)
+ - Recognise TYPE_FACTORY in the ccmx loader (Richard Hughes)
+ - Remove all locale dependent string parsing functions (Richard Hughes)
+ - Repair device only once while forced (Michal Čihař)
+ - Set correct return value (Michal Čihař)
+ - set_leds/get_leds() argument is not ChStatusLed, but guint8 (Jussi Kukkonen)
+ - Use G_GSIZE_FORMAT when printing gsize values (Jussi Kukkonen)
+
 Version 0.1.5
 ~~~~~~~~~~~~~
 Released: 2012-01-26
