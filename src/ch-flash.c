@@ -1151,10 +1151,15 @@ ch_flash_got_metadata_cb (SoupSession *session,
 			break;
 
 		/* add info text */
-		g_string_append_printf (priv->update_details,
-					"%s\n", update->info->str);
-		g_string_append_printf (priv->warning_details,
-					"%s\n", update->warning->str);
+		if (update->info->len > 0) {
+			g_string_append_printf (priv->update_details,
+						"%s\n", update->info->str);
+		}
+		/* add warning text */
+		if (update->warning->len > 0) {
+			g_string_append_printf (priv->warning_details,
+						"%s\n", update->warning->str);
+		}
 
 		/* save newest available firmware */
 		if (priv->filename == NULL) {
