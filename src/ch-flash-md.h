@@ -24,12 +24,20 @@
 
 #include <glib.h>
 
+typedef enum {
+	CH_FLASH_MD_STATE_UNKNOWN,
+	CH_FLASH_MD_STATE_STABLE,
+	CH_FLASH_MD_STATE_TESTING,
+	CH_FLASH_MD_STATE_LAST
+} ChFlashMdState;
+
 typedef struct {
 	gchar		*version;
 	gchar		*checksum;
 	gchar		*filename;
 	GString		*info;
 	GString		*warning;
+	ChFlashMdState	 state;
 } ChFlashUpdate;
 
 GPtrArray	*ch_flash_md_parse_filename	(const gchar	*filename,

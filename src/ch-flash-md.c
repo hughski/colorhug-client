@@ -30,6 +30,7 @@ typedef enum {
 	CH_FLASH_MD_POS_UPDATES,
 	CH_FLASH_MD_POS_UPDATE,
 	CH_FLASH_MD_POS_VERSION,
+	CH_FLASH_MD_POS_STATE,
 	CH_FLASH_MD_POS_FILENAME,
 	CH_FLASH_MD_POS_CHECKSUM,
 	CH_FLASH_MD_POS_CHANGELOG,
@@ -57,6 +58,8 @@ ch_flash_md_pos_to_text (ChFlashMdPos pos)
 		return "update";
 	if (pos == CH_FLASH_MD_POS_VERSION)
 		return "version";
+	if (pos == CH_FLASH_MD_POS_STATE)
+		return "state";
 	if (pos == CH_FLASH_MD_POS_FILENAME)
 		return "filename";
 	if (pos == CH_FLASH_MD_POS_CHECKSUM)
@@ -127,14 +130,13 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 			priv->update_tmp = g_new0 (ChFlashUpdate, 1);
 			priv->update_tmp->info = g_string_new ("");
 			priv->update_tmp->warning = g_string_new ("");
+			priv->update_tmp->state = CH_FLASH_MD_STATE_UNKNOWN;
 			return;
 		}
 		g_debug ("unknown start tag %s for updates", element_name);
 		return;
 	}
 	if (priv->pos == CH_FLASH_MD_POS_UPDATE) {
-		if (g_strcmp0 (element_name, "state") == 0)
-			return;
 		if (g_strcmp0 (element_name, "supported_hardware") == 0)
 			return;
 		if (g_strcmp0 (element_name, "size") == 0)
@@ -143,6 +145,10 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 			return;
 		if (g_strcmp0 (element_name, "version") == 0) {
 			priv->pos = CH_FLASH_MD_POS_VERSION;
+			return;
+		}
+		if (g_strcmp0 (element_name, "state") == 0) {
+			priv->pos = CH_FLASH_MD_POS_STATE;
 			return;
 		}
 		if (g_strcmp0 (element_name, "filename") == 0) {
@@ -225,6 +231,14 @@ ch_flash_md_end_element_cb (GMarkupParseContext *context,
 		g_debug ("unknown end tag %s for version", element_name);
 		return;
 	}
+	if (priv->pos == CH_FLASH_MD_POS_STATE) {
+		if (g_strcmp0 (element_name, "state") == 0) {
+			priv->pos = CH_FLASH_MD_POS_UPDATE;
+			return;
+		}
+		g_debug ("unknown end tag %s for state", element_name);
+		return;
+	}
 	if (priv->pos == CH_FLASH_MD_POS_FILENAME) {
 		if (g_strcmp0 (element_name, "filename") == 0) {
 			priv->pos = CH_FLASH_MD_POS_UPDATE;
@@ -270,6 +284,20 @@ ch_flash_md_end_element_cb (GMarkupParseContext *context,
 }
 
 /**
+ * ch_flash_md_state_from_string:
+ **/
+static ChFlashMdState
+ch_flash_md_state_from_string (const gchar *state)
+{
+	if (g_strcmp0 (state, "stable") == 0)
+		return CH_FLASH_MD_STATE_STABLE;
+	if (g_strcmp0 (state, "testing") == 0)
+		return CH_FLASH_MD_STATE_TESTING;
+	g_debug ("unknown state value: %s", state);
+	return CH_FLASH_MD_STATE_UNKNOWN;
+}
+
+/**
  * ch_flash_md_text_cb:
  *
  * Called for character data -- text is not nul-terminated.
@@ -297,6 +325,10 @@ ch_flash_md_text_cb (GMarkupParseContext *context,
 		goto out;
 	if (priv->pos == CH_FLASH_MD_POS_VERSION) {
 		priv->update_tmp->version = g_strdup (tmp);
+		goto out;
+	}
+	if (priv->pos == CH_FLASH_MD_POS_STATE) {
+		priv->update_tmp->state = ch_flash_md_state_from_string (tmp);
 		goto out;
 	}
 	if (priv->pos == CH_FLASH_MD_POS_FILENAME) {
