@@ -57,6 +57,7 @@ typedef struct {
 	gsize		 flash_chunk_len;
 	guint8		 flash_buffer[64];
 	ChMarkdown	*markdown;
+	GSettings	*settings;
 } ChFlashPrivate;
 
 static void	 ch_flash_read_firmware_chunk	(ChFlashPrivate *priv);
@@ -1114,6 +1115,7 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	GError *error = NULL;
 	GPtrArray *updates = NULL;
 	guint i;
+	gboolean enable_test_firmware;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -1133,6 +1135,10 @@ ch_flash_got_metadata_cb (SoupSession *session,
 		goto out;
 	}
 
+	/* this is a session configurable */
+	enable_test_firmware = g_settings_get_boolean (priv->settings,
+						       "enable-test-firmware");
+
 	/* parse file */
 	updates = ch_flash_md_parse_data (msg->response_body->data,
 					  &error);
@@ -1150,12 +1156,25 @@ ch_flash_got_metadata_cb (SoupSession *session,
 		if (!ch_flash_version_is_newer (priv, update->version))
 			break;
 
+		/* is the state correct? */
+		if (update->state != CH_FLASH_MD_STATE_STABLE && !enable_test_firmware)
+			continue;
+
 		/* add info text */
 		if (update->info->len > 0) {
 			g_string_append_printf (priv->update_details,
 						"%s\n", update->info->str);
 		}
+
 		/* add warning text */
+		if (update->state == CH_FLASH_MD_STATE_TESTING) {
+			g_string_append_printf (priv->warning_details,
+						"**%s**\n%s\n",
+						/* TRANSLATORS: this is test firmware */
+						_("This is a test firmware not intended for general release."),
+						/* TRANSLATORS: all bets are off */
+						_("This firmware has not been widely tested and may not work as expected."));
+		}
 		if (update->warning->len > 0) {
 			g_string_append_printf (priv->warning_details,
 						"%s\n", update->warning->str);
@@ -1935,6 +1954,7 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChFlashPrivate, 1);
+	priv->settings = g_settings_new ("com.hughski.colorhug-client");
 	priv->filename = filename;
 	priv->update_details = g_string_new ("");
 	priv->warning_details = g_string_new ("");
@@ -1979,6 +1999,8 @@ main (int argc, char **argv)
 		g_object_unref (priv->session);
 	if (priv->markdown != NULL)
 		g_object_unref (priv->markdown);
+	if (priv->settings != NULL)
+		g_object_unref (priv->settings);
 	g_free (priv->filename);
 	g_free (priv->checksum);
 	g_free (priv->firmware_data);

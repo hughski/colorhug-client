@@ -17,6 +17,7 @@ AC_PROG_INSTALL
 LT_INIT
 AM_PROG_CC_C_O
 IT_PROG_INTLTOOL([0.35.0])
+GLIB_GSETTINGS
 
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff
