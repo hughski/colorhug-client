@@ -735,6 +735,98 @@ ch_test_reading_xyz_func (void)
 	g_object_unref (device);
 }
 
+/**
+ * ch_test_incomplete_request_func:
+ *
+ * This tests what happens when we do request,request,read on the device
+ * rather than just request,read. With new firmare versions we should
+ * return a %CH_ERROR_INCOMPLETE_REQUEST error value and the original
+ * command ID rather than just the device re-enumerating on the USB bus.
+ */
+static void
+ch_test_incomplete_request_func (void)
+{
+	ChClient *client;
+	gboolean ret;
+	GError *error = NULL;
+	guint8 buffer[CH_USB_HID_EP_SIZE];
+	GUsbDevice *device = NULL;
+
+	/* new device */
+	client = ch_client_new ();
+
+	/* load the device */
+	device = ch_client_get_default (client, &error);
+	if (device == NULL && g_error_matches (error,
+					       G_USB_DEVICE_ERROR,
+					       G_USB_DEVICE_ERROR_NO_DEVICE)) {
+		g_debug ("no device, skipping tests");
+		g_error_free (error);
+		return;
+	}
+	g_assert_no_error (error);
+	g_assert (device != NULL);
+
+	/* sending first tx packet */
+	memset (buffer, 0x00, CH_USB_HID_EP_SIZE);
+	buffer[0] = CH_CMD_GET_FIRMWARE_VERSION;
+	ret = g_usb_device_interrupt_transfer (device,
+					       CH_USB_HID_EP_OUT,
+					       buffer,
+					       CH_USB_HID_EP_SIZE,
+					       NULL,
+					       CH_DEVICE_USB_TIMEOUT,
+					       NULL,
+					       &error);
+	if (!ret) {
+		g_warning ("Error: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* oops, the calling program crashed */
+	g_usleep (G_USEC_PER_SEC);
+
+	/* sending second tx packet */
+	memset (buffer, 0x00, CH_USB_HID_EP_SIZE);
+	buffer[0] = CH_CMD_GET_CALIBRATION;
+	ret = g_usb_device_interrupt_transfer (device,
+					       CH_USB_HID_EP_OUT,
+					       buffer,
+					       CH_USB_HID_EP_SIZE,
+					       NULL,
+					       CH_DEVICE_USB_TIMEOUT,
+					       NULL,
+					       &error);
+	if (!ret) {
+		g_warning ("Error: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get rx packet */
+	memset (buffer, 0x00, CH_USB_HID_EP_SIZE);
+	ret = g_usb_device_interrupt_transfer (device,
+					       CH_USB_HID_EP_IN,
+					       buffer,
+					       CH_USB_HID_EP_SIZE,
+					       NULL,
+					       CH_DEVICE_USB_TIMEOUT,
+					       NULL,
+					       &error);
+	if (!ret) {
+		g_warning ("Error: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	g_assert_cmpint (buffer[0], ==, CH_ERROR_INCOMPLETE_REQUEST);
+	g_assert_cmpint (buffer[1], ==, CH_CMD_GET_FIRMWARE_VERSION);
+out:
+	g_object_unref (client);
+	if (device != NULL)
+		g_object_unref (device);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -752,6 +844,7 @@ main (int argc, char **argv)
 	g_test_add_func ("/ColorHug/eeprom", ch_test_eeprom_func);
 	g_test_add_func ("/ColorHug/reading", ch_test_reading_func);
 	g_test_add_func ("/ColorHug/reading-xyz", ch_test_reading_xyz_func);
+	g_test_add_func ("/ColorHug/device-incomplete-request", ch_test_incomplete_request_func);
 	return g_test_run ();
 }
 

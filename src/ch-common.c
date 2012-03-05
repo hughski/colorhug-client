@@ -29,8 +29,6 @@
 #include "ch-common.h"
 #include "ch-math.h"
 
-/* the default timeout */
-#define CH_DEVICE_USB_TIMEOUT		5000 /* ms */
 #define CH_DEVICE_DETERMINANT_AVE	21.53738
 #define CH_DEVICE_DETERMINANT_ERROR	10.00000
 
@@ -95,6 +93,9 @@ ch_strerror (ChError error_enum)
 		break;
 	case CH_ERROR_DEVICE_DEACTIVATED:
 		str = "Device deactivated";
+		break;
+	case CH_ERROR_INCOMPLETE_REQUEST:
+		str = "Incomplete previous request";
 		break;
 	default:
 		str = "Unknown error, please report";

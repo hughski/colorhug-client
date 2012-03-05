@@ -36,6 +36,9 @@
 #define	CH_USB_HID_EP_OUT			(CH_USB_HID_EP | 0x00)
 #define	CH_USB_HID_EP_SIZE			64
 
+/* the default timeout in client tools */
+#define CH_DEVICE_USB_TIMEOUT			5000 /* ms */
+
 /* constants for ownership tags */
 #define CH_OWNER_LENGTH_MAX			60
 
@@ -664,6 +667,7 @@ typedef enum {
 	CH_ERROR_OVERFLOW_SENSOR,
 	CH_ERROR_OVERFLOW_STACK,
 	CH_ERROR_DEVICE_DEACTIVATED,
+	CH_ERROR_INCOMPLETE_REQUEST,
 	CH_ERROR_LAST
 } ChError;
 
