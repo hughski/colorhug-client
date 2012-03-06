@@ -813,8 +813,6 @@ gboolean	 ch_device_cmd_take_readings_xyz (GUsbDevice	*device,
 						 guint16	 calibration_index,
 						 CdColorXYZ	*value,
 						 GError		**error);
-gboolean	 ch_device_cmd_reset		(GUsbDevice	*device,
-						 GError		**error);
 gboolean	 ch_device_cmd_boot_flash	(GUsbDevice	*device,
 						 GError		**error);
 gboolean	 ch_device_cmd_set_owner_name	(GUsbDevice	*device,

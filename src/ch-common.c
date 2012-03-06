@@ -1744,30 +1744,6 @@ out:
 }
 
 /**
- * ch_device_cmd_reset:
- **/
-gboolean
-ch_device_cmd_reset (GUsbDevice *device,
-		     GError **error)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-	/* hit hardware */
-	ret = ch_device_write_command (device,
-				       CH_CMD_RESET,
-				       NULL,	/* buffer in */
-				       0,	/* size of input buffer */
-				       NULL,	/* buffer out */
-				       0,	/* size of output buffer */
-				       NULL,	/* cancellable */
-				       error);
-	return ret;
-}
-
-/**
  * ch_device_cmd_set_flash_success:
  **/
 gboolean
