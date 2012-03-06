@@ -688,83 +688,6 @@ out:
 }
 
 /**
- * ch_util_get_firmware_filename:
- **/
-static gchar *
-ch_util_get_firmware_filename (GtkWindow *window)
-{
-	gchar *filename = NULL;
-	GtkWidget *dialog;
-	GtkFileFilter *filter;
-
-	/* TRANSLATORS: dialog for chosing the firmware */
-	dialog = gtk_file_chooser_dialog_new (_("Select firmware file"), window,
-					      GTK_FILE_CHOOSER_ACTION_OPEN,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-					      NULL);
-	gtk_file_chooser_set_create_folders (GTK_FILE_CHOOSER(dialog), FALSE);
-
-	/* setup the filter */
-	filter = gtk_file_filter_new ();
-	/* TRANSLATORS: filter name on the file->open dialog */
-	gtk_file_filter_set_name (filter, _("Supported firmware files"));
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(dialog), filter);
-
-	/* setup the all files filter */
-	filter = gtk_file_filter_new ();
-	gtk_file_filter_add_pattern (filter, "*.bin");
-	/* TRANSLATORS: filter name on the file->open dialog */
-	gtk_file_filter_set_name (filter, _("Firmware images"));
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(dialog), filter);
-
-	/* did user choose file */
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
-
-	/* we're done */
-	gtk_widget_destroy (dialog);
-
-	/* or NULL for missing */
-	return filename;
-}
-
-/**
- * ch_util_flash_firmware_button_cb:
- **/
-static void
-ch_util_flash_firmware_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
-{
-	const gchar *title;
-	gboolean ret;
-	GError *error = NULL;
-	GtkWindow *window;
-	gchar *filename;
-
-	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_ch"));
-	filename = ch_util_get_firmware_filename (window);
-	if (filename == NULL)
-		goto out;
-
-	/* set to HW */
-	ret = ch_client_flash_firmware (priv->client,
-					filename,
-					&error);
-	if (!ret) {
-		/* TRANSLATORS: internal device error */
-		title = _("Failed to flash new firmware");
-		ch_util_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* refresh */
-	ch_util_refresh (priv);
-out:
-	g_free (filename);
-}
-
-/**
  * ch_util_color_select_changed_cb:
  **/
 static void
@@ -1022,9 +945,6 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_reset"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_util_reset_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash_firmware"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (ch_util_flash_firmware_button_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "comboboxtext_color_select"));
 	g_signal_connect (widget, "changed",
 			  G_CALLBACK (ch_util_color_select_changed_cb), priv);

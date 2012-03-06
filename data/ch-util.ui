@@ -930,20 +930,6 @@
                     <property name="position">4</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkButton" id="button_flash_firmware">
-                    <property name="label" translatable="yes" comments="Choose a firmware file to flash">Flash Firmware</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">5</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
