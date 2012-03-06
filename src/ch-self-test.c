@@ -433,6 +433,7 @@ ch_test_state_func (void)
 	guint16 integral_time = 0;
 	guint8 leds = 0;
 	GUsbDevice *device;
+	ChDeviceQueue *device_queue;
 
 	/* load the device */
 	device = ch_client_get_default (&error);
@@ -447,59 +448,70 @@ ch_test_state_func (void)
 	g_assert (device != NULL);
 
 	/* verify LEDs */
-	ret = ch_device_cmd_set_leds (device,
-				      3,
-				      0,
-				      0x00,
-				      0x00,
-				      &error);
+	device_queue = ch_device_queue_new ();
+	ch_device_queue_set_leds (device_queue,
+				  device,
+				  3,
+				  0,
+				  0x00,
+				  0x00);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_get_leds (device,
-				      &leds,
-				      &error);
+	ch_device_queue_get_leds (device_queue,
+				  device,
+				  &leds);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (leds, ==, 3);
 
 	/* verify color select */
-	ret = ch_device_cmd_set_color_select (device,
-					      CH_COLOR_SELECT_BLUE,
-					      &error);
+	ch_device_queue_set_color_select (device_queue,
+					  device,
+					  CH_COLOR_SELECT_BLUE);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_get_color_select (device,
-					      &color_select,
-					      &error);
+	ch_device_queue_get_color_select (device_queue,
+					  device,
+					  &color_select);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (color_select, ==, CH_COLOR_SELECT_BLUE);
 
 	/* verify multiplier */
-	ret = ch_device_cmd_set_multiplier (device,
-					    CH_FREQ_SCALE_2,
-					    &error);
+	ch_device_queue_set_multiplier (device_queue,
+					device,
+					CH_FREQ_SCALE_2);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_get_multiplier (device,
-					    &multiplier,
-					    &error);
+	ch_device_queue_get_multiplier (device_queue,
+					device,
+					&multiplier);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (multiplier, ==, CH_FREQ_SCALE_2);
 
 	/* verify integral */
-	ret = ch_device_cmd_set_integral_time (device,
-					       100,
-					       &error);
+	ch_device_queue_set_integral_time (device_queue,
+					   device,
+					   100);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_get_integral_time (device,
-					       &integral_time,
-					       &error);
+	ch_device_queue_get_integral_time (device_queue,
+					   device,
+					   &integral_time);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (integral_time, ==, 100);
+
+	g_object_unref (device_queue);
 }
 
 static void
@@ -521,6 +533,7 @@ ch_test_eeprom_func (void)
 	CdMat3x3 calibration_tmp;
 	gchar desc[24];
 	GUsbDevice *device;
+	ChDeviceQueue *device_queue;
 
 	/* load the device */
 	device = ch_client_get_default (&error);
@@ -535,9 +548,11 @@ ch_test_eeprom_func (void)
 	g_assert (device != NULL);
 
 	/* only run the destructive tests on a device that is blank */
-	ret = ch_device_cmd_get_serial_number (device,
-					       &serial_number,
-					       &error);
+	device_queue = ch_device_queue_new ();
+	ch_device_queue_get_serial_number (device_queue,
+					   device,
+					   &serial_number);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	if (serial_number != 0) {
@@ -546,32 +561,36 @@ ch_test_eeprom_func (void)
 	}
 
 	/* write eeprom with wrong code */
-	ret = ch_device_cmd_write_eeprom (device,
-					  "hello dave",
-					  &error);
+	ch_device_queue_write_eeprom (device_queue,
+				      device,
+				     "hello dave");
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_error (error, 1, 0);
 	g_assert (!ret);
 	g_clear_error (&error);
 
 	/* verify serial number */
-	ret = ch_device_cmd_set_serial_number (device,
-					       12345678,
-					       &error);
+	ch_device_queue_set_serial_number (device_queue,
+					   device,
+					   12345678);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_get_serial_number (device,
-					      &serial_number,
-					       &error);
+	ch_device_queue_get_serial_number (device_queue,
+					   device,
+					   &serial_number);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (serial_number, ==, 12345678);
 
 	/* verify firmware */
-	ret = ch_device_cmd_get_firmware_ver (device,
-					      &major,
-					      &minor,
-					      &micro,
-					      &error);
+	ch_device_queue_get_firmware_ver (device_queue,
+					  device,
+					  &major,
+					  &minor,
+					  &micro);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (major, ==, 1);
@@ -582,14 +601,16 @@ ch_test_eeprom_func (void)
 	value.R = 0.12;
 	value.G = 0.34;
 	value.B = 0.56;
-	ret = ch_device_cmd_set_dark_offsets (device,
-					      &value,
-					      &error);
+	ch_device_queue_set_dark_offsets (device_queue,
+					  device,
+					  &value);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_get_dark_offsets (device,
-					      &value,
-					      &error);
+	ch_device_queue_get_dark_offsets (device_queue,
+					  device,
+					  &value);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (value.R, ==, 0.12);
@@ -606,38 +627,39 @@ ch_test_eeprom_func (void)
 	calibration.m20 = 7.0f;
 	calibration.m21 = 8.0f;
 	calibration.m22 = 9.0f;
-	ret = ch_device_cmd_set_calibration (device,
-					     60,
-					     &calibration,
-					     CH_CALIBRATION_TYPE_CRT,
-					     "test0",
-					     &error);
+	ch_device_queue_set_calibration (device_queue,
+					 device,
+					 60,
+					 &calibration,
+					 CH_CALIBRATION_TYPE_CRT,
+					 "test0");
+	ch_device_queue_set_calibration (device_queue,
+					 device,
+					 61,
+					 &calibration,
+					 CH_CALIBRATION_TYPE_PROJECTOR,
+					 "test1");
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
-	ret = ch_device_cmd_set_calibration (device,
-					     61,
-					     &calibration,
-					     CH_CALIBRATION_TYPE_PROJECTOR,
-					     "test1",
-					     &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	ret = ch_device_cmd_set_calibration (device,
-					     60,
-					     &calibration,
-					     CH_CALIBRATION_TYPE_CRT,
-					     "test0",
-					     &error);
+	ch_device_queue_set_calibration (device_queue,
+					 device,
+					 60,
+					 &calibration,
+					 CH_CALIBRATION_TYPE_CRT,
+					 "test0");
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
 	/* read back data */
-	ret = ch_device_cmd_get_calibration (device,
-					     60,
-					     &calibration_tmp,
-					     &types,
-					     desc,
-					     &error);
+	ch_device_queue_get_calibration (device_queue,
+					 device,
+					 60,
+					 &calibration_tmp,
+					 &types,
+					 desc);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert (memcmp (&calibration_tmp,
@@ -645,12 +667,13 @@ ch_test_eeprom_func (void)
 			  sizeof (gfloat) * 9) == 0);
 	g_assert_cmpint (types, ==, CH_CALIBRATION_TYPE_CRT);
 	g_assert_cmpstr (desc, ==, "test0");
-	ret = ch_device_cmd_get_calibration (device,
-					     61,
-					     &calibration_tmp,
-					     &types,
-					     desc,
-					     &error);
+	ch_device_queue_get_calibration (device_queue,
+					 device,
+					 61,
+					 &calibration_tmp,
+					 &types,
+					 desc);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert (memcmp (&calibration_tmp,
@@ -661,44 +684,50 @@ ch_test_eeprom_func (void)
 
 	/* verify post scale */
 	post_scale = 127.8f;
-	ret = ch_device_cmd_set_post_scale (device,
-					    post_scale,
-					    &error);
+	ch_device_queue_set_post_scale (device_queue,
+					device,
+					post_scale);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
-	ret = ch_device_cmd_get_post_scale (device,
-					    &post_scale_tmp,
-					    &error);
+	ch_device_queue_get_post_scale (device_queue,
+					device,
+					&post_scale_tmp);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpfloat (fabs (post_scale - post_scale_tmp), <, 0.0001);
 
 	/* verify pre scale */
 	pre_scale = 1.23f;
-	ret = ch_device_cmd_set_pre_scale (device,
-					   pre_scale,
-					   &error);
+	ch_device_queue_set_pre_scale (device_queue,
+				       device,
+				       pre_scale);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
-	ret = ch_device_cmd_get_pre_scale (device,
-					    &pre_scale_tmp,
-					    &error);
+	ch_device_queue_get_pre_scale (device_queue,
+				       device,
+				       &pre_scale_tmp);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpfloat (fabs (pre_scale - pre_scale_tmp), <, 0.0001);
 
 #if 0
 	/* write eeprom */
-	ret = ch_device_cmd_write_eeprom (device,
-					  CH_WRITE_EEPROM_MAGIC,
-					  &error);
+	ch_device_queue_write_eeprom (device_queue,
+				      device,
+				      CH_WRITE_EEPROM_MAGIC);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 #endif
 
 	g_object_unref (device);
+	g_object_unref (device_queue);
 }
 
 static void
@@ -708,7 +737,7 @@ ch_test_reading_func (void)
 	GError *error = NULL;
 	guint16 take_reading = 0;
 	GUsbDevice *device;
-
+	ChDeviceQueue *device_queue;
 
 	/* load the device */
 	device = ch_client_get_default (&error);
@@ -723,35 +752,36 @@ ch_test_reading_func (void)
 	g_assert (device != NULL);
 
 	/* set color select */
-	ret = ch_device_cmd_set_color_select (device,
-					      CH_COLOR_SELECT_WHITE,
-					      &error);
+	device_queue = ch_device_queue_new ();
+	ch_device_queue_set_color_select (device_queue,
+					  device,
+					  CH_COLOR_SELECT_WHITE);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
 	/* set multiplier */
-	ret = ch_device_cmd_set_multiplier (device,
-					    CH_FREQ_SCALE_100,
-					    &error);
+	ch_device_queue_set_multiplier (device_queue,
+					device,
+					CH_FREQ_SCALE_100);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
-	/* set integral */
-	ret = ch_device_cmd_set_integral_time (device,
-					       0xffff,
-					       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	/* take a reading from the hardware */
-	ret = ch_device_cmd_take_reading_raw (device,
-					      &take_reading,
-					      &error);
+	/* set integral and take a reading from the hardware */
+	ch_device_queue_set_integral_time (device_queue,
+					   device,
+					   0xffff);
+	ch_device_queue_take_reading_raw (device_queue,
+					  device,
+					  &take_reading);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (take_reading, >, 0);
 
 	g_object_unref (device);
+	g_object_unref (device_queue);
 }
 
 static void
@@ -768,7 +798,7 @@ ch_test_reading_xyz_func (void)
 	guint i;
 	GUsbDevice *device;
 	CdColorRGB value;
-
+	ChDeviceQueue *device_queue;
 
 	/* load the device */
 	device = ch_client_get_default (&error);
@@ -783,54 +813,48 @@ ch_test_reading_xyz_func (void)
 	g_assert (device != NULL);
 
 	/* set unity calibration */
+	device_queue = ch_device_queue_new ();
 	cd_mat33_set_identity (&calibration);
-	ret = ch_device_cmd_set_calibration (device,
-					     60,
-					     &calibration,
-					     CH_CALIBRATION_TYPE_ALL,
-					     "test0",
-					     &error);
+	ch_device_queue_set_calibration (device_queue,
+					 device,
+					 60,
+					 &calibration,
+					 CH_CALIBRATION_TYPE_ALL,
+					 "test0");
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
 	/* set everything to use the unity values */
 	for (i = 0; i < 6; i++)
 		calibration_map[i] = 60;
-	ret = ch_device_cmd_set_calibration_map (device,
-						 calibration_map,
-						 &error);
+	ch_device_queue_set_calibration_map (device_queue,
+					     device,
+					     calibration_map);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
-	/* set dark offsets */
+	/* set dark offsets and scale */
 	value.R = 0.0f;
 	value.G = 0.0f;
 	value.B = 0.0f;
-	ret = ch_device_cmd_set_dark_offsets (device,
-					      &value,
-					      &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	/* set pre scale */
-	ret = ch_device_cmd_set_pre_scale (device,
-					   5.0f,
-					   &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	/* set post scale */
-	ret = ch_device_cmd_set_post_scale (device,
-					    1.0f,
-					    &error);
-	g_assert_no_error (error);
-	g_assert (ret);
+	ch_device_queue_set_dark_offsets (device_queue,
+					  device,
+					  &value);
+	ch_device_queue_set_pre_scale (device_queue,
+				       device,
+				       5.0f);
+	ch_device_queue_set_post_scale (device_queue,
+					device,
+					1.0f);
 
 	/* take a reading from the hardware */
-	ret = ch_device_cmd_take_readings_xyz (device,
-					       0,
-					       &reading1,
-					       &error);
+	ch_device_queue_take_readings_xyz (device_queue,
+					   device,
+					   0,
+					   &reading1);
+	ret = ch_device_queue_process (device_queue, NULL, &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpfloat (reading1.X, >, 0.0f);
@@ -840,17 +864,14 @@ ch_test_reading_xyz_func (void)
 	/* set post scale much higher */
 	for (post_scale = 1; post_scale < 2000; post_scale *= 2) {
 		g_debug ("Setting post-scale %i", post_scale);
-		ret = ch_device_cmd_set_post_scale (device,
-						    post_scale,
-						    &error);
-		g_assert_no_error (error);
-		g_assert (ret);
-
-		/* take a reading from the hardware */
-		ret = ch_device_cmd_take_readings_xyz (device,
-						       0,
-						       &reading2,
-						       &error);
+		ch_device_queue_set_post_scale (device_queue,
+						device,
+						post_scale);
+		ch_device_queue_take_readings_xyz (device_queue,
+						   device,
+						   0,
+						   &reading2);
+		ret = ch_device_queue_process (device_queue, NULL, &error);
 		g_assert_no_error (error);
 		g_assert (ret);
 
@@ -882,6 +903,7 @@ ch_test_reading_xyz_func (void)
 		reading1.Z = reading2.Z * 2;
 	}
 	g_object_unref (device);
+	g_object_unref (device_queue);
 }
 
 /**
