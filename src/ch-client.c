@@ -72,25 +72,9 @@ ch_client_get_default (ChClient *client, GError **error)
 		goto out;
 	g_debug ("Found ColorHug device %s",
 		 g_usb_device_get_platform_id (device));
-
-	/* load device */
-	ret = g_usb_device_open (device, error);
+	ret = ch_device_open (device, error);
 	if (!ret)
 		goto out;
-	g_debug ("Opened device");
-	ret = g_usb_device_set_configuration (device,
-					      CH_USB_CONFIG,
-					      error);
-	if (!ret)
-		goto out;
-	g_debug ("Set configuration 0x%x", CH_USB_CONFIG);
-	ret = g_usb_device_claim_interface (device,
-					    CH_USB_INTERFACE,
-					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
-					    error);
-	if (!ret)
-		goto out;
-	g_debug ("Claimed interface 0x%x for device", CH_USB_INTERFACE);
 out:
 	if (list != NULL)
 		g_object_unref (list);

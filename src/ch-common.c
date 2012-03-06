@@ -278,6 +278,38 @@ ch_command_to_string (guint8 cmd)
 /**********************************************************************/
 
 /**
+ * ch_device_open:
+ **/
+gboolean
+ch_device_open (GUsbDevice *device, GError **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* load device */
+	ret = g_usb_device_open (device, error);
+	if (!ret)
+		goto out;
+	ret = g_usb_device_set_configuration (device,
+					      CH_USB_CONFIG,
+					      error);
+	if (!ret)
+		goto out;
+	ret = g_usb_device_claim_interface (device,
+					    CH_USB_INTERFACE,
+					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
+					    error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**********************************************************************/
+
+/**
  * ch_print_data_buffer:
  **/
 static void

@@ -1646,31 +1646,10 @@ ch_flash_got_device (ChFlashPrivate *priv)
 		goto fake_device;
 
 	/* open device */
-	ret = g_usb_device_open (priv->device, &error);
+	ret = ch_device_open (priv->device, &error);
 	if (!ret) {
 		/* TRANSLATORS: permissions error perhaps? */
 		title = _("Failed to open device");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		return;
-	}
-	ret = g_usb_device_set_configuration (priv->device,
-					      CH_USB_CONFIG,
-					      &error);
-	if (!ret) {
-		/* TRANSLATORS: we can't set the device config */
-		title = _("Failed to set configuration");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		return;
-	}
-	ret = g_usb_device_claim_interface (priv->device,
-					    CH_USB_INTERFACE,
-					    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
-					    &error);
-	if (!ret) {
-		/* TRANSLATORS: we can't claim the interface for our sole usage */
-		title = _("Failed to claim interface");
 		ch_flash_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		return;

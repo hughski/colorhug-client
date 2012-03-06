@@ -705,6 +705,10 @@ gboolean	ch_device_write_command		(GUsbDevice	*device,
 						 GCancellable	*cancellable,
 						 GError		**error);
 
+/* general utility functions */
+gboolean	ch_device_open			(GUsbDevice	*device,
+						 GError		**error);
+
 /* command utility functions */
 gboolean	 ch_device_cmd_get_color_select	(GUsbDevice	*device,
 						 ChColorSelect	*color_select,
