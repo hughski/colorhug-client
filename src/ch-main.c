@@ -29,10 +29,12 @@
 #include <sqlite3.h>
 
 #include "ch-client.h"
+#include "ch-device-queue.h"
 #include "ch-math.h"
 
 typedef struct {
 	ChClient		*client;
+	ChDeviceQueue		*device_queue;
 	GOptionContext		*context;
 	GPtrArray		*cmd_array;
 	GUsbDevice		*device;
@@ -213,7 +215,12 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChColorSelect color_select = 0;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_color_select (priv->device, &color_select, error);
+	ch_device_queue_get_color_select (priv->device_queue,
+					  priv->device,
+					  &color_select);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -244,9 +251,12 @@ ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **erro
 	guint8 hw_version = 0;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_hardware_version (priv->device,
-						  &hw_version,
-						  error);
+	ch_device_queue_get_hardware_version (priv->device_queue,
+					      priv->device,
+					      &hw_version);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -275,26 +285,21 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble std_dev = 0.0f;
 
 	/* setup HW */
-	ret = ch_device_cmd_set_integral_time (priv->device,
-					       CH_INTEGRAL_TIME_VALUE_MAX,
-					       error);
-	if (!ret)
-		goto out;
-	ret = ch_device_cmd_set_multiplier (priv->device,
-					    CH_FREQ_SCALE_100,
-					    error);
-	if (!ret)
-		goto out;
-	ret = ch_device_cmd_set_color_select (priv->device,
-					      CH_COLOR_SELECT_WHITE,
-					      error);
-	if (!ret)
-		goto out;
-
-	/* get from HW */
-	ret = ch_device_cmd_take_reading_array (priv->device,
-					        reading_array,
-					        error);
+	ch_device_queue_set_integral_time (priv->device_queue,
+					   priv->device,
+					   CH_INTEGRAL_TIME_VALUE_MAX);
+	ch_device_queue_set_multiplier (priv->device_queue,
+					priv->device,
+					CH_FREQ_SCALE_100);
+	ch_device_queue_set_color_select (priv->device_queue,
+					  priv->device,
+					  CH_COLOR_SELECT_WHITE);
+	ch_device_queue_take_reading_array (priv->device_queue,
+					    priv->device,
+					    reading_array);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -367,9 +372,15 @@ ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_color_select (priv->device, color_select, error);
+	ch_device_queue_set_color_select (priv->device_queue,
+					  priv->device,
+					  color_select);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -384,7 +395,12 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChFreqScale multiplier;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
+	ch_device_queue_get_multiplier (priv->device_queue,
+					priv->device,
+					&multiplier);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -440,9 +456,15 @@ ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_multiplier (priv->device, multiplier, error);
+	ch_device_queue_set_multiplier (priv->device_queue,
+					priv->device,
+					multiplier);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -457,9 +479,15 @@ ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 integral_time = 0;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
+	ch_device_queue_get_integral_time (priv->device_queue,
+					   priv->device,
+					   &integral_time);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("%i\n", integral_time);
 out:
 	return ret;
@@ -484,9 +512,15 @@ ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 	integral_time = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
-	ret = ch_device_cmd_set_integral_time (priv->device, integral_time, error);
+	ch_device_queue_set_integral_time (priv->device_queue,
+					   priv->device,
+					   integral_time);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -504,11 +538,15 @@ ch_util_get_calibration_map (ChUtilPrivate *priv,
 	guint i;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_calibration_map (priv->device,
-						 calibration_map,
-						 error);
+	ch_device_queue_get_calibration_map (priv->device_queue,
+					     priv->device,
+					     calibration_map);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	for (i = 0; i < 6; i++)
 		g_print ("%i -> %i\n", i, calibration_map[i]);
 out:
@@ -538,11 +576,15 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 		calibration_map[i] = g_ascii_strtoull (values[i], NULL, 10);
 
 	/* set to HW */
-	ret = ch_device_cmd_set_calibration_map (priv->device,
-						 calibration_map,
-						 error);
+	ch_device_queue_set_calibration_map (priv->device_queue,
+					     priv->device,
+					     calibration_map);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -554,16 +596,22 @@ static gboolean
 ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint16 major, minor, micro;
+	guint16 major = 0;
+	guint16 minor = 0;
+	guint16 micro = 0;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_firmware_ver (priv->device,
-					      &major,
-					      &minor,
-					      &micro,
-					      error);
+	ch_device_queue_get_firmware_ver (priv->device_queue,
+					  priv->device,
+					  &major,
+					  &minor,
+					  &micro);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("%i.%i.%i\n", major, minor, micro);
 out:
 	return ret;
@@ -609,14 +657,18 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* get from HW */
-	ret = ch_device_cmd_get_calibration (priv->device,
-					     calibration_index,
-					     &calibration,
-					     &types,
-					     description,
-					     error);
+	ch_device_queue_get_calibration (priv->device_queue,
+					 priv->device,
+					 calibration_index,
+					 &calibration,
+					 &types,
+					 description);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("index: %i\n", calibration_index);
 	g_print ("supports LCD: %i\n", (types & 0x01) > 0);
 	g_print ("supports CRT: %i\n", (types & 0x02) > 0);
@@ -686,14 +738,18 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_calibration (priv->device,
-					     calibration_index,
-					     &calibration,
-					     types,
-					     values[11],
-					     error);
+	ch_device_queue_set_calibration (priv->device_queue,
+					 priv->device,
+					 calibration_index,
+					 &calibration,
+					 types,
+					 values[11]);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	ch_util_show_calibration (&calibration);
 out:
 	return ret;
@@ -718,11 +774,15 @@ ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
-	ret = ch_device_cmd_clear_calibration (priv->device,
-					       calibration_index,
-					       error);
+	ch_device_queue_clear_calibration (priv->device_queue,
+					   priv->device,
+					   calibration_index);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -740,13 +800,17 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	string = g_string_new ("");
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
-		ret = ch_device_cmd_get_calibration (priv->device,
-						     i,
-						     NULL,
-						     NULL,
-						     description,
-						     NULL);
-		if (ret) {
+		description[0] = '\0';
+		ch_device_queue_get_calibration (priv->device_queue,
+						 priv->device,
+						 i,
+						 NULL,
+						 NULL,
+						 description);
+		ret = ch_device_queue_process (priv->device_queue,
+					       NULL,
+					       error);
+		if (ret && description[0] != '\0') {
 			g_string_append_printf (string, "%i\t%s\n",
 						i, description);
 		}
@@ -789,10 +853,16 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
-	ret = ch_device_cmd_set_calibration_ccmx (priv->device,
-						  calibration_index,
-						  values[1],
-						  error);
+	ret = ch_device_queue_set_calibration_ccmx (priv->device_queue,
+						    priv->device,
+						    calibration_index,
+						    values[1],
+						    error);
+	if (!ret)
+		goto out;
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 out:
@@ -809,9 +879,15 @@ ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint32 serial_number;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_serial_number (priv->device, &serial_number, error);
+	ch_device_queue_get_serial_number (priv->device_queue,
+					   priv->device,
+					   &serial_number);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("%06i\n", serial_number);
 out:
 	return ret;
@@ -924,9 +1000,15 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* set to HW */
 	g_print ("setting serial number to %i\n", serial_number);
-	ret = ch_device_cmd_set_serial_number (priv->device, serial_number, error);
+	ch_device_queue_set_serial_number (priv->device_queue,
+					   priv->device,
+					   serial_number);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -941,9 +1023,15 @@ ch_util_get_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 	gchar name[CH_OWNER_LENGTH_MAX];
 
 	/* get from HW */
-	ret = ch_device_cmd_get_owner_name (priv->device, name, error);
+	ch_device_queue_get_owner_name (priv->device_queue,
+					priv->device,
+					name);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("%s\n", name);
 out:
 	return ret;
@@ -973,9 +1061,15 @@ ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* set to HW */
 	g_print ("setting name to %s\n", name);
-	ret = ch_device_cmd_set_owner_name (priv->device, name, error);
+	ch_device_queue_set_owner_name (priv->device_queue,
+					priv->device,
+					name);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -990,9 +1084,15 @@ ch_util_get_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 	gchar email[CH_OWNER_LENGTH_MAX];
 
 	/* get from HW */
-	ret = ch_device_cmd_get_owner_email (priv->device, email, error);
+	ch_device_queue_get_owner_email (priv->device_queue,
+					priv->device,
+					email);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("%s\n", email);
 out:
 	return ret;
@@ -1022,9 +1122,15 @@ ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* set to HW */
 	g_print ("setting email to %s\n", email);
-	ret = ch_device_cmd_set_owner_email (priv->device, email, error);
+	ch_device_queue_set_owner_email (priv->device_queue,
+					priv->device,
+					email);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1039,9 +1145,15 @@ ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint8 leds = 0;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_leds (priv->device, &leds, error);
+	ch_device_queue_get_leds (priv->device_queue,
+				  priv->device,
+				  &leds);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	if (leds > 3) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
@@ -1103,14 +1215,18 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_leds (priv->device,
-				      leds,
-				      repeat,
-				      time_on,
-				      time_off,
-				      error);
+	ch_device_queue_set_leds (priv->device_queue,
+				  priv->device,
+				  leds,
+				  repeat,
+				  time_on,
+				  time_off);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1125,9 +1241,15 @@ ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 pcb_errata = CH_PCB_ERRATA_NONE;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_pcb_errata (priv->device, &pcb_errata, error);
+	ch_device_queue_get_pcb_errata (priv->device_queue,
+					priv->device,
+					&pcb_errata);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	if (pcb_errata == 0) {
 		g_print ("Errata: none\n");
 		goto out;
@@ -1169,18 +1291,18 @@ ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("Errata: none\n");
 
 	/* set to HW */
-	ret = ch_device_cmd_set_pcb_errata (priv->device,
-					    pcb_errata,
-					    error);
+	ch_device_queue_set_pcb_errata (priv->device_queue,
+					priv->device,
+					pcb_errata);
+	ch_device_queue_write_eeprom (priv->device_queue,
+				      priv->device,
+				      CH_WRITE_EEPROM_MAGIC);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
-	/* save EEPROM */
-	ret = ch_device_cmd_write_eeprom (priv->device,
-					  CH_WRITE_EEPROM_MAGIC,
-					  error);
-	if (!ret)
-		goto out;
 out:
 	return ret;
 }
@@ -1195,11 +1317,15 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 	CdColorRGB value;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_dark_offsets (priv->device,
-					      &value,
-					      error);
+	ch_device_queue_get_dark_offsets (priv->device_queue,
+					  priv->device,
+					  &value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 out:
 	return ret;
@@ -1215,50 +1341,43 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	CdColorRGB value_old;
 	CdColorRGB value;
 
-	/* get from HW */
-	ret = ch_device_cmd_get_dark_offsets (priv->device,
-					      &value_old,
-					      error);
-	if (!ret)
-		goto out;
-
 	/* set dark offsets */
 	cd_color_set_rgb (&value, 0.0f, 0.0f, 0.0f);
 
-	/* set to HW */
-	ret = ch_device_cmd_set_dark_offsets (priv->device,
-					      &value,
-					      error);
-	if (!ret)
-		goto out;
-
-	/* setup HW */
-	ret = ch_device_cmd_set_integral_time (priv->device,
-					       CH_INTEGRAL_TIME_VALUE_MAX,
-					       error);
-	if (!ret)
-		goto out;
-	ret = ch_device_cmd_set_multiplier (priv->device,
-					    CH_FREQ_SCALE_100,
-					    error);
-	if (!ret)
-		goto out;
-
 	/* get from HW */
-	ret = ch_device_cmd_take_readings (priv->device,
-					   &value,
-					   error);
+	ch_device_queue_get_dark_offsets (priv->device_queue,
+					  priv->device,
+					  &value_old);
+	ch_device_queue_set_dark_offsets (priv->device_queue,
+					  priv->device,
+					  &value);
+	ch_device_queue_set_integral_time (priv->device_queue,
+					   priv->device,
+					   CH_INTEGRAL_TIME_VALUE_MAX);
+	ch_device_queue_set_multiplier (priv->device_queue,
+					priv->device,
+					CH_FREQ_SCALE_100);
+	ch_device_queue_take_readings (priv->device_queue,
+				       priv->device,
+				       &value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("Values: R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 
 	/* TRANSLATORS: ask before we set these */
 	ret = ch_util_get_prompt (_("Set these values as the dark offsets"), FALSE);
 	if (!ret) {
 		/* restore HW */
-		ret = ch_device_cmd_set_dark_offsets (priv->device,
-						      &value_old,
-						      error);
+		ch_device_queue_set_dark_offsets (priv->device_queue,
+						  priv->device,
+						  &value_old);
+		ret = ch_device_queue_process (priv->device_queue,
+					       NULL,
+					       error);
 		if (!ret)
 			goto out;
 		g_set_error_literal (error, 1, 0,
@@ -1267,18 +1386,18 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_dark_offsets (priv->device,
-					      &value,
-					      error);
+	ch_device_queue_set_dark_offsets (priv->device_queue,
+					  priv->device,
+					  &value);
+	ch_device_queue_write_eeprom (priv->device_queue,
+				      priv->device,
+				      CH_WRITE_EEPROM_MAGIC);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
-	/* save EEPROM */
-	ret = ch_device_cmd_write_eeprom (priv->device,
-					  CH_WRITE_EEPROM_MAGIC,
-					  error);
-	if (!ret)
-		goto out;
 out:
 	return ret;
 }
@@ -1310,11 +1429,15 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 	value.B = g_ascii_strtod (values[2], NULL);
 
 	/* set to HW */
-	ret = ch_device_cmd_set_dark_offsets (priv->device,
-					      &value,
-					      error);
+	ch_device_queue_set_dark_offsets (priv->device_queue,
+					  priv->device,
+					  &value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1336,9 +1459,15 @@ ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_write_eeprom (priv->device, values[0], error);
+	ch_device_queue_write_eeprom (priv->device_queue,
+				      priv->device,
+				      values[0]);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1356,7 +1485,21 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 take_reading;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_color_select (priv->device, &color_select, error);
+	ch_device_queue_get_color_select (priv->device_queue,
+					  priv->device,
+					  &color_select);
+	ch_device_queue_get_multiplier (priv->device_queue,
+					priv->device,
+					&multiplier);
+	ch_device_queue_get_integral_time (priv->device_queue,
+					   priv->device,
+					   &integral_time);
+	ch_device_queue_take_reading_raw (priv->device_queue,
+					  priv->device,
+					  &take_reading);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -1364,27 +1507,12 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	g_print ("%s:\t\t%s\n", _("Color"),
 		 ch_color_select_to_string (color_select));
 
-	/* get from HW */
-	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
-	if (!ret)
-		goto out;
-
 	/* TRANSLATORS: this is the sensor scale factor */
 	g_print ("%s:\t%s\n", _("Multiplier"),
 		 ch_multiplier_to_string (multiplier));
 
-	/* get from HW */
-	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
-	if (!ret)
-		goto out;
-
 	/* TRANSLATORS: this is the sensor sample time */
 	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
-
-	/* get from HW */
-	ret = ch_device_cmd_take_reading_raw (priv->device, &take_reading, error);
-	if (!ret)
-		goto out;
 
 	/* TRANSLATORS: this is the number of pulses detected */
 	g_print ("%s:\t\t%i\n", _("Pulses"), take_reading);
@@ -1404,7 +1532,18 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 integral_time = 0;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
+	ch_device_queue_get_multiplier (priv->device_queue,
+					priv->device,
+					&multiplier);
+	ch_device_queue_get_integral_time (priv->device_queue,
+					   priv->device,
+					   &integral_time);
+	ch_device_queue_take_readings (priv->device_queue,
+				       priv->device,
+				       &value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -1412,20 +1551,9 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 	g_print ("%s:\t%s\n", _("Multiplier"),
 		 ch_multiplier_to_string (multiplier));
 
-	/* get from HW */
-	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
-	if (!ret)
-		goto out;
-
 	/* TRANSLATORS: this is the sensor sample time */
 	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 
-	/* get from HW */
-	ret = ch_device_cmd_take_readings (priv->device,
-					   &value,
-					   error);
-	if (!ret)
-		goto out;
 	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 out:
 	return ret;
@@ -1453,7 +1581,19 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* get from HW */
-	ret = ch_device_cmd_get_multiplier (priv->device, &multiplier, error);
+	ch_device_queue_get_multiplier (priv->device_queue,
+					priv->device,
+					&multiplier);
+	ch_device_queue_get_integral_time (priv->device_queue,
+					   priv->device,
+					   &integral_time);
+	ch_device_queue_take_readings_xyz (priv->device_queue,
+					   priv->device,
+					   calibration_index,
+					   &value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -1461,21 +1601,9 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	g_print ("%s:\t%s\n", _("Multiplier"),
 		 ch_multiplier_to_string (multiplier));
 
-	/* get from HW */
-	ret = ch_device_cmd_get_integral_time (priv->device, &integral_time, error);
-	if (!ret)
-		goto out;
-
 	/* TRANSLATORS: this is the sensor sample time */
 	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 
-	/* get from HW */
-	ret = ch_device_cmd_take_readings_xyz (priv->device,
-					       calibration_index,
-					       &value,
-					       error);
-	if (!ret)
-		goto out;
 	g_print ("X:%.5f Y:%.5f Z:%.5f\n", value.X, value.Y, value.Z);
 out:
 	return ret;
@@ -1490,10 +1618,14 @@ ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 
 	/* this may return with an error */
-	ret = ch_device_cmd_reset (priv->device,
-				   error);
+	ch_device_queue_reset (priv->device_queue,
+			       priv->device);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1574,14 +1706,18 @@ static gboolean
 ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble pre_scale;
+	gdouble pre_scale = 0.0f;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_pre_scale (priv->device,
-					   &pre_scale,
-					   error);
+	ch_device_queue_get_pre_scale (priv->device_queue,
+				       priv->device,
+				       &pre_scale);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("Pre Scale: %f\n", pre_scale);
 out:
 	return ret;
@@ -1613,11 +1749,15 @@ ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_pre_scale (priv->device,
-					   pre_scale,
-					   error);
+	ch_device_queue_set_pre_scale (priv->device_queue,
+				       priv->device,
+				       pre_scale);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1629,14 +1769,18 @@ static gboolean
 ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	gdouble post_scale;
+	gdouble post_scale = 0.0f;
 
 	/* get from HW */
-	ret = ch_device_cmd_get_post_scale (priv->device,
-					    &post_scale,
-					    error);
+	ch_device_queue_get_post_scale (priv->device_queue,
+					priv->device,
+					&post_scale);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 	g_print ("Post Scale: %f\n", post_scale);
 out:
 	return ret;
@@ -1668,11 +1812,15 @@ ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_post_scale (priv->device,
-					    post_scale,
-					    error);
+	ch_device_queue_set_post_scale (priv->device_queue,
+					priv->device,
+					post_scale);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1686,10 +1834,14 @@ ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 
 	/* set to HW */
-	ret = ch_device_cmd_boot_flash (priv->device,
-					error);
+	ch_device_queue_boot_flash (priv->device_queue,
+				    priv->device);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1720,11 +1872,15 @@ ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_device_cmd_set_flash_success (priv->device,
-					       flash_success,
-					       error);
+	ch_device_queue_set_flash_success (priv->device_queue,
+					   priv->device,
+					   flash_success);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1769,20 +1925,26 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* just write zeros */
 	data = g_new0 (guint8, len);
-	ret = ch_device_cmd_write_flash (priv->device,
-					 address,
-					 data,
-					 len,
-					 error);
+	ch_device_queue_write_flash (priv->device_queue,
+				     priv->device,
+				     address,
+				     data,
+				     len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
 	/* flush */
-	ret = ch_device_cmd_write_flash (priv->device,
-					 address | CH_FLASH_TRANSFER_BLOCK_SIZE,
-					 data,
-					 len,
-					 error);
+	ch_device_queue_write_flash (priv->device_queue,
+				     priv->device,
+				     address | CH_FLASH_TRANSFER_BLOCK_SIZE,
+				     data,
+				     len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -1829,12 +1991,16 @@ ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 			     len);
 		goto out;
 	}
-	ret = ch_device_cmd_erase_flash (priv->device,
-					 address,
-					 len,
-					 error);
+	ch_device_queue_erase_flash (priv->device_queue,
+				     priv->device,
+				     address,
+				     len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
+
 out:
 	return ret;
 }
@@ -1877,11 +2043,14 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 		goto out;
 	}
 	data = g_new0 (guint8, len);
-	ret = ch_device_cmd_read_flash (priv->device,
-					address,
-					data,
-					len,
-					error);
+	ch_device_queue_read_flash (priv->device_queue,
+				    priv->device,
+				    address,
+				    data,
+				    len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -2191,6 +2360,7 @@ main (int argc, char *argv[])
 
 	/* get connection to colord */
 	priv->client = ch_client_new ();
+	priv->device_queue = ch_device_queue_new ();
 	priv->device = ch_client_get_default (priv->client, &error);
 	if (priv->device == NULL) {
 		/* TRANSLATORS: no colord available */
@@ -2217,6 +2387,8 @@ out:
 			g_ptr_array_unref (priv->cmd_array);
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
+		if (priv->device_queue != NULL)
+			g_object_unref (priv->device_queue);
 		g_option_context_free (priv->context);
 		g_free (priv);
 	}
