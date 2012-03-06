@@ -815,18 +815,6 @@ gboolean	 ch_device_cmd_take_readings_xyz (GUsbDevice	*device,
 						 GError		**error);
 gboolean	 ch_device_cmd_boot_flash	(GUsbDevice	*device,
 						 GError		**error);
-gboolean	 ch_device_cmd_set_owner_name	(GUsbDevice	*device,
-						 const gchar	*name,
-						 GError	 	**error);
-gboolean	 ch_device_cmd_get_owner_name	(GUsbDevice	*device,
-						 gchar		*name,
-						 GError	 	**error);
-gboolean	 ch_device_cmd_set_owner_email	(GUsbDevice	*device,
-						 const gchar	*email,
-						 GError	 	**error);
-gboolean	 ch_device_cmd_get_owner_email	(GUsbDevice	*device,
-						 gchar		*email,
-						 GError	 	**error);
 gboolean	 ch_device_cmd_take_reading_array (GUsbDevice	*device,
 						 guint8		*reading_array,
 						 GError	 	**error);
