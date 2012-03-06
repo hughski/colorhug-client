@@ -26,13 +26,13 @@
 #include <locale.h>
 #include <colord.h>
 #include <math.h>
+#include <gusb.h>
 
-#include "ch-client.h"
+#include "ch-common.h"
 
 typedef struct {
 	GtkBuilder	*builder;
 	GtkApplication	*application;
-	ChClient	*client;
 	guint8		 leds_old;
 	CdColorRGB	 value_max;
 	GUsbDevice	*device;
@@ -878,6 +878,41 @@ ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 }
 
 /**
+ * ch_util_get_default_device:
+ **/
+static GUsbDevice *
+ch_util_get_default_device (GError **error)
+{
+	gboolean ret;
+	GUsbContext *usb_ctx;
+	GUsbDevice *device = NULL;
+	GUsbDeviceList *list;
+
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* try to find the ColorHug device */
+	usb_ctx = g_usb_context_new (NULL);
+	list = g_usb_device_list_new (usb_ctx);
+	g_usb_device_list_coldplug (list);
+	device = g_usb_device_list_find_by_vid_pid (list,
+						    CH_USB_VID,
+						    CH_USB_PID,
+						    error);
+	if (device == NULL)
+		goto out;
+	g_debug ("Found ColorHug device %s",
+		 g_usb_device_get_platform_id (device));
+	ret = ch_device_open (device, error);
+	if (!ret)
+		goto out;
+out:
+	g_object_unref (usb_ctx);
+	if (list != NULL)
+		g_object_unref (list);
+	return device;
+}
+
+/**
  * ch_util_startup_cb:
  **/
 static void
@@ -913,7 +948,7 @@ ch_util_startup_cb (GApplication *application, ChUtilPrivate *priv)
 	gtk_widget_hide (main_window);
 
 	/* connect to device */
-	priv->device = ch_client_get_default (priv->client, &error);
+	priv->device = ch_util_get_default_device (&error);
 	if (priv->device == NULL) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to connect to device");
@@ -1026,17 +1061,12 @@ main (int argc, char **argv)
 	g_signal_connect (priv->application, "activate",
 			  G_CALLBACK (ch_util_activate_cb), priv);
 
-	/* use client */
-	priv->client = ch_client_new ();
-
 	/* wait */
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);
 
 	g_object_unref (priv->application);
 	if (priv->builder != NULL)
 		g_object_unref (priv->builder);
-	if (priv->client != NULL)
-		g_object_unref (priv->client);
 	if (priv->device != NULL)
 		g_object_unref (priv->device);
 	g_free (priv);

@@ -20,7 +20,6 @@
  */
 
 #include "config.h"
-#include "ch-client.h"
 #include "ch-math.h"
 #include "ch-device-queue.h"
 
@@ -389,10 +388,44 @@ ch_test_math_multiply_func (void)
 	g_assert_cmpint (rc, ==, CH_ERROR_OVERFLOW_MULTIPLY);
 }
 
+/**
+ * ch_client_get_default:
+ **/
+static GUsbDevice *
+ch_client_get_default (GError **error)
+{
+	gboolean ret;
+	GUsbContext *usb_ctx;
+	GUsbDevice *device = NULL;
+	GUsbDeviceList *list;
+
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* try to find the ColorHug device */
+	usb_ctx = g_usb_context_new (NULL);
+	list = g_usb_device_list_new (usb_ctx);
+	g_usb_device_list_coldplug (list);
+	device = g_usb_device_list_find_by_vid_pid (list,
+						    CH_USB_VID,
+						    CH_USB_PID,
+						    error);
+	if (device == NULL)
+		goto out;
+	g_debug ("Found ColorHug device %s",
+		 g_usb_device_get_platform_id (device));
+	ret = ch_device_open (device, error);
+	if (!ret)
+		goto out;
+out:
+	g_object_unref (usb_ctx);
+	if (list != NULL)
+		g_object_unref (list);
+	return device;
+}
+
 static void
 ch_test_state_func (void)
 {
-	ChClient *client;
 	ChColorSelect color_select = 0;
 	ChFreqScale multiplier = 0;
 	gboolean ret;
@@ -401,11 +434,8 @@ ch_test_state_func (void)
 	guint8 leds = 0;
 	GUsbDevice *device;
 
-	/* new device */
-	client = ch_client_new ();
-
 	/* load the device */
-	device = ch_client_get_default (client, &error);
+	device = ch_client_get_default (&error);
 	if (device == NULL && g_error_matches (error,
 					       G_USB_DEVICE_ERROR,
 					       G_USB_DEVICE_ERROR_NO_DEVICE)) {
@@ -470,14 +500,11 @@ ch_test_state_func (void)
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (integral_time, ==, 100);
-
-	g_object_unref (client);
 }
 
 static void
 ch_test_eeprom_func (void)
 {
-	ChClient *client;
 	gboolean ret;
 	GError *error = NULL;
 	guint16 major = 0;
@@ -495,11 +522,8 @@ ch_test_eeprom_func (void)
 	gchar desc[24];
 	GUsbDevice *device;
 
-	/* new device */
-	client = ch_client_new ();
-
 	/* load the device */
-	device = ch_client_get_default (client, &error);
+	device = ch_client_get_default (&error);
 	if (device == NULL && g_error_matches (error,
 					       G_USB_DEVICE_ERROR,
 					       G_USB_DEVICE_ERROR_NO_DEVICE)) {
@@ -675,23 +699,19 @@ ch_test_eeprom_func (void)
 #endif
 
 	g_object_unref (device);
-	g_object_unref (client);
 }
 
 static void
 ch_test_reading_func (void)
 {
-	ChClient *client;
 	gboolean ret;
 	GError *error = NULL;
 	guint16 take_reading = 0;
 	GUsbDevice *device;
 
-	/* new device */
-	client = ch_client_new ();
 
 	/* load the device */
-	device = ch_client_get_default (client, &error);
+	device = ch_client_get_default (&error);
 	if (device == NULL && g_error_matches (error,
 					       G_USB_DEVICE_ERROR,
 					       G_USB_DEVICE_ERROR_NO_DEVICE)) {
@@ -731,14 +751,12 @@ ch_test_reading_func (void)
 	g_assert (ret);
 	g_assert_cmpint (take_reading, >, 0);
 
-	g_object_unref (client);
 	g_object_unref (device);
 }
 
 static void
 ch_test_reading_xyz_func (void)
 {
-	ChClient *client;
 	gboolean ret;
 	CdMat3x3 calibration;
 	CdColorXYZ reading1;
@@ -751,11 +769,9 @@ ch_test_reading_xyz_func (void)
 	GUsbDevice *device;
 	CdColorRGB value;
 
-	/* new device */
-	client = ch_client_new ();
 
 	/* load the device */
-	device = ch_client_get_default (client, &error);
+	device = ch_client_get_default (&error);
 	if (device == NULL && g_error_matches (error,
 					       G_USB_DEVICE_ERROR,
 					       G_USB_DEVICE_ERROR_NO_DEVICE)) {
@@ -865,7 +881,6 @@ ch_test_reading_xyz_func (void)
 		g_assert_cmpfloat (scaling_factor_actual, <, 1.1);
 		reading1.Z = reading2.Z * 2;
 	}
-	g_object_unref (client);
 	g_object_unref (device);
 }
 
@@ -880,17 +895,14 @@ ch_test_reading_xyz_func (void)
 static void
 ch_test_incomplete_request_func (void)
 {
-	ChClient *client;
 	gboolean ret;
 	GError *error = NULL;
 	guint8 buffer[CH_USB_HID_EP_SIZE];
 	GUsbDevice *device = NULL;
 
-	/* new device */
-	client = ch_client_new ();
 
 	/* load the device */
-	device = ch_client_get_default (client, &error);
+	device = ch_client_get_default (&error);
 	if (device == NULL && g_error_matches (error,
 					       G_USB_DEVICE_ERROR,
 					       G_USB_DEVICE_ERROR_NO_DEVICE)) {
@@ -956,7 +968,6 @@ ch_test_incomplete_request_func (void)
 	g_assert_cmpint (buffer[0], ==, CH_ERROR_INCOMPLETE_REQUEST);
 	g_assert_cmpint (buffer[1], ==, CH_CMD_GET_FIRMWARE_VERSION);
 out:
-	g_object_unref (client);
 	if (device != NULL)
 		g_object_unref (device);
 }

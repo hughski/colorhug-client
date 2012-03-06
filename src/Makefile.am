@@ -15,8 +15,6 @@ noinst_LIBRARIES = libchshared.a
 libchshared_a_SOURCES =					\
 	ch-math.c					\
 	ch-math.h					\
-	ch-client.c					\
-	ch-client.h					\
 	ch-device-queue.c				\
 	ch-device-queue.h				\
 	ch-common.c					\

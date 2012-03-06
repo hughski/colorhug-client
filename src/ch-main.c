@@ -28,12 +28,10 @@
 #include <math.h>
 #include <sqlite3.h>
 
-#include "ch-client.h"
 #include "ch-device-queue.h"
 #include "ch-math.h"
 
 typedef struct {
-	ChClient		*client;
 	ChDeviceQueue		*device_queue;
 	GOptionContext		*context;
 	GPtrArray		*cmd_array;
@@ -1631,6 +1629,182 @@ out:
 }
 
 /**
+ * ch_util_get_default_device:
+ **/
+static GUsbDevice *
+ch_util_get_default_device (GError **error)
+{
+	gboolean ret;
+	GUsbContext *usb_ctx;
+	GUsbDevice *device = NULL;
+	GUsbDeviceList *list;
+
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* try to find the ColorHug device */
+	usb_ctx = g_usb_context_new (NULL);
+	list = g_usb_device_list_new (usb_ctx);
+	g_usb_device_list_coldplug (list);
+	device = g_usb_device_list_find_by_vid_pid (list,
+						    CH_USB_VID,
+						    CH_USB_PID,
+						    error);
+	if (device == NULL)
+		goto out;
+	g_debug ("Found ColorHug device %s",
+		 g_usb_device_get_platform_id (device));
+	ret = ch_device_open (device, error);
+	if (!ret)
+		goto out;
+out:
+	g_object_unref (usb_ctx);
+	if (list != NULL)
+		g_object_unref (list);
+	return device;
+}
+
+/**
+ * ch_util_flash_firmware_internal:
+ **/
+static gboolean
+ch_util_flash_firmware_internal (const gchar *filename,
+				 GError **error)
+{
+	gboolean ret;
+	gchar *data = NULL;
+	guint8 buffer[60];
+	guint idx;
+	gsize len = 0;
+	gsize chunk_len;
+	guint8 flash_success;
+	GUsbDevice *device = NULL;
+
+	g_return_val_if_fail (filename != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	/* load file */
+	ret = g_file_get_contents (filename, &data, &len, error);
+	if (!ret)
+		goto out;
+
+	/* boot to bootloader */
+	device = ch_util_get_default_device (error);
+	if (!ret)
+		goto out;
+	ret = ch_device_cmd_reset (device, error);
+	if (!ret)
+		goto out;
+
+	/* wait for the device to reconnect */
+	g_object_unref (device);
+	g_usleep (1 * G_USEC_PER_SEC);
+	device = ch_util_get_default_device (error);
+	if (!ret)
+		goto out;
+
+	/* set flash success false */
+	flash_success = 0x00;
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       &flash_success, 1,
+				       NULL, 0,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* erase flash */
+	g_debug ("Erasing at %04x size %" G_GSIZE_FORMAT,
+		 CH_EEPROM_ADDR_RUNCODE, len);
+	ret = ch_device_cmd_erase_flash (device,
+					 CH_EEPROM_ADDR_RUNCODE,
+					 len,
+					 error);
+	if (!ret)
+		goto out;
+
+	/* just write in 32 byte chunks, as we're sure that the firmware
+	 * image has been prepared to end on a 64 byte chunk with
+	 * colorhug-inhx32-to-bin >= 0.1.5 */
+	idx = 0;
+	chunk_len = CH_FLASH_TRANSFER_BLOCK_SIZE;
+	do {
+		if (idx + chunk_len > len)
+			chunk_len = len - idx;
+		g_debug ("Writing at %04x size %" G_GSIZE_FORMAT,
+			 CH_EEPROM_ADDR_RUNCODE + idx,
+			 chunk_len);
+		ret = ch_device_cmd_write_flash (device,
+						 CH_EEPROM_ADDR_RUNCODE + idx,
+						 (guint8 *) data + idx,
+						 chunk_len,
+						 error);
+		if (!ret)
+			goto out;
+		idx += chunk_len;
+	} while (idx < len);
+
+	/* read in 60 byte chunks */
+	idx = 0;
+	chunk_len = 60;
+	do {
+		if (idx + chunk_len > len)
+			chunk_len = len - idx;
+		g_debug ("Reading at %04x size %" G_GSIZE_FORMAT,
+			 CH_EEPROM_ADDR_RUNCODE + idx,
+			 chunk_len);
+		ret = ch_device_cmd_read_flash (device,
+						CH_EEPROM_ADDR_RUNCODE + idx,
+						buffer,
+						chunk_len,
+						error);
+		if (!ret)
+			goto out;
+		if (memcmp (data + idx, buffer, chunk_len) != 0) {
+			ret = FALSE;
+			g_set_error (error, 1, 0,
+				     "Failed to verify @0x%04x",
+				     CH_EEPROM_ADDR_RUNCODE + idx);
+			goto out;
+		}
+		idx += chunk_len;
+	} while (idx < len);
+
+	/* boot into new code */
+	ret = ch_device_write_command (device,
+				       CH_CMD_BOOT_FLASH,
+				       NULL, 0,
+				       NULL, 0,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+
+	/* wait for the device to reconnect */
+	g_object_unref (device);
+	g_usleep (CH_FLASH_RECONNECT_TIMEOUT * 1000);
+	device = ch_util_get_default_device (error);
+	if (!ret)
+		goto out;
+
+	/* set flash success true */
+	flash_success = 0x01;
+	ret = ch_device_write_command (device,
+				       CH_CMD_SET_FLASH_SUCCESS,
+				       &flash_success, 1,
+				       NULL, 0,
+				       NULL,	/* cancellable */
+				       error);
+	if (!ret)
+		goto out;
+out:
+	if (device != NULL)
+		g_object_unref (device);
+	g_free (data);
+	return ret;
+}
+
+/**
  * ch_util_flash_firmware_force:
  **/
 static gboolean
@@ -1647,8 +1821,7 @@ ch_util_flash_firmware_force (ChUtilPrivate *priv, gchar **values, GError **erro
 	}
 
 	/* set to HW */
-	ret = ch_client_flash_firmware (priv->client,
-					values[0],
+	ret = ch_util_flash_firmware_internal (values[0],
 					error);
 	if (!ret)
 		goto out;
@@ -1687,8 +1860,7 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_client_flash_firmware (priv->client,
-					values[0],
+	ret = ch_util_flash_firmware_internal (values[0],
 					error);
 	if (!ret)
 		goto out;
@@ -2359,9 +2531,8 @@ main (int argc, char *argv[])
 	}
 
 	/* get connection to colord */
-	priv->client = ch_client_new ();
 	priv->device_queue = ch_device_queue_new ();
-	priv->device = ch_client_get_default (priv->client, &error);
+	priv->device = ch_util_get_default_device (&error);
 	if (priv->device == NULL) {
 		/* TRANSLATORS: no colord available */
 		g_print ("%s %s\n", _("No connection to device:"),
@@ -2382,7 +2553,6 @@ main (int argc, char *argv[])
 	retval = 0;
 out:
 	if (priv != NULL) {
-		g_object_unref (priv->client);
 		if (priv->cmd_array != NULL)
 			g_ptr_array_unref (priv->cmd_array);
 		if (priv->device != NULL)
