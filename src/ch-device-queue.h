@@ -63,6 +63,34 @@ struct _ChDeviceQueueClass
 	void (*_ch_reserved5) (void);
 };
 
+
+/**
+ * ChDeviceQueueProcessFlags:
+ *
+ * CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE:
+ * 	Normal operation, where a single device command failure makes
+ *	the return value of the process %FALSE, but the queue contibues
+ *	to run for other devices.
+ *
+ * CH_DEVICE_QUEUE_PROCESS_FLAGS_CONTINUE_ERRORS:
+ * 	Continue to submit commands to a device that has failed a
+ *	command, for example where one command might not be supported
+ *	in the middle of a queue of commands.
+ *
+ * CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS:
+ * 	Do not consider a device error to be fatal, but instead emit
+ *	a signal and continue with the rest of the queue. If the flag
+ *	%CH_DEVICE_QUEUE_PROCESS_FLAGS_CONTINUE_ERRORS is not used then
+ *	other commands to the same device will not be submitted.
+ *
+ * Flags for controlling processing options
+ **/
+typedef enum {
+	CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE		= 0,
+	CH_DEVICE_QUEUE_PROCESS_FLAGS_CONTINUE_ERRORS	= 1 << 0,
+	CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS	= 1 << 1
+} ChDeviceQueueProcessFlags;
+
 GType		 ch_device_queue_get_type	(void);
 ChDeviceQueue	*ch_device_queue_new		(void);
 
@@ -75,6 +103,7 @@ void		 ch_device_queue_add		(ChDeviceQueue	*device_queue,
 						 gsize		 buffer_out_len);
 
 void		 ch_device_queue_process_async	(ChDeviceQueue	*device_queue,
+						 ChDeviceQueueProcessFlags process_flags,
 						 GCancellable	*cancellable,
 						 GAsyncReadyCallback callback,
 						 gpointer	 user_data);
@@ -82,6 +111,7 @@ gboolean	 ch_device_queue_process_finish	(ChDeviceQueue	*device_queue,
 						 GAsyncResult	*res,
 						 GError		**error);
 gboolean	 ch_device_queue_process	(ChDeviceQueue	*device_queue,
+						 ChDeviceQueueProcessFlags process_flags,
 						 GCancellable	*cancellable,
 						 GError		**error);
 

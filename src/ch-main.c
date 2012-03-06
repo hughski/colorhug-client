@@ -217,6 +217,7 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 					  priv->device,
 					  &color_select);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -253,6 +254,7 @@ ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **erro
 					      priv->device,
 					      &hw_version);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -296,6 +298,7 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 					    priv->device,
 					    reading_array);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -374,6 +377,7 @@ ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 					  priv->device,
 					  color_select);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -397,6 +401,7 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					&multiplier);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -458,6 +463,7 @@ ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					multiplier);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -481,6 +487,7 @@ ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 					   priv->device,
 					   &integral_time);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -514,6 +521,7 @@ ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 					   priv->device,
 					   integral_time);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -540,6 +548,7 @@ ch_util_get_calibration_map (ChUtilPrivate *priv,
 					     priv->device,
 					     calibration_map);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -578,6 +587,7 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 					     priv->device,
 					     calibration_map);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -605,6 +615,7 @@ ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
 					  &minor,
 					  &micro);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -662,6 +673,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					 &types,
 					 description);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -743,6 +755,7 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					 types,
 					 values[11]);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -776,6 +789,7 @@ ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					   priv->device,
 					   calibration_index);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -806,6 +820,7 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 						 NULL,
 						 description);
 		ret = ch_device_queue_process (priv->device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 					       NULL,
 					       error);
 		if (ret && description[0] != '\0') {
@@ -859,6 +874,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	if (!ret)
 		goto out;
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -881,6 +897,7 @@ ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 					   priv->device,
 					   &serial_number);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1002,6 +1019,7 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 					   priv->device,
 					   serial_number);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1025,6 +1043,7 @@ ch_util_get_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					name);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1063,6 +1082,7 @@ ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					name);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1086,6 +1106,7 @@ ch_util_get_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					email);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1124,6 +1145,7 @@ ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					email);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1147,6 +1169,7 @@ ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 				  priv->device,
 				  &leds);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1220,6 +1243,7 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 				  time_on,
 				  time_off);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1243,6 +1267,7 @@ ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					&pcb_errata);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1296,6 +1321,7 @@ ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1319,6 +1345,7 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 					  priv->device,
 					  &value);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1359,6 +1386,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 				       priv->device,
 				       &value);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1374,6 +1402,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 						  priv->device,
 						  &value_old);
 		ret = ch_device_queue_process (priv->device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 					       NULL,
 					       error);
 		if (!ret)
@@ -1391,6 +1420,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1431,6 +1461,7 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 					  priv->device,
 					  &value);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1461,6 +1492,7 @@ ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 				      priv->device,
 				      values[0]);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1496,6 +1528,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 					  priv->device,
 					  &take_reading);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1540,6 +1573,7 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 				       priv->device,
 				       &value);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1590,6 +1624,7 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 					   calibration_index,
 					   &value);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1619,6 +1654,7 @@ ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_reset (priv->device_queue,
 			       priv->device);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1667,14 +1703,14 @@ out:
  * ch_util_flash_firmware_internal:
  **/
 static gboolean
-ch_util_flash_firmware_internal (const gchar *filename,
+ch_util_flash_firmware_internal (ChUtilPrivate *priv,
+				 const gchar *filename,
 				 GError **error)
 {
 	gboolean ret;
 	gchar *data = NULL;
 	gsize len = 0;
 	GUsbDevice *device = NULL;
-	ChDeviceQueue *device_queue = NULL;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -1685,12 +1721,14 @@ ch_util_flash_firmware_internal (const gchar *filename,
 		goto out;
 
 	/* boot to bootloader */
-	device_queue = ch_device_queue_new ();
 	device = ch_util_get_default_device (error);
 	if (!ret)
 		goto out;
-	ch_device_queue_reset (device_queue, device);
-	ret = ch_device_queue_process (device_queue, NULL, error);
+	ch_device_queue_reset (priv->device_queue, device);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -1702,25 +1740,31 @@ ch_util_flash_firmware_internal (const gchar *filename,
 		goto out;
 
 	/* write firmware */
-	ch_device_queue_set_flash_success (device_queue,
+	ch_device_queue_set_flash_success (priv->device_queue,
 					   device,
 					   0x00);
-	ch_device_queue_write_firmware (device_queue,
+	ch_device_queue_write_firmware (priv->device_queue,
 					device,
 					(const guint8 *) data,
 					len);
-	ret = ch_device_queue_process (device_queue, NULL, error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
 	/* read firmware */
-	ch_device_queue_verify_firmware (device_queue,
+	ch_device_queue_verify_firmware (priv->device_queue,
 					 device,
 					 (const guint8 *) data,
 					 len);
-	ch_device_queue_boot_flash (device_queue,
+	ch_device_queue_boot_flash (priv->device_queue,
 				    device);
-	ret = ch_device_queue_process (device_queue, NULL, error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 
@@ -1732,17 +1776,18 @@ ch_util_flash_firmware_internal (const gchar *filename,
 		goto out;
 
 	/* set flash success true */
-	ch_device_queue_set_flash_success (device_queue,
+	ch_device_queue_set_flash_success (priv->device_queue,
 					   device,
 					   0x01);
-	ret = ch_device_queue_process (device_queue, NULL, error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
 	if (!ret)
 		goto out;
 out:
 	if (device != NULL)
 		g_object_unref (device);
-	if (device_queue != NULL)
-		g_object_unref (device_queue);
 	g_free (data);
 	return ret;
 }
@@ -1764,8 +1809,9 @@ ch_util_flash_firmware_force (ChUtilPrivate *priv, gchar **values, GError **erro
 	}
 
 	/* set to HW */
-	ret = ch_util_flash_firmware_internal (values[0],
-					error);
+	ret = ch_util_flash_firmware_internal (priv,
+					       values[0],
+					       error);
 	if (!ret)
 		goto out;
 
@@ -1803,8 +1849,9 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* set to HW */
-	ret = ch_util_flash_firmware_internal (values[0],
-					error);
+	ret = ch_util_flash_firmware_internal (priv,
+					       values[0],
+					       error);
 	if (!ret)
 		goto out;
 
@@ -1828,6 +1875,7 @@ ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 				       priv->device,
 				       &pre_scale);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1868,6 +1916,7 @@ ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 				       priv->device,
 				       pre_scale);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1891,6 +1940,7 @@ ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					&post_scale);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1931,6 +1981,7 @@ ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 					priv->device,
 					post_scale);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1952,6 +2003,7 @@ ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_boot_flash (priv->device_queue,
 				    priv->device);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -1991,6 +2043,7 @@ ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 					   priv->device,
 					   flash_success);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -2046,6 +2099,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 				     data,
 				     len);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -2058,6 +2112,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 				     data,
 				     len);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -2111,6 +2166,7 @@ ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 				     address,
 				     len);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
@@ -2164,6 +2220,7 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 				    data,
 				    len);
 	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)

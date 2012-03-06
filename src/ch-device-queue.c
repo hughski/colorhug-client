@@ -72,8 +72,10 @@ typedef struct {
 
 typedef struct {
 	ChDeviceQueue		*device_queue;
+	ChDeviceQueueProcessFlags process_flags;
 	GCancellable		*cancellable;
 	GSimpleAsyncResult	*res;
+	GPtrArray		*failures;
 } ChDeviceQueueHelper;
 
 static guint signals[SIGNAL_LAST] = { 0 };
@@ -101,6 +103,7 @@ ch_device_queue_free_helper (ChDeviceQueueHelper *helper)
 		g_object_unref (helper->cancellable);
 	g_object_unref (helper->device_queue);
 	g_object_unref (helper->res);
+	g_ptr_array_unref (helper->failures);
 	g_free (helper);
 }
 
@@ -131,8 +134,9 @@ ch_device_queue_device_force_complete (ChDeviceQueue *device_queue, GUsbDevice *
 static void
 ch_device_queue_update_progress (ChDeviceQueue *device_queue)
 {
-	guint i;
 	guint complete = 0;
+	guint i;
+	guint percentage;
 	ChDeviceQueueData *data;
 
 	/* no devices */
@@ -146,10 +150,11 @@ ch_device_queue_update_progress (ChDeviceQueue *device_queue)
 			complete++;
 	}
 
-	g_debug ("emit progress-changed");
+	/* emit a signal with our progress */
+	percentage = (complete * 100) / device_queue->priv->data_array->len;
 	g_signal_emit (device_queue,
 		       signals[SIGNAL_PROGRESS_CHANGED], 0,
-		       (complete * 100) / device_queue->priv->data_array->len);
+		       percentage);
 }
 
 /**
@@ -160,10 +165,11 @@ ch_device_queue_process_write_command_cb (GObject *source,
 					  GAsyncResult *res,
 					  gpointer user_data)
 {
-	ChDeviceQueueHelper *helper = (ChDeviceQueueHelper *) user_data;
 	ChDeviceQueueData *data;
-	gboolean ret;
+	ChDeviceQueueHelper *helper = (ChDeviceQueueHelper *) user_data;
 	const gchar *device_id;
+	gboolean ret;
+	gchar *error_msg = NULL;
 	GError *error = NULL;
 	guint i;
 	GUsbDevice *device = G_USB_DEVICE (source);
@@ -171,7 +177,7 @@ ch_device_queue_process_write_command_cb (GObject *source,
 	/* mark it as not in use */
 	device_id = g_usb_device_get_platform_id (device);
 	data = g_hash_table_lookup (helper->device_queue->priv->devices_in_use,
-			            device_id);
+				    device_id);
 	g_hash_table_remove (helper->device_queue->priv->devices_in_use,
 			     device_id);
 
@@ -190,12 +196,20 @@ ch_device_queue_process_write_command_cb (GObject *source,
 			       signals[SIGNAL_DEVICE_FAILED], 0,
 			       device,
 			       error->message);
-//FIXME: add boolean to control if this should evict other commands
-		/* mark any other commands to this device as complete */
-		ch_device_queue_device_force_complete (helper->device_queue, device);
-		ch_device_queue_update_progress (helper->device_queue);
+
+		/* save this so we can possibly use when we're done */
+		g_ptr_array_add (helper->failures,
+				 g_strdup_printf ("%s: %s",
+						  g_usb_device_get_platform_id (device),
+						  error->message));
 		g_error_free (error);
-		goto out;
+
+		/* should we mark complete other commands as complete */
+		if ((helper->process_flags & CH_DEVICE_QUEUE_PROCESS_FLAGS_CONTINUE_ERRORS) == 0) {
+			ch_device_queue_device_force_complete (helper->device_queue, device);
+			ch_device_queue_update_progress (helper->device_queue);
+			goto out;
+		}
 	}
 
 	/* update progress */
@@ -211,10 +225,25 @@ ch_device_queue_process_write_command_cb (GObject *source,
 out:
 	/* any more pending commands? */
 	if (g_hash_table_size (helper->device_queue->priv->devices_in_use) == 0) {
-		g_simple_async_result_set_op_res_gboolean (helper->res, TRUE);
+
+		/* should we return the process with an error, or just
+		 * rely on the signal? */
+		if (helper->failures->len > 0 &&
+		    (helper->process_flags & CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS) == 0) {
+			g_ptr_array_add (helper->failures, NULL);
+			error_msg = g_strjoinv (", ", (gchar**) helper->failures->pdata);
+			g_simple_async_result_set_error (helper->res,
+							 1, 0,
+							 "There were %i failures: %s",
+							 helper->failures->len - 1,
+							 error_msg);
+		} else {
+			g_simple_async_result_set_op_res_gboolean (helper->res, TRUE);
+		}
 		g_simple_async_result_complete_in_idle (helper->res);
 		ch_device_queue_free_helper (helper);
 	}
+	g_free (error_msg);
 }
 
 /**
@@ -276,6 +305,7 @@ out:
  **/
 void
 ch_device_queue_process_async (ChDeviceQueue		*device_queue,
+			       ChDeviceQueueProcessFlags process_flags,
 			       GCancellable		*cancellable,
 			       GAsyncReadyCallback	 callback,
 			       gpointer			 user_data)
@@ -288,6 +318,8 @@ ch_device_queue_process_async (ChDeviceQueue		*device_queue,
 	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
 	helper = g_new0 (ChDeviceQueueHelper, 1);
+	helper->process_flags = process_flags;
+	helper->failures = g_ptr_array_new_with_free_func (g_free);
 	helper->device_queue = g_object_ref (device_queue);
 	helper->res = g_simple_async_result_new (G_OBJECT (device_queue),
 						 callback,
@@ -367,8 +399,9 @@ ch_device_queue_process_finish_cb (GObject *source,
  **/
 gboolean
 ch_device_queue_process (ChDeviceQueue	*device_queue,
-		      GCancellable	*cancellable,
-		      GError		**error)
+			 ChDeviceQueueProcessFlags process_flags,
+			 GCancellable	*cancellable,
+			 GError		**error)
 {
 	ChDeviceQueueSyncHelper helper;
 
@@ -381,6 +414,7 @@ ch_device_queue_process (ChDeviceQueue	*device_queue,
 
 	/* run async method */
 	ch_device_queue_process_async (device_queue,
+				       process_flags,
 				       cancellable,
 				       ch_device_queue_process_finish_cb,
 				       &helper);
@@ -1355,8 +1389,8 @@ ch_device_queue_write_eeprom (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_dark_offsets_cb (guint8 *output_buffer,
-				        gpointer user_data,
-				        GError **error)
+					gpointer user_data,
+					GError **error)
 {
 	CdColorRGB *value = (CdColorRGB *) user_data;
 	guint16 *buffer = (guint16 *) output_buffer;

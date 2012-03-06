@@ -145,7 +145,10 @@ ch_test_device_queue_func (void)
 	}
 
 	/* process queue */
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -155,6 +158,32 @@ ch_test_device_queue_func (void)
 	/* chekc we got enough progress updates */
 	if (valid_devices > 0)
 		g_assert_cmpint (progress_changed_cnt, ==, valid_devices * 3 + 1);
+
+	/* fail on unknown command */
+	for (i = 0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		if (g_usb_device_get_vid (device) != CH_USB_VID)
+			continue;
+		if (g_usb_device_get_pid (device) != CH_USB_PID)
+			continue;
+		ch_device_queue_add (device_queue,
+				     device,
+				     0xff,
+				     NULL,
+				     0,
+				     NULL,
+				     0);
+	}
+
+	/* process queue */
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
+	g_assert_error (error, 1, 0);
+	g_debug ("error was: %s", error->message);
+	g_assert (!ret);
+	g_error_free (error);
 
 	g_ptr_array_unref (devices);
 	g_object_unref (device_queue);
@@ -455,13 +484,19 @@ ch_test_state_func (void)
 				  0,
 				  0x00,
 				  0x00);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_get_leds (device_queue,
 				  device,
 				  &leds);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (leds, ==, 3);
@@ -470,13 +505,19 @@ ch_test_state_func (void)
 	ch_device_queue_set_color_select (device_queue,
 					  device,
 					  CH_COLOR_SELECT_BLUE);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_get_color_select (device_queue,
 					  device,
 					  &color_select);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (color_select, ==, CH_COLOR_SELECT_BLUE);
@@ -485,13 +526,19 @@ ch_test_state_func (void)
 	ch_device_queue_set_multiplier (device_queue,
 					device,
 					CH_FREQ_SCALE_2);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_get_multiplier (device_queue,
 					device,
 					&multiplier);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (multiplier, ==, CH_FREQ_SCALE_2);
@@ -500,13 +547,19 @@ ch_test_state_func (void)
 	ch_device_queue_set_integral_time (device_queue,
 					   device,
 					   100);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_get_integral_time (device_queue,
 					   device,
 					   &integral_time);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (integral_time, ==, 100);
@@ -552,7 +605,10 @@ ch_test_eeprom_func (void)
 	ch_device_queue_get_serial_number (device_queue,
 					   device,
 					   &serial_number);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	if (serial_number != 0) {
@@ -564,7 +620,10 @@ ch_test_eeprom_func (void)
 	ch_device_queue_write_eeprom (device_queue,
 				      device,
 				     "hello dave");
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_error (error, 1, 0);
 	g_assert (!ret);
 	g_clear_error (&error);
@@ -573,13 +632,19 @@ ch_test_eeprom_func (void)
 	ch_device_queue_set_serial_number (device_queue,
 					   device,
 					   12345678);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_get_serial_number (device_queue,
 					   device,
 					   &serial_number);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (serial_number, ==, 12345678);
@@ -590,7 +655,10 @@ ch_test_eeprom_func (void)
 					  &major,
 					  &minor,
 					  &micro);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (major, ==, 1);
@@ -604,13 +672,19 @@ ch_test_eeprom_func (void)
 	ch_device_queue_set_dark_offsets (device_queue,
 					  device,
 					  &value);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_get_dark_offsets (device_queue,
 					  device,
 					  &value);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (value.R, ==, 0.12);
@@ -639,7 +713,10 @@ ch_test_eeprom_func (void)
 					 &calibration,
 					 CH_CALIBRATION_TYPE_PROJECTOR,
 					 "test1");
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	ch_device_queue_set_calibration (device_queue,
@@ -648,7 +725,10 @@ ch_test_eeprom_func (void)
 					 &calibration,
 					 CH_CALIBRATION_TYPE_CRT,
 					 "test0");
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -659,7 +739,10 @@ ch_test_eeprom_func (void)
 					 &calibration_tmp,
 					 &types,
 					 desc);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert (memcmp (&calibration_tmp,
@@ -673,7 +756,10 @@ ch_test_eeprom_func (void)
 					 &calibration_tmp,
 					 &types,
 					 desc);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert (memcmp (&calibration_tmp,
@@ -687,14 +773,20 @@ ch_test_eeprom_func (void)
 	ch_device_queue_set_post_scale (device_queue,
 					device,
 					post_scale);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
 	ch_device_queue_get_post_scale (device_queue,
 					device,
 					&post_scale_tmp);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpfloat (fabs (post_scale - post_scale_tmp), <, 0.0001);
@@ -704,14 +796,20 @@ ch_test_eeprom_func (void)
 	ch_device_queue_set_pre_scale (device_queue,
 				       device,
 				       pre_scale);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
 	ch_device_queue_get_pre_scale (device_queue,
 				       device,
 				       &pre_scale_tmp);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpfloat (fabs (pre_scale - pre_scale_tmp), <, 0.0001);
@@ -721,7 +819,10 @@ ch_test_eeprom_func (void)
 	ch_device_queue_write_eeprom (device_queue,
 				      device,
 				      CH_WRITE_EEPROM_MAGIC);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 #endif
@@ -756,7 +857,10 @@ ch_test_reading_func (void)
 	ch_device_queue_set_color_select (device_queue,
 					  device,
 					  CH_COLOR_SELECT_WHITE);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -764,7 +868,10 @@ ch_test_reading_func (void)
 	ch_device_queue_set_multiplier (device_queue,
 					device,
 					CH_FREQ_SCALE_100);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -775,7 +882,10 @@ ch_test_reading_func (void)
 	ch_device_queue_take_reading_raw (device_queue,
 					  device,
 					  &take_reading);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (take_reading, >, 0);
@@ -821,7 +931,10 @@ ch_test_reading_xyz_func (void)
 					 &calibration,
 					 CH_CALIBRATION_TYPE_ALL,
 					 "test0");
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -831,7 +944,10 @@ ch_test_reading_xyz_func (void)
 	ch_device_queue_set_calibration_map (device_queue,
 					     device,
 					     calibration_map);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 
@@ -854,7 +970,10 @@ ch_test_reading_xyz_func (void)
 					   device,
 					   0,
 					   &reading1);
-	ret = ch_device_queue_process (device_queue, NULL, &error);
+	ret = ch_device_queue_process (device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpfloat (reading1.X, >, 0.0f);
@@ -871,7 +990,10 @@ ch_test_reading_xyz_func (void)
 						   device,
 						   0,
 						   &reading2);
-		ret = ch_device_queue_process (device_queue, NULL, &error);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
 		g_assert_no_error (error);
 		g_assert (ret);
 

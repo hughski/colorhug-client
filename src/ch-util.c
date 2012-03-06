@@ -106,7 +106,10 @@ ch_util_set_default_calibration (ChUtilPrivate *priv)
 	ch_device_queue_set_calibration_map (priv->device_queue,
 					     priv->device,
 					     calibration_map);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set the calibration map");
@@ -174,7 +177,10 @@ ch_util_refresh (ChUtilPrivate *priv)
 	ch_device_queue_get_integral_time (priv->device_queue,
 					   priv->device,
 					   &integral_time);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get device status");
@@ -236,7 +242,10 @@ ch_util_refresh (ChUtilPrivate *priv)
 					 &calibration,
 					 NULL,
 					 NULL);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to get calibration data, resetting");
@@ -328,7 +337,10 @@ ch_util_write_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ch_device_queue_write_eeprom (priv->device_queue,
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to write EEPROM");
@@ -359,7 +371,10 @@ ch_util_measure_raw (ChUtilPrivate *priv)
 	ch_device_queue_take_readings (priv->device_queue,
 				       priv->device,
 				       &value);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to take readings");
@@ -434,7 +449,10 @@ ch_util_measure_device (ChUtilPrivate *priv)
 					   priv->device,
 					   0,
 					   &value);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to take readings");
@@ -509,7 +527,10 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ch_device_queue_take_readings (priv->device_queue,
 				       priv->device,
 				       &value);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to take readings");
@@ -522,7 +543,10 @@ ch_util_dark_offset_button_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set dark offsets");
@@ -564,7 +588,10 @@ ch_util_color_select_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ch_device_queue_set_color_select (priv->device_queue,
 					  priv->device,
 					  color_select);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set color select");
@@ -588,7 +615,10 @@ ch_util_adjustment_value_changed_cb (GtkAdjustment *adjustment, ChUtilPrivate *p
 	ch_device_queue_set_serial_number (priv->device_queue,
 					   priv->device,
 					   (guint64) value);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set serial number");
@@ -616,7 +646,10 @@ ch_util_checkbutton0_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 				  0,
 				  0xff,
 				  0xff);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set LEDs");
@@ -644,7 +677,10 @@ ch_util_checkbutton1_toggled_cb (GtkWidget *widget, ChUtilPrivate *priv)
 				  0,
 				  0xff,
 				  0xff);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set LEDs");
@@ -670,7 +706,10 @@ ch_util_multiplier_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ch_device_queue_set_multiplier (priv->device_queue,
 					priv->device,
 					multiplier);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set multiplier");
@@ -736,7 +775,10 @@ ch_util_integral_changed_cb (GtkWidget *widget, ChUtilPrivate *priv)
 	ch_device_queue_set_integral_time (priv->device_queue,
 					   priv->device,
 					   integral_time);
-	ret = ch_device_queue_process (priv->device_queue, NULL, &error);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       &error);
 	if (!ret) {
 		/* TRANSLATORS: internal device error */
 		title = _("Failed to set sample read time");
