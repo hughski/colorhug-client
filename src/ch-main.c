@@ -1672,12 +1672,9 @@ ch_util_flash_firmware_internal (const gchar *filename,
 {
 	gboolean ret;
 	gchar *data = NULL;
-	guint8 buffer[60];
-	guint idx;
 	gsize len = 0;
-	gsize chunk_len;
-	guint8 flash_success;
 	GUsbDevice *device = NULL;
+	ChDeviceQueue *device_queue = NULL;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -1688,10 +1685,12 @@ ch_util_flash_firmware_internal (const gchar *filename,
 		goto out;
 
 	/* boot to bootloader */
+	device_queue = ch_device_queue_new ();
 	device = ch_util_get_default_device (error);
 	if (!ret)
 		goto out;
-	ret = ch_device_cmd_reset (device, error);
+	ch_device_queue_reset (device_queue, device);
+	ret = ch_device_queue_process (device_queue, NULL, error);
 	if (!ret)
 		goto out;
 
@@ -1702,81 +1701,26 @@ ch_util_flash_firmware_internal (const gchar *filename,
 	if (!ret)
 		goto out;
 
-	/* set flash success false */
-	flash_success = 0x00;
-	ret = ch_device_write_command (device,
-				       CH_CMD_SET_FLASH_SUCCESS,
-				       &flash_success, 1,
-				       NULL, 0,
-				       NULL,	/* cancellable */
-				       error);
+	/* write firmware */
+	ch_device_queue_set_flash_success (device_queue,
+					   device,
+					   0x00);
+	ch_device_queue_write_firmware (device_queue,
+					device,
+					(const guint8 *) data,
+					len);
+	ret = ch_device_queue_process (device_queue, NULL, error);
 	if (!ret)
 		goto out;
 
-	/* erase flash */
-	g_debug ("Erasing at %04x size %" G_GSIZE_FORMAT,
-		 CH_EEPROM_ADDR_RUNCODE, len);
-	ret = ch_device_cmd_erase_flash (device,
-					 CH_EEPROM_ADDR_RUNCODE,
-					 len,
-					 error);
-	if (!ret)
-		goto out;
-
-	/* just write in 32 byte chunks, as we're sure that the firmware
-	 * image has been prepared to end on a 64 byte chunk with
-	 * colorhug-inhx32-to-bin >= 0.1.5 */
-	idx = 0;
-	chunk_len = CH_FLASH_TRANSFER_BLOCK_SIZE;
-	do {
-		if (idx + chunk_len > len)
-			chunk_len = len - idx;
-		g_debug ("Writing at %04x size %" G_GSIZE_FORMAT,
-			 CH_EEPROM_ADDR_RUNCODE + idx,
-			 chunk_len);
-		ret = ch_device_cmd_write_flash (device,
-						 CH_EEPROM_ADDR_RUNCODE + idx,
-						 (guint8 *) data + idx,
-						 chunk_len,
-						 error);
-		if (!ret)
-			goto out;
-		idx += chunk_len;
-	} while (idx < len);
-
-	/* read in 60 byte chunks */
-	idx = 0;
-	chunk_len = 60;
-	do {
-		if (idx + chunk_len > len)
-			chunk_len = len - idx;
-		g_debug ("Reading at %04x size %" G_GSIZE_FORMAT,
-			 CH_EEPROM_ADDR_RUNCODE + idx,
-			 chunk_len);
-		ret = ch_device_cmd_read_flash (device,
-						CH_EEPROM_ADDR_RUNCODE + idx,
-						buffer,
-						chunk_len,
-						error);
-		if (!ret)
-			goto out;
-		if (memcmp (data + idx, buffer, chunk_len) != 0) {
-			ret = FALSE;
-			g_set_error (error, 1, 0,
-				     "Failed to verify @0x%04x",
-				     CH_EEPROM_ADDR_RUNCODE + idx);
-			goto out;
-		}
-		idx += chunk_len;
-	} while (idx < len);
-
-	/* boot into new code */
-	ret = ch_device_write_command (device,
-				       CH_CMD_BOOT_FLASH,
-				       NULL, 0,
-				       NULL, 0,
-				       NULL,	/* cancellable */
-				       error);
+	/* read firmware */
+	ch_device_queue_verify_firmware (device_queue,
+					 device,
+					 (const guint8 *) data,
+					 len);
+	ch_device_queue_boot_flash (device_queue,
+				    device);
+	ret = ch_device_queue_process (device_queue, NULL, error);
 	if (!ret)
 		goto out;
 
@@ -1788,18 +1732,17 @@ ch_util_flash_firmware_internal (const gchar *filename,
 		goto out;
 
 	/* set flash success true */
-	flash_success = 0x01;
-	ret = ch_device_write_command (device,
-				       CH_CMD_SET_FLASH_SUCCESS,
-				       &flash_success, 1,
-				       NULL, 0,
-				       NULL,	/* cancellable */
-				       error);
+	ch_device_queue_set_flash_success (device_queue,
+					   device,
+					   0x01);
+	ret = ch_device_queue_process (device_queue, NULL, error);
 	if (!ret)
 		goto out;
 out:
 	if (device != NULL)
 		g_object_unref (device);
+	if (device_queue != NULL)
+		g_object_unref (device_queue);
 	g_free (data);
 	return ret;
 }

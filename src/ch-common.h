@@ -817,23 +817,6 @@ gboolean	 ch_device_cmd_reset		(GUsbDevice	*device,
 						 GError		**error);
 gboolean	 ch_device_cmd_boot_flash	(GUsbDevice	*device,
 						 GError		**error);
-gboolean	 ch_device_cmd_set_flash_success (GUsbDevice	*device,
-						 guint8		 value,
-						 GError		**error);
-gboolean	 ch_device_cmd_write_flash	(GUsbDevice	*device,
-						guint16		 address,
-						guint8		*data,
-						gsize		 len,
-						GError		**error);
-gboolean	 ch_device_cmd_read_flash	(GUsbDevice	*device,
-						guint16		 address,
-						guint8		*data,
-						gsize		 len,
-						GError		**error);
-gboolean	 ch_device_cmd_erase_flash	(GUsbDevice	*device,
-						guint16		 address,
-						gsize		 len,
-						GError		**error);
 gboolean	 ch_device_cmd_set_owner_name	(GUsbDevice	*device,
 						 const gchar	*name,
 						 GError	 	**error);
