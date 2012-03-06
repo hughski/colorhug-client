@@ -22,12 +22,146 @@
 #include "config.h"
 #include "ch-client.h"
 #include "ch-math.h"
+#include "ch-device-queue.h"
 
 #include <string.h>
 #include <glib.h>
 #include <glib-object.h>
 #include <gusb.h>
 #include <math.h>
+
+static guint device_failed_cnt = 0;
+static guint progress_changed_cnt = 0;
+
+static void
+ch_test_device_queue_device_failed_cb (ChDeviceQueue	*device_queue,
+				       GUsbDevice	*device,
+				       const gchar	*error_message,
+				       gpointer		 user_data)
+{
+	device_failed_cnt++;
+	g_debug ("device %s down, error: %s",
+		 g_usb_device_get_platform_id (device),
+		 error_message);
+}
+
+static void
+ch_test_device_queue_progress_changed_cb (ChDeviceQueue	*device_queue,
+					  guint		 percentage,
+					  gpointer	 user_data)
+{
+	progress_changed_cnt++;
+	g_debug ("queue complete %i%%",
+		 percentage);
+}
+
+static void
+ch_test_device_queue_func (void)
+{
+	ChDeviceQueue *device_queue;
+	gboolean ret;
+	GError *error = NULL;
+	GPtrArray *devices;
+	guint i;
+	guint valid_devices = 0;
+	GUsbContext *usb_ctx;
+	GUsbDevice *device;
+	GUsbDeviceList *list;
+
+	/* try to find any ColorHug devices */
+	usb_ctx = g_usb_context_new (NULL);
+	list = g_usb_device_list_new (usb_ctx);
+	g_usb_device_list_coldplug (list);
+	devices = g_usb_device_list_get_devices (list);
+
+	/* watch for any failed devices */
+	device_queue = ch_device_queue_new ();
+	g_signal_connect (device_queue,
+			  "device-failed",
+			  G_CALLBACK (ch_test_device_queue_device_failed_cb),
+			  NULL);
+	g_signal_connect (device_queue,
+			  "progress-changed",
+			  G_CALLBACK (ch_test_device_queue_progress_changed_cb),
+			  NULL);
+	for (i = 0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		if (g_usb_device_get_vid (device) != CH_USB_VID)
+			continue;
+		if (g_usb_device_get_pid (device) != CH_USB_PID)
+			continue;
+
+		valid_devices++;
+		g_debug ("Found ColorHug device %s",
+			 g_usb_device_get_platform_id (device));
+
+		/* load device */
+		ret = g_usb_device_open (device, &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		ret = g_usb_device_set_configuration (device,
+						      CH_USB_CONFIG,
+						      &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		ret = g_usb_device_claim_interface (device,
+						    CH_USB_INTERFACE,
+						    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
+						    &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+
+		/* set RED to queue */
+		ch_device_queue_set_leds (device_queue,
+				          device,
+				          CH_STATUS_LED_RED,
+				          50,
+				          100,
+				          5);
+
+		/* set GREEN to queue */
+		ch_device_queue_set_leds (device_queue,
+				          device,
+				          CH_STATUS_LED_GREEN,
+				          50,
+				          100,
+				          5);
+
+		/* do unknown command */
+		ch_device_queue_add (device_queue,
+				     device,
+				     0xff,
+				     NULL,
+				     0,
+				     NULL,
+				     0);
+
+		/* set BOTH to queue */
+		ch_device_queue_set_leds (device_queue,
+				          device,
+				          CH_STATUS_LED_GREEN | CH_STATUS_LED_RED,
+				          50,
+				          100,
+				          5);
+	}
+
+	/* process queue */
+	ret = ch_device_queue_process (device_queue, NULL, &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+
+	/* check we failed both devices */
+	g_assert_cmpint (device_failed_cnt, ==, valid_devices);
+
+	/* chekc we got enough progress updates */
+	if (valid_devices > 0)
+		g_assert_cmpint (progress_changed_cnt, ==, valid_devices * 3 + 1);
+
+	g_ptr_array_unref (devices);
+	g_object_unref (device_queue);
+	g_object_unref (list);
+	g_object_unref (usb_ctx);
+}
 
 static void
 ch_test_math_convert_func (void)
@@ -837,6 +971,7 @@ main (int argc, char **argv)
 	g_log_set_fatal_mask (NULL, G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
 
 	/* tests go here */
+	g_test_add_func ("/ColorHug/device-queue", ch_test_device_queue_func);
 	g_test_add_func ("/ColorHug/math-convert", ch_test_math_convert_func);
 	g_test_add_func ("/ColorHug/math-add", ch_test_math_add_func);
 	g_test_add_func ("/ColorHug/math-multiply", ch_test_math_multiply_func);
