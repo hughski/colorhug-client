@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2009-2011 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2009-2012 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -32,6 +32,7 @@
 #include "ch-common.h"
 #include "ch-markdown.h"
 #include "ch-flash-md.h"
+#include "ch-device-queue.h"
 
 /* don't change this unless you want to provide firmware updates */
 #define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/firmware/"
@@ -53,15 +54,10 @@ typedef struct {
 	GUsbDevice	*device;
 	GUsbDeviceList	*device_list;
 	SoupSession	*session;
-	guint		 flash_idx;
-	gsize		 flash_chunk_len;
-	guint8		 flash_buffer[64];
 	ChMarkdown	*markdown;
+	ChDeviceQueue	*device_queue;
 	GSettings	*settings;
 } ChFlashPrivate;
-
-static void	 ch_flash_read_firmware_chunk	(ChFlashPrivate *priv);
-static void	 ch_flash_write_firmware_chunk	(ChFlashPrivate *priv);
 
 /**
  * ch_flash_error_dialog:
@@ -189,175 +185,6 @@ ch_flash_close_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	gtk_widget_destroy (widget);
 }
 
-
-/**
- * ch_flash_calculate_checksum:
- **/
-static guint8
-ch_flash_calculate_checksum (guint8 *data,
-			     gsize len)
-{
-	guint8 checksum = 0xff;
-	guint i;
-	for (i = 0; i < len; i++)
-		checksum ^= data[i];
-	return checksum;
-}
-
-/**
- * ch_flash_write_flash_cb:
- **/
-static void
-ch_flash_write_flash_cb (GObject *source,
-			 GAsyncResult *res,
-			 gpointer user_data)
-{
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		ch_flash_error_do_not_panic (priv);
-		/* TRANSLATORS: the flash write failed */
-		title = _("Failed to write the flash");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* write the next chunk */
-	ch_flash_write_firmware_chunk (priv);
-out:
-	return;
-}
-
-/**
- * ch_flash_write_flash:
- **/
-static void
-ch_flash_write_flash (ChFlashPrivate *priv,
-		      guint16 address,
-		      guint8 *data,
-		      gsize len)
-{
-	guint16 addr_le;
-	guint8 buffer_tx[64];
-
-	/* set address, length, checksum, data */
-	addr_le = GUINT16_TO_LE (address);
-	memcpy (buffer_tx + 0, &addr_le, 2);
-	buffer_tx[2] = len;
-	buffer_tx[3] = ch_flash_calculate_checksum (data, len);
-	memcpy (buffer_tx + 4, data, len);
-
-	/* hit hardware */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_WRITE_FLASH,
-				       buffer_tx,
-				       len + 4,
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
-				       ch_flash_write_flash_cb,
-				       priv);
-}
-
-/**
- * ch_flash_read_flash_cb:
- **/
-static void
-ch_flash_read_flash_cb (GObject *source,
-			GAsyncResult *res,
-			gpointer user_data)
-{
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	gchar *str = NULL;
-	GError *error = NULL;
-	guint8 expected_checksum;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		ch_flash_error_do_not_panic (priv);
-		/* TRANSLATORS: the flash failed and the checksum is wrong */
-		title = _("Failed to verify the flash");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* verify checksum */
-	expected_checksum = ch_flash_calculate_checksum (priv->flash_buffer + 1,
-							 priv->flash_chunk_len);
-	if (priv->flash_buffer[0] != expected_checksum) {
-		/* TRANSLATORS: the write failed */
-		str = g_strdup_printf (_("Checksum failed at 0x%04x"),
-				       CH_EEPROM_ADDR_RUNCODE + priv->flash_idx);
-		ch_flash_error_do_not_panic (priv);
-		ch_flash_error_dialog (priv,
-				       _("Failed to verify the checksum"),
-				       str);
-		goto out;
-	}
-
-	/* failed to verify chunk */
-	if (memcmp (priv->firmware_data + priv->flash_idx,
-		    priv->flash_buffer + 1,
-		    priv->flash_chunk_len) != 0) {
-		/* TRANSLATORS: the write failed */
-		str = g_strdup_printf (_("Verification failed at 0x%04x (len %i)"),
-				       CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
-				       (guint) priv->flash_chunk_len);
-		ch_flash_error_do_not_panic (priv);
-		/* TRANSLATORS: the write failed */
-		title = _("Failed to verify the flash");
-		ch_flash_error_dialog (priv, title, str);
-		goto out;
-	}
-
-	/* read the next chunk */
-	priv->flash_idx += priv->flash_chunk_len;
-	ch_flash_read_firmware_chunk (priv);
-out:
-	g_free (str);
-	return;
-}
-
-/**
- * ch_flash_read_flash:
- **/
-static void
-ch_flash_read_flash (ChFlashPrivate *priv,
-		     guint16 address,
-		     gsize len)
-{
-	guint8 buffer_tx[3];
-	guint16 addr_le;
-
-	/* set address, length, checksum, data */
-	addr_le = GUINT16_TO_LE (address);
-	memcpy (buffer_tx + 0, &addr_le, 2);
-	buffer_tx[2] = len;
-
-	/* hit hardware */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_READ_FLASH,
-				       buffer_tx,
-				       sizeof(buffer_tx),
-				       priv->flash_buffer,
-				       len + 1,
-				       NULL, /* cancellable */
-				       ch_flash_read_flash_cb,
-				       priv);
-}
-
 /**
  * ch_flash_set_flash_success_1_cb:
  **/
@@ -371,10 +198,10 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: we can only set the flash success
@@ -406,7 +233,6 @@ ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 {
 	const gchar *title;
 	GtkWidget *widget;
-	guint8 flash_success = 0x01;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
@@ -415,13 +241,12 @@ ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* need to boot into bootloader */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_SET_FLASH_SUCCESS,
-				       &flash_success,
-				       1,
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_set_flash_success (priv->device_queue,
+					   priv->device,
+					   0x01);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_flash_set_flash_success_1_cb,
 				       priv);
 }
@@ -463,10 +288,10 @@ ch_flash_boot_flash_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: the new firmware will not load */
@@ -484,32 +309,29 @@ out:
 }
 
 /**
- * ch_flash_read_firmware_chunk:
+ * ch_flash_verify_firmware_cb:
  **/
 static void
-ch_flash_read_firmware_chunk (ChFlashPrivate *priv)
+ch_flash_verify_firmware_cb (GObject *source,
+			     GAsyncResult *res,
+			     gpointer user_data)
 {
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
+	gboolean ret;
+	GError *error = NULL;
 	GtkWidget *widget;
-	gfloat complete;
 
-	/* work out percentage complete */
-	complete = (gfloat) priv->flash_idx / (gfloat) priv->firmware_len;
-
-	/* update UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), complete);
-
-	/* any more data to read? */
-	if (priv->flash_idx < priv->firmware_len) {
-		if (priv->flash_idx + priv->flash_chunk_len > priv->firmware_len)
-			priv->flash_chunk_len = priv->firmware_len - priv->flash_idx;
-		g_debug ("Reading at %04x size %" G_GSIZE_FORMAT,
-			 CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
-			 priv->flash_chunk_len);
-		ch_flash_read_flash (priv,
-				     CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
-				     priv->flash_chunk_len);
+	/* get data */
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
+	if (!ret) {
+		ch_flash_error_do_not_panic (priv);
+		/* TRANSLATORS: tell the device the firmware is no
+		 * longer known working */
+		title = _("Failed to verify the firmware");
+		ch_flash_error_dialog (priv, title, error->message);
+		g_error_free (error);
 		goto out;
 	}
 
@@ -535,13 +357,11 @@ ch_flash_read_firmware_chunk (ChFlashPrivate *priv)
 	priv->planned_replug = TRUE;
 
 	/* boot into new code */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_BOOT_FLASH,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_boot_flash (priv->device_queue,
+				    priv->device);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS,
+				       NULL,
 				       ch_flash_boot_flash_cb,
 				       priv);
 out:
@@ -549,36 +369,31 @@ out:
 }
 
 /**
- * ch_flash_write_firmware_chunk:
+ * ch_flash_write_firmware_cb:
  **/
 static void
-ch_flash_write_firmware_chunk (ChFlashPrivate *priv)
+ch_flash_write_firmware_cb (GObject *source,
+			    GAsyncResult *res,
+			    gpointer user_data)
 {
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
+	gboolean ret;
+	GError *error = NULL;
 	GtkWidget *widget;
-	gfloat complete;
 
-	/* work out percentage complete */
-	complete = (gfloat) priv->flash_idx / (gfloat) priv->firmware_len;
-
-	/* update UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), complete);
-
-	/* write data */
-	if (priv->flash_idx < priv->firmware_len) {
-		if (priv->flash_idx + priv->flash_chunk_len > priv->firmware_len)
-			priv->flash_chunk_len = priv->firmware_len - priv->flash_idx;
-		g_debug ("Writing at %04x size %" G_GSIZE_FORMAT,
-			 CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
-			 priv->flash_chunk_len);
-		ch_flash_write_flash (priv,
-				      CH_EEPROM_ADDR_RUNCODE + priv->flash_idx,
-				      (guint8 *) priv->firmware_data + priv->flash_idx,
-				      priv->flash_chunk_len);
-		priv->flash_idx += priv->flash_chunk_len;
+	/* get data */
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
+	if (!ret) {
+		ch_flash_error_do_not_panic (priv);
+		/* TRANSLATORS: tell the device the firmware is no
+		 * longer known working */
+		title = _("Failed to write the firmware");
+		ch_flash_error_dialog (priv, title, error->message);
+		g_error_free (error);
 		goto out;
-	};
+	}
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
@@ -586,101 +401,16 @@ ch_flash_write_firmware_chunk (ChFlashPrivate *priv)
 	 * verify it before we tell the device it was successfull */
 	title = _("Verifying new firmware...");
 	gtk_label_set_label (GTK_LABEL (widget), title);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
-	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.0f);
 
-	/* verify by reading in 60 byte chunks */
-	priv->flash_idx = 0;
-	priv->flash_chunk_len = 60;
-	ch_flash_read_firmware_chunk (priv);
-out:
-	return;
-}
-
-/**
- * ch_flash_erase_flash_cb:
- **/
-static void
-ch_flash_erase_flash_cb (GObject *source,
-			 GAsyncResult *res,
-			 gpointer user_data)
-{
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		ch_flash_error_do_not_panic (priv);
-		/* TRANSLATORS: clear enough flash for the new firmware */
-		title = _("Failed to erase the flash");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* update UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	/* TRANSLATORS: now write the new firmware chunks */
-	title = _("Writing new firmware...");
-	gtk_label_set_label (GTK_LABEL (widget), title);
-
-	/* write in 32 byte chunks */
-	priv->flash_idx = 0;
-	priv->flash_chunk_len = CH_FLASH_TRANSFER_BLOCK_SIZE;
-	ch_flash_write_firmware_chunk (priv);
-out:
-	return;
-}
-
-/**
- * ch_flash_set_flash_success_0_cb:
- **/
-static void
-ch_flash_set_flash_success_0_cb (GObject *source,
-				 GAsyncResult *res,
-				 gpointer user_data)
-{
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	guint16 addr_le;
-	guint8 buffer_tx[4];
-	guint16 len_le;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		ch_flash_error_do_not_panic (priv);
-		/* TRANSLATORS: tell the device the firmware is no
-		 * longer known working */
-		title = _("Failed to set the flash success false");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* set address, length */
-	addr_le = GUINT16_TO_LE (CH_EEPROM_ADDR_RUNCODE);
-	memcpy (buffer_tx + 0, &addr_le, 2);
-	len_le = GUINT16_TO_LE (priv->firmware_len);
-	memcpy (buffer_tx + 2, &len_le, 2);
-
-	/* erase enough flash for the program code */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_ERASE_FLASH,
-				       buffer_tx,
-				       sizeof(buffer_tx),
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
-				       ch_flash_erase_flash_cb,
+	/* verify firmware */
+	ch_device_queue_verify_firmware (priv->device_queue,
+					 priv->device,
+					 priv->firmware_data,
+					 priv->firmware_len);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       ch_flash_verify_firmware_cb,
 				       priv);
 out:
 	return;
@@ -694,23 +424,25 @@ ch_flash_set_flash_success_0 (ChFlashPrivate *priv)
 {
 	const gchar *title;
 	GtkWidget *widget;
-	guint8 flash_success = 0x00;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
-	/* TRANSLATORS: tell the device the firmware is no longer known working */
-	title = _("Clearing flash success...");
+	/* TRANSLATORS: now write the new firmware chunks */
+	title = _("Writing new firmware...");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
-	/* need to boot into bootloader */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_SET_FLASH_SUCCESS,
-				       &flash_success,
-				       1,
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
-				       ch_flash_set_flash_success_0_cb,
+	/* write firmware */
+	ch_device_queue_set_flash_success (priv->device_queue,
+					   priv->device,
+					   0x00);
+	ch_device_queue_write_firmware (priv->device_queue,
+					priv->device,
+					priv->firmware_data,
+					priv->firmware_len);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       ch_flash_write_firmware_cb,
 				       priv);
 }
 
@@ -750,10 +482,10 @@ ch_flash_reset_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: we restart the device in bootloader mode */
@@ -795,13 +527,11 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	priv->planned_replug = TRUE;
 
 	/* need to boot into bootloader */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_RESET,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_reset (priv->device_queue,
+			       priv->device);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS,
+				       NULL,
 				       ch_flash_reset_cb,
 				       priv);
 }
@@ -1224,10 +954,10 @@ ch_flash_set_lost_or_stolen_cb (GObject *source,
 	GError *error = NULL;
 	GString *msg = NULL;
 	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: the device refused our request to mark
@@ -1282,16 +1012,13 @@ out:
 static void
 ch_flash_set_lost_or_stolen (ChFlashPrivate *priv)
 {
-	guint8 flash_success = 0xff;
-
 	/* TODO: need to erase device as well */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_SET_FLASH_SUCCESS,
-				       &flash_success,
-				       1,
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_set_flash_success (priv->device_queue,
+					   priv->device,
+					   0xff);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_flash_set_lost_or_stolen_cb,
 				       priv);
 }
@@ -1511,10 +1238,10 @@ ch_flash_get_serial_number_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		/* TRANSLATORS: the request failed */
 		title = _("Failed to contact ColorHug");
@@ -1541,10 +1268,10 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		/* TRANSLATORS: the request failed */
 		title = _("Failed to contact ColorHug");
@@ -1560,52 +1287,13 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	}
 
 	/* get the serial number */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_GET_SERIAL_NUMBER,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       (guint8 *) &priv->serial_number,
-				       4,
-				       NULL, /* cancellable */
+	ch_device_queue_get_serial_number (priv->device_queue,
+					   priv->device,
+					   &priv->serial_number);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_flash_get_serial_number_cb,
-				       priv);
-out:
-	return;
-}
-
-/**
- * ch_flash_get_hardware_version_cb:
- **/
-static void
-ch_flash_get_hardware_version_cb (GObject *source,
-				  GAsyncResult *res,
-				  gpointer user_data)
-{
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		/* TRANSLATORS: the request failed */
-		title = _("Failed to contact ColorHug");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* get the firmware version */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_GET_FIRMWARE_VERSION,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       (guint8 *) priv->firmware_version,
-				       6,
-				       NULL, /* cancellable */
-				       ch_flash_get_firmware_version_cb,
 				       priv);
 out:
 	return;
@@ -1668,15 +1356,19 @@ fake_device:
 		gtk_label_set_label (GTK_LABEL (widget), title);
 	}
 
-	/* get the firmware version */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_GET_HARDWARE_VERSION,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       &priv->hardware_version,
-				       1,
-				       NULL, /* cancellable */
-				       ch_flash_get_hardware_version_cb,
+	/* get the hardware and firmware version */
+	ch_device_queue_get_hardware_version (priv->device_queue,
+					      priv->device,
+					      &priv->hardware_version);
+	ch_device_queue_get_firmware_ver (priv->device_queue,
+					  priv->device,
+					  &priv->firmware_version[0],
+					  &priv->firmware_version[1],
+					  &priv->firmware_version[2]);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       ch_flash_get_firmware_version_cb,
 				       priv);
 }
 
@@ -1888,6 +1580,17 @@ ch_flash_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
 {
 }
 
+static void
+ch_flash_device_queue_progress_changed_cb (ChDeviceQueue *device_queue,
+					   guint percentage,
+					   ChFlashPrivate *priv)
+{
+	GtkWidget *widget;
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
+	g_debug ("queue complete %i%%", percentage);
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), (gdouble) percentage / 100.0f);
+}
+
 /**
  * main:
  **/
@@ -1938,6 +1641,11 @@ main (int argc, char **argv)
 	priv->update_details = g_string_new ("");
 	priv->warning_details = g_string_new ("");
 	priv->markdown = ch_markdown_new ();
+	priv->device_queue = ch_device_queue_new ();
+	g_signal_connect (priv->device_queue,
+			  "progress-changed",
+			  G_CALLBACK (ch_flash_device_queue_progress_changed_cb),
+			  priv);
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
 	g_signal_connect (priv->device_list, "device-added",
@@ -1970,6 +1678,8 @@ main (int argc, char **argv)
 		g_string_free (priv->warning_details, TRUE);
 	if (priv->device_list != NULL)
 		g_object_unref (priv->device_list);
+	if (priv->device_queue != NULL)
+		g_object_unref (priv->device_queue);
 	if (priv->usb_ctx != NULL)
 		g_object_unref (priv->usb_ctx);
 	if (priv->builder != NULL)
