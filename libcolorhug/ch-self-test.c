@@ -145,6 +145,10 @@ ch_test_device_queue_func (void)
 				          5);
 	}
 
+	/* fix make check with no hardware attached */
+	if (valid_devices == 0)
+		goto out;
+
 	/* process queue */
 	ret = ch_device_queue_process (device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS,
@@ -185,7 +189,7 @@ ch_test_device_queue_func (void)
 	g_debug ("error was: %s", error->message);
 	g_assert (!ret);
 	g_error_free (error);
-
+out:
 	g_ptr_array_unref (devices);
 	g_object_unref (device_queue);
 	g_object_unref (list);
