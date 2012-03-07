@@ -240,6 +240,8 @@ out:
 		} else {
 			g_simple_async_result_set_op_res_gboolean (helper->res, TRUE);
 		}
+		/* remove all commands from the queue, as they are done */
+		g_ptr_array_set_size (helper->device_queue->priv->data_array, 0);
 		g_simple_async_result_complete_in_idle (helper->res);
 		ch_device_queue_free_helper (helper);
 	}
