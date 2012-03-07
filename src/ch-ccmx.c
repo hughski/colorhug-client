@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2009-2011 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2009-2012 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -32,6 +32,7 @@
 
 #include "ch-common.h"
 #include "ch-math.h"
+#include "ch-device-queue.h"
 
 /* don't change this unless you want to provide ccmx files */
 #define COLORHUG_CCMX_LOCATION		"http://www.hughski.com/downloads/colorhug/ccmx/"
@@ -46,13 +47,14 @@ typedef struct {
 	GUsbDeviceList	*device_list;
 	SoupSession	*session;
 	guint16		 calibration_map[6];
-	gboolean	 in_use[CH_CALIBRATION_MAX];
 	guint		 ccmx_idx;
-	guint8		 ccmx_buffer[64];
+	guint8		 ccmx_types[CH_CALIBRATION_MAX];
+	gchar		*ccmx_description[CH_CALIBRATION_MAX];
 	GHashTable	*hash;
 	guint32		 serial_number;
 	gboolean	 needs_repair;
 	gboolean	 force_repair;
+	ChDeviceQueue	*device_queue;
 } ChCcmxPrivate;
 
 enum {
@@ -63,7 +65,6 @@ enum {
 	COLUMN_LAST
 };
 
-static void	 ch_ccmx_get_calibration_idx		(ChCcmxPrivate *priv);
 static void	 ch_ccmx_refresh_calibration_data	(ChCcmxPrivate *priv);
 static gboolean	 ch_ccmx_set_calibration_data		(ChCcmxPrivate *priv,
 							 guint16 cal_idx,
@@ -453,13 +454,13 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
 	gchar *uri = NULL;
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		/* TRANSLATORS: the request failed */
 		title = _("Failed to contact ColorHug");
@@ -502,16 +503,14 @@ ch_ccmx_device_needs_repair_cb (GtkDialog *dialog,
 		goto out;
 
 	/* get the serial number */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_GET_SERIAL_NUMBER,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       (guint8 *) &priv->serial_number,
-				       4,
-				       NULL, /* cancellable */
+	ch_device_queue_get_serial_number (priv->device_queue,
+					   priv->device,
+					   &priv->serial_number);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_ccmx_get_serial_number_cb,
 				       priv);
-
 out:
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
@@ -589,30 +588,135 @@ ch_ccmx_device_force_repair (ChCcmxPrivate *priv)
 }
 
 /**
- * ch_ccmx_get_calibration_map_cb:
+ * ch_ccmx_add_calibration:
  **/
 static void
-ch_ccmx_get_calibration_map_cb (GObject *source,
-				GAsyncResult *res,
-				gpointer user_data)
+ch_ccmx_add_calibration (ChCcmxPrivate *priv,
+			 guint16 idx,
+			 const gchar *description,
+			 guint8 types)
 {
-	const gchar *title;
+	gboolean ret;
+	GtkListStore *list_store;
+	GtkTreeIter iter;
+
+	if (types == 0)
+		return;
+
+	/* is suitable for LCD */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
+	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
+				    -1);
+	}
+
+	/* is suitable for LED */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_led"));
+	if ((types & CH_CALIBRATION_TYPE_LED) > 0) {
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
+				    -1);
+	}
+
+	/* is suitable for CRT */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
+	if ((types & CH_CALIBRATION_TYPE_CRT) > 0) {
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
+				    -1);
+	}
+
+	/* is suitable for projector */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
+	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0) {
+		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
+					    &iter,
+					    description);
+		if (!ret)
+			gtk_list_store_append (list_store, &iter);
+		gtk_list_store_set (list_store, &iter,
+				    COLUMN_DESCRIPTION, description,
+				    COLUMN_INDEX, idx,
+				    COLUMN_TYPE, NULL,
+				    COLUMN_LOCAL_FILENAME, NULL,
+				    -1);
+	}
+
+	/* insert into hash */
+	g_hash_table_insert (priv->hash,
+			     g_strdup (description),
+			     GINT_TO_POINTER (1));
+}
+
+/**
+ * ch_ccmx_get_calibration_cb:
+ **/
+static void
+ch_ccmx_get_calibration_cb (GObject *source,
+			    GAsyncResult *res,
+			    gpointer user_data)
+{
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	const gchar *title;
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	guint i;
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		/* TRANSLATORS: the calibration map is an array that
 		 * maps a specific matrix to a display type */
-		title = _("Failed to get the calibration map");
+		title = _("Failed to get the calibration data");
 		ch_ccmx_error_dialog (priv, title, error->message);
 		g_error_free (error);
 		goto out;
 	}
+
+	/* add each item */
+	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
+		ch_ccmx_add_calibration (priv,
+					 i,
+					 priv->ccmx_description[i],
+					 priv->ccmx_types[i]);
+	}
+
+	/* does this device need repairing */
+	if (g_strcmp0 (priv->ccmx_description[0], "Factory Calibration") == 0)
+		priv->needs_repair = FALSE;
+
+	/* add local files */
+	ch_ccmx_add_local_files (priv);
+
+
+{
 
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
@@ -641,159 +745,8 @@ ch_ccmx_get_calibration_map_cb (GObject *source,
 		/* Force repair only once */
 		priv->force_repair = FALSE;
 	}
-out:
-	return;
 }
 
-/**
- * ch_ccmx_get_calibration_cb:
- **/
-static void
-ch_ccmx_get_calibration_cb (GObject *source,
-			    GAsyncResult *res,
-			    gpointer user_data)
-{
-	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GtkListStore *list_store;
-	GtkTreeIter iter;
-	guint8 types;
-	const gchar *description;
-	GUsbDevice *device = G_USB_DEVICE (source);
-
-	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
-	if (!ret) {
-		g_debug ("ignoring: %s", error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* get the types this is suitable for */
-	types = priv->ccmx_buffer[4*9];
-	description = (const gchar *) priv->ccmx_buffer + (4*9) + 1;
-
-	/* is suitable for LCD */
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
-	if ((types & CH_CALIBRATION_TYPE_LCD) > 0) {
-		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
-					    &iter,
-					    description);
-		if (!ret)
-			gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, description,
-				    COLUMN_INDEX, priv->ccmx_idx,
-				    COLUMN_TYPE, NULL,
-				    COLUMN_LOCAL_FILENAME, NULL,
-				    -1);
-	}
-
-	/* is suitable for LED */
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_led"));
-	if ((types & CH_CALIBRATION_TYPE_LED) > 0) {
-		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
-					    &iter,
-					    description);
-		if (!ret)
-			gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, description,
-				    COLUMN_INDEX, priv->ccmx_idx,
-				    COLUMN_TYPE, NULL,
-				    COLUMN_LOCAL_FILENAME, NULL,
-				    -1);
-	}
-
-	/* is suitable for CRT */
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
-	if ((types & CH_CALIBRATION_TYPE_CRT) > 0) {
-		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
-					    &iter,
-					    description);
-		if (!ret)
-			gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, description,
-				    COLUMN_INDEX, priv->ccmx_idx,
-				    COLUMN_TYPE, NULL,
-				    COLUMN_LOCAL_FILENAME, NULL,
-				    -1);
-	}
-
-	/* is suitable for projector */
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
-	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0) {
-		ret = ch_ccmx_find_by_desc (GTK_TREE_MODEL (list_store),
-					    &iter,
-					    description);
-		if (!ret)
-			gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				    COLUMN_DESCRIPTION, description,
-				    COLUMN_INDEX, priv->ccmx_idx,
-				    COLUMN_TYPE, NULL,
-				    COLUMN_LOCAL_FILENAME, NULL,
-				    -1);
-	}
-
-	/* does this device need repairing */
-	if (priv->ccmx_idx == 0) {
-		if (g_strcmp0 (description, "Factory Calibration") == 0)
-			priv->needs_repair = FALSE;
-	}
-
-	/* insert into hash */
-	g_hash_table_insert (priv->hash,
-			     g_strdup (description),
-			     GINT_TO_POINTER (1));
-
-	/* success */
-	ret = TRUE;
-out:
-	/* track if it's in use so we can find a spare slot on import */
-	priv->in_use[priv->ccmx_idx] = ret;
-
-	/* read the next chunk */
-	priv->ccmx_idx++;
-	ch_ccmx_get_calibration_idx (priv);
-	return;
-}
-
-/**
- * ch_ccmx_get_calibration_idx:
- **/
-static void
-ch_ccmx_get_calibration_idx (ChCcmxPrivate *priv)
-{
-	/* hit hardware */
-	if (priv->ccmx_idx < CH_CALIBRATION_MAX) {
-		ch_device_write_command_async (priv->device,
-					       CH_CMD_GET_CALIBRATION,
-					       (const guint8 *) &priv->ccmx_idx,
-					       sizeof(priv->ccmx_idx),
-					       priv->ccmx_buffer,
-					       60,
-					       NULL, /* cancellable */
-					       ch_ccmx_get_calibration_cb,
-					       priv);
-		goto out;
-	}
-
-	/* add local files */
-	ch_ccmx_add_local_files (priv);
-
-	/* get calibration map */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_GET_CALIBRATION_MAP,
-				       NULL, /* buffer_in */
-				       0, /* buffer_in_len */
-				       (guint8 *) priv->calibration_map, /* buffer_out */
-				       sizeof(priv->calibration_map), /* buffer_out_len */
-				       NULL, /* cancellable */
-				       ch_ccmx_get_calibration_map_cb,
-				       priv);
 out:
 	return;
 }
@@ -847,10 +800,10 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		/* TRANSLATORS: the calibration map is an array that
 		 * maps a specific matrix to a display type */
@@ -880,10 +833,10 @@ ch_ccmx_set_calibration_cb (GObject *source,
 	gboolean ret;
 	GError *error = NULL;
 	GtkWidget *widget;
-	GUsbDevice *device = G_USB_DEVICE (source);
+	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 
 	/* get data */
-	ret = ch_device_write_command_finish (device, res, &error);
+	ret = ch_device_queue_process_finish (device_queue, res, &error);
 	if (!ret) {
 		ch_ccmx_error_dialog (priv,
 				       _("Failed to set the calibration matrix"),
@@ -897,13 +850,12 @@ ch_ccmx_set_calibration_cb (GObject *source,
 	gtk_widget_set_sensitive (widget, FALSE);
 
 	/* hit hardware */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_SET_CALIBRATION_MAP,
-				       (const guint8 *) priv->calibration_map,
-				       sizeof(priv->calibration_map),
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_set_calibration_map (priv->device_queue,
+					     priv->device,
+					     priv->calibration_map);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_ccmx_set_calibration_map_cb,
 				       priv);
 out:
@@ -920,15 +872,14 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 			      gsize ccmx_size,
 			      GError **error)
 {
+	CdMat3x3 calibration;
 	cmsHANDLE ccmx = NULL;
 	const gchar *description;
 	const gchar *sheet_type;
 	const gchar *type_tmp;
 	gboolean ret = TRUE;
 	gboolean type_factory = FALSE;
-	guint8 buffer[62];
 	guint8 types = 0;
-	guint i, j;
 
 	/* load from a blob, as lcms sucks at reading files */
 	ccmx = cmsIT8LoadFromMem (NULL, (void *) ccmx_data, ccmx_size);
@@ -973,36 +924,27 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
 		types += CH_CALIBRATION_TYPE_PROJECTOR;
 
-	/* write the index */
-	memset (buffer, 0x00, sizeof (buffer));
-	memcpy (buffer + 0, &cal_idx, 2);
-
-	/* write the calibration values */
-	for (j = 0; j < 3; j++) {
-		for (i = 0; i < 3; i++) {
-			cal_idx = sizeof (guint16) + (((j * 3) + i) * sizeof (ChPackedFloat));
-			ch_double_to_packed_float (cmsIT8GetDataRowColDbl(ccmx, j, i),
-						   (ChPackedFloat *) (buffer + cal_idx));
-		}
-	}
-
-	/* write types */
-	buffer[9*4 + 2] = types;
-
-	/* write the description */
-	cal_idx = sizeof (guint16) + (9 * sizeof (ChPackedFloat)) + 1;
-	g_utf8_strncpy ((gchar *) buffer + cal_idx,
-			description,
-			CH_CALIBRATION_DESCRIPTION_LEN);
+	/* read the calibration values */
+	calibration.m00 = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
+	calibration.m01 = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
+	calibration.m02 = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
+	calibration.m10 = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
+	calibration.m11 = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
+	calibration.m12 = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
+	calibration.m20 = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
+	calibration.m21 = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
+	calibration.m22 = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
 
 	/* set to HW */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_SET_CALIBRATION,
-				       buffer, /* buffer_in */
-				       sizeof(buffer), /* buffer_in_len */
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_set_calibration (priv->device_queue,
+					 priv->device,
+					 cal_idx,
+					 &calibration,
+					 types,
+					 description);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_ccmx_set_calibration_cb,
 				       priv);
 	if (!ret)
@@ -1034,9 +976,10 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 	if (!ret)
 		goto out;
 
-	ret = ch_ccmx_set_calibration_data (priv, 0,
+	ret = ch_ccmx_set_calibration_data (priv,
+					    cal_idx,
 					    (guint8 *)ccmx_data,
-                        ccmx_size,
+					    ccmx_size,
 					    error);
 out:
 	g_free (ccmx_data);
@@ -1062,7 +1005,7 @@ ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 
 	/* import the file into a spare slot */
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
-		if (!priv->in_use[i])
+		if (priv->ccmx_types[i] == 0)
 			break;
 	}
 	if (i == CH_CALIBRATION_MAX) {
@@ -1094,10 +1037,30 @@ out:
 static void
 ch_ccmx_refresh_calibration_data (ChCcmxPrivate *priv)
 {
+	guint i;
+
 	/* get latest from device */
 	priv->done_get_cal = FALSE;
-	priv->ccmx_idx = 0;
-	ch_ccmx_get_calibration_idx (priv);
+
+	/* get the calibration info from all slots */
+	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
+		ch_device_queue_get_calibration (priv->device_queue,
+						 priv->device,
+						 i,
+						 NULL,
+						 &priv->ccmx_types[i],
+						 priv->ccmx_description[i]);
+	}
+	ch_device_queue_get_calibration_map (priv->device_queue,
+					     priv->device,
+					     priv->calibration_map);
+
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_CONTINUE_ERRORS |
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS,
+				       NULL,
+				       ch_ccmx_get_calibration_cb,
+				       priv);
 }
 
 /**
@@ -1208,7 +1171,7 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 	if (idx_tmp == -1) {
 
 		for (i = 0; i < CH_CALIBRATION_MAX; i++) {
-			if (!priv->in_use[i])
+			if (priv->ccmx_types[i] == 0)
 				break;
 		}
 		if (i == CH_CALIBRATION_MAX) {
@@ -1255,13 +1218,15 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 	gtk_widget_set_sensitive (widget, FALSE);
 
 	/* hit hardware */
-	ch_device_write_command_async (priv->device,
-				       CH_CMD_SET_CALIBRATION_MAP,
-				       (const guint8 *) priv->calibration_map,
-				       sizeof(priv->calibration_map),
-				       NULL, /* buffer_out */
-				       0, /* buffer_out_len */
-				       NULL, /* cancellable */
+	ch_device_queue_set_calibration_map (priv->device_queue,
+					     priv->device,
+					     priv->calibration_map);
+	ch_device_queue_write_eeprom (priv->device_queue,
+				      priv->device,
+				      CH_WRITE_EEPROM_MAGIC);
+	ch_device_queue_process_async (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
 				       ch_ccmx_set_calibration_map_cb,
 				       priv);
 out:
@@ -1692,6 +1657,7 @@ main (int argc, char **argv)
 	gboolean ret;
 	gboolean verbose = FALSE;
 	gboolean force_repair = FALSE;
+	guint i;
 	GError *error = NULL;
 	GOptionContext *context;
 	int status = 0;
@@ -1733,10 +1699,17 @@ main (int argc, char **argv)
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
+	priv->device_queue = ch_device_queue_new ();
 	g_signal_connect (priv->device_list, "device-added",
 			  G_CALLBACK (ch_ccmx_device_added_cb), priv);
 	g_signal_connect (priv->device_list, "device-removed",
 			  G_CALLBACK (ch_ccmx_device_removed_cb), priv);
+
+	/* clear initial calibration table */
+	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
+		priv->ccmx_types[i] = 0;
+		priv->ccmx_description[i] = g_new0 (gchar, 24);
+	}
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("com.hughski.ColorHug.Ccmx", 0);
@@ -1760,6 +1733,8 @@ main (int argc, char **argv)
 		g_hash_table_destroy (priv->hash);
 	if (priv->device_list != NULL)
 		g_object_unref (priv->device_list);
+	if (priv->device_queue != NULL)
+		g_object_unref (priv->device_queue);
 	if (priv->usb_ctx != NULL)
 		g_object_unref (priv->usb_ctx);
 	if (priv->builder != NULL)
