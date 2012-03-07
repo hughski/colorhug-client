@@ -27,9 +27,7 @@
 #include <colord.h>
 #include <math.h>
 #include <gusb.h>
-
-#include "ch-common.h"
-#include "ch-device-queue.h"
+#include <colorhug.h>
 
 typedef struct {
 	GtkBuilder	*builder;

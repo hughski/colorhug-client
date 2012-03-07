@@ -29,10 +29,7 @@
 #include <gusb.h>
 #include <libsoup/soup.h>
 #include <lcms2.h>
-
-#include "ch-common.h"
-#include "ch-math.h"
-#include "ch-device-queue.h"
+#include <colorhug.h>
 
 /* don't change this unless you want to provide ccmx files */
 #define COLORHUG_CCMX_LOCATION		"http://www.hughski.com/downloads/colorhug/ccmx/"

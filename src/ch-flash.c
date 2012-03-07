@@ -28,11 +28,10 @@
 #include <math.h>
 #include <gusb.h>
 #include <libsoup/soup.h>
+#include <colorhug.h>
 
-#include "ch-common.h"
 #include "ch-markdown.h"
 #include "ch-flash-md.h"
-#include "ch-device-queue.h"
 
 /* don't change this unless you want to provide firmware updates */
 #define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/firmware/"

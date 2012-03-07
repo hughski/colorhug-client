@@ -19,6 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#if !defined (__COLORHUG_H_INSIDE__) && !defined (CH_COMPILATION)
+#error "Only <colorhug.h> can be included directly."
+#endif
+
 #ifndef __CH_MATH_H
 #define __CH_MATH_H
 

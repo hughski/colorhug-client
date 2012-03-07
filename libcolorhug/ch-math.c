@@ -32,7 +32,7 @@
  *
  * @pf: A %ChPackedFloat
  *
- * Returns packed value to host byte order.
+ * Return value: packed value to host byte order
  */
 gint32
 ch_packed_float_get_value (const ChPackedFloat *pf)
@@ -102,7 +102,7 @@ ch_double_to_packed_float (gdouble value, ChPackedFloat *pf)
  *
  * Adds two packed floats together using only integer maths.
  *
- * @return: an error code
+ * Return value: an error code
  **/
 ChError
 ch_packed_float_add (const ChPackedFloat *pf1,
@@ -138,7 +138,7 @@ ch_packed_float_add (const ChPackedFloat *pf1,
  *
  * Multiplies two packed floats together using only integer maths.
  *
- * @return: an error code
+ * Return value: an error code
  **/
 ChError
 ch_packed_float_multiply (const ChPackedFloat *pf1,

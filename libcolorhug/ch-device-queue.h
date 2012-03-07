@@ -19,13 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#if !defined (__COLORHUG_H_INSIDE__) && !defined (CH_COMPILATION)
+#error "Only <colorhug.h> can be included directly."
+#endif
+
 #ifndef __CH_DEVICE_QUEUE_H
 #define __CH_DEVICE_QUEUE_H
 
-#include "ch-common.h"
-
 #include <glib-object.h>
 #include <gusb.h>
+
+#include "ch-common.h"
 
 G_BEGIN_DECLS
 
@@ -62,7 +66,6 @@ struct _ChDeviceQueueClass
 	void (*_ch_reserved4) (void);
 	void (*_ch_reserved5) (void);
 };
-
 
 /**
  * ChDeviceQueueProcessFlags:

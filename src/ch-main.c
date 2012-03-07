@@ -27,9 +27,7 @@
 #include <lcms2.h>
 #include <math.h>
 #include <sqlite3.h>
-
-#include "ch-device-queue.h"
-#include "ch-math.h"
+#include <colorhug.h>
 
 typedef struct {
 	ChDeviceQueue		*device_queue;

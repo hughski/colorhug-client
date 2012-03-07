@@ -20,14 +20,15 @@
  */
 
 #include "config.h"
-#include "ch-math.h"
-#include "ch-device-queue.h"
 
 #include <string.h>
 #include <glib.h>
 #include <glib-object.h>
 #include <gusb.h>
 #include <math.h>
+
+#include "ch-math.h"
+#include "ch-device-queue.h"
 
 static guint device_failed_cnt = 0;
 static guint progress_changed_cnt = 0;
@@ -1135,6 +1136,7 @@ main (int argc, char **argv)
 	g_test_add_func ("/ColorHug/reading", ch_test_reading_func);
 	g_test_add_func ("/ColorHug/reading-xyz", ch_test_reading_xyz_func);
 	g_test_add_func ("/ColorHug/device-incomplete-request", ch_test_incomplete_request_func);
+
 	return g_test_run ();
 }
 

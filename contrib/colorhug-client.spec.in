@@ -16,6 +16,7 @@ BuildRequires: libgusb-devel >= 0.1.2
 BuildRequires: colord-devel >= 0.1.15
 BuildRequires: lcms2-devel
 BuildRequires: libsoup-devel
+BuildRequires: libtool
 BuildRequires: docbook-utils
 BuildRequires: sqlite-devel
 
@@ -26,6 +27,15 @@ sensor used to calibrate screens.
 This package includes the client tools which allows the user to upgrade
 the firmware on the sensor or to access the sensor from command line
 scripts.
+
+%package devel
+Summary: GLib Libraries and headers for zif
+Requires: %{name} = %{version}-%{release}
+Requires: glib2-devel
+Requires: libgusb-devel
+
+%description devel
+GLib headers and libraries for colorhug-client.
 
 %prep
 %setup -q
@@ -38,13 +48,17 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 
+rm -f $RPM_BUILD_ROOT%{_libdir}/libcolorhug*.la
+
 %find_lang %{name}
 
 %post
+/sbin/ldconfig
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %postun
+/sbin/ldconfig
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
@@ -57,6 +71,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README AUTHORS NEWS COPYING
+%{_libdir}/libcolorhug.so.*
 %dir %{_datadir}/colorhug-client
 %{_datadir}/colorhug-client
 %{_libexecdir}/colorhug*
@@ -68,6 +83,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
 %{_mandir}/man1/*.1.gz
 %{_sysconfdir}/bash_completion.d/*-completion.bash
+
+%files devel
+%defattr(-,root,root,-)
+%{_libdir}/libcolorhug.so
+%{_libdir}/pkgconfig/colorhug.pc
+%dir %{_includedir}/libcolorhug
+%{_includedir}/libcolorhug/*.h
+%{_libdir}/girepository-1.0/ColorHug-1.0.typelib
+%{_datadir}/gir-1.0/ColorHug-1.0.gir
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
