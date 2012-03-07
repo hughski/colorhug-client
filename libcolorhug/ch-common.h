@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2011 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2011-2012 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -687,30 +687,5 @@ const gchar	*ch_strerror			(ChError	 error_enum);
 const gchar	*ch_command_to_string		(guint8		 cmd);
 const gchar	*ch_multiplier_to_string	(ChFreqScale	 multiplier);
 const gchar	*ch_color_select_to_string	(ChColorSelect	 color_select);
-
-void		ch_device_write_command_async	(GUsbDevice	*device,
-						 guint8		 cmd,
-						 const guint8	*buffer_in,
-						 gsize		 buffer_in_len,
-						 guint8		*buffer_out,
-						 gsize		 buffer_out_len,
-						 GCancellable	*cancellable,
-						 GAsyncReadyCallback callback,
-						 gpointer	 user_data);
-gboolean	 ch_device_write_command_finish	(GUsbDevice	*device,
-						 GAsyncResult	*res,
-						 GError		**error);
-gboolean	ch_device_write_command		(GUsbDevice	*device,
-						 guint8		 cmd,
-						 const guint8	*buffer_in,
-						 gsize		 buffer_in_len,
-						 guint8		*buffer_out,
-						 gsize		 buffer_out_len,
-						 GCancellable	*cancellable,
-						 GError		**error);
-
-/* general utility functions */
-gboolean	ch_device_open			(GUsbDevice	*device,
-						 GError		**error);
 
 #endif

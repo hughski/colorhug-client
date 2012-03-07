@@ -25,6 +25,7 @@
 #define __COLORHUG_H_INSIDE__
 
 #include <ch-common.h>
+#include <ch-device.h>
 #include <ch-device-queue.h>
 #include <ch-math.h>
 #include <ch-version.h>

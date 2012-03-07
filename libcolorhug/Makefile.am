@@ -30,6 +30,7 @@ libcolorhug_includedir = $(includedir)/libcolorhug
 
 libcolorhug_include_HEADERS =					\
 	ch-common.h						\
+	ch-device.h						\
 	ch-device-queue.h					\
 	ch-math.h						\
 	ch-version.h						\
@@ -38,6 +39,8 @@ libcolorhug_include_HEADERS =					\
 libcolorhug_la_SOURCES =					\
 	ch-common.c						\
 	ch-common.h						\
+	ch-device.c						\
+	ch-device.h						\
 	ch-device-queue.c					\
 	ch-device-queue.h					\
 	ch-math.c						\
@@ -106,6 +109,8 @@ if HAVE_INTROSPECTION
 introspection_sources =						\
 	ch-common.c						\
 	ch-common.h						\
+	ch-device.c						\
+	ch-device.h						\
 	ch-device-queue.c					\
 	ch-device-queue.h
 

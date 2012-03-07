@@ -28,6 +28,7 @@
 #include <lcms2.h>
 
 #include "ch-common.h"
+#include "ch-device.h"
 #include "ch-device-queue.h"
 #include "ch-math.h"
 
