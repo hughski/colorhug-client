@@ -1698,6 +1698,17 @@ out:
 }
 
 /**
+ * ch_util_helper_quit_loop_cb:
+ **/
+static gboolean
+ch_util_helper_quit_loop_cb (gpointer user_data)
+{
+	GMainLoop *loop = (GMainLoop *) user_data;
+	g_main_loop_quit (loop);
+	return FALSE;
+}
+
+/**
  * ch_util_flash_firmware_internal:
  **/
 static gboolean
@@ -1709,6 +1720,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	gchar *data = NULL;
 	gsize len = 0;
 	GUsbDevice *device = NULL;
+	GMainLoop *loop = NULL;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -1731,8 +1743,12 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		goto out;
 
 	/* wait for the device to reconnect */
+	loop = g_main_loop_new (NULL, FALSE);
+	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
+		       ch_util_helper_quit_loop_cb,
+		       loop);
+	g_main_loop_run (loop);
 	g_object_unref (device);
-	g_usleep (1 * G_USEC_PER_SEC);
 	device = ch_util_get_default_device (error);
 	if (!ret)
 		goto out;
@@ -1766,9 +1782,12 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	if (!ret)
 		goto out;
 
-	/* wait for the device to reconnect */
+	/* wait again for the device to reconnect */
 	g_object_unref (device);
-	g_usleep (CH_FLASH_RECONNECT_TIMEOUT * 1000);
+	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
+		       ch_util_helper_quit_loop_cb,
+		       loop);
+	g_main_loop_run (loop);
 	device = ch_util_get_default_device (error);
 	if (!ret)
 		goto out;
@@ -1784,6 +1803,8 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	if (!ret)
 		goto out;
 out:
+	if (loop != NULL)
+		g_main_loop_unref (loop);
 	if (device != NULL)
 		g_object_unref (device);
 	g_free (data);
