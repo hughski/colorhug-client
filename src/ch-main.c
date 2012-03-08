@@ -1750,7 +1750,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	g_main_loop_run (loop);
 	g_object_unref (device);
 	device = ch_util_get_default_device (error);
-	if (!ret)
+	if (device == NULL)
 		goto out;
 
 	/* write firmware */
@@ -1789,7 +1789,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		       loop);
 	g_main_loop_run (loop);
 	device = ch_util_get_default_device (error);
-	if (!ret)
+	if (device == NULL)
 		goto out;
 
 	/* set flash success true */
