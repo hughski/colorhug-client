@@ -33,9 +33,6 @@
 #include "ch-markdown.h"
 #include "ch-flash-md.h"
 
-/* don't change this unless you want to provide firmware updates */
-#define COLORHUG_FIRMWARE_LOCATION	"http://www.hughski.com/downloads/colorhug/firmware/"
-
 typedef struct {
 	gchar		*filename;
 	gchar		*checksum;
@@ -690,6 +687,7 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	SoupURI *base_uri = NULL;
 	SoupMessage *msg = NULL;
 	gboolean ret;
+	gchar *server_uri = NULL;
 	gchar *uri = NULL;
 
 	/* show the user any warning dialog */
@@ -723,7 +721,8 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.0f);
 
 	/* download file */
-	uri = g_build_filename (COLORHUG_FIRMWARE_LOCATION,
+	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
+	uri = g_build_filename (server_uri,
 				priv->filename,
 				NULL);
 	g_debug ("Downloading %s", uri);
@@ -747,6 +746,7 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	soup_session_queue_message (priv->session, msg,
 				    ch_flash_got_firmware_cb, priv);
 out:
+	g_free (server_uri);
 	g_free (uri);
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
@@ -1034,6 +1034,7 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 	const gchar *title;
 	gboolean ret;
 	gchar **lines = NULL;
+	gchar *server_uri = NULL;
 	gchar *uri = NULL;
 	GError *error = NULL;
 	GtkWidget *widget;
@@ -1090,7 +1091,8 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 	}
 
 	/* get the latest manifest file */
-	uri = g_build_filename (COLORHUG_FIRMWARE_LOCATION,
+	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
+	uri = g_build_filename (server_uri,
 				"metadata.xml",
 				NULL);
 	base_uri = soup_uri_new (uri);
@@ -1110,6 +1112,7 @@ ch_flash_got_blacklist_cb (SoupSession *session,
 out:
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
+	g_free (server_uri);
 	g_free (uri);
 	g_strfreev (lines);
 }
@@ -1121,6 +1124,7 @@ static void
 ch_flash_got_device_data (ChFlashPrivate *priv)
 {
 	const gchar *title;
+	gchar *server_uri = NULL;
 	gchar *str = NULL;
 	gchar *uri = NULL;
 	gchar *user_agent = NULL;
@@ -1198,7 +1202,8 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	gtk_widget_show (widget);
 
 	/* get the latest blacklist file */
-	uri = g_build_filename (COLORHUG_FIRMWARE_LOCATION,
+	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
+	uri = g_build_filename (server_uri,
 				"BLACKLIST",
 				NULL);
 	base_uri = soup_uri_new (uri);
@@ -1222,6 +1227,7 @@ out:
 		soup_uri_free (base_uri);
 	g_free (user_agent);
 	g_free (str);
+	g_free (server_uri);
 	g_free (uri);
 }
 

@@ -31,10 +31,6 @@
 #include <lcms2.h>
 #include <colorhug.h>
 
-/* don't change this unless you want to provide ccmx files */
-#define COLORHUG_CCMX_LOCATION		"http://www.hughski.com/downloads/colorhug/ccmx/"
-#define COLORHUG_ARCHIVE_LOCATION	"http://www.hughski.com/downloads/colorhug/archive/"
-
 typedef struct {
 	GtkApplication	*application;
 	GtkBuilder	*builder;
@@ -52,6 +48,7 @@ typedef struct {
 	gboolean	 needs_repair;
 	gboolean	 force_repair;
 	ChDeviceQueue	*device_queue;
+	GSettings	*settings;
 } ChCcmxPrivate;
 
 enum {
@@ -454,6 +451,7 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
+	gchar *server_uri = NULL;
 	gchar *uri = NULL;
 
 	/* get data */
@@ -467,8 +465,9 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	}
 
 	/* download the correct factory calibration file */
-	uri = g_strdup_printf ("%scalibration-%06i.ccmx",
-			       COLORHUG_ARCHIVE_LOCATION,
+	server_uri = g_settings_get_string (priv->settings, "calibration-uri");
+	uri = g_strdup_printf ("%s/calibration-%06i.ccmx",
+			       server_uri,
 			       priv->serial_number);
 	base_uri = soup_uri_new (uri);
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
@@ -483,6 +482,7 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	soup_session_queue_message (priv->session, msg,
 				    ch_ccmx_got_factory_calibration_cb, priv);
 out:
+	g_free (server_uri);
 	g_free (uri);
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
@@ -1339,6 +1339,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 	gchar *filename_tmp;
 	gchar **lines = NULL;
 	gchar *location = NULL;
+	gchar *server_uri = NULL;
 	gchar *uri_tmp;
 	GtkWidget *widget;
 	guint i;
@@ -1371,6 +1372,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 	priv->ccmx_idx = 0;
 
 	/* read file */
+	server_uri = g_settings_get_string (priv->settings, "ccmx-uri");
 	lines = g_strsplit (msg->response_body->data, "\n", -1);
 	for (i = 0; lines[i] != NULL; i++) {
 		if (lines[i][0] == '\0')
@@ -1382,7 +1384,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 						 NULL);
 		ret = g_file_test (filename_tmp, G_FILE_TEST_EXISTS);
 		if (!ret) {
-			uri_tmp = g_build_filename (COLORHUG_CCMX_LOCATION,
+			uri_tmp = g_build_filename (server_uri,
 						    lines[i],
 						    NULL);
 			priv->ccmx_idx++;
@@ -1400,6 +1402,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 		gtk_widget_hide (widget);
 	}
 out:
+	g_free (server_uri);
 	g_free (location);
 	g_strfreev (lines);
 	return;
@@ -1412,6 +1415,7 @@ static void
 ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
 	const gchar *title;
+	gchar *server_uri = NULL;
 	gchar *uri = NULL;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
@@ -1425,7 +1429,8 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	gtk_widget_show_all (widget);
 
 	/* get the latest INDEX file */
-	uri = g_build_filename (COLORHUG_CCMX_LOCATION,
+	server_uri = g_settings_get_string (priv->settings, "ccmx-uri");
+	uri = g_build_filename (server_uri,
 				"INDEX",
 				NULL);
 	base_uri = soup_uri_new (uri);
@@ -1445,6 +1450,7 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 out:
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
+	g_free (server_uri);
 	g_free (uri);
 }
 
@@ -1691,6 +1697,7 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChCcmxPrivate, 1);
+	priv->settings = g_settings_new ("com.hughski.colorhug-client");
 	priv->needs_repair = TRUE;
 	priv->force_repair = force_repair;
 	priv->usb_ctx = g_usb_context_new (NULL);
@@ -1738,6 +1745,8 @@ main (int argc, char **argv)
 		g_object_unref (priv->builder);
 	if (priv->session != NULL)
 		g_object_unref (priv->session);
+	if (priv->settings != NULL)
+		g_object_unref (priv->settings);
 	g_free (priv);
 	return status;
 }
