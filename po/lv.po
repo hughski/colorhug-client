@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-29 11:15+0000\n"
-"PO-Revision-Date: 2011-12-29 11:33+0000\n"
-"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
+"POT-Creation-Date: 2012-03-15 19:54+0000\n"
+"PO-Revision-Date: 2012-03-15 19:56+0000\n"
+"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,210 +17,247 @@ msgstr ""
 "Language: lv\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2)\n"
 
-#. Default cathode ray tube (ask your parents...) matrix
-#: ../data/ch-ccmx.ui.h:2
-msgid "CRT"
-msgstr "CRT"
-
-#: ../data/ch-ccmx.ui.h:3 ../data/ch-flash.ui.h:1 ../data/ch-util.ui.h:7
-msgid "Close this window"
-msgstr "Aizvērt šo logu"
-
-#: ../data/ch-ccmx.ui.h:4
+#: ../data/ch-ccmx.ui.h:1
 msgid "ColorHug CCMX Loader"
 msgstr "ColorHug CCMX ielādētājs"
 
-#: ../data/ch-ccmx.ui.h:5
-msgid "Import a local CCMX file"
-msgstr "Importēt lokālo CCMX failu"
-
 #. Button to import a CCMX file
-#: ../data/ch-ccmx.ui.h:7
+#: ../data/ch-ccmx.ui.h:3
 msgid "Import file"
 msgstr "Importēt failu"
 
-#. Default liquid crystal display matrix
-#: ../data/ch-ccmx.ui.h:9
-msgid "LCD"
-msgstr "LCD"
+#: ../data/ch-ccmx.ui.h:4
+msgid "Import a local CCMX file"
+msgstr "Importēt lokālo CCMX failu"
 
-#. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:10 ../src/ch-flash.c:1644
-msgid "Please connect your ColorHug"
-msgstr "Pievienojiet ColorHug ierīci"
+#: ../data/ch-ccmx.ui.h:5 ../data/ch-flash.ui.h:2 ../data/ch-util.ui.h:2
+msgid "Close this window"
+msgstr "Aizvērt šo logu"
 
-#. Default projector (beamer etc) matrix
-#: ../data/ch-ccmx.ui.h:12
-msgid "Projector"
-msgstr "Projektors"
-
-#: ../data/ch-ccmx.ui.h:13
+#: ../data/ch-ccmx.ui.h:6
 msgid "Refresh the list of matrices from the device"
 msgstr "Atsvaidzināt matricu sarakstu no ierīces"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
-#: ../data/ch-ccmx.ui.h:15
+#: ../data/ch-ccmx.ui.h:8
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
 msgstr "Krāsu matricas izvēle maksimizē ColorHug precizitāti."
 
 #. Only advanced users have to change this...
-#: ../data/ch-ccmx.ui.h:17
+#: ../data/ch-ccmx.ui.h:10
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
-"Noklusējuma matricas izmantošana dos vairumam lietotāju pieņemamu "
-"kalibrēšanas rezultātu."
+msgstr "Noklusējuma matricas izmantošana dos vairumam lietotāju pieņemamu kalibrēšanas rezultātu."
 
-#: ../data/ch-flash.ui.h:2
+#. Default liquid crystal display matrix
+#: ../data/ch-ccmx.ui.h:12
+msgid "LCD"
+msgstr "LCD"
+
+#. Default cathode ray tube (ask your parents...) matrix
+#: ../data/ch-ccmx.ui.h:14
+msgid "CRT"
+msgstr "CRT"
+
+#. Default projector (beamer etc) matrix
+#: ../data/ch-ccmx.ui.h:16
+msgid "Projector"
+msgstr "Projektors"
+
+#. Default light emitting diode matrix
+#: ../data/ch-ccmx.ui.h:18
+msgid "LED"
+msgstr ""
+
+#. TRANSLATORS: device is not connected to the computer
+#: ../data/ch-ccmx.ui.h:19 ../src/ch-flash.c:1438
+msgid "Please connect your ColorHug"
+msgstr "Pievienojiet ColorHug ierīci"
+
+#: ../data/ch-flash.ui.h:1
 msgid "ColorHug Firmware Updater"
 msgstr "ColorHug aparātprogrammatūras atjauninātājs"
 
-#. We are flashing the device, so we have to be careful
-#: ../data/ch-flash.ui.h:4
-msgid "Do not unplug the device and do not turn off the computer."
-msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
-
-#: ../data/ch-flash.ui.h:5
-msgid "Firmware version unknown"
-msgstr "Programmaparatūras versija nav zināma"
-
-#: ../data/ch-flash.ui.h:6
-msgid "Flash new firmware to the device"
-msgstr "Atjauniniet aparātprogrammatūru uz ierīces"
-
 #. Button to update to a newer version of the firmware
-#: ../data/ch-flash.ui.h:8
+#: ../data/ch-flash.ui.h:4
 msgid "Update!"
 msgstr "Atjaunināt!"
 
-#. The last color reading in raw mode
-#: ../data/ch-util.ui.h:2
-msgid "Blue"
-msgstr "Zils"
+#: ../data/ch-flash.ui.h:5
+msgid "Flash new firmware to the device"
+msgstr "Atjauniniet aparātprogrammatūru uz ierīces"
 
-#. Calibrate the hardware
-#: ../data/ch-util.ui.h:4
-msgid "Calibrate"
-msgstr "Kalibrēt"
+#: ../data/ch-flash.ui.h:6
+msgid "Firmware version unknown"
+msgstr "Programmaparatūras versija nav zināma"
 
-#. This is the device calibration matrix
-#: ../data/ch-util.ui.h:6
-msgid "Calibration:"
-msgstr "Kalibrācija:"
+#. We are flashing the device, so we have to be careful
+#: ../data/ch-flash.ui.h:8
+msgid "Do not unplug the device and do not turn off the computer."
+msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
 
-#. Switch the sensor in raw mode to measure different colors
-#: ../data/ch-util.ui.h:9
-msgid "Color select:"
-msgstr "Krāsas izvēle:"
-
-#: ../data/ch-util.ui.h:10
+#: ../data/ch-util.ui.h:1
 msgid "ColorHug Utility"
 msgstr "ColorHug servisprogramma"
 
-#. This is the zero-offset when measuring perfect black
-#: ../data/ch-util.ui.h:12
-msgid "Dark offset:"
-msgstr "Tumšā nobīde:"
-
-#: ../data/ch-util.ui.h:13
-msgid "Device State"
-msgstr "Ierīces stāvoklis"
-
-#: ../data/ch-util.ui.h:14
-msgid "Firmware version:"
-msgstr "Programmaparatūras versija:"
-
-#. Choose a firmware file to flash
-#: ../data/ch-util.ui.h:16
-msgid "Flash Firmware"
-msgstr "Atjaunināt aparātprogrammatūru"
-
-#. The last color reading in raw mode
-#: ../data/ch-util.ui.h:18
-msgid "Green"
-msgstr "Zaļš"
-
 #. Device status indicators
-#: ../data/ch-util.ui.h:20
+#: ../data/ch-util.ui.h:4
 msgid "LEDs:"
 msgstr "LED:"
 
-#. This is the last XYZ color measured by the device
-#: ../data/ch-util.ui.h:22
-msgid "Last sample:"
-msgstr "Pēdējais paraugs:"
-
-#. This measures the perfect black reading and sets it.
-#: ../data/ch-util.ui.h:24
-msgid "Measure Dark"
-msgstr "Mērīt tumsu"
-
-#. This reads a color using the sensor
-#: ../data/ch-util.ui.h:26
-msgid "Measure Sample"
-msgstr "Mērīt paraugu"
-
-#. Set the multiplier scaling factor
-#: ../data/ch-util.ui.h:28
-msgid "Multiplier:"
-msgstr "Reizinātājs:"
-
-#. This is a scale value applied after the dRGB reading has been converted to
-#. XYZ
-#: ../data/ch-util.ui.h:30
-msgid "Post scale:"
-msgstr "Pēc pārveidošanas skala:"
-
-#. This is a scale value applied after the reading has been taken
-#: ../data/ch-util.ui.h:32
-msgid "Pre scale:"
-msgstr "Pirms pārveidošanas skala:"
-
-#. A sample is taken without the calibration matrix
-#: ../data/ch-util.ui.h:34
-msgid "Raw"
-msgstr "Raw"
+#. Switch the sensor in raw mode to measure different colors
+#: ../data/ch-util.ui.h:6
+msgid "Color select:"
+msgstr "Krāsas izvēle:"
 
 #. The last color reading in raw mode
-#: ../data/ch-util.ui.h:36
+#: ../data/ch-util.ui.h:8
+msgid "Green"
+msgstr "Zaļš"
+
+#. The last color reading in raw mode
+#: ../data/ch-util.ui.h:10
 msgid "Red"
 msgstr "Sarkans"
 
-#. Switch the device from firmware to bootloader mode
-#: ../data/ch-util.ui.h:38
-msgid "Reset Processor"
-msgstr "Atstatīt procesoru"
+#: ../data/ch-util.ui.h:11
+msgid "White"
+msgstr ""
+
+#. The last color reading in raw mode
+#: ../data/ch-util.ui.h:13
+msgid "Blue"
+msgstr "Zils"
+
+#. Set the multiplier scaling factor
+#: ../data/ch-util.ui.h:15
+msgid "Multiplier:"
+msgstr "Reizinātājs:"
+
+#: ../data/ch-util.ui.h:17
+#, no-c-format
+msgid "0% (off)"
+msgstr ""
+
+#: ../data/ch-util.ui.h:19
+#, no-c-format
+msgid "20%"
+msgstr ""
+
+#: ../data/ch-util.ui.h:21
+#, no-c-format
+msgid "2%"
+msgstr ""
+
+#: ../data/ch-util.ui.h:23
+#, no-c-format
+msgid "100%"
+msgstr ""
+
+#. Set the time to collect each reading for
+#: ../data/ch-util.ui.h:25
+msgid "Sample read time:"
+msgstr "Parauga nolasīšanas laiks:"
+
+#: ../data/ch-util.ui.h:26
+msgid "5ms"
+msgstr ""
+
+#: ../data/ch-util.ui.h:27
+msgid "50ms"
+msgstr ""
+
+#: ../data/ch-util.ui.h:28
+msgid "100ms"
+msgstr ""
+
+#: ../data/ch-util.ui.h:29
+msgid "200ms"
+msgstr ""
+
+#: ../data/ch-util.ui.h:30
+msgid "Maximum"
+msgstr ""
+
+#: ../data/ch-util.ui.h:31
+msgid "Firmware version:"
+msgstr "Programmaparatūras versija:"
+
+#: ../data/ch-util.ui.h:32
+msgid "Serial number:"
+msgstr "Sērijas numurs:"
+
+#. This is the zero-offset when measuring perfect black
+#: ../data/ch-util.ui.h:34
+msgid "Dark offset:"
+msgstr "Tumšā nobīde:"
+
+#. This is the device calibration matrix
+#: ../data/ch-util.ui.h:36
+msgid "Calibration:"
+msgstr "Kalibrācija:"
 
 #. This is the time that the last sample took
-#: ../data/ch-util.ui.h:40
+#: ../data/ch-util.ui.h:38
 msgid "Sample duration:"
 msgstr "Parauga ilgums:"
+
+#. This is the last XYZ color measured by the device
+#: ../data/ch-util.ui.h:40
+msgid "Last sample:"
+msgstr "Pēdējais paraugs:"
 
 #. The sample mode enables us to switch off the calibration matrix if required
 #: ../data/ch-util.ui.h:42
 msgid "Sample mode:"
 msgstr "Parauga režīms:"
 
-#. Set the time to collect each reading for
+#. A sample is taken without the calibration matrix
 #: ../data/ch-util.ui.h:44
-msgid "Sample read time:"
-msgstr "Parauga nolasīšanas laiks:"
-
-#: ../data/ch-util.ui.h:45
-msgid "Serial number:"
-msgstr "Sērijas numurs:"
+msgid "Raw"
+msgstr "Raw"
 
 #. The sample is converted with an internal calibration matrix
-#: ../data/ch-util.ui.h:47
+#: ../data/ch-util.ui.h:46
 msgid "With calibration matrix"
 msgstr "Ar kalibrācijas matricu"
 
+#. This is a scale value applied after the reading has been taken
+#: ../data/ch-util.ui.h:48
+msgid "Pre scale:"
+msgstr "Pirms pārveidošanas skala:"
+
+#. This is a scale value applied after the dRGB reading has been converted to
+#. XYZ
+#: ../data/ch-util.ui.h:50
+msgid "Post scale:"
+msgstr "Pēc pārveidošanas skala:"
+
+#: ../data/ch-util.ui.h:51
+msgid "Device State"
+msgstr "Ierīces stāvoklis"
+
 #. This writes any changed settings to the internal memory
-#: ../data/ch-util.ui.h:49
+#: ../data/ch-util.ui.h:53
 msgid "Write EEPROM"
 msgstr "Rakstīt EEPROM"
+
+#. This reads a color using the sensor
+#: ../data/ch-util.ui.h:55
+msgid "Measure Sample"
+msgstr "Mērīt paraugu"
+
+#. This measures the perfect black reading and sets it.
+#: ../data/ch-util.ui.h:57
+msgid "Measure Dark"
+msgstr "Mērīt tumsu"
+
+#. Calibrate the hardware
+#: ../data/ch-util.ui.h:59
+msgid "Calibrate"
+msgstr "Kalibrēt"
 
 #: ../data/colorhug-ccmx.desktop.in.h:1
 msgid "CCMX Loader"
@@ -238,716 +275,773 @@ msgstr "Aparātprogrammatūras atjauninātājs"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
-#: ../src/ch-ccmx.c:128
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
+msgid "Whether we should update to test firmware"
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
+msgid ""
+"Whether we should show test firmware and allow the user to update to it."
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
+msgid "The location of where firmware updates are stored"
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
+msgid "The location of where firmware updates and the metadata is stored."
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:5
+msgid "The location of where CCMX files are stored"
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:6
+msgid "The location of where CCMX files and the metadata is stored."
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:7
+msgid "The location of where device calibration files are stored"
+msgstr ""
+
+#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:8
+msgid "The location of where device calibration files are stored."
+msgstr ""
+
+#: ../src/ch-ccmx.c:131
 msgid "Failed to create directory"
 msgstr "Neizdevās izveidot direktoriju"
 
+#: ../src/ch-ccmx.c:410 ../src/ch-ccmx.c:1256
+msgid "Failed to download file"
+msgstr "Neizdevās lejupielādēt failu"
+
+#: ../src/ch-ccmx.c:418 ../src/ch-ccmx.c:1264
+msgid "File has zero size"
+msgstr "Faila izmērs ir nulle"
+
+#: ../src/ch-ccmx.c:430
+msgid "Failed to load data"
+msgstr ""
+
+#. TRANSLATORS: the request failed
+#: ../src/ch-ccmx.c:461 ../src/ch-flash.c:1252 ../src/ch-flash.c:1282
+msgid "Failed to contact ColorHug"
+msgstr "Neizdevās sazināties ar ColorHug"
+
+#. TRANSLATORS: internal error when setting up HTTP request
+#: ../src/ch-ccmx.c:476 ../src/ch-ccmx.c:1315 ../src/ch-ccmx.c:1442
+#: ../src/ch-flash.c:735 ../src/ch-flash.c:1104 ../src/ch-flash.c:1215
+msgid "Failed to setup message"
+msgstr "Neizdevās iestatīt ziņojumu"
+
+#. TRANSLATORS: device is broken and needs fixing
+#: ../src/ch-ccmx.c:526
+msgid "The ColorHug is missing the factory calibration values."
+msgstr ""
+
+#. TRANSLATORS: the device is missing
+#. * it's calibration matrix
+#: ../src/ch-ccmx.c:534
+msgid "Device calibration error"
+msgstr ""
+
+#. TRANSLATORS: this is a button
+#: ../src/ch-ccmx.c:539
+msgid "Ignore"
+msgstr ""
+
+#. TRANSLATORS: this is a button
+#: ../src/ch-ccmx.c:542 ../src/ch-ccmx.c:578
+msgid "Repair"
+msgstr ""
+
+#. TRANSLATORS: device is broken and needs fixing
+#: ../src/ch-ccmx.c:562
+msgid "Update the factory calibration values?"
+msgstr ""
+
+#. TRANSLATORS: the device has an
+#. * updated calibration matrix
+#: ../src/ch-ccmx.c:570
+msgid "Device calibration update"
+msgstr ""
+
+#. TRANSLATORS: this is a button
+#: ../src/ch-ccmx.c:575
+msgid "Cancel"
+msgstr ""
+
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:387
-msgid "Failed to get the calibration map"
-msgstr "Neizdevās iegūt kalibrēšanas karti"
+#: ../src/ch-ccmx.c:694
+msgid "Failed to get the calibration data"
+msgstr ""
 
 #. TRANSLATORS: dialog for chosing the correction matrix
-#: ../src/ch-ccmx.c:552
+#: ../src/ch-ccmx.c:762
 msgid "Select correction matrix"
 msgstr "Izvēlieties krāsu matricu"
 
 #. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-ccmx.c:563
+#: ../src/ch-ccmx.c:773
 msgid "Correction matrices"
 msgstr "Labojumu matricas"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 #. TRANSLATORS: internal device error
-#: ../src/ch-ccmx.c:597 ../src/ch-util.c:146
+#: ../src/ch-ccmx.c:807 ../src/ch-util.c:113
 msgid "Failed to set the calibration map"
 msgstr "Neizdevās iestatīt kalibrēšanas karti"
 
-#: ../src/ch-ccmx.c:629
+#: ../src/ch-ccmx.c:839
 msgid "Failed to set the calibration matrix"
 msgstr "Neizdevās iestatīt kalibrēšanas matricu"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
-#: ../src/ch-ccmx.c:781 ../src/ch-ccmx.c:950
+#: ../src/ch-ccmx.c:1010 ../src/ch-ccmx.c:1178
 msgid "No space left on device"
 msgstr "Nav palicis vietas uz iekārtas"
 
-#: ../src/ch-ccmx.c:782 ../src/ch-ccmx.c:952
+#: ../src/ch-ccmx.c:1011 ../src/ch-ccmx.c:1180
 msgid "All 64 slots are used up."
 msgstr "Visi 64 sloti ir aizņemti."
 
-#: ../src/ch-ccmx.c:790 ../src/ch-ccmx.c:961
+#. TRANSLATORS: file read error when reading
+#. * local firmware file
+#: ../src/ch-ccmx.c:1019 ../src/ch-ccmx.c:1189 ../src/ch-flash.c:1084
 msgid "Failed to load file"
 msgstr "Neizdevās ielādēt failu"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:833 ../src/ch-flash.c:1534
+#: ../src/ch-ccmx.c:1082 ../src/ch-flash.c:1345
 msgid "Failed to open device"
 msgstr "Neizdevās atvērt ierīci"
 
-#. TRANSLATORS: we can't set the device config
-#: ../src/ch-ccmx.c:843 ../src/ch-flash.c:1544
-msgid "Failed to set configuration"
-msgstr "Neizdevās iestatīt konfigurāciju"
-
-#. TRANSLATORS: we can't claim the interface for our sole usage
-#: ../src/ch-ccmx.c:854 ../src/ch-flash.c:1555
-msgid "Failed to claim interface"
-msgstr "Neizdevās pieprasīt saskarni"
-
 #. TRANSLATORS: get the calibration matrices from the device
-#: ../src/ch-ccmx.c:872
+#: ../src/ch-ccmx.c:1100
 msgid "Getting calibration from device..."
 msgstr "Saņem kalibrāciju no ierīces..."
 
-#: ../src/ch-ccmx.c:1022
-msgid "Failed to download file"
-msgstr "Neizdevās lejupielādēt failu"
-
-#: ../src/ch-ccmx.c:1030
-msgid "File has zero size"
-msgstr "Faila izmērs ir nulle"
-
-#: ../src/ch-ccmx.c:1048
+#: ../src/ch-ccmx.c:1282
 msgid "Failed to write file"
 msgstr "Neizdevās ierakstīt failu"
 
-#. TRANSLATORS: internal error when setting up HTTP request
-#: ../src/ch-ccmx.c:1081 ../src/ch-ccmx.c:1203 ../src/ch-flash.c:950
-#: ../src/ch-flash.c:1258 ../src/ch-flash.c:1366
-msgid "Failed to setup message"
-msgstr "Neizdevās iestatīt ziņojumu"
-
 #. TRANSLATORS: could not download the directory listing
-#: ../src/ch-ccmx.c:1115
+#: ../src/ch-ccmx.c:1350
 msgid "Failed to get the list of firmware files"
 msgstr "Neizdevās iegūt sarakstu ar aparātprogrammatūru failiem"
 
 #. TRANSLATORS: the directory listing returned no results
-#: ../src/ch-ccmx.c:1123
+#: ../src/ch-ccmx.c:1358
 msgid "Firmware list has zero size"
 msgstr "Aparātprogrammatūras saraksta izmērs ir nulle"
 
 #. TRANSLATORS: get the list of firmwares from the internet
-#: ../src/ch-ccmx.c:1188
+#: ../src/ch-ccmx.c:1426
 msgid "Getting latest data from the web..."
 msgstr "Saņem jaunākos datus no tīmekļa..."
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:1343 ../src/ch-flash.c:1729
+#: ../src/ch-ccmx.c:1590 ../src/ch-flash.c:1523
 msgid "Failed to setup networking"
 msgstr "Neizdevās iestatīt tīklošanu"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:1421 ../src/ch-flash.c:1809 ../src/ch-main.c:1370
+#: ../src/ch-ccmx.c:1670 ../src/ch-flash.c:1615 ../src/ch-flash.c:1618
+#: ../src/ch-main.c:2291
 msgid "Show extra debugging information"
 msgstr "Rādīt papildu atkļūdošanas informāciju"
 
+#. TRANSLATORS: command line option
+#: ../src/ch-ccmx.c:1673
+msgid "Repair the factory calibration matrix"
+msgstr ""
+
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:1435
+#: ../src/ch-ccmx.c:1687
 msgid "ColorHug CCMX loader"
 msgstr "ColorHug CCMX ielādētājs"
 
-#: ../src/ch-ccmx.c:1441 ../src/ch-flash.c:1828 ../src/ch-util.c:1105
+#: ../src/ch-ccmx.c:1693 ../src/ch-flash.c:1637 ../src/ch-util.c:952
 msgid "Failed to parse command line options"
 msgstr "Neizdevās apstrādāt komandrindas opcijas"
 
 #. TRANSLATORS: we broke the device
-#: ../src/ch-flash.c:98
+#: ../src/ch-flash.c:100
 msgid "Flashing the device failed but the ColorHug is not damaged."
 msgstr "Ierīces zibatmiņas atjaunināšana neizdevās, bet ColorHug nav bojāts."
 
-#. TRANSLATORS: this explains the flashy light thing
-#: ../src/ch-flash.c:102
-msgid ""
-"If there were any problems flashing the device, it will enter a bootloader "
-"mode."
-msgstr ""
-"Ja gadījās kādas problēmas, atjauninot ierīces zibatmiņu, tā ieies sistēmas "
-"ielādes režīmā."
-
 #. TRANSLATORS: hopefully we can "fix" this automatically
-#: ../src/ch-flash.c:106
+#: ../src/ch-flash.c:104
 msgid ""
-"Just remove the ColorHug device from the computer, reinsert it and re-run "
-"this program."
+"Remove the ColorHug device from the computer, reinsert it and re-run this "
+"program."
 msgstr ""
-"Vienkārši izņemiet ColorHug ierīci no datora, palaidiet to no jauna un atkal"
-" palaidiet šo programmu."
 
 #. TRANSLATORS: the user has to be online to get firmware
-#: ../src/ch-flash.c:161
+#: ../src/ch-flash.c:159
 msgid "Connect to the internet to check for updates"
 msgstr "Savienojaties ar internetu, lai pārbaudītu atjauninājumus"
 
-#. TRANSLATORS: the flash write failed
-#: ../src/ch-flash.c:220
-msgid "Failed to write the flash"
-msgstr "Neizdevās ierakstīt zibatmiņā"
-
-#. TRANSLATORS: the flash failed and the checksum is wrong
-#. TRANSLATORS: the write failed
-#: ../src/ch-flash.c:284 ../src/ch-flash.c:314
-msgid "Failed to verify the flash"
-msgstr "Neizdevās pārbaudīt zibatmiņu"
-
-#. TRANSLATORS: the write failed
-#: ../src/ch-flash.c:295
-#, c-format
-msgid "Checksum failed at 0x%04x"
-msgstr "Kontrolsumma neveiksmīga pie 0x%04x"
-
-#: ../src/ch-flash.c:299
-msgid "Failed to verify the checksum"
-msgstr "Neizdevās pārbaudīt kontrolsummu"
-
-#. TRANSLATORS: the write failed
-#: ../src/ch-flash.c:309
-#, c-format
-msgid "Verification failed at 0x%04x (len %i)"
-msgstr "Pārbaude neveiksmīga pie 0x%04x (garums %i)"
-
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
-#: ../src/ch-flash.c:376
+#: ../src/ch-flash.c:205
 msgid "Failed to set the flash success true"
 msgstr "Neizdevās iestatīt zibatmiņas atjaunināšanu kā patiesu"
 
 #. TRANSLATORS: we've uploaded new firmware
-#: ../src/ch-flash.c:385
+#: ../src/ch-flash.c:214
 msgid "Device successfully updated"
 msgstr "Ierīce tika sekmīgi atjaunināta"
 
 #. TRANSLATORS: tell the hardware we succeeded
-#: ../src/ch-flash.c:408
+#: ../src/ch-flash.c:236
 msgid "Setting flash success..."
 msgstr "Iestata atjaunināšanas veiksmīgumu..."
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
-#: ../src/ch-flash.c:437
+#: ../src/ch-flash.c:264
 msgid "Failed to startup the ColorHug"
 msgstr "Neizdevās startēt ColorHug"
 
 #. TRANSLATORS: the new firmware will not load
-#: ../src/ch-flash.c:467
+#: ../src/ch-flash.c:294
 msgid "Failed to boot the ColorHug"
 msgstr "Neizdevās ielādēt ColorHug"
 
+#. TRANSLATORS: tell the device the firmware is no
+#. * longer known working
+#: ../src/ch-flash.c:328
+msgid "Failed to verify the firmware"
+msgstr ""
+
 #. TRANSLATORS: boot into the new firmware
-#: ../src/ch-flash.c:520
+#: ../src/ch-flash.c:345
 msgid "Starting the new firmware..."
 msgstr "Startē jauno aparātprogrammatūru..."
 
+#. TRANSLATORS: tell the device the firmware is no
+#. * longer known working
+#: ../src/ch-flash.c:388
+msgid "Failed to write the firmware"
+msgstr ""
+
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
-#: ../src/ch-flash.c:593
+#: ../src/ch-flash.c:398
 msgid "Verifying new firmware..."
 msgstr "Pārbauda jauno aparātprogrammatūru..."
 
-#. TRANSLATORS: clear enough flash for the new firmware
-#: ../src/ch-flash.c:626
-msgid "Failed to erase the flash"
-msgstr "Neizdevās izdzēst zibatmiņu"
-
 #. TRANSLATORS: now write the new firmware chunks
-#: ../src/ch-flash.c:635
+#: ../src/ch-flash.c:427
 msgid "Writing new firmware..."
 msgstr "Raksta jauno aparātprogrammatūru..."
 
-#. TRANSLATORS: tell the device the firmware is no
-#. * longer known working
-#: ../src/ch-flash.c:669
-msgid "Failed to set the flash success false"
-msgstr "Neizdevās iestatīt zibatmiņas atjaunināšanu kā aplamu"
-
-#. TRANSLATORS: tell the device the firmware is no longer known working
-#: ../src/ch-flash.c:708
-msgid "Clearing flash success..."
-msgstr "Attīra atjaunināšanas veiksmīgumu..."
-
 #. TRANSLATORS: the device failed to come back alive
-#: ../src/ch-flash.c:736
+#: ../src/ch-flash.c:458
 msgid "Failed to reboot the ColorHug"
 msgstr "Neizdevās pārlādēt ColorHug"
 
 #. TRANSLATORS: we restart the device in bootloader mode
-#: ../src/ch-flash.c:766
+#: ../src/ch-flash.c:488
 msgid "Failed to reset the ColorHug"
 msgstr "Neizdevās atstatīt ColorHug"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
-#: ../src/ch-flash.c:790
+#: ../src/ch-flash.c:519
 msgid "Resetting into bootloader..."
 msgstr "Atstata sistēmas ielādētājā..."
 
 #. TRANSLATORS: failed to get the firmware file
-#: ../src/ch-flash.c:823
+#: ../src/ch-flash.c:552
 msgid "Failed to get firmware"
 msgstr "Neizdevās iegūt aparātprogrammatūru"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:832
+#: ../src/ch-flash.c:561
 msgid "Firmware has zero size"
 msgstr "Aparātprogrammatūras izmērs ir nulle"
 
+#. TRANSLATORS: the server gave us an invalid file
+#: ../src/ch-flash.c:573
+msgid "Firmware has incorrect checksum"
+msgstr ""
+
+#. TRANSLATORS: the long details about all the updates that
+#. * are newer than the version the user has installed
+#: ../src/ch-flash.c:661
+msgid "Warnings about this update"
+msgstr ""
+
+#. TRANSLATORS: this is the button text to continue the flash
+#. * after showing the user a warning
+#: ../src/ch-flash.c:669
+msgid "Flash anyway"
+msgstr ""
+
+#. TRANSLATORS: this is the button text to abort the flash process
+#: ../src/ch-flash.c:671
+msgid "Do not flash"
+msgstr ""
+
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
-#: ../src/ch-flash.c:932
+#: ../src/ch-flash.c:716
 msgid "Downloading update..."
 msgstr "Lejupielādē atjauninājumu..."
 
 #. TRANSLATORS: the user is already running the latest firmware
-#: ../src/ch-flash.c:1023
+#: ../src/ch-flash.c:809
 msgid "There are no updates available."
 msgstr "Atjauninājumi nav pieejami."
 
 #. TRANSLATORS: the user is running an old firmware version
-#: ../src/ch-flash.c:1043
+#: ../src/ch-flash.c:829
 msgid "A firmware update is available."
 msgstr "Ir pieejams aparātprogrammatūras atjauninājums."
 
 #. TRANSLATORS: the HTTP request failed
-#: ../src/ch-flash.c:1065
+#: ../src/ch-flash.c:853
 msgid "Failed to get the listing of firmware files"
 msgstr "Neizdevās iegūt sarakstu ar aparātprogrammatūru failiem"
 
 #. TRANSLATORS: we got an invalid response from the server
-#: ../src/ch-flash.c:1074
+#: ../src/ch-flash.c:862
 msgid "The firmware listing has zero size"
 msgstr "Aparātprogrammatūras saraksta izmērs ir nulle"
 
+#. TRANSLATORS: the XML file was corrupt
+#: ../src/ch-flash.c:876
+msgid "Failed to parse the update metadata"
+msgstr ""
+
+#. TRANSLATORS: this is test firmware
+#: ../src/ch-flash.c:903
+msgid "This is a test firmware not intended for general release."
+msgstr ""
+
+#. TRANSLATORS: all bets are off
+#: ../src/ch-flash.c:905
+msgid "This firmware has not been widely tested and may not work as expected."
+msgstr ""
+
 #. TRANSLATORS: the device refused our request to mark
 #. * it lost or stolen
-#: ../src/ch-flash.c:1142
+#: ../src/ch-flash.c:964
 msgid "Failed to set the device as lost or stolen"
 msgstr "Neizdevās iestatīt ierīci ka pazudušu vai nozagtu"
 
 #. TRANSLATORS: we have a blacklist that we match the device against
-#: ../src/ch-flash.c:1157
+#: ../src/ch-flash.c:979
 msgid "This ColorHug has been registered as lost or stolen."
 msgstr "Šis ColorHug ir reģistrēts kā nozudis vai nozagts."
 
 #. TRANSLATORS: We disable the device so it can't go into
 #. * firmware mode without a magic incantation
-#: ../src/ch-flash.c:1166
+#: ../src/ch-flash.c:988
 msgid "The device has now been deactivated."
 msgstr "Šī ierīce tagad ir deaktivēta."
 
 #. TRANSLATORS: We can tell the user the magic incantation if we've
 #. * made a mistake
-#: ../src/ch-flash.c:1171
+#: ../src/ch-flash.c:993
 msgid "Please contact <tt>info@hughski.com</tt> for more details."
 msgstr "Sazinieties ar <tt>info@hughski.com</tt>, lai uzzinātu vairāk."
 
 #. TRANSLATORS: we failed to get the blacklist from the server
-#: ../src/ch-flash.c:1226
+#: ../src/ch-flash.c:1049
 msgid "Failed to get device blacklist"
 msgstr "Neizdevās iegūt ierīču melno sarakstu"
 
+#. TRANSLATORS: we've specified a local file
+#: ../src/ch-flash.c:1074
+msgid "Flashing firmware file..."
+msgstr ""
+
 #. TRANSLATORS: pre-production hardware
-#: ../src/ch-flash.c:1301
+#: ../src/ch-flash.c:1149
 msgid "Prototype ColorHug Detected"
 msgstr "Atrasts ColorHug prototips"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1305
+#: ../src/ch-flash.c:1153
 msgid "ColorHug Detected"
 msgstr "Atrasts ColorHug"
 
 #. TRANSLATORS: fake hardware
-#: ../src/ch-flash.c:1309
+#: ../src/ch-flash.c:1157
 msgid "Emulated ColorHug Detected"
 msgstr "Atrasts emulēts ColorHug"
 
 #. TRANSLATORS: new-issue hardware
-#: ../src/ch-flash.c:1313
+#: ../src/ch-flash.c:1161
 #, c-format
 msgid "ColorHug v%i Detected"
 msgstr "Atrasts ColorHug v%i"
 
 #. TRANSLATORS: the device is in bootloader mode
-#: ../src/ch-flash.c:1324
+#: ../src/ch-flash.c:1172
 msgid "Bootloader version"
 msgstr "Sistēmas ielādētāja versija"
 
 #. TRANSLATORS: the device is in firmware mode
-#: ../src/ch-flash.c:1332
+#: ../src/ch-flash.c:1180
 msgid "Firmware version"
 msgstr "Programmaparatūras versija"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
-#: ../src/ch-flash.c:1351
+#: ../src/ch-flash.c:1199
 msgid "Checking for updates..."
 msgstr "Pārbauda atjauninājumus..."
 
-#. TRANSLATORS: the request failed
-#: ../src/ch-flash.c:1402 ../src/ch-flash.c:1432 ../src/ch-flash.c:1476
-msgid "Failed to contact ColorHug"
-msgstr "Neizdevās sazināties ar ColorHug"
-
 #. TRANSLATORS: request the firmware version from the device
-#: ../src/ch-flash.c:1570
+#: ../src/ch-flash.c:1360
 msgid "Getting firmware version..."
 msgstr "Saņem aparātprogrammatūras versiju..."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:1605
+#: ../src/ch-flash.c:1399
 msgid "Update details"
 msgstr "Informācija par atjauninājumu"
 
 #. TRANSLATORS: show the user some markdown formatted text
-#: ../src/ch-flash.c:1695
+#: ../src/ch-flash.c:1489
 msgid "See details about the update"
 msgstr "Apskatiet sīkāku informāciju par atjauninājumu"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
-#: ../src/ch-flash.c:1822
+#: ../src/ch-flash.c:1631
 msgid "ColorHug Flash Program"
 msgstr "ColorHug zibatmiņas programma"
 
 #. TRANSLATORS: this is a command alias
-#: ../src/ch-main.c:90
+#: ../src/ch-main.c:88
 #, c-format
 msgid "Alias to %s"
 msgstr "%s alias"
 
-#: ../src/ch-main.c:168
+#: ../src/ch-main.c:166
 msgid "Command not found, valid commands are:"
 msgstr "Komanda nav atrasta, derīgās komandas ir:"
 
+#. TRANSLATORS: ask before we set these
+#: ../src/ch-main.c:1396
+msgid "Set these values as the dark offsets"
+msgstr ""
+
+#. TRANSLATORS: this is the enabled sensor color
+#: ../src/ch-main.c:1536
+msgid "Color"
+msgstr ""
+
+#. TRANSLATORS: this is the sensor scale factor
+#: ../src/ch-main.c:1540 ../src/ch-main.c:1581 ../src/ch-main.c:1632
+msgid "Multiplier"
+msgstr ""
+
+#. TRANSLATORS: this is the sensor sample time
+#: ../src/ch-main.c:1544 ../src/ch-main.c:1585 ../src/ch-main.c:1636
+msgid "Integral"
+msgstr ""
+
+#. TRANSLATORS: this is the number of pulses detected
+#: ../src/ch-main.c:1547
+msgid "Pulses"
+msgstr ""
+
+#. TRANSLATORS: confirmation
+#: ../src/ch-main.c:1863
+msgid "Flash the device?"
+msgstr ""
+
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1391
+#: ../src/ch-main.c:2312
 msgid "Gets the sensor color filter"
 msgstr "Saņem sensora krāsu filtru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1396
+#: ../src/ch-main.c:2317
 msgid "Sets the sensor color filter"
 msgstr "Iestata sensora krāsu filtru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1401
+#: ../src/ch-main.c:2322
 msgid "Gets the sensor multiplier"
 msgstr "Saņem sensora reizinātāju"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1406
+#: ../src/ch-main.c:2327
 msgid "Sets the sensor multiplier"
 msgstr "Iestata sensora reizinātāju"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1411
+#: ../src/ch-main.c:2332
 msgid "Gets the sensor sample read time"
 msgstr "Saņem sensora parauga nolasīšanas laiku"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1416
+#: ../src/ch-main.c:2337
 msgid "Sets the sensor sample read time"
 msgstr "Iestata sensora parauga nolasīšanas laiku"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1421
+#: ../src/ch-main.c:2342
 msgid "Gets the sensor firmware version"
 msgstr "Saņem sensora aparātprogrammatūras versiju"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1426
+#: ../src/ch-main.c:2347
 msgid "Gets the sensor calibration matrix"
 msgstr "Saņem sensora kalibrācijas matricu"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1431
+#: ../src/ch-main.c:2352
 msgid "Sets the sensor calibration matrix"
 msgstr "Iestata sensora kalibrācijas matricu"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1436
+#: ../src/ch-main.c:2357
 msgid "Clear the sensor calibration matrix"
 msgstr "Attīra sensora kalibrācijas matricu"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1441
+#: ../src/ch-main.c:2362
 msgid "List the sensor calibration matrices"
 msgstr "Uzskaita sensora kalibrācijas matricas"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1446
+#: ../src/ch-main.c:2367
 msgid "Sets the sensor calibration matrix from a CCMX file"
 msgstr "Iestata sensora kalibrācijas matricu no CCMX faila"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1451
+#: ../src/ch-main.c:2372
 msgid "Gets the sensor serial number"
 msgstr "Saņem sensora sērijas numuru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1456
+#: ../src/ch-main.c:2377
 msgid "Sets the sensor serial number"
 msgstr "Iestata sensora sērijas numuru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1461
+#: ../src/ch-main.c:2382
+msgid "Gets the owner's name"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2387
+msgid "Sets the owner's name"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2392
+msgid "Gets the owner's email address"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2397
+msgid "Sets the owner's email address"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2402
 msgid "Gets the LED values"
 msgstr "Saņem LED vērtības"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1466
+#: ../src/ch-main.c:2407
 msgid "Sets the LEDs"
 msgstr "Iestata LED vērtības"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1471
+#: ../src/ch-main.c:2412
+msgid "Gets the PCB errata"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2417
+msgid "Sets the PCB errata"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2422
 msgid "Gets the dark offset values"
 msgstr "Saņem tumšās nobīdes vērtības"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1476
+#: ../src/ch-main.c:2427
 msgid "Sets the dark offset values"
 msgstr "Iestata tumšās nobīdes vērtības"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1481
+#: ../src/ch-main.c:2432
 msgid "Writes the EEPROM with updated values"
 msgstr "Raksta EEPROM ar atjauninātajām vērtībām"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1486
+#: ../src/ch-main.c:2437
 msgid "Takes a reading"
 msgstr "Nolasa mērījumu"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1491
+#: ../src/ch-main.c:2442
 msgid "Takes all color readings (to device RGB)"
 msgstr "Nolasa visu krāsu mērījumus (uz ierīces RGB)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1496
+#: ../src/ch-main.c:2447
 msgid "Takes all color readings (to XYZ)"
 msgstr "Nolasa visu krāsu mērījumus (uz XYZ)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1501
+#: ../src/ch-main.c:2452
 msgid "Reset the processor back to the bootloader"
 msgstr "Atstatīt procesoru atpakaļ uz sistēmas ielādētāju"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1506
+#: ../src/ch-main.c:2457 ../src/ch-main.c:2462
 msgid "Flash firmware into the processor"
 msgstr "Atjaunināt aparātprogrammatūru procesorā"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1511
+#: ../src/ch-main.c:2467
+msgid "Read EEPROM at a specified address"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2472
+msgid "Erase EEPROM at a specified address"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2477
+msgid "Write EEPROM at a specified address"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2482
 msgid "Gets the pre scale constant"
 msgstr "Saņem pirms pārveidošanas skalas konstanti"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1516
+#: ../src/ch-main.c:2487
 msgid "Sets the pre scale constant"
 msgstr "Iestata pirms pārveidošanas skalas konstanti"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1521
+#: ../src/ch-main.c:2492
 msgid "Gets the post scale constant"
 msgstr "Saņem pēc pārveidošanas skalas konstanti"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1526
+#: ../src/ch-main.c:2497
 msgid "Sets the post scale constant"
 msgstr "Iestata pēc pārveidošanas skalas konstanti"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1531
+#: ../src/ch-main.c:2502
 msgid "Sets the flash success"
 msgstr "Iestata atjaunināšanas veiksmīgumu"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1536
+#: ../src/ch-main.c:2507
 msgid "Boots from the bootloader into the firmware"
 msgstr "Ielādē no sistēmas ielādētāja uz aparātprogrammatūru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1541
+#: ../src/ch-main.c:2512
 msgid "Gets the sensor calibration map"
 msgstr "Saņem sensora kalibrācijas karti"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1546
+#: ../src/ch-main.c:2517
 msgid "Sets the sensor calibration map"
 msgstr "Iestata sensora kalibrācijas karti"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:1551
+#: ../src/ch-main.c:2522
 msgid "Gets the hardware version"
 msgstr "Saņem aparatūras versiju"
 
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:2527
+msgid "Gets an array of raw samples"
+msgstr ""
+
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:1564
+#: ../src/ch-main.c:2540
 msgid "Color Management"
 msgstr "Krāsu pārvaldība"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:1581
+#: ../src/ch-main.c:2557
 msgid "No connection to device:"
 msgstr "Nav savienojuma ar ierīci:"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:103
-msgid "Failed to set calibration"
-msgstr "Neizdevās iestatīt kalibrēšanu"
-
-#. TRANSLATORS: post scale is applied after the XYZ conversion
-#: ../src/ch-util.c:115
-msgid "Failed to set post scale"
-msgstr "Neizdevās iestatīt pēc pārveidošanas skalu"
-
-#. TRANSLATORS: pre scale is applied after the dRGB
-#. * sample but before the XYZ conversion
-#: ../src/ch-util.c:128
-msgid "Failed to set pre scale"
-msgstr "Neizdevās iestatīt pirms pārveidošanas skalu"
+#: ../src/ch-util.c:184
+msgid "Failed to get device status"
+msgstr ""
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:186
-msgid "Failed to get LED status"
-msgstr "Neizdevās iegūt LED statusu"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:205
-msgid "Failed to get color select"
-msgstr "Neizdevās iegūt krāsas izvēli"
-
-#. TRANSLATORS: the multiplier is the scale factor used
-#. * when using the sensor
-#: ../src/ch-util.c:220
-msgid "Failed to get multiplier"
-msgstr "Neizdevās iegūt reizinātāju"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:236
-msgid "Failed to get firmware version"
-msgstr "Neizdevās iegūt aparātprogrammatūras versiju"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:258
-msgid "Failed to get serial number"
-msgstr "Neizdevās iegūt sērijas numuru"
-
-#. TRANSLATORS: failed to get the absolute black offset
-#: ../src/ch-util.c:278
-msgid "Failed to get dark offsets"
-msgstr "Neizdevās iegūt tumšās nobīdes"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:305
+#: ../src/ch-util.c:249
 msgid "Failed to get calibration data, resetting"
 msgstr "Neizdevās iegūt kalibrācijas datus, atstata"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:327
-msgid "Failed to get pre scale"
-msgstr "Neizdevās iegūt pirms pārveidošanas skalu"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:343
-msgid "Failed to get post scale"
-msgstr "Neizdevās iegūt pēc pārveidošanas skalu"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:359
-msgid "Failed to get sample read time"
-msgstr "Neizdevās saņemt parauga nolasīšanas laiku"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:425
+#: ../src/ch-util.c:344
 msgid "Failed to write EEPROM"
 msgstr "Neizdevās ierakstīt EEPROM"
 
-#. TRANSLATORS: we have to enable the sensor
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:451 ../src/ch-util.c:535 ../src/ch-util.c:628
-msgid "Failed to turn on sensor"
-msgstr "Neizdevās ieslēgt sensoru"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:466 ../src/ch-util.c:551 ../src/ch-util.c:642
+#: ../src/ch-util.c:378 ../src/ch-util.c:456 ../src/ch-util.c:534
 msgid "Failed to take readings"
 msgstr "Neizdevās veikt nolasīšanu"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:616
-msgid "Failed to reset dark offsets"
-msgstr "Neizdevās atstatīt tumšās nobīdes"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:654
+#: ../src/ch-util.c:550
 msgid "Failed to set dark offsets"
 msgstr "Neizdevās iestatīt tumšās nobīdes"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:691
-msgid "Failed to reset processor"
-msgstr "Neizdevās atstatīt procesoru"
-
-#. TRANSLATORS: dialog for chosing the firmware
-#: ../src/ch-util.c:714
-msgid "Select firmware file"
-msgstr "Izvēlieties aparātprogrammatūras failu"
-
-#. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-util.c:724
-msgid "Supported firmware files"
-msgstr "Atbalstītie aparātprogrammatūras faili"
-
-#. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-util.c:731
-msgid "Firmware images"
-msgstr "Aparātprogrammatūras attēli"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:768
-msgid "Failed to flash new firmware"
-msgstr "Neizdevās atjaunināt uz jauno aparātprogrammatūru"
-
-#. TRANSLATORS: internal device error
-#: ../src/ch-util.c:799
+#: ../src/ch-util.c:595
 msgid "Failed to set color select"
 msgstr "Neizdevās iestatīt krāsas izvēli"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:820
+#: ../src/ch-util.c:622
 msgid "Failed to set serial number"
 msgstr "Neizdevās iestatīt sērijas numuru"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:847 ../src/ch-util.c:874
+#: ../src/ch-util.c:653 ../src/ch-util.c:684
 msgid "Failed to set LEDs"
 msgstr "Neizdevās iestatīt LED"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:899
+#: ../src/ch-util.c:713
 msgid "Failed to set multiplier"
 msgstr "Neizdevās iestatīt reizinātāju"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:964
+#: ../src/ch-util.c:782
 msgid "Failed to set sample read time"
 msgstr "Neizdevās iestatīt parauga nolasīšanas laiku"
 
 #. TRANSLATORS: internal device error
-#: ../src/ch-util.c:1010
+#: ../src/ch-util.c:863
 msgid "Failed to connect to device"
 msgstr "Neizdevās savienoties ar ierīci"
 
 #. TRANSLATORS: A program to do low level commands on the hardware
-#: ../src/ch-util.c:1100
+#: ../src/ch-util.c:947
 msgid "ColorHug command line tool"
 msgstr "ColorHug komandrindas rīks"
-
-

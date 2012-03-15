@@ -1,3 +1,22 @@
+Version 0.1.7
+~~~~~~~~~~~~~
+Released: 2012-03-15
+
+New Features:
+ - Add a class responsible for async-queued-operations to multiple devices
+ - Allow the user to update to test firmware if enabled in GSettings
+ - Create a libcolorhug library that is designed for low level access to the device
+
+Bugfixes:
+ - Add self test code to test the new incomplete-request functionality
+ - Convert colorhug-ccmx to using ChDeviceQueue to decrease the startup delay
+ - Convert colorhug-flash to using ChDeviceQueue to increase the flash speed
+ - Convert the colormgr tool to using ChDeviceQueue
+ - Correctly detect the failure to re-enumerate
+ - Do not hardcode the server path, instead set it in the GSettings schema
+ - Do not show an empty warning box if there is no firmware flash warning
+ - Do not use g_usleep() when waiting for a device reconnect
+
 Version 0.1.6
 ~~~~~~~~~~~~~
 Released: 2012-03-04
