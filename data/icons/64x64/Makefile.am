@@ -5,6 +5,7 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = 				\
+	colorhug-ccmx.png		\
 	colorhug-flash.png		\
 	colorhug.png
 

@@ -6,6 +6,7 @@ iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = 				\
 	colorimeter-colorhug-inactive.png \
+	colorhug-ccmx.png		\
 	colorhug-flash.png		\
 	colorhug.png
 

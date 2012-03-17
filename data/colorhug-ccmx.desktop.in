@@ -1,7 +1,7 @@
 [Desktop Entry]
 _Name=CCMX Loader
 _Comment=Modify the calibration matrices on the ColorHug device
-Icon=colorhug
+Icon=colorhug-ccmx
 Exec=colorhug-ccmx %F
 Terminal=false
 Type=Application
