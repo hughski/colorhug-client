@@ -5,7 +5,6 @@ INCLUDES =						\
 	$(COLORD_CFLAGS)				\
 	$(LCMS_CFLAGS)					\
 	$(SOUP_CFLAGS)					\
-	$(SQLITE_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"Ch\"				\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
@@ -32,7 +31,6 @@ colorhug_LDADD =					\
 	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\
-	$(SQLITE_LIBS)					\
 	$(COLORHUG_LIBS)				\
 	-lm
 

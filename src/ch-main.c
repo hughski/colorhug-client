@@ -26,7 +26,6 @@
 #include <locale.h>
 #include <lcms2.h>
 #include <math.h>
-#include <sqlite3.h>
 #include <colorhug.h>
 
 typedef struct {
@@ -907,78 +906,6 @@ out:
 }
 
 /**
- * ch_util_get_next_serial_number:
- **/
-static guint32
-ch_util_get_next_serial_number (GError **error)
-{
-	const gchar *statement;
-	gboolean ret;
-	gchar *error_msg = NULL;
-	gchar *filename = NULL;
-	gchar *location;
-	GFile *file = NULL;
-	gint rc;
-	guint32 serial_number = 0;
-	sqlite3 *db = NULL;
-
-	/* open database */
-	location = g_build_filename (g_get_user_config_dir (),
-				     "colorhug",
-				     NULL);
-	file = g_file_new_for_path (location);
-	ret = g_file_query_exists (file, NULL);
-	if (!ret) {
-		ret = g_file_make_directory_with_parents (file, NULL, error);
-		if (!ret)
-			goto out;
-	}
-	filename = g_build_filename (location,
-				     "calibration.db",
-				     NULL);
-	g_debug ("trying to open database '%s'", filename);
-	rc = sqlite3_open (filename, &db);
-	if (rc != SQLITE_OK) {
-		g_set_error (error, 1, 0,
-			     "can't open calibration database: %s",
-			     sqlite3_errmsg (db));
-		goto out;
-	}
-
-	/* create if required */
-	rc = sqlite3_exec (db, "SELECT * FROM serial_numbers LIMIT 1",
-			   NULL, NULL, &error_msg);
-	if (rc != SQLITE_OK) {
-		g_debug ("creating table to repair: %s", error_msg);
-		sqlite3_free (error_msg);
-		statement = "CREATE TABLE serial_numbers ("
-			    "last INTEGER PRIMARY KEY AUTOINCREMENT,"
-			    "timespec TEXT);";
-		sqlite3_exec (db, statement, NULL, NULL, NULL);
-	}
-
-	/* add newest */
-	statement = "INSERT INTO serial_numbers (timespec) VALUES ('fixme');";
-	rc = sqlite3_exec (db, statement, NULL, NULL, &error_msg);
-	if (rc != SQLITE_OK) {
-		g_set_error (error, 1, 0,
-			     "failed to add entry: %s",
-			     sqlite3_errmsg (db));
-		goto out;
-	}
-
-	/* yay, atomic serial number */
-	serial_number = sqlite3_last_insert_rowid (db);
-out:
-	g_object_unref (file);
-	g_free (filename);
-	g_free (location);
-	if (db != NULL)
-		sqlite3_close (db);
-	return serial_number;
-}
-
-/**
  * ch_util_set_serial_number:
  **/
 static gboolean
@@ -994,15 +921,7 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect 'value' or 'auto'");
 		goto out;
 	}
-	if (g_strcmp0 (values[0], "auto") == 0) {
-		serial_number = ch_util_get_next_serial_number (error);
-		if (serial_number == 0) {
-			ret = FALSE;
-			goto out;
-		}
-	} else {
-		serial_number = g_ascii_strtoull (values[0], NULL, 10);
-	}
+	serial_number = g_ascii_strtoull (values[0], NULL, 10);
 	if (serial_number == 0) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,

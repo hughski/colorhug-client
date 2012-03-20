@@ -18,7 +18,6 @@ BuildRequires: lcms2-devel
 BuildRequires: libsoup-devel
 BuildRequires: libtool
 BuildRequires: docbook-utils
-BuildRequires: sqlite-devel
 
 %description
 The Hughski ColorHug colorimeter is a low cost open-source hardware
