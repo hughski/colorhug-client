@@ -126,6 +126,7 @@ PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.0)
 PKG_CHECK_MODULES(COLORD, colord >= 0.1.15)
 PKG_CHECK_MODULES(LCMS, lcms2)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
+PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
 
 dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files

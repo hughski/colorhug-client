@@ -5,6 +5,7 @@ INCLUDES =						\
 	$(COLORD_CFLAGS)				\
 	$(LCMS_CFLAGS)					\
 	$(SOUP_CFLAGS)					\
+	$(CANBERRA_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"Ch\"				\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
@@ -67,6 +68,7 @@ colorhug_flash_LDADD =					\
 	$(SOUP_LIBS)					\
 	$(LCMS_LIBS)					\
 	$(COLORHUG_LIBS)				\
+	$(CANBERRA_LIBS)				\
 	-lm
 
 colorhug_flash_CFLAGS =					\
