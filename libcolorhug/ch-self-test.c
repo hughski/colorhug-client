@@ -28,6 +28,7 @@
 #include <math.h>
 
 #include "ch-math.h"
+#include "ch-device.h"
 #include "ch-device-queue.h"
 
 static guint device_failed_cnt = 0;
@@ -96,18 +97,7 @@ ch_test_device_queue_func (void)
 			 g_usb_device_get_platform_id (device));
 
 		/* load device */
-		ret = g_usb_device_open (device, &error);
-		g_assert_no_error (error);
-		g_assert (ret);
-		ret = g_usb_device_set_configuration (device,
-						      CH_USB_CONFIG,
-						      &error);
-		g_assert_no_error (error);
-		g_assert (ret);
-		ret = g_usb_device_claim_interface (device,
-						    CH_USB_INTERFACE,
-						    G_USB_DEVICE_CLAIM_INTERFACE_BIND_KERNEL_DRIVER,
-						    &error);
+		ret = ch_device_open (device, &error);
 		g_assert_no_error (error);
 		g_assert (ret);
 
