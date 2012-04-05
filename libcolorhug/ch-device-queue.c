@@ -59,8 +59,16 @@ typedef gboolean (*ChDeviceQueueParseFunc)	(guint8		*output_buffer,
 						 gpointer	 user_data,
 						 GError		**error);
 
+typedef enum {
+	CH_DEVICE_QUEUE_DATA_STATE_PENDING,
+	CH_DEVICE_QUEUE_DATA_STATE_WAITING_FOR_HW,
+	CH_DEVICE_QUEUE_DATA_STATE_CANCELLED,
+	CH_DEVICE_QUEUE_DATA_STATE_COMPLETE,
+	CH_DEVICE_QUEUE_DATA_STATE_UNKNOWN
+} ChDeviceQueueDataState;
+
 typedef struct {
-	gboolean		 complete;
+	ChDeviceQueueDataState	 state;
 	GUsbDevice		*device;
 	guint8			 cmd;
 	guint8			*buffer_in;	/* we own this */
@@ -125,7 +133,7 @@ ch_device_queue_device_force_complete (ChDeviceQueue *device_queue, GUsbDevice *
 		data = g_ptr_array_index (device_queue->priv->data_array, i);
 		device_id_tmp = g_usb_device_get_platform_id (data->device);
 		if (g_strcmp0 (device_id_tmp, device_id) == 0)
-			data->complete = TRUE;
+			data->state = CH_DEVICE_QUEUE_DATA_STATE_CANCELLED;
 	}
 }
 
@@ -147,7 +155,8 @@ ch_device_queue_update_progress (ChDeviceQueue *device_queue)
 	/* find out how many commands are complete */
 	for (i = 0; i < device_queue->priv->data_array->len; i++) {
 		data = g_ptr_array_index (device_queue->priv->data_array, i);
-		if (data->complete)
+		if (data->state == CH_DEVICE_QUEUE_DATA_STATE_COMPLETE ||
+		    data->state == CH_DEVICE_QUEUE_DATA_STATE_CANCELLED)
 			complete++;
 	}
 
@@ -214,6 +223,7 @@ ch_device_queue_process_write_command_cb (GObject *source,
 	}
 
 	/* update progress */
+	data->state = CH_DEVICE_QUEUE_DATA_STATE_COMPLETE;
 	ch_device_queue_update_progress (helper->device_queue);
 
 	/* is there another pending command for this device */
@@ -263,7 +273,7 @@ ch_device_queue_process_data (ChDeviceQueueHelper *helper,
 	gboolean ret = FALSE;
 
 	/* is this command already complete? */
-	if (data->complete)
+	if (data->state == CH_DEVICE_QUEUE_DATA_STATE_COMPLETE)
 		goto out;
 
 	/* is this device already busy? */
@@ -292,7 +302,7 @@ ch_device_queue_process_data (ChDeviceQueueHelper *helper,
 	ret = TRUE;
 
 	/* remove this from the command queue -- TODO: retries? */
-	data->complete = TRUE;
+	data->state = CH_DEVICE_QUEUE_DATA_STATE_WAITING_FOR_HW;
 out:
 	return ret;
 }
@@ -451,6 +461,7 @@ ch_device_queue_add_internal (ChDeviceQueue		*device_queue,
 	g_return_if_fail (G_USB_IS_DEVICE (device));
 
 	data = g_new0 (ChDeviceQueueData, 1);
+	data->state = CH_DEVICE_QUEUE_DATA_STATE_PENDING;
 	data->parse_func = parse_func;
 	data->user_data = user_data;
 	data->cmd = cmd;
