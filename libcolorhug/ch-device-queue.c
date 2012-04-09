@@ -168,6 +168,26 @@ ch_device_queue_update_progress (ChDeviceQueue *device_queue)
 }
 
 /**
+ * ch_device_queue_count_in_state:
+ **/
+static guint
+ch_device_queue_count_in_state (ChDeviceQueue *device_queue,
+				ChDeviceQueueDataState state)
+{
+	guint i;
+	guint cnt = 0;
+	ChDeviceQueueData *data;
+
+	/* find any data objects in a specific state */
+	for (i = 0; i < device_queue->priv->data_array->len; i++) {
+		data = g_ptr_array_index (device_queue->priv->data_array, i);
+		if (data->state == state)
+			cnt++;
+	}
+	return cnt;
+}
+
+/**
  * ch_device_queue_process_write_command_cb:
  **/
 static void
@@ -182,6 +202,7 @@ ch_device_queue_process_write_command_cb (GObject *source,
 	gchar *error_msg = NULL;
 	GError *error = NULL;
 	guint i;
+	guint pending_commands;
 	GUsbDevice *device = G_USB_DEVICE (source);
 
 	/* mark it as not in use */
@@ -235,7 +256,12 @@ ch_device_queue_process_write_command_cb (GObject *source,
 	}
 out:
 	/* any more pending commands? */
-	if (g_hash_table_size (helper->device_queue->priv->devices_in_use) == 0) {
+	pending_commands = ch_device_queue_count_in_state (helper->device_queue,
+							   CH_DEVICE_QUEUE_DATA_STATE_PENDING);
+	pending_commands += ch_device_queue_count_in_state (helper->device_queue,
+							    CH_DEVICE_QUEUE_DATA_STATE_WAITING_FOR_HW);
+	g_debug ("Pending commands: %i", pending_commands);
+	if (pending_commands == 0) {
 
 		/* should we return the process with an error, or just
 		 * rely on the signal? */
