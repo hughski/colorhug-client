@@ -251,6 +251,7 @@ out:
 		} else {
 			g_simple_async_result_set_op_res_gboolean (helper->res, TRUE);
 		}
+
 		/* remove all commands from the queue, as they are done */
 		g_ptr_array_set_size (helper->device_queue->priv->data_array, 0);
 		g_simple_async_result_complete_in_idle (helper->res);
@@ -1762,6 +1763,7 @@ ch_device_queue_buffer_verify_flash_cb (guint8 *output_buffer,
 	}
 out:
 	g_free (output_buffer);
+	g_free (helper->data);
 	g_free (helper);
 	return ret;
 }
@@ -1789,7 +1791,7 @@ ch_device_queue_verify_flash (ChDeviceQueue *device_queue,
 	/* create a helper structure as the checksum needs an extra
 	 * byte for the checksum */
 	helper = g_new0 (ChDeviceQueueReadFlashHelper, 1);
-	helper->data = (guint8 *) data;
+	helper->data = g_memdup (data, len + 1);
 	helper->len = len;
 	helper->address = address;
 
