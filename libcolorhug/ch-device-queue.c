@@ -56,6 +56,7 @@ enum {
 G_DEFINE_TYPE (ChDeviceQueue, ch_device_queue, G_TYPE_OBJECT)
 
 typedef gboolean (*ChDeviceQueueParseFunc)	(guint8		*output_buffer,
+						 gsize		 output_buffer_size,
 						 gpointer	 user_data,
 						 GError		**error);
 
@@ -217,6 +218,7 @@ ch_device_queue_process_write_command_cb (GObject *source,
 	if (ret && data->parse_func != NULL) {
 		/* do any conversion function */
 		ret = data->parse_func (data->buffer_out,
+					data->buffer_out_len,
 					data->user_data,
 					&error);
 	}
@@ -619,12 +621,24 @@ ch_device_queue_set_multiplier (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_uint16_from_le_cb (guint8 *output_buffer,
+					  gsize output_buffer_size,
 					  gpointer user_data,
 					  GError **error)
 {
+	gboolean ret = TRUE;
 	guint16 *tmp = (guint16 *) output_buffer;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (guint16)) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (guint16), output_buffer_size);
+		goto out;
+	}
 	*tmp = GUINT16_FROM_LE (*tmp);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -632,12 +646,24 @@ ch_device_queue_buffer_uint16_from_le_cb (guint8 *output_buffer,
  **/
 static gboolean
 ch_device_queue_buffer_uint32_from_le_cb (guint8 *output_buffer,
+					  gsize output_buffer_size,
 					  gpointer user_data,
 					  GError **error)
 {
+	gboolean ret = TRUE;
 	guint32 *tmp = (guint32 *) output_buffer;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (guint32)) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (guint32), output_buffer_size);
+		goto out;
+	}
 	*tmp = GUINT32_FROM_LE (*tmp);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -742,11 +768,22 @@ typedef struct {
  **/
 static gboolean
 ch_device_queue_buffer_to_firmware_ver_cb (guint8 *output_buffer,
+					   gsize output_buffer_size,
 					   gpointer user_data,
 					   GError **error)
 {
 	ChDeviceQueueGetFirmwareVerHelper *helper = (void *) user_data;
+	gboolean ret = TRUE;
 	guint16 *tmp = (guint16 *) output_buffer;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (guint16) * 3) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (guint16) * 3, output_buffer_size);
+		goto out;
+	}
 
 	*helper->major = GUINT16_FROM_LE (tmp[0]);
 	*helper->minor = GUINT16_FROM_LE (tmp[1]);
@@ -755,7 +792,8 @@ ch_device_queue_buffer_to_firmware_ver_cb (guint8 *output_buffer,
 	/* yes, we own this */
 	g_free (output_buffer);
 	g_free (helper);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -807,12 +845,23 @@ typedef struct {
  **/
 static gboolean
 ch_device_queue_buffer_to_get_calibration_cb (guint8 *output_buffer,
+					      gsize output_buffer_size,
 					      gpointer user_data,
 					      GError **error)
 {
 	ChDeviceQueueGetCalibrationHelper *helper = (void *) user_data;
+	gboolean ret = TRUE;
 	gdouble *calibration_tmp;
 	guint i;
+
+	/* check buffer size */
+	if (output_buffer_size != 60) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %i, got %" G_GSIZE_FORMAT,
+			     60, output_buffer_size);
+		goto out;
+	}
 
 	/* convert back into floating point */
 	if (helper->calibration != NULL) {
@@ -837,7 +886,8 @@ ch_device_queue_buffer_to_get_calibration_cb (guint8 *output_buffer,
 	/* yes, we own this */
 	g_free (output_buffer);
 	g_free (helper);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -1145,16 +1195,28 @@ ch_device_queue_clear_calibration (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_to_double_cb (guint8 *output_buffer,
+				     gsize output_buffer_size,
 				     gpointer user_data,
 				     GError **error)
 {
 	ChPackedFloat *buffer = (ChPackedFloat *) output_buffer;
+	gboolean ret = TRUE;
 	gdouble *value = (gdouble *) user_data;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (ChPackedFloat)) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (ChPackedFloat), output_buffer_size);
+		goto out;
+	}
 
 	/* convert back into floating point */
 	ch_packed_float_to_double (buffer, value);
 	g_free (output_buffer);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -1430,11 +1492,22 @@ ch_device_queue_write_eeprom (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_dark_offsets_cb (guint8 *output_buffer,
+					gsize output_buffer_size,
 					gpointer user_data,
 					GError **error)
 {
 	CdColorRGB *value = (CdColorRGB *) user_data;
+	gboolean ret = TRUE;
 	guint16 *buffer = (guint16 *) output_buffer;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (guint16) * 3) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (guint16) * 3, output_buffer_size);
+		goto out;
+	}
 
 	/* convert back into floating point */
 	value->R = (gdouble) buffer[0] / (gdouble) 0xffff;
@@ -1443,7 +1516,8 @@ ch_device_queue_buffer_dark_offsets_cb (guint8 *output_buffer,
 
 	/* yes, we own this */
 	g_free (buffer);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -1525,11 +1599,22 @@ ch_device_queue_take_reading_raw (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_triple_rgb_cb (guint8 *output_buffer,
+				      gsize output_buffer_size,
 				      gpointer user_data,
 				      GError **error)
 {
 	CdColorRGB *value = (CdColorRGB *) user_data;
 	ChPackedFloat *buffer = (ChPackedFloat *) output_buffer;
+	gboolean ret = TRUE;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (ChPackedFloat) * 3) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (ChPackedFloat) * 3, output_buffer_size);
+		goto out;
+	}
 
 	/* convert back into floating point */
 	ch_packed_float_to_double (&buffer[0], &value->R);
@@ -1538,7 +1623,8 @@ ch_device_queue_buffer_triple_rgb_cb (guint8 *output_buffer,
 
 	/* yes, we own this */
 	g_free (buffer);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -1572,11 +1658,22 @@ ch_device_queue_take_readings (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_triple_xyz_cb (guint8 *output_buffer,
+				      gsize output_buffer_size,
 				      gpointer user_data,
 				      GError **error)
 {
 	CdColorXYZ *value = (CdColorXYZ *) user_data;
 	ChPackedFloat *buffer = (ChPackedFloat *) output_buffer;
+	gboolean ret = TRUE;
+
+	/* check buffer size */
+	if (output_buffer_size != sizeof (ChPackedFloat) * 3) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     sizeof (ChPackedFloat) * 3, output_buffer_size);
+		goto out;
+	}
 
 	/* convert back into floating point */
 	ch_packed_float_to_double (&buffer[0], &value->X);
@@ -1585,7 +1682,8 @@ ch_device_queue_buffer_triple_xyz_cb (guint8 *output_buffer,
 
 	/* yes, we own this */
 	g_free (buffer);
-	return TRUE;
+out:
+	return ret;
 }
 
 /**
@@ -1689,12 +1787,22 @@ typedef struct {
  **/
 static gboolean
 ch_device_queue_buffer_read_flash_cb (guint8 *output_buffer,
+				      gsize output_buffer_size,
 				      gpointer user_data,
 				      GError **error)
 {
 	ChDeviceQueueReadFlashHelper *helper = (ChDeviceQueueReadFlashHelper *) user_data;
 	gboolean ret = TRUE;
 	guint8 expected_checksum;
+
+	/* check buffer size */
+	if (output_buffer_size != helper->len + 1) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     helper->len + 1, output_buffer_size);
+		goto out;
+	}
 
 	/* verify checksum */
 	expected_checksum = ch_device_queue_calculate_checksum (output_buffer + 1,
@@ -1759,12 +1867,22 @@ ch_device_queue_read_flash (ChDeviceQueue *device_queue,
  **/
 static gboolean
 ch_device_queue_buffer_verify_flash_cb (guint8 *output_buffer,
+					gsize output_buffer_size,
 					gpointer user_data,
 					GError **error)
 {
 	ChDeviceQueueReadFlashHelper *helper = (ChDeviceQueueReadFlashHelper *) user_data;
 	gboolean ret = TRUE;
 	guint8 expected_checksum;
+
+	/* check buffer size */
+	if (output_buffer_size != helper->len + 1) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Wrong output buffer size, expected %" G_GSIZE_FORMAT ", got %" G_GSIZE_FORMAT,
+			     helper->len + 1, output_buffer_size);
+		goto out;
+	}
 
 	/* verify checksum */
 	expected_checksum = ch_device_queue_calculate_checksum (output_buffer + 1,
