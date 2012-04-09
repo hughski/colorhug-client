@@ -804,6 +804,7 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gchar description[CH_CALIBRATION_DESCRIPTION_LEN];
+	GError *error_local = NULL;
 	GString *string;
 	guint16 i;
 
@@ -819,10 +820,15 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 		ret = ch_device_queue_process (priv->device_queue,
 					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 					       NULL,
-					       error);
-		if (ret && description[0] != '\0') {
-			g_string_append_printf (string, "%i\t%s\n",
-						i, description);
+					       &error_local);
+		if (ret) {
+			if (description[0] != '\0') {
+				g_string_append_printf (string, "%i\t%s\n",
+							i, description);
+			}
+		} else {
+			g_debug ("ignoring error: %s", error_local->message);
+			g_clear_error (&error_local);
 		}
 	}
 
