@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-15 19:54+0000\n"
-"PO-Revision-Date: 2012-03-15 19:56+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"PO-Revision-Date: 2012-03-17 19:46+0000\n"
+"Last-Translator: Ferry Huberts <mailings@hupie.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -125,7 +125,7 @@ msgstr "Rood"
 
 #: ../data/ch-util.ui.h:11
 msgid "White"
-msgstr ""
+msgstr "Wit"
 
 #. The last color reading in raw mode
 #: ../data/ch-util.ui.h:13
@@ -140,22 +140,22 @@ msgstr "Versterkingsfactor:"
 #: ../data/ch-util.ui.h:17
 #, no-c-format
 msgid "0% (off)"
-msgstr ""
+msgstr "0% (uit)"
 
 #: ../data/ch-util.ui.h:19
 #, no-c-format
 msgid "20%"
-msgstr ""
+msgstr "20%"
 
 #: ../data/ch-util.ui.h:21
 #, no-c-format
 msgid "2%"
-msgstr ""
+msgstr "2%"
 
 #: ../data/ch-util.ui.h:23
 #, no-c-format
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #. Set the time to collect each reading for
 #: ../data/ch-util.ui.h:25
@@ -164,23 +164,23 @@ msgstr "Voorbeeld leestijd:"
 
 #: ../data/ch-util.ui.h:26
 msgid "5ms"
-msgstr ""
+msgstr "5ms"
 
 #: ../data/ch-util.ui.h:27
 msgid "50ms"
-msgstr ""
+msgstr "50ms"
 
 #: ../data/ch-util.ui.h:28
 msgid "100ms"
-msgstr ""
+msgstr "100ms"
 
 #: ../data/ch-util.ui.h:29
 msgid "200ms"
-msgstr ""
+msgstr "200ms"
 
 #: ../data/ch-util.ui.h:30
 msgid "Maximum"
-msgstr ""
+msgstr "Maximum"
 
 #: ../data/ch-util.ui.h:31
 msgid "Firmware version:"
@@ -278,36 +278,36 @@ msgstr "Werk de firmware van de ColorHug colorimeter bij"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
-msgstr ""
+msgstr "Bepaalt of we de firmware zouden moeten bijwerken om deze te testen"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr ""
+msgstr "Bepaalt of de test firmware zouden moeten laten zien en de gebruiker in staat zouden moeten stellen deze bij te werken."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The location of where firmware updates are stored"
-msgstr ""
+msgstr "De locatie waar de firmware updates opgeslagen worden"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid "The location of where firmware updates and the metadata is stored."
-msgstr ""
+msgstr "De locatie waar de firmware updates en metadata opgeslagen worden"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:5
 msgid "The location of where CCMX files are stored"
-msgstr ""
+msgstr "De locatie waar de CCMS bestanden opgeslagen worden"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:6
 msgid "The location of where CCMX files and the metadata is stored."
-msgstr ""
+msgstr "De locatie waar de CCMX bestanden en metadata opgeslagen worden"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:7
 msgid "The location of where device calibration files are stored"
-msgstr ""
+msgstr "De locatie waar de apparaat calibratie bestanden opgeslagen worden"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:8
 msgid "The location of where device calibration files are stored."
-msgstr ""
+msgstr "De locatie waar de apparaat calibratie bestanden opgeslagen worden."
 
 #: ../src/ch-ccmx.c:131
 msgid "Failed to create directory"
@@ -377,7 +377,7 @@ msgstr "Annuleer"
 #. * maps a specific matrix to a display type
 #: ../src/ch-ccmx.c:694
 msgid "Failed to get the calibration data"
-msgstr ""
+msgstr "Ophalen van de calibratie data is mislukt"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 #: ../src/ch-ccmx.c:762
@@ -519,7 +519,7 @@ msgstr "Booten van de ColorHug is mislukt"
 #. * longer known working
 #: ../src/ch-flash.c:328
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Verifieren van de firmware is mislukt"
 
 #. TRANSLATORS: boot into the new firmware
 #: ../src/ch-flash.c:345
@@ -530,7 +530,7 @@ msgstr "Opstarten van de nieuwe firmware..."
 #. * longer known working
 #: ../src/ch-flash.c:388
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Schrijven van de firmware is mislukt"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
@@ -624,12 +624,12 @@ msgstr "Kon de update metadata niet inlezen"
 #. TRANSLATORS: this is test firmware
 #: ../src/ch-flash.c:903
 msgid "This is a test firmware not intended for general release."
-msgstr ""
+msgstr "Dit is een test firmware die niet bedoeld is voor algemeen gebruik."
 
 #. TRANSLATORS: all bets are off
 #: ../src/ch-flash.c:905
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Deze firmware is niet uitvoerig getest en kan mogelijk niet naar behoren werken."
 
 #. TRANSLATORS: the device refused our request to mark
 #. * it lost or stolen
@@ -865,12 +865,12 @@ msgstr "Stelt de LED waarden in"
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2412
 msgid "Gets the PCB errata"
-msgstr ""
+msgstr "Hallt de PCB errata op"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2417
 msgid "Sets the PCB errata"
-msgstr ""
+msgstr "Stelt de PCB errata in"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2422
@@ -990,7 +990,7 @@ msgstr "Geen verbinding met het apparaat:"
 #. TRANSLATORS: internal device error
 #: ../src/ch-util.c:184
 msgid "Failed to get device status"
-msgstr ""
+msgstr "Ophalen van de apparaat status is mislukt"
 
 #. TRANSLATORS: internal device error
 #: ../src/ch-util.c:249

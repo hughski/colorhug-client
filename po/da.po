@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+#   <olmissen@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-15 19:54+0000\n"
-"PO-Revision-Date: 2012-03-15 19:56+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"PO-Revision-Date: 2012-04-02 10:58+0000\n"
+"Last-Translator: olmissen <olmissen@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,7 +70,7 @@ msgstr "Projektor"
 #. Default light emitting diode matrix
 #: ../data/ch-ccmx.ui.h:18
 msgid "LED"
-msgstr ""
+msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
 #: ../data/ch-ccmx.ui.h:19 ../src/ch-flash.c:1438
@@ -124,7 +125,7 @@ msgstr "Rød"
 
 #: ../data/ch-util.ui.h:11
 msgid "White"
-msgstr ""
+msgstr "Hvid"
 
 #. The last color reading in raw mode
 #: ../data/ch-util.ui.h:13
@@ -139,47 +140,47 @@ msgstr "Multiplier:"
 #: ../data/ch-util.ui.h:17
 #, no-c-format
 msgid "0% (off)"
-msgstr ""
+msgstr "0% (slukket)"
 
 #: ../data/ch-util.ui.h:19
 #, no-c-format
 msgid "20%"
-msgstr ""
+msgstr "20%"
 
 #: ../data/ch-util.ui.h:21
 #, no-c-format
 msgid "2%"
-msgstr ""
+msgstr "2%"
 
 #: ../data/ch-util.ui.h:23
 #, no-c-format
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #. Set the time to collect each reading for
 #: ../data/ch-util.ui.h:25
 msgid "Sample read time:"
-msgstr ""
+msgstr "Tid per prøve:"
 
 #: ../data/ch-util.ui.h:26
 msgid "5ms"
-msgstr ""
+msgstr "5ms"
 
 #: ../data/ch-util.ui.h:27
 msgid "50ms"
-msgstr ""
+msgstr "50ms"
 
 #: ../data/ch-util.ui.h:28
 msgid "100ms"
-msgstr ""
+msgstr "100ms"
 
 #: ../data/ch-util.ui.h:29
 msgid "200ms"
-msgstr ""
+msgstr "200ms"
 
 #: ../data/ch-util.ui.h:30
 msgid "Maximum"
-msgstr ""
+msgstr "Maksimum"
 
 #: ../data/ch-util.ui.h:31
 msgid "Firmware version:"
@@ -322,7 +323,7 @@ msgstr "Filen er tom"
 
 #: ../src/ch-ccmx.c:430
 msgid "Failed to load data"
-msgstr ""
+msgstr "Kunne ikke hente data"
 
 #. TRANSLATORS: the request failed
 #: ../src/ch-ccmx.c:461 ../src/ch-flash.c:1252 ../src/ch-flash.c:1282
@@ -344,17 +345,17 @@ msgstr ""
 #. * it's calibration matrix
 #: ../src/ch-ccmx.c:534
 msgid "Device calibration error"
-msgstr ""
+msgstr "Fejl ved kalibrering af enheden"
 
 #. TRANSLATORS: this is a button
 #: ../src/ch-ccmx.c:539
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorer"
 
 #. TRANSLATORS: this is a button
 #: ../src/ch-ccmx.c:542 ../src/ch-ccmx.c:578
 msgid "Repair"
-msgstr ""
+msgstr "Reparer"
 
 #. TRANSLATORS: device is broken and needs fixing
 #: ../src/ch-ccmx.c:562
@@ -370,7 +371,7 @@ msgstr ""
 #. TRANSLATORS: this is a button
 #: ../src/ch-ccmx.c:575
 msgid "Cancel"
-msgstr ""
+msgstr "Annuller"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
@@ -473,14 +474,14 @@ msgstr "Kunne ikke parse kommando-linjen"
 #. TRANSLATORS: we broke the device
 #: ../src/ch-flash.c:100
 msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr ""
+msgstr "Flashing fejlede, men ColorHug er ikke blevet beskadiget."
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
 #: ../src/ch-flash.c:104
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
-msgstr ""
+msgstr "Fjern ColorHug enheden fra computeren, genindsæt den og genstart dette program"
 
 #. TRANSLATORS: the user has to be online to get firmware
 #: ../src/ch-flash.c:159
@@ -570,24 +571,24 @@ msgstr "Firmware has zero size"
 #. TRANSLATORS: the server gave us an invalid file
 #: ../src/ch-flash.c:573
 msgid "Firmware has incorrect checksum"
-msgstr ""
+msgstr "Firmwaren har en ukorrekt checksum"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 #: ../src/ch-flash.c:661
 msgid "Warnings about this update"
-msgstr ""
+msgstr "Advarsler for denne opdatering"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
 #: ../src/ch-flash.c:669
 msgid "Flash anyway"
-msgstr ""
+msgstr "Flash alligevel"
 
 #. TRANSLATORS: this is the button text to abort the flash process
 #: ../src/ch-flash.c:671
 msgid "Do not flash"
-msgstr ""
+msgstr "Flash ikke"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
@@ -608,7 +609,7 @@ msgstr "Der er en firmware opdatering tilgængelig"
 #. TRANSLATORS: the HTTP request failed
 #: ../src/ch-flash.c:853
 msgid "Failed to get the listing of firmware files"
-msgstr ""
+msgstr "Kunne ikke hente liste over firmware filer"
 
 #. TRANSLATORS: we got an invalid response from the server
 #: ../src/ch-flash.c:862
@@ -656,7 +657,7 @@ msgstr "Kontakt venligst <tt>info@hughski.com</tt> for flere oplysninger."
 #. TRANSLATORS: we failed to get the blacklist from the server
 #: ../src/ch-flash.c:1049
 msgid "Failed to get device blacklist"
-msgstr ""
+msgstr "Kunne ikke hente enheds sortliste"
 
 #. TRANSLATORS: we've specified a local file
 #: ../src/ch-flash.c:1074
@@ -739,12 +740,12 @@ msgstr ""
 #. TRANSLATORS: this is the enabled sensor color
 #: ../src/ch-main.c:1536
 msgid "Color"
-msgstr ""
+msgstr "Farve"
 
 #. TRANSLATORS: this is the sensor scale factor
 #: ../src/ch-main.c:1540 ../src/ch-main.c:1581 ../src/ch-main.c:1632
 msgid "Multiplier"
-msgstr ""
+msgstr "Multiplikator"
 
 #. TRANSLATORS: this is the sensor sample time
 #: ../src/ch-main.c:1544 ../src/ch-main.c:1585 ../src/ch-main.c:1636
@@ -759,7 +760,7 @@ msgstr ""
 #. TRANSLATORS: confirmation
 #: ../src/ch-main.c:1863
 msgid "Flash the device?"
-msgstr ""
+msgstr "Flash enheden?"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2312
@@ -834,7 +835,7 @@ msgstr "Sætter sensorens serienummer"
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2382
 msgid "Gets the owner's name"
-msgstr ""
+msgstr "Viser ejerens navn"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2387

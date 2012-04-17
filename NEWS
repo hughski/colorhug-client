@@ -1,3 +1,21 @@
+Version 0.1.8
+~~~~~~~~~~~~~
+Released: 2012-04-17
+
+New Features:
+ - Add a libusb0.1 example program that can run on RHEL5
+ - Add a simple colorhug-ccmx icon
+ - Make a sound when colorhug-flash fails or completes the update
+
+Bugfixes:
+ - Add gmodule-2.0 to the GLib configure check
+ - Automatically use the correct proxy server using glib-networking
+ - Check the buffer size before attempting to parse
+ - Don't assume const data is available when verifying firmware
+ - Keep track of the device state in ChDeviceQueue
+ - Prevent critical warnings when doing 'colorhug list-calibration'
+ - Use the device state to work out if there are pending commands
+
 Version 0.1.7
 ~~~~~~~~~~~~~
 Released: 2012-03-15

@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-15 19:54+0000\n"
-"PO-Revision-Date: 2012-03-15 19:56+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"PO-Revision-Date: 2012-04-16 17:16+0000\n"
+"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,7 +70,7 @@ msgstr "Projektors"
 #. Default light emitting diode matrix
 #: ../data/ch-ccmx.ui.h:18
 msgid "LED"
-msgstr ""
+msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
 #: ../data/ch-ccmx.ui.h:19 ../src/ch-flash.c:1438
@@ -124,7 +125,7 @@ msgstr "Sarkans"
 
 #: ../data/ch-util.ui.h:11
 msgid "White"
-msgstr ""
+msgstr "Balts"
 
 #. The last color reading in raw mode
 #: ../data/ch-util.ui.h:13
@@ -139,22 +140,22 @@ msgstr "Reizinātājs:"
 #: ../data/ch-util.ui.h:17
 #, no-c-format
 msgid "0% (off)"
-msgstr ""
+msgstr "0% (izslēgts)"
 
 #: ../data/ch-util.ui.h:19
 #, no-c-format
 msgid "20%"
-msgstr ""
+msgstr "20%"
 
 #: ../data/ch-util.ui.h:21
 #, no-c-format
 msgid "2%"
-msgstr ""
+msgstr "2%"
 
 #: ../data/ch-util.ui.h:23
 #, no-c-format
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #. Set the time to collect each reading for
 #: ../data/ch-util.ui.h:25
@@ -163,23 +164,23 @@ msgstr "Parauga nolasīšanas laiks:"
 
 #: ../data/ch-util.ui.h:26
 msgid "5ms"
-msgstr ""
+msgstr "5ms"
 
 #: ../data/ch-util.ui.h:27
 msgid "50ms"
-msgstr ""
+msgstr "50ms"
 
 #: ../data/ch-util.ui.h:28
 msgid "100ms"
-msgstr ""
+msgstr "100ms"
 
 #: ../data/ch-util.ui.h:29
 msgid "200ms"
-msgstr ""
+msgstr "200ms"
 
 #: ../data/ch-util.ui.h:30
 msgid "Maximum"
-msgstr ""
+msgstr "Maksimums"
 
 #: ../data/ch-util.ui.h:31
 msgid "Firmware version:"
@@ -277,36 +278,36 @@ msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
-msgstr ""
+msgstr "Vai vajadzētu atjaunināt uz testa aparātprogrammatūru"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr ""
+msgstr "Vai vajadzētu rādīt testa aparātprogrammatūru un ļaut lietotājam uz to atjaunināt."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The location of where firmware updates are stored"
-msgstr ""
+msgstr "Vieta, kur atrodas aparātprogrammatūras atjauninājumi"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid "The location of where firmware updates and the metadata is stored."
-msgstr ""
+msgstr "Vieta, kur glabājas aparātprogrammatūras atjauninājumi un metadati."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:5
 msgid "The location of where CCMX files are stored"
-msgstr ""
+msgstr "Vieta, kur tiek glabāti CCMX faili"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:6
 msgid "The location of where CCMX files and the metadata is stored."
-msgstr ""
+msgstr "Vieta, kur tiek glabāti CCMX faili un metadati."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:7
 msgid "The location of where device calibration files are stored"
-msgstr ""
+msgstr "Vieta, kur tiek glabāti ierīces kalibrēšanas faili"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:8
 msgid "The location of where device calibration files are stored."
-msgstr ""
+msgstr "Vieta, kur tiek glabāti ierīces kalibrēšanas faili."
 
 #: ../src/ch-ccmx.c:131
 msgid "Failed to create directory"
@@ -322,7 +323,7 @@ msgstr "Faila izmērs ir nulle"
 
 #: ../src/ch-ccmx.c:430
 msgid "Failed to load data"
-msgstr ""
+msgstr "Neizdevās ielādēt datus"
 
 #. TRANSLATORS: the request failed
 #: ../src/ch-ccmx.c:461 ../src/ch-flash.c:1252 ../src/ch-flash.c:1282
@@ -338,45 +339,45 @@ msgstr "Neizdevās iestatīt ziņojumu"
 #. TRANSLATORS: device is broken and needs fixing
 #: ../src/ch-ccmx.c:526
 msgid "The ColorHug is missing the factory calibration values."
-msgstr ""
+msgstr "ColorHug trūkst rūpnīcas kalibrēšanas vērtības."
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
 #: ../src/ch-ccmx.c:534
 msgid "Device calibration error"
-msgstr ""
+msgstr "Ierīces kalibrēšanas kļūda"
 
 #. TRANSLATORS: this is a button
 #: ../src/ch-ccmx.c:539
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorēt"
 
 #. TRANSLATORS: this is a button
 #: ../src/ch-ccmx.c:542 ../src/ch-ccmx.c:578
 msgid "Repair"
-msgstr ""
+msgstr "Salabot"
 
 #. TRANSLATORS: device is broken and needs fixing
 #: ../src/ch-ccmx.c:562
 msgid "Update the factory calibration values?"
-msgstr ""
+msgstr "Atjaunināt rūpnīcas kalibrēšanas vērtības?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
 #: ../src/ch-ccmx.c:570
 msgid "Device calibration update"
-msgstr ""
+msgstr "Ierīces kalibrēšanas atjauninājums"
 
 #. TRANSLATORS: this is a button
 #: ../src/ch-ccmx.c:575
 msgid "Cancel"
-msgstr ""
+msgstr "Atcelt"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 #: ../src/ch-ccmx.c:694
 msgid "Failed to get the calibration data"
-msgstr ""
+msgstr "Neizdevās saņemt kalibrēšanas datus"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 #: ../src/ch-ccmx.c:762
@@ -458,7 +459,7 @@ msgstr "Rādīt papildu atkļūdošanas informāciju"
 #. TRANSLATORS: command line option
 #: ../src/ch-ccmx.c:1673
 msgid "Repair the factory calibration matrix"
-msgstr ""
+msgstr "Salabot ražotnes kalibrācijas matricu"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
@@ -480,7 +481,7 @@ msgstr "Ierīces zibatmiņas atjaunināšana neizdevās, bet ColorHug nav bojāt
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
-msgstr ""
+msgstr "Izņemiet ColorHug no datora, atkal ievietojiet to un atkal palaidiet šo programmu."
 
 #. TRANSLATORS: the user has to be online to get firmware
 #: ../src/ch-flash.c:159
@@ -518,7 +519,7 @@ msgstr "Neizdevās ielādēt ColorHug"
 #. * longer known working
 #: ../src/ch-flash.c:328
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Neizdevās pārbaudīt aparātprogrammatūru"
 
 #. TRANSLATORS: boot into the new firmware
 #: ../src/ch-flash.c:345
@@ -529,7 +530,7 @@ msgstr "Startē jauno aparātprogrammatūru..."
 #. * longer known working
 #: ../src/ch-flash.c:388
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Neizdevās ierakstīt aparātprogrammatūru"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
@@ -570,24 +571,24 @@ msgstr "Aparātprogrammatūras izmērs ir nulle"
 #. TRANSLATORS: the server gave us an invalid file
 #: ../src/ch-flash.c:573
 msgid "Firmware has incorrect checksum"
-msgstr ""
+msgstr "Aparātprogrammatūrai ir nepareiza kontrolsumma."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 #: ../src/ch-flash.c:661
 msgid "Warnings about this update"
-msgstr ""
+msgstr "Brīdinājumi par šo atjauninājumu"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
 #: ../src/ch-flash.c:669
 msgid "Flash anyway"
-msgstr ""
+msgstr "Tomēr pārrakstīt zibatmiņu"
 
 #. TRANSLATORS: this is the button text to abort the flash process
 #: ../src/ch-flash.c:671
 msgid "Do not flash"
-msgstr ""
+msgstr "Nepārrakstīt zibatmiņu"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
@@ -618,17 +619,17 @@ msgstr "Aparātprogrammatūras saraksta izmērs ir nulle"
 #. TRANSLATORS: the XML file was corrupt
 #: ../src/ch-flash.c:876
 msgid "Failed to parse the update metadata"
-msgstr ""
+msgstr "Neizdevās noparsēt atjauninājuma metadatus"
 
 #. TRANSLATORS: this is test firmware
 #: ../src/ch-flash.c:903
 msgid "This is a test firmware not intended for general release."
-msgstr ""
+msgstr "Šī ir testēšanas aparātprogrammatūra, kas nav paredzēta vispārīgai lietošanai."
 
 #. TRANSLATORS: all bets are off
 #: ../src/ch-flash.c:905
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Šī aparātprogrammatūra nav plaši testēta un varētu nedarboties, kā paredzēts."
 
 #. TRANSLATORS: the device refused our request to mark
 #. * it lost or stolen
@@ -661,7 +662,7 @@ msgstr "Neizdevās iegūt ierīču melno sarakstu"
 #. TRANSLATORS: we've specified a local file
 #: ../src/ch-flash.c:1074
 msgid "Flashing firmware file..."
-msgstr ""
+msgstr "Pārraksta aparātprogrammatūras failu"
 
 #. TRANSLATORS: pre-production hardware
 #: ../src/ch-flash.c:1149
@@ -734,32 +735,32 @@ msgstr "Komanda nav atrasta, derīgās komandas ir:"
 #. TRANSLATORS: ask before we set these
 #: ../src/ch-main.c:1396
 msgid "Set these values as the dark offsets"
-msgstr ""
+msgstr "Iestatīt šīs vērtības kā tumšās nobīdes"
 
 #. TRANSLATORS: this is the enabled sensor color
 #: ../src/ch-main.c:1536
 msgid "Color"
-msgstr ""
+msgstr "Krāsa"
 
 #. TRANSLATORS: this is the sensor scale factor
 #: ../src/ch-main.c:1540 ../src/ch-main.c:1581 ../src/ch-main.c:1632
 msgid "Multiplier"
-msgstr ""
+msgstr "Reizinātājs"
 
 #. TRANSLATORS: this is the sensor sample time
 #: ../src/ch-main.c:1544 ../src/ch-main.c:1585 ../src/ch-main.c:1636
 msgid "Integral"
-msgstr ""
+msgstr "Integrālais"
 
 #. TRANSLATORS: this is the number of pulses detected
 #: ../src/ch-main.c:1547
 msgid "Pulses"
-msgstr ""
+msgstr "Pulsi"
 
 #. TRANSLATORS: confirmation
 #: ../src/ch-main.c:1863
 msgid "Flash the device?"
-msgstr ""
+msgstr "Pārrakstīt ierīces zibatmiņu?"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2312
@@ -834,22 +835,22 @@ msgstr "Iestata sensora sērijas numuru"
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2382
 msgid "Gets the owner's name"
-msgstr ""
+msgstr "Saņem īpašnieka vārdu"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2387
 msgid "Sets the owner's name"
-msgstr ""
+msgstr "Iestata īpašnieka vārdu"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2392
 msgid "Gets the owner's email address"
-msgstr ""
+msgstr "Saņem īpašnieka e-pasta adresi"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2397
 msgid "Sets the owner's email address"
-msgstr ""
+msgstr "Iestata īpašnieka e-pasta adresi"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2402
@@ -864,12 +865,12 @@ msgstr "Iestata LED vērtības"
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2412
 msgid "Gets the PCB errata"
-msgstr ""
+msgstr "Saņem PCB kļūdu labojumu"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2417
 msgid "Sets the PCB errata"
-msgstr ""
+msgstr "Iestata PCB kļūdu labojumu"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2422
@@ -914,17 +915,17 @@ msgstr "Atjaunināt aparātprogrammatūru procesorā"
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2467
 msgid "Read EEPROM at a specified address"
-msgstr ""
+msgstr "Nolasīt EEPROM norādītajā adresē"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2472
 msgid "Erase EEPROM at a specified address"
-msgstr ""
+msgstr "Nodzēst EEPROM norādītajā adresē"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2477
 msgid "Write EEPROM at a specified address"
-msgstr ""
+msgstr "Rakstīt EEPROM norādītajā adresē"
 
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2482
@@ -974,7 +975,7 @@ msgstr "Saņem aparatūras versiju"
 #. TRANSLATORS: command description
 #: ../src/ch-main.c:2527
 msgid "Gets an array of raw samples"
-msgstr ""
+msgstr "Saņem masīvu ar jēliem paraugiem"
 
 #. TRANSLATORS: program name
 #: ../src/ch-main.c:2540
@@ -989,7 +990,7 @@ msgstr "Nav savienojuma ar ierīci:"
 #. TRANSLATORS: internal device error
 #: ../src/ch-util.c:184
 msgid "Failed to get device status"
-msgstr ""
+msgstr "Neizdevās saņemt ierīces statusu"
 
 #. TRANSLATORS: internal device error
 #: ../src/ch-util.c:249
