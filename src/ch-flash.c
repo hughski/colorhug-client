@@ -1538,6 +1538,10 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 		goto out;
 	}
 
+	/* automatically use the correct proxies */
+	soup_session_add_feature_by_type (priv->session,
+					  SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
+
 	/* emulate a device */
 	if (g_getenv ("COLORHUG_EMULATE") != NULL) {
 		priv->device = ch_flash_get_fake_device (priv);

@@ -1592,6 +1592,10 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 		goto out;
 	}
 
+	/* automatically use the correct proxies */
+	soup_session_add_feature_by_type (priv->session,
+					  SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
+
 	/* emulate a device */
 	if (g_getenv ("COLORHUG_EMULATE") != NULL) {
 		priv->device = ch_ccmx_get_fake_device (priv);
