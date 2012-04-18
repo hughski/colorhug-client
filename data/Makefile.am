@@ -17,7 +17,6 @@ gsettings_schemas_in_files = com.hughski.colorhug-client.gschema.xml.in
 gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
 
 pkgdata_DATA =						\
-	ch-util.ui					\
 	ch-ccmx.ui					\
 	ch-flash.ui
 

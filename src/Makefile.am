@@ -17,8 +17,7 @@ COLORHUG_LIBS =						\
 
 libexec_PROGRAMS =					\
 	colorhug					\
-	colorhug-inhx32-to-bin				\
-	colorhug-gui
+	colorhug-inhx32-to-bin
 
 bin_PROGRAMS =						\
 	colorhug-ccmx					\
@@ -37,21 +36,6 @@ colorhug_LDADD =					\
 	-lm
 
 colorhug_CFLAGS =					\
-	$(WARNINGFLAGS_C)
-
-colorhug_gui_SOURCES =					\
-	ch-util.c
-
-colorhug_gui_LDADD =					\
-	$(COLORD_LIBS)					\
-	$(GLIB_LIBS)					\
-	$(GTK_LIBS)					\
-	$(GUSB_LIBS)					\
-	$(LCMS_LIBS)					\
-	$(COLORHUG_LIBS)				\
-	-lm
-
-colorhug_gui_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_flash_SOURCES =				\
