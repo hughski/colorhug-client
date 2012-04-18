@@ -32,6 +32,7 @@ libcolorhug_include_HEADERS =					\
 	ch-common.h						\
 	ch-device.h						\
 	ch-device-queue.h					\
+	ch-hash.h						\
 	ch-math.h						\
 	ch-version.h						\
 	colorhug.h
@@ -43,6 +44,8 @@ libcolorhug_la_SOURCES =					\
 	ch-device.h						\
 	ch-device-queue.c					\
 	ch-device-queue.h					\
+	ch-hash.c						\
+	ch-hash.h						\
 	ch-math.c						\
 	ch-math.h						\
 	ch-version.h						\

@@ -19,19 +19,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __COLORHUG_H
-#define __COLORHUG_H
+#if !defined (__COLORHUG_H_INSIDE__) && !defined (CH_COMPILATION)
+#error "Only <colorhug.h> can be included directly."
+#endif
 
-#define __COLORHUG_H_INSIDE__
+#ifndef __CH_HASH_H
+#define __CH_HASH_H
 
-#include <ch-common.h>
-#include <ch-device.h>
-#include <ch-device-queue.h>
-#include <ch-hash.h>
-#include <ch-math.h>
-#include <ch-version.h>
+#include <glib.h>
 
-#undef __COLORHUG_H_INSIDE__
+G_BEGIN_DECLS
 
-#endif /* __COLORHUG_H */
+/* SHA1 hash */
+typedef struct {
+	guint8	bytes[20];
+} ChSha1;
 
+gchar		*ch_sha1_to_string		(const ChSha1		*sha1);
+gboolean	 ch_sha1_parse			(const gchar		*value,
+						 ChSha1			*sha1,
+						 GError			**error);
+
+G_END_DECLS
+
+#endif /* __CH_HASH_H */

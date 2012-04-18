@@ -28,8 +28,31 @@
 #include <math.h>
 
 #include "ch-math.h"
+#include "ch-hash.h"
 #include "ch-device.h"
 #include "ch-device-queue.h"
+
+static void
+ch_test_hash_func (void)
+{
+	ChSha1 sha1;
+	gboolean ret;
+	gchar *str;
+	GError *error = NULL;
+
+	/* parse into structure */
+	ret = ch_sha1_parse ("f18973b4ebaeab527dc15d5dd246debfbff20324",
+			     &sha1, &error);
+	g_assert_no_error (error);
+	g_assert (ret);
+	g_assert_cmpint (sha1.bytes[0], == ,241);
+	g_assert_cmpint (sha1.bytes[1], ==, 137);
+
+	/* print back to string */
+	str = ch_sha1_to_string (&sha1);
+	g_assert_cmpstr (str, ==, "f18973b4ebaeab527dc15d5dd246debfbff20324");
+	g_free (str);
+}
 
 static guint device_failed_cnt = 0;
 static guint progress_changed_cnt = 0;
@@ -1121,6 +1144,7 @@ main (int argc, char **argv)
 	g_log_set_fatal_mask (NULL, G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
 
 	/* tests go here */
+	g_test_add_func ("/ColorHug/hash", ch_test_hash_func);
 	g_test_add_func ("/ColorHug/device-queue", ch_test_device_queue_func);
 	g_test_add_func ("/ColorHug/math-convert", ch_test_math_convert_func);
 	g_test_add_func ("/ColorHug/math-add", ch_test_math_add_func);
