@@ -40,6 +40,7 @@ __colorhug_commandlist="
     get-pcb-errata
     get-post-scale
     get-pre-scale
+    get-remote-hash
     get-serial-number
     list-calibration
     reset
@@ -57,6 +58,7 @@ __colorhug_commandlist="
     set-pcb-errata
     set-post-scale
     set-pre-scale
+    set-remote-hash
     set-serial-number
     take-reading-array
     take-reading-raw

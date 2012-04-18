@@ -261,6 +261,12 @@ ch_command_to_string (guint8 cmd)
 	case CH_CMD_GET_HARDWARE_VERSION:
 		str = "get-hardware-version";
 		break;
+	case CH_CMD_GET_REMOTE_HASH:
+		str = "get-remote-hash";
+		break;
+	case CH_CMD_SET_REMOTE_HASH:
+		str = "set-remote-hash";
+		break;
 	default:
 		str = "unknown-command";
 		break;

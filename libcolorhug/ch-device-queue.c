@@ -1467,6 +1467,47 @@ ch_device_queue_set_pcb_errata (ChDeviceQueue *device_queue,
 }
 
 /**
+ * ch_device_queue_get_remote_hash:
+ **/
+void
+ch_device_queue_get_remote_hash (ChDeviceQueue *device_queue,
+				 GUsbDevice *device,
+				 ChSha1 *remote_hash)
+{
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+	g_return_if_fail (remote_hash != NULL);
+
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_GET_REMOTE_HASH,
+			     NULL,
+			     0,
+			     (guint8 *) remote_hash,
+			     sizeof (ChSha1));
+}
+
+/**
+ * ch_device_queue_set_remote_hash:
+ **/
+void
+ch_device_queue_set_remote_hash (ChDeviceQueue *device_queue,
+				 GUsbDevice *device,
+				 ChSha1 *remote_hash)
+{
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_SET_REMOTE_HASH,
+			     (const guint8 *) remote_hash,
+			     sizeof (ChSha1),
+			     NULL,
+			     0);
+}
+
+/**
  * ch_device_queue_write_eeprom:
  **/
 void

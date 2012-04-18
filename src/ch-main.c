@@ -1255,6 +1255,75 @@ out:
 }
 
 /**
+ * ch_util_get_remote_hash:
+ **/
+static gboolean
+ch_util_get_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	ChSha1 remote_hash;
+	gboolean ret;
+	gchar *tmp = NULL;
+
+	/* get from HW */
+	ch_device_queue_get_remote_hash (priv->device_queue,
+					 priv->device,
+					 &remote_hash);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	/* print hash */
+	tmp = ch_sha1_to_string (&remote_hash);
+	g_print ("%s\n", tmp);
+out:
+	g_free (tmp);
+	return ret;
+}
+
+/**
+ * ch_util_set_remote_hash:
+ **/
+static gboolean
+ch_util_set_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChSha1 remote_hash;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect sha1");
+		goto out;
+	}
+
+	/* try to parse string */
+	ret = ch_sha1_parse (values[0], &remote_hash, error);
+	if (!ret)
+		goto out;
+
+	/* set to HW */
+	ch_device_queue_set_remote_hash (priv->device_queue,
+					 priv->device,
+					 &remote_hash);
+	ch_device_queue_write_eeprom (priv->device_queue,
+				      priv->device,
+				      CH_WRITE_EEPROM_MAGIC);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_dark_offsets:
  **/
 static gboolean
@@ -2341,6 +2410,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the PCB errata"),
 		     ch_util_set_pcb_errata);
+	ch_util_add (priv->cmd_array,
+		     "get-remote-hash",
+		     /* TRANSLATORS: command description */
+		     _("Gets the remote profile SHA1 hash"),
+		     ch_util_get_remote_hash);
+	ch_util_add (priv->cmd_array,
+		     "set-remote-hash",
+		     /* TRANSLATORS: command description */
+		     _("Sets the remote profile SHA1 hash"),
+		     ch_util_set_remote_hash);
 	ch_util_add (priv->cmd_array,
 		     "get-dark-offsets",
 		     /* TRANSLATORS: command description */
