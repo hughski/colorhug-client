@@ -32,6 +32,7 @@ colorhug_LDADD =					\
 	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\
+	$(SOUP_LIBS)					\
 	$(COLORHUG_LIBS)				\
 	-lm
 

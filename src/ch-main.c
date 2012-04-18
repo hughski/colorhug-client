@@ -27,12 +27,14 @@
 #include <lcms2.h>
 #include <math.h>
 #include <colorhug.h>
+#include <libsoup/soup.h>
 
 typedef struct {
 	ChDeviceQueue		*device_queue;
 	GOptionContext		*context;
 	GPtrArray		*cmd_array;
 	GUsbDevice		*device;
+	SoupSession		*session;
 } ChUtilPrivate;
 
 typedef gboolean (*ChUtilPrivateCb)	(ChUtilPrivate	*util,
@@ -334,6 +336,171 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 		std_dev += pow (reading_array[i] - ave, 2);
 	g_print ("Standard deviation: %.03lf\n", sqrt (std_dev / 60));
 out:
+	return ret;
+}
+
+/**
+ * ch_util_remote_profile_download:
+ **/
+static gboolean
+ch_util_remote_profile_download (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	ChSha1 remote_hash;
+	gboolean ret;
+	gchar *filename = NULL;
+	gchar *sha1 = NULL;
+	gchar *uri = NULL;
+	guint status_code;
+	SoupMessage *msg = NULL;
+	SoupURI *base_uri = NULL;
+
+	/* get the remote hash from the device */
+	ch_device_queue_get_remote_hash (priv->device_queue,
+					 priv->device,
+					 &remote_hash);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	/* print hash */
+	sha1 = ch_sha1_to_string (&remote_hash);
+	uri = g_strdup_printf ("http://www.hughski.com/uploads/%s.icc", sha1);
+
+	/* GET file */
+	base_uri = soup_uri_new (uri);
+	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
+	if (msg == NULL) {
+		/* TRANSLATORS: internal error when setting up HTTP request */
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Failed to setup message");
+		goto out;
+	}
+	status_code = soup_session_send_message (priv->session, msg);
+	if (status_code != 200) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Failed to download file %s: %s",
+			     uri, msg->reason_phrase);
+		goto out;
+	}
+
+	/* copy this file into the users default icc folder */
+	filename = g_strdup_printf ("%s/%s/%s.icc",
+				    g_get_user_data_dir (),
+				    "icc",
+				    sha1);
+	ret = g_file_set_contents (filename,
+				   msg->response_body->data,
+				   msg->response_body->length,
+				   error);
+	if (!ret)
+		goto out;
+
+	/* print something */
+	if (g_strcmp0 (g_getenv ("COLORHUG_OUTPUT"), "plain") == 0)
+		g_print ("%s\n", filename);
+	else
+		g_print ("Copied remote profile into %s\n", filename);
+out:
+	if (base_uri != NULL)
+		soup_uri_free (base_uri);
+	if (msg != NULL)
+		g_object_unref (msg);
+	g_free (sha1);
+	g_free (filename);
+	g_free (uri);
+	return ret;
+}
+
+/**
+ * ch_util_remote_profile_upload:
+ **/
+static gboolean
+ch_util_remote_profile_upload (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	ChSha1 remote_hash;
+	const gchar *uri;
+	gboolean ret = TRUE;
+	gchar *data = NULL;
+	gchar *sha1 = NULL;
+	gsize length;
+	guint status_code;
+	SoupBuffer *buffer = NULL;
+	SoupMessage *msg = NULL;
+	SoupMultipart *multipart = NULL;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'filename.icc'");
+		goto out;
+	}
+
+	/* read file */
+	ret = g_file_get_contents (values[0], &data, &length, error);
+	if (!ret)
+		goto out;
+
+	/* create multipart form and upload file */
+	multipart = soup_multipart_new (SOUP_FORM_MIME_TYPE_MULTIPART);
+	buffer = soup_buffer_new (SOUP_MEMORY_STATIC, data, length);
+	soup_multipart_append_form_file (multipart,
+					 "upload",
+					 values[0],
+					 NULL,
+					 buffer);
+	msg = soup_form_request_new_from_multipart ("http://www.hughski.com/profile-store.php", multipart);
+	status_code = soup_session_send_message (priv->session, msg);
+	if (status_code != 201) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Failed to upload file: %s",
+			     msg->reason_phrase);
+		goto out;
+	}
+	uri = soup_message_headers_get (msg->response_headers, "Location");
+	g_debug ("Successfully uploaded to %s", uri);
+
+	/* print something machine readable */
+	if (g_strcmp0 (g_getenv ("COLORHUG_OUTPUT"), "plain") == 0)
+		g_print ("%s\n", uri);
+	else
+		g_print ("Uploaded profile to %s\n", uri);
+
+	/* set SHA1 hash to device */
+	sha1 = g_compute_checksum_for_data (G_CHECKSUM_SHA1,
+					    (const guchar *) data,
+					    length);
+	g_debug ("Setting %s to device", sha1);
+	ret = ch_sha1_parse (sha1, &remote_hash, error);
+	if (!ret)
+		goto out;
+	ch_device_queue_set_remote_hash (priv->device_queue,
+					 priv->device,
+					 &remote_hash);
+	ch_device_queue_write_eeprom (priv->device_queue,
+				      priv->device,
+				      CH_WRITE_EEPROM_MAGIC);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	if (buffer != NULL)
+		soup_buffer_free (buffer);
+	if (msg != NULL)
+		g_object_unref (msg);
+	if (multipart != NULL)
+		soup_multipart_free (multipart);
+	g_free (data);
+	g_free (sha1);
 	return ret;
 }
 
@@ -2530,6 +2697,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Gets an array of raw samples"),
 		     ch_util_take_reading_array);
+	ch_util_add (priv->cmd_array,
+		     "remote-profile-download",
+		     /* TRANSLATORS: command description */
+		     _("Downloads a remote profile"),
+		     ch_util_remote_profile_download);
+	ch_util_add (priv->cmd_array,
+		     "remote-profile-upload",
+		     /* TRANSLATORS: command description */
+		     _("Uploads a remote profile"),
+		     ch_util_remote_profile_upload);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
@@ -2564,6 +2741,20 @@ main (int argc, char *argv[])
 		goto out;
 	}
 
+	/* setup the session */
+	priv->session = soup_session_sync_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug",
+							    SOUP_SESSION_TIMEOUT, 5000,
+							    NULL);
+	if (priv->session == NULL) {
+		/* TRANSLATORS: internal error when setting up HTTP */
+		g_print ("%s\n", _("Failed to setup networking"));
+		goto out;
+	}
+
+	/* automatically use the correct proxies */
+	soup_session_add_feature_by_type (priv->session,
+					  SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
+
 	/* run the specified command */
 	ret = ch_util_run (priv, argv[1], (gchar**) &argv[2], &error);
 	if (!ret) {
@@ -2576,6 +2767,8 @@ main (int argc, char *argv[])
 	retval = 0;
 out:
 	if (priv != NULL) {
+		if (priv->session != NULL)
+			g_object_unref (priv->session);
 		if (priv->cmd_array != NULL)
 			g_ptr_array_unref (priv->cmd_array);
 		if (priv->device != NULL)

@@ -44,6 +44,8 @@ __colorhug_commandlist="
     get-serial-number
     list-calibration
     reset
+    remote-profile-download
+    remote-profile-upload
     set-calibration
     set-calibration-ccmx
     set-calibration-map
