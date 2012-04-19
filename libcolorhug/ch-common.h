@@ -28,7 +28,6 @@
 
 #include <glib.h>
 #include <gusb.h>
-#include <colord.h>
 
 /* device constants */
 #define	CH_USB_VID				0x04d8

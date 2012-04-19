@@ -26,6 +26,7 @@
 #include <gusb.h>
 #include <string.h>
 #include <lcms2.h>
+#include <colord.h>
 
 #include "ch-common.h"
 #include "ch-device.h"

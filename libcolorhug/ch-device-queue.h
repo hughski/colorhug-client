@@ -29,6 +29,15 @@
 #include <glib-object.h>
 #include <gusb.h>
 
+/* try to avoid dragging in all the GObject deps, as this file may be
+ * included from colorhug.h in the cd-sensor-colorhug.c source file
+ *
+ * NOTE: we can't do use color-private.h until we have a hard dep on
+ * colord >= 0.1.20
+ */
+//#include <colord-private.h>
+#include <colord.h>
+
 #include "ch-common.h"
 #include "ch-hash.h"
 
