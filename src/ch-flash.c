@@ -953,194 +953,18 @@ out:
 }
 
 /**
- * ch_flash_set_lost_or_stolen_cb:
- **/
-static void
-ch_flash_set_lost_or_stolen_cb (GObject *source,
-				GAsyncResult *res,
-				gpointer user_data)
-{
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GString *msg = NULL;
-	GtkWidget *widget;
-	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
-
-	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
-		ch_flash_error_do_not_panic (priv);
-		/* TRANSLATORS: the device refused our request to mark
-		 * it lost or stolen */
-		title = _("Failed to set the device as lost or stolen");
-		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
-	}
-
-	/* setup UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_warning"));
-	gtk_widget_show (widget);
-
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_warning"));
-	msg = g_string_new ("");
-	/* TRANSLATORS: we have a blacklist that we match the device against */
-	title = _("This ColorHug has been registered as lost or stolen.");
-	g_string_append_printf (msg, "<span weight='bold' size='x-large'>%s</span>",
-				title);
-	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
-	g_string_free (msg, TRUE);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-	msg = g_string_new ("");
-	/* TRANSLATORS: We disable the device so it can't go into
-	 * firmware mode without a magic incantation */
-	title = _("The device has now been deactivated.");
-	g_string_append_printf (msg, "<b>%s</b>",
-				title);
-	/* TRANSLATORS: We can tell the user the magic incantation if we've
-	 * made a mistake */
-	title = _("Please contact <tt>info@hughski.com</tt> for more details.");
-	g_string_append_printf (msg, "\n\n%s",
-				title);
-	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
-	gtk_widget_set_sensitive (widget, TRUE);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
-	gtk_widget_hide (widget);
-out:
-	if (msg != NULL)
-		g_string_free (msg, TRUE);
-}
-
-/**
- * ch_flash_set_lost_or_stolen:
- **/
-static void
-ch_flash_set_lost_or_stolen (ChFlashPrivate *priv)
-{
-	/* TODO: need to erase device as well */
-	ch_device_queue_set_flash_success (priv->device_queue,
-					   priv->device,
-					   0xff);
-	ch_device_queue_process_async (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       ch_flash_set_lost_or_stolen_cb,
-				       priv);
-}
-
-/**
- * ch_flash_got_blacklist_cb:
- **/
-static void
-ch_flash_got_blacklist_cb (SoupSession *session,
-			   SoupMessage *msg,
-			   gpointer user_data)
-{
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	const gchar *title;
-	gboolean ret;
-	gchar **lines = NULL;
-	gchar *server_uri = NULL;
-	gchar *uri = NULL;
-	GError *error = NULL;
-	GtkWidget *widget;
-	guint i;
-	guint tmp;
-	SoupURI *base_uri = NULL;
-
-	/* we failed */
-	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
-		ch_flash_error_no_network (priv);
-		/* TRANSLATORS: we failed to get the blacklist from the server */
-		title = _("Failed to get device blacklist");
-		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
-	}
-
-	/* empty file */
-	if (msg->response_body->length == 0)
-		goto out;
-
-	/* read file */
-	lines = g_strsplit (msg->response_body->data, "\n", -1);
-	for (i = 0; lines[i] != NULL; i++) {
-		if (lines[i][0] == '\0')
-			continue;
-		/* check if matches serial number */
-		tmp = g_ascii_strtoull (lines[i], NULL, 10);
-		if (tmp == priv->serial_number) {
-			ch_flash_set_lost_or_stolen (priv);
-			goto out;
-		}
-	}
-
-	/* we've manually specified a local firmware file */
-	if (priv->filename != NULL) {
-		/* TRANSLATORS: we've specified a local file */
-		title = _("Flashing firmware file...");
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
-		gtk_label_set_label (GTK_LABEL (widget), title);
-		ret = g_file_get_contents (priv->filename,
-					   (gchar **) &priv->firmware_data,
-					   &priv->firmware_len,
-					   &error);
-		if (!ret) {
-			/* TRANSLATORS: file read error when reading
-			 * local firmware file */
-			title = _("Failed to load file");
-			ch_flash_error_dialog (priv, title, error->message);
-			g_error_free (error);
-			goto out;
-		}
-		ch_flash_got_firmware_data (priv);
-		goto out;
-	}
-
-	/* get the latest manifest file */
-	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
-	uri = g_build_filename (server_uri,
-				"metadata.xml",
-				NULL);
-	base_uri = soup_uri_new (uri);
-
-	/* GET file */
-	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
-	if (msg == NULL) {
-		/* TRANSLATORS: internal error when setting up HTTP request */
-		title = _("Failed to setup message");
-		ch_flash_error_dialog (priv, title, NULL);
-		goto out;
-	}
-
-	/* send sync */
-	soup_session_queue_message (priv->session, msg,
-				    ch_flash_got_metadata_cb, priv);
-out:
-	if (base_uri != NULL)
-		soup_uri_free (base_uri);
-	g_free (server_uri);
-	g_free (uri);
-	g_strfreev (lines);
-}
-
-/**
  * ch_flash_got_device_data:
  **/
 static void
 ch_flash_got_device_data (ChFlashPrivate *priv)
 {
 	const gchar *title;
+	gboolean ret;
 	gchar *server_uri = NULL;
 	gchar *str = NULL;
 	gchar *uri = NULL;
 	gchar *user_agent = NULL;
+	GError *error = NULL;
 	GtkWidget *widget;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
@@ -1214,10 +1038,32 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_show (widget);
 
-	/* get the latest blacklist file */
+	/* we've manually specified a local firmware file */
+	if (priv->filename != NULL) {
+		/* TRANSLATORS: we've specified a local file */
+		title = _("Flashing firmware file...");
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+		gtk_label_set_label (GTK_LABEL (widget), title);
+		ret = g_file_get_contents (priv->filename,
+					   (gchar **) &priv->firmware_data,
+					   &priv->firmware_len,
+					   &error);
+		if (!ret) {
+			/* TRANSLATORS: file read error when reading
+			 * local firmware file */
+			title = _("Failed to load file");
+			ch_flash_error_dialog (priv, title, error->message);
+			g_error_free (error);
+			goto out;
+		}
+		ch_flash_got_firmware_data (priv);
+		goto out;
+	}
+
+	/* get the latest manifest file */
 	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
 	uri = g_build_filename (server_uri,
-				"BLACKLIST",
+				"metadata.xml",
 				NULL);
 	base_uri = soup_uri_new (uri);
 
@@ -1232,7 +1078,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 
 	/* send sync */
 	soup_session_queue_message (priv->session, msg,
-				    ch_flash_got_blacklist_cb, priv);
+				    ch_flash_got_metadata_cb, priv);
 out:
 	/* reset the flag */
 	priv->planned_replug = FALSE;
