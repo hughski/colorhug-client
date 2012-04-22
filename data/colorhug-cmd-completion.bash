@@ -19,7 +19,7 @@
 #  02110-1301  USA
 
 
-__colorhug_commandlist="
+__colorhug_cmd_commandlist="
     boot-flash
     clear-calibration
     eeprom-erase
@@ -69,7 +69,7 @@ __colorhug_commandlist="
     write-eeprom
     "
 
-__colorhugcomp ()
+__colorhug_cmdcomp ()
 {
 	local all c s=$'\n' IFS=' '$'\t'$'\n'
 	local cur="${COMP_WORDS[COMP_CWORD]}"
@@ -87,7 +87,7 @@ __colorhugcomp ()
 	return
 }
 
-_colorhug ()
+_colorhug_cmd ()
 {
 	local i c=1 command
 
@@ -103,18 +103,18 @@ _colorhug ()
     if [ $c -eq $COMP_CWORD -a -z "$command" ]; then
 		case "${COMP_WORDS[COMP_CWORD]}" in
 		--*=*) COMPREPLY=() ;;
-		--*)   __colorhugcomp "
+		--*)   __colorhug_cmdcomp "
 			--verbose
 			--help
 			"
 			;;
-        -*) __colorhugcomp "
+        -*) __colorhug_cmdcomp "
             -v
             -h
             -?
             "
             ;;
-		*)     __colorhugcomp "$__colorhug_commandlist" ;;
+		*)     __colorhug_cmdcomp "$__colorhug_cmd_commandlist" ;;
 		esac
 		return
 	fi
@@ -124,4 +124,4 @@ _colorhug ()
 	esac
 }
 
-complete -o default -o nospace -F _colorhug colorhug
+complete -o default -o nospace -F _colorhug_cmd colorhug-cmd

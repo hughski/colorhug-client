@@ -16,17 +16,17 @@ COLORHUG_LIBS =						\
 	$(top_builddir)/libcolorhug/libcolorhug.la
 
 libexec_PROGRAMS =					\
-	colorhug					\
 	colorhug-inhx32-to-bin
 
 bin_PROGRAMS =						\
 	colorhug-ccmx					\
+	colorhug-cmd					\
 	colorhug-flash
 
-colorhug_SOURCES =					\
+colorhug_cmd_SOURCES =					\
 	ch-main.c
 
-colorhug_LDADD =					\
+colorhug_cmd_LDADD =					\
 	$(COLORD_LIBS)					\
 	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
@@ -35,7 +35,7 @@ colorhug_LDADD =					\
 	$(COLORHUG_LIBS)				\
 	-lm
 
-colorhug_CFLAGS =					\
+colorhug_cmd_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_flash_SOURCES =				\
@@ -84,5 +84,9 @@ colorhug_inhx32_to_bin_LDADD =				\
 
 colorhug_inhx32_to_bin_CFLAGS =				\
 	$(WARNINGFLAGS_C)
+
+install-data-hook:
+	mkdir -p $(DESTDIR)$(libexecdir);
+	ln -fs $(bindir)/colorhug-cmd $(DESTDIR)$(libexecdir)/colorhug;
 
 -include $(top_srcdir)/git.mk
