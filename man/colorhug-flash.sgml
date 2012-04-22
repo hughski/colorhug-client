@@ -33,6 +33,7 @@
     <cmdsynopsis>
       <command>&package;</command>
       <arg><option>--verbose</option></arg>
+      <arg><option>--filename</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   <refsect1>
@@ -44,6 +45,45 @@
       <command>&package;</command> allows you to update the firmware
       on your Hughski ColorHug colorimeter.
     </para>
+  </refsect1>
+  <refsect1>
+    <title>OPTIONS</title>
+    <para>
+      This program follows the usual &gnu; command line syntax, with long options
+      starting with two dashes (`-').
+      A summary of options is included below.
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <option>--help</option>
+        </term>
+        <listitem>
+          <para>Show summary of options.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--verbose</option>
+        </term>
+        <listitem>
+          <para>Show extra debugging information.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--filename</option>
+        </term>
+        <listitem>
+          <para>Flash a specific firmware file.</para>
+          <para>
+            Usually colorhug-flash contacts the internet and downloads
+            update metadata to work out the firmware file to use.
+            This flag allows the user to use a custom image.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </refsect1>
   <refsect1>
     <title>ENVIRONMENT</title>

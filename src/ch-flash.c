@@ -1632,7 +1632,7 @@ main (int argc, char **argv)
 			_("Show extra debugging information"), NULL },
 		{ "filename", 'f', 0, G_OPTION_ARG_STRING, &filename,
 			/* TRANSLATORS: command line option */
-			_("Show extra debugging information"), NULL },
+			_("Flash a specific firmware file"), NULL },
 		{ NULL}
 	};
 
