@@ -64,6 +64,18 @@ out:
 }
 
 /**
+ * ch_device_is_colorhug:
+ **/
+gboolean
+ch_device_is_colorhug (GUsbDevice *device)
+{
+	if (g_usb_device_get_vid (device) == CH_USB_VID &&
+	    g_usb_device_get_pid (device) == CH_USB_PID)
+		return TRUE;
+	return FALSE;
+}
+
+/**
  * ch_print_data_buffer:
  **/
 static void

@@ -1411,8 +1411,7 @@ ch_flash_device_added_cb (GUsbDeviceList *list,
 	g_debug ("Added: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
-	if (g_usb_device_get_vid (device) == CH_USB_VID &&
-	    g_usb_device_get_pid (device) == CH_USB_PID) {
+	if (ch_device_is_colorhug (device)) {
 		priv->device = g_object_ref (device);
 		ch_flash_got_device (priv);
 	}
@@ -1429,8 +1428,7 @@ ch_flash_device_removed_cb (GUsbDeviceList *list,
 	g_debug ("Removed: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
-	if (g_usb_device_get_vid (device) == CH_USB_VID &&
-	    g_usb_device_get_pid (device) == CH_USB_PID) {
+	if (ch_device_is_colorhug (device)) {
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
 		priv->device = NULL;

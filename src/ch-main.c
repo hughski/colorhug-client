@@ -1830,8 +1830,12 @@ static GUsbDevice *
 ch_util_get_default_device (GError **error)
 {
 	gboolean ret;
+	GPtrArray *devices;
+	guint i;
 	GUsbContext *usb_ctx;
 	GUsbDevice *device = NULL;
+	GUsbDevice *device_success = NULL;
+	GUsbDevice *device_tmp;
 	GUsbDeviceList *list;
 
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -1840,22 +1844,42 @@ ch_util_get_default_device (GError **error)
 	usb_ctx = g_usb_context_new (NULL);
 	list = g_usb_device_list_new (usb_ctx);
 	g_usb_device_list_coldplug (list);
-	device = g_usb_device_list_find_by_vid_pid (list,
-						    CH_USB_VID,
-						    CH_USB_PID,
-						    error);
-	if (device == NULL)
+
+	/* ensure we only find one device */
+	devices = g_usb_device_list_get_devices (list);
+	for (i = 0; i < devices->len; i++) {
+		device_tmp = g_ptr_array_index (devices, i);
+		if (!ch_device_is_colorhug (device_tmp))
+			continue;
+		if (device != NULL) {
+			g_set_error_literal (error, 1, 0,
+					     _("Multiple ColorHug devices are attached"));
+			goto out;
+		}
+		device = g_object_ref (device_tmp);
+	}
+	if (device == NULL) {
+		g_set_error_literal (error, 1, 0,
+				     _("No ColorHug devices were found"));
 		goto out;
+	}
 	g_debug ("Found ColorHug device %s",
 		 g_usb_device_get_platform_id (device));
 	ret = ch_device_open (device, error);
 	if (!ret)
 		goto out;
+
+	/* success */
+	device_success = g_object_ref (device);
 out:
 	g_object_unref (usb_ctx);
+	if (device != NULL)
+		g_object_unref (device);
 	if (list != NULL)
 		g_object_unref (list);
-	return device;
+	if (devices != NULL)
+		g_ptr_array_unref (devices);
+	return device_success;
 }
 
 /**

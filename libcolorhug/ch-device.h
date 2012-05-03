@@ -31,6 +31,7 @@
 
 gboolean	 ch_device_open			(GUsbDevice	*device,
 						 GError		**error);
+gboolean	 ch_device_is_colorhug		(GUsbDevice	*device);
 void		 ch_device_write_command_async	(GUsbDevice	*device,
 						 guint8		 cmd,
 						 const guint8	*buffer_in,
