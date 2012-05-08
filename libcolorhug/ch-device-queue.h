@@ -280,7 +280,7 @@ void		 ch_device_queue_take_reading_array	(ChDeviceQueue	*device_queue,
 gboolean	 ch_device_queue_set_calibration_ccmx	(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,
 							 guint16	 calibration_index,
-							 const gchar	*filename,
+							 CdIt8		*ccmx,
 							 GError		**error);
 void		 ch_device_queue_write_firmware		(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,

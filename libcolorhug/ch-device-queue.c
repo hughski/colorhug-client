@@ -975,9 +975,6 @@ ch_device_queue_set_calibration (ChDeviceQueue *device_queue,
 			     0);
 }
 
-#define CH_DEVICE_DETERMINANT_AVE	21.53738
-#define CH_DEVICE_DETERMINANT_ERROR	10.00000
-
 /**
  * ch_device_queue_set_calibration_ccmx:
  **/
@@ -985,49 +982,28 @@ gboolean
 ch_device_queue_set_calibration_ccmx (ChDeviceQueue *device_queue,
 				      GUsbDevice *device,
 				      guint16 calibration_index,
-				      const gchar *filename,
+				      CdIt8 *ccmx,
 				      GError **error)
 {
-	CdMat3x3 calibration;
-	cmsHANDLE ccmx = NULL;
+	const CdMat3x3 *calibration;
 	const gchar *description;
-	const gchar *sheet_type;
-	gboolean ret;
+	gboolean ret = TRUE;
 	gdouble *calibration_tmp;
-#if CD_CHECK_VERSION(0,1,17)
-	gdouble det;
-#endif
-	gchar *ccmx_data = NULL;
-	gsize ccmx_size;
 	guint i;
 
-	g_return_val_if_fail (filename != NULL, FALSE);
+	g_return_val_if_fail (CD_IS_IT8 (ccmx), FALSE);
 	g_return_val_if_fail (CH_IS_DEVICE_QUEUE (device_queue), FALSE);
 	g_return_val_if_fail (G_USB_IS_DEVICE (device), FALSE);
 
-	/* load file */
-	ret = g_file_get_contents (filename,
-				   &ccmx_data,
-				   &ccmx_size,
-				   error);
-	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
-	if (ccmx == NULL) {
+	/* ensure correct kind */
+	if (cd_it8_get_kind (ccmx) != CD_IT8_KIND_CCMX) {
 		ret = FALSE;
-		g_set_error (error, 1, 0, "Cannot open %s", filename);
-		goto out;
-	}
-
-	/* select correct sheet */
-	sheet_type = cmsIT8GetSheetType (ccmx);
-	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
-		ret = FALSE;
-		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
-			     filename, sheet_type);
+		g_set_error (error, 1, 0, "is not a CCMX file");
 		goto out;
 	}
 
 	/* get the description from the ccmx file */
-	description = CMSEXPORT cmsIT8GetProperty(ccmx, "DISPLAY");
+	description = cd_it8_get_title (ccmx);
 	if (description == NULL) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
@@ -1035,19 +1011,9 @@ ch_device_queue_set_calibration_ccmx (ChDeviceQueue *device_queue,
 		goto out;
 	}
 
-	/* get the values */
-	calibration.m00 = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
-	calibration.m01 = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
-	calibration.m02 = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
-	calibration.m10 = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
-	calibration.m11 = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
-	calibration.m12 = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
-	calibration.m20 = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
-	calibration.m21 = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
-	calibration.m22 = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
-
-	/* check for sanity */
-	calibration_tmp = cd_mat33_get_data (&calibration);
+	/* get the values and check for sanity */
+	calibration = cd_it8_get_matrix (ccmx);
+	calibration_tmp = cd_mat33_get_data (calibration);
 	for (i = 0; i < 9; i++) {
 		if (calibration_tmp[i] < -10.0f ||
 		    calibration_tmp[i] > 10.0f) {
@@ -1059,28 +1025,14 @@ ch_device_queue_set_calibration_ccmx (ChDeviceQueue *device_queue,
 		}
 	}
 
-#if CD_CHECK_VERSION(0,1,17)
-	/* check the scale is correct */
-	det = cd_mat33_determinant (&calibration);
-	if (ABS (det - CH_DEVICE_DETERMINANT_AVE) > CH_DEVICE_DETERMINANT_ERROR) {
-		ret = FALSE;
-		g_set_error (error, 1, 0,
-			     "Matrix determinant out of range: %f", det);
-		goto out;
-	}
-#endif
-
 	/* set to HW */
 	ch_device_queue_set_calibration (device_queue,
 					 device,
 					 calibration_index,
-					 &calibration,
+					 calibration,
 					 CH_CALIBRATION_TYPE_ALL,
 					 description);
 out:
-	g_free (ccmx_data);
-	if (ccmx != NULL)
-		cmsIT8Free (ccmx);
 	return ret;
 }
 

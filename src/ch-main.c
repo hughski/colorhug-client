@@ -1023,6 +1023,8 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 {
 	gboolean ret;
 	guint16 calibration_index;
+	CdIt8 *ccmx = NULL;
+	GFile *file = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
@@ -1036,10 +1038,15 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
+	ccmx = cd_it8_new ();
+	file = g_file_new_for_path (values[1]);
+	ret = cd_it8_load_from_file (ccmx, file, error);
+	if (!ret)
+		goto out;
 	ret = ch_device_queue_set_calibration_ccmx (priv->device_queue,
 						    priv->device,
 						    calibration_index,
-						    values[1],
+						    ccmx,
 						    error);
 	if (!ret)
 		goto out;
@@ -1050,6 +1057,10 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	if (!ret)
 		goto out;
 out:
+	if (ccmx != NULL)
+		g_object_unref (ccmx);
+	if (file != NULL)
+		g_object_unref (file);
 	return ret;
 }
 
