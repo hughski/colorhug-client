@@ -24,7 +24,7 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <locale.h>
-#include <lcms2.h>
+#include <stdio.h>
 #include <math.h>
 #include <colorhug.h>
 #include <libsoup/soup.h>
@@ -2443,17 +2443,6 @@ ch_util_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
 }
 
 /**
- * ch_util_lcms_error_cb:
- **/
-static void
-ch_util_lcms_error_cb (cmsContext ContextID,
-		       cmsUInt32Number errorcode,
-		       const char *text)
-{
-	g_warning ("LCMS error %i: %s", errorcode, text);
-}
-
-/**
  * main:
  **/
 int
@@ -2477,7 +2466,6 @@ main (int argc, char *argv[])
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-	cmsSetLogErrorHandler (ch_util_lcms_error_cb);
 
 	g_type_init ();
 

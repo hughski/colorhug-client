@@ -28,7 +28,6 @@
 #include <math.h>
 #include <gusb.h>
 #include <libsoup/soup.h>
-#include <lcms2.h>
 #include <colorhug.h>
 
 typedef struct {
@@ -174,10 +173,8 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 			const gchar *filename,
 			GError **error)
 {
-	cmsHANDLE ccmx = NULL;
+	CdIt8 *it8 = NULL;
 	const gchar *description;
-	const gchar *sheet_type;
-	const gchar *type_tmp;
 	gboolean ret;
 	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
@@ -193,24 +190,15 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 				   error);
 	if (!ret)
 		goto out;
-	ccmx = cmsIT8LoadFromMem (NULL, ccmx_data, ccmx_size);
-	if (ccmx == NULL) {
-		ret = FALSE;
-		g_set_error (error, 1, 0, "Cannot open %s", filename);
-		goto out;
-	}
 
-	/* select correct sheet */
-	sheet_type = cmsIT8GetSheetType (ccmx);
-	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
-		ret = FALSE;
-		g_set_error (error, 1, 0, "%s is not a CCMX file [%s]",
-			     filename, sheet_type);
+	/* parse */
+	it8 = cd_it8_new ();
+	ret = cd_it8_load_from_data (it8, ccmx_data, ccmx_size, error);
+	if (!ret)
 		goto out;
-	}
 
 	/* get the description from the ccmx file */
-	description = cmsIT8GetProperty (ccmx, "DISPLAY");
+	description = cd_it8_get_title (it8);
 	if (description == NULL) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
@@ -226,17 +214,13 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	}
 
 	/* get the types */
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (cd_it8_has_option (it8, "TYPE_LCD"))
 		types += CH_CALIBRATION_TYPE_LCD;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LED");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (cd_it8_has_option (it8, "TYPE_LED"))
 		types += CH_CALIBRATION_TYPE_LED;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (cd_it8_has_option (it8, "TYPE_CRT"))
 		types += CH_CALIBRATION_TYPE_CRT;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_PROJECTOR");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
+	if (cd_it8_has_option (it8, "TYPE_PROJECTOR"))
 		types += CH_CALIBRATION_TYPE_PROJECTOR;
 
 	/* is suitable for LCD */
@@ -312,8 +296,8 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	ret = TRUE;
 out:
 	g_free (ccmx_data);
-	if (ccmx != NULL)
-		cmsIT8Free (ccmx);
+	if (it8 != NULL)
+		g_object_unref (it8);
 	return ret;
 }
 
@@ -869,34 +853,21 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 			      gsize ccmx_size,
 			      GError **error)
 {
-	CdMat3x3 calibration;
-	cmsHANDLE ccmx = NULL;
+	CdIt8 *it8 = NULL;
+	const CdMat3x3 *calibration;
 	const gchar *description;
-	const gchar *sheet_type;
-	const gchar *type_tmp;
 	gboolean ret = TRUE;
 	gboolean type_factory = FALSE;
 	guint8 types = 0;
 
-	/* load from a blob, as lcms sucks at reading files */
-	ccmx = cmsIT8LoadFromMem (NULL, (void *) ccmx_data, ccmx_size);
-	if (ccmx == NULL) {
-		ret = FALSE;
-		g_set_error_literal (error, 1, 0, "Cannot open CCMX");
+	/* read ccmx */
+	it8 = cd_it8_new ();
+	ret = cd_it8_load_from_data (it8, (const gchar*) ccmx_data, ccmx_size, error);
+	if (!ret)
 		goto out;
-	}
-
-	/* select correct sheet */
-	sheet_type = cmsIT8GetSheetType (ccmx);
-	if (g_strcmp0 (sheet_type, "CCMX   ") != 0) {
-		ret = FALSE;
-		g_set_error (error, 1, 0, "file is not a CCMX file [%s]",
-			     sheet_type);
-		goto out;
-	}
 
 	/* get the description from the ccmx file */
-	description = cmsIT8GetProperty (ccmx, "DISPLAY");
+	description = cd_it8_get_title (it8);
 	if (description == NULL) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
@@ -905,38 +876,22 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	}
 
 	/* get the types */
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_FACTORY");
-	if (g_strcmp0 (type_tmp, "YES") == 0)
-		type_factory = TRUE;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LCD");
-	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
+	type_factory = cd_it8_has_option (it8, "TYPE_FACTORY");
+	if (type_factory || cd_it8_has_option (it8, "TYPE_LCD"))
 		types += CH_CALIBRATION_TYPE_LCD;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_LED");
-	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
+	if (type_factory || cd_it8_has_option (it8, "TYPE_LED"))
 		types += CH_CALIBRATION_TYPE_LED;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_CRT");
-	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
+	if (type_factory || cd_it8_has_option (it8, "TYPE_CRT"))
 		types += CH_CALIBRATION_TYPE_CRT;
-	type_tmp = cmsIT8GetProperty (ccmx, "TYPE_PROJECTOR");
-	if (type_factory || g_strcmp0 (type_tmp, "YES") == 0)
+	if (type_factory || cd_it8_has_option (it8, "TYPE_PROJECTOR"))
 		types += CH_CALIBRATION_TYPE_PROJECTOR;
 
-	/* read the calibration values */
-	calibration.m00 = cmsIT8GetDataRowColDbl(ccmx, 0, 0);
-	calibration.m01 = cmsIT8GetDataRowColDbl(ccmx, 0, 1);
-	calibration.m02 = cmsIT8GetDataRowColDbl(ccmx, 0, 2);
-	calibration.m10 = cmsIT8GetDataRowColDbl(ccmx, 1, 0);
-	calibration.m11 = cmsIT8GetDataRowColDbl(ccmx, 1, 1);
-	calibration.m12 = cmsIT8GetDataRowColDbl(ccmx, 1, 2);
-	calibration.m20 = cmsIT8GetDataRowColDbl(ccmx, 2, 0);
-	calibration.m21 = cmsIT8GetDataRowColDbl(ccmx, 2, 1);
-	calibration.m22 = cmsIT8GetDataRowColDbl(ccmx, 2, 2);
-
 	/* set to HW */
+	calibration = cd_it8_get_matrix (it8);
 	ch_device_queue_set_calibration (priv->device_queue,
 					 priv->device,
 					 cal_idx,
-					 &calibration,
+					 calibration,
 					 types,
 					 description);
 	ch_device_queue_process_async (priv->device_queue,
@@ -947,8 +902,6 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	if (!ret)
 		goto out;
 out:
-	if (ccmx != NULL)
-		cmsIT8Free (ccmx);
 	return ret;
 }
 

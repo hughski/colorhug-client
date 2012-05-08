@@ -14,7 +14,6 @@ BuildRequires: gtk3-devel
 BuildRequires: intltool
 BuildRequires: libgusb-devel >= 0.1.2
 BuildRequires: colord-devel >= 0.1.15
-BuildRequires: lcms2-devel
 BuildRequires: libsoup-devel
 BuildRequires: libtool
 BuildRequires: docbook-utils

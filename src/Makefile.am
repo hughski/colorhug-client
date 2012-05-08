@@ -3,7 +3,6 @@ INCLUDES =						\
 	$(GTK_CFLAGS)					\
 	$(GUSB_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
-	$(LCMS_CFLAGS)					\
 	$(SOUP_CFLAGS)					\
 	$(CANBERRA_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"Ch\"				\
@@ -28,7 +27,6 @@ colorhug_cmd_SOURCES =					\
 
 colorhug_cmd_LDADD =					\
 	$(COLORD_LIBS)					\
-	$(LCMS_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\
 	$(SOUP_LIBS)					\
@@ -51,7 +49,6 @@ colorhug_flash_LDADD =					\
 	$(GTK_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(SOUP_LIBS)					\
-	$(LCMS_LIBS)					\
 	$(COLORHUG_LIBS)				\
 	$(CANBERRA_LIBS)				\
 	-lm
@@ -68,7 +65,6 @@ colorhug_ccmx_LDADD =					\
 	$(GTK_LIBS)					\
 	$(GUSB_LIBS)					\
 	$(SOUP_LIBS)					\
-	$(LCMS_LIBS)					\
 	$(COLORHUG_LIBS)				\
 	-lm
 
