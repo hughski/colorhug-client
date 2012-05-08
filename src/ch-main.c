@@ -1717,14 +1717,13 @@ static gboolean
 ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	CdColorRGB value;
-	ChFreqScale multiplier = 0;
 	gboolean ret;
 	guint16 integral_time = 0;
 
 	/* get from HW */
-	ch_device_queue_get_multiplier (priv->device_queue,
+	ch_device_queue_set_multiplier (priv->device_queue,
 					priv->device,
-					&multiplier);
+					CH_FREQ_SCALE_100);
 	ch_device_queue_get_integral_time (priv->device_queue,
 					   priv->device,
 					   &integral_time);
@@ -1737,10 +1736,6 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 				       error);
 	if (!ret)
 		goto out;
-
-	/* TRANSLATORS: this is the sensor scale factor */
-	g_print ("%s:\t%s\n", _("Multiplier"),
-		 ch_multiplier_to_string (multiplier));
 
 	/* TRANSLATORS: this is the sensor sample time */
 	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
