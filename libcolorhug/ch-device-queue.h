@@ -238,6 +238,8 @@ void		 ch_device_queue_reset			(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device);
 void		 ch_device_queue_boot_flash		(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device);
+void		 ch_device_queue_self_test		(ChDeviceQueue	*device_queue,
+							 GUsbDevice	*device);
 void		 ch_device_queue_set_flash_success	(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,
 							 guint8		 value);

@@ -2022,6 +2022,24 @@ ch_device_queue_boot_flash (ChDeviceQueue *device_queue,
 }
 
 /**
+ * ch_device_queue_self_test:
+ **/
+void
+ch_device_queue_self_test (ChDeviceQueue *device_queue,
+			    GUsbDevice *device)
+{
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+
+	/* do a really simple self test */
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_SELF_TEST,
+			     NULL, 0,
+			     NULL, 0);
+}
+
+/**
  * ch_device_queue_get_hardware_version:
  **/
 void

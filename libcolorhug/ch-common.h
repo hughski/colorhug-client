@@ -611,6 +611,19 @@
  **/
 #define	CH_CMD_GET_REMOTE_HASH			0x35
 
+/**
+ * CH_CMD_SELF_TEST:
+ *
+ * Tests the device by trying to get a non-zero reading from each
+ * color channel.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd]
+ *
+ * This command is available in bootloader and firmware mode.
+ **/
+#define	CH_CMD_SELF_TEST			0x40
+
 /* secret code */
 #define	CH_WRITE_EEPROM_MAGIC			"Un1c0rn2"
 
@@ -698,6 +711,12 @@ typedef enum {
 	CH_ERROR_OVERFLOW_STACK,
 	CH_ERROR_DEVICE_DEACTIVATED,
 	CH_ERROR_INCOMPLETE_REQUEST,
+	CH_ERROR_SELF_TEST_SENSOR,
+	CH_ERROR_SELF_TEST_RED,
+	CH_ERROR_SELF_TEST_GREEN,
+	CH_ERROR_SELF_TEST_BLUE,
+	CH_ERROR_SELF_TEST_COLOR_SELECT,
+	CH_ERROR_SELF_TEST_MULTIPLIER,
 	CH_ERROR_LAST
 } ChError;
 

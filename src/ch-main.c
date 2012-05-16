@@ -417,6 +417,25 @@ out:
 }
 
 /**
+ * ch_util_self_test:
+ **/
+static gboolean
+ch_util_self_test (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ch_device_queue_self_test (priv->device_queue,
+				   priv->device);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_remote_profile_upload:
  **/
 static gboolean
@@ -2725,6 +2744,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Uploads a remote profile"),
 		     ch_util_remote_profile_upload);
+	ch_util_add (priv->cmd_array,
+		     "self-test",
+		     /* TRANSLATORS: command description */
+		     _("Does a quick self test on the device"),
+		     ch_util_self_test);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
