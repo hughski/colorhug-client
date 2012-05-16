@@ -30,9 +30,6 @@
 #include "ch-device.h"
 #include "ch-math.h"
 
-#define CH_DEVICE_DETERMINANT_AVE	21.53738
-#define CH_DEVICE_DETERMINANT_ERROR	10.00000
-
 /**
  * ch_device_open:
  **/
