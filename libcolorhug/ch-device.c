@@ -31,6 +31,22 @@
 #include "ch-math.h"
 
 /**
+ * ch_device_error_quark:
+ *
+ * Return value: ChDevice error quark.
+ *
+ * Since: 0.1.1
+ **/
+GQuark
+ch_device_error_quark (void)
+{
+	static GQuark quark = 0;
+	if (!quark)
+		quark = g_quark_from_static_string ("ch_device_error");
+	return quark;
+}
+
+/**
  * ch_device_open:
  **/
 gboolean
@@ -197,7 +213,10 @@ ch_device_reply_cb (GObject *source_object,
 				       ch_command_to_string (helper->cmd),
 				       actual_len,
 				       helper->buffer_out_len + CH_BUFFER_OUTPUT_DATA);
-		g_simple_async_result_set_error (helper->res, 1, 0, "%s", msg);
+		g_simple_async_result_set_error (helper->res,
+						 CH_DEVICE_ERROR,
+						 error_enum,
+						 "%s", msg);
 		g_simple_async_result_complete_in_idle (helper->res);
 		ch_device_free_helper (helper);
 		return;

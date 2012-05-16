@@ -29,6 +29,9 @@
 #include <glib.h>
 #include <gusb.h>
 
+#define CH_DEVICE_ERROR		(ch_device_error_quark ())
+
+GQuark		 ch_device_error_quark		(void);
 gboolean	 ch_device_open			(GUsbDevice	*device,
 						 GError		**error);
 gboolean	 ch_device_is_colorhug		(GUsbDevice	*device);

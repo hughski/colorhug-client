@@ -200,11 +200,13 @@ ch_device_queue_process_write_command_cb (GObject *source,
 	ChDeviceQueueData *data;
 	ChDeviceQueueHelper *helper = (ChDeviceQueueHelper *) user_data;
 	const gchar *device_id;
+	const gchar *tmp;
 	gboolean ret;
 	gchar *error_msg = NULL;
 	GError *error = NULL;
 	guint i;
 	guint pending_commands;
+	ChError last_error_code = 0;
 	GUsbDevice *device = G_USB_DEVICE (source);
 
 	/* mark it as not in use */
@@ -232,6 +234,7 @@ ch_device_queue_process_write_command_cb (GObject *source,
 			       error->message);
 
 		/* save this so we can possibly use when we're done */
+		last_error_code = error->code;
 		g_ptr_array_add (helper->failures,
 				 g_strdup_printf ("%s: %s",
 						  g_usb_device_get_platform_id (device),
@@ -268,12 +271,20 @@ out:
 
 		/* should we return the process with an error, or just
 		 * rely on the signal? */
-		if (helper->failures->len > 0 &&
+		if (helper->failures->len == 1 &&
 		    (helper->process_flags & CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS) == 0) {
+			tmp = g_ptr_array_index (helper->failures, 0);
+			g_simple_async_result_set_error (helper->res,
+							 CH_DEVICE_ERROR,
+							 last_error_code,
+							 "%s", tmp);
+		} else if (helper->failures->len > 1 &&
+			   (helper->process_flags & CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS) == 0) {
 			g_ptr_array_add (helper->failures, NULL);
 			error_msg = g_strjoinv (", ", (gchar**) helper->failures->pdata);
 			g_simple_async_result_set_error (helper->res,
-							 1, 0,
+							 CH_DEVICE_ERROR,
+							 last_error_code,
 							 "There were %i failures: %s",
 							 helper->failures->len - 1,
 							 error_msg);
