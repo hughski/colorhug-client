@@ -26,11 +26,14 @@
 #include <string.h>
 #include <unistd.h>
 
+#define	CH_USB_VID				0x273f
+#define	CH_USB_PID_FIRMWARE			0x1001
+
 int main (int argc, char *argv[])
 {
 	char buffer[64];
 	HIDInterface* hid;
-	HIDInterfaceMatcher matcher = { 0x04d8, 0xf8da, NULL, NULL, 0 };
+	HIDInterfaceMatcher matcher = { CH_USB_VID, CH_USB_PID_FIRMWARE, NULL, NULL, 0 };
 	hid_return ret;
 	int i;
 	int iface_num = 0;

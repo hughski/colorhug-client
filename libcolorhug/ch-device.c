@@ -82,10 +82,44 @@ out:
 gboolean
 ch_device_is_colorhug (GUsbDevice *device)
 {
-	if (g_usb_device_get_vid (device) == CH_USB_VID &&
-	    g_usb_device_get_pid (device) == CH_USB_PID)
-		return TRUE;
-	return FALSE;
+	return ch_device_get_mode (device) != CH_DEVICE_MODE_UNKNOWN;
+}
+
+/**
+ * ch_device_get_mode:
+ **/
+ChDeviceMode
+ch_device_get_mode (GUsbDevice *device)
+{
+	ChDeviceMode state;
+
+	/* is a legacy device */
+	if (g_usb_device_get_vid (device) == CH_USB_VID_LEGACY &&
+	    g_usb_device_get_pid (device) == CH_USB_PID_LEGACY) {
+		state = CH_DEVICE_MODE_LEGACY;
+		goto out;
+	}
+
+	/* vendor doesn't match */
+	if (g_usb_device_get_vid (device) != CH_USB_VID) {
+		state = CH_DEVICE_MODE_UNKNOWN;
+		goto out;
+	}
+
+	/* use the product ID to work out the state */
+	switch (g_usb_device_get_pid (device)) {
+	case CH_USB_PID_BOOTLADER:
+		state = CH_DEVICE_MODE_BOOTLOADER;
+		break;
+	case CH_USB_PID_FIRMWARE:
+		state = CH_DEVICE_MODE_FIRMWARE;
+		break;
+	default:
+		state = CH_DEVICE_MODE_UNKNOWN;
+		break;
+	}
+out:
+	return state;
 }
 
 /**
