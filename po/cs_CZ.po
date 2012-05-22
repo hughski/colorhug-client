@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-15 19:54+0000\n"
-"PO-Revision-Date: 2012-03-15 19:56+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2012-04-17 19:26+0100\n"
+"PO-Revision-Date: 2012-05-15 13:13+0000\n"
+"Last-Translator: nijel <michal@cihar.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,10 +70,10 @@ msgstr "Projektor"
 #. Default light emitting diode matrix
 #: ../data/ch-ccmx.ui.h:18
 msgid "LED"
-msgstr ""
+msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:19 ../src/ch-flash.c:1438
+#: ../data/ch-ccmx.ui.h:19 ../src/ch-flash.c:1451
 msgid "Please connect your ColorHug"
 msgstr "Prosím připojte Váš ColorHug"
 
@@ -125,7 +125,7 @@ msgstr "Červená"
 
 #: ../data/ch-util.ui.h:11
 msgid "White"
-msgstr ""
+msgstr "Bílá"
 
 #. The last color reading in raw mode
 #: ../data/ch-util.ui.h:13
@@ -140,22 +140,22 @@ msgstr "Násobič:"
 #: ../data/ch-util.ui.h:17
 #, no-c-format
 msgid "0% (off)"
-msgstr ""
+msgstr "0% (vypnuto)"
 
 #: ../data/ch-util.ui.h:19
 #, no-c-format
 msgid "20%"
-msgstr ""
+msgstr "20%"
 
 #: ../data/ch-util.ui.h:21
 #, no-c-format
 msgid "2%"
-msgstr ""
+msgstr "2%"
 
 #: ../data/ch-util.ui.h:23
 #, no-c-format
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #. Set the time to collect each reading for
 #: ../data/ch-util.ui.h:25
@@ -164,23 +164,23 @@ msgstr "Doba načítání vzorku:"
 
 #: ../data/ch-util.ui.h:26
 msgid "5ms"
-msgstr ""
+msgstr "5ms"
 
 #: ../data/ch-util.ui.h:27
 msgid "50ms"
-msgstr ""
+msgstr "50ms"
 
 #: ../data/ch-util.ui.h:28
 msgid "100ms"
-msgstr ""
+msgstr "100ms"
 
 #: ../data/ch-util.ui.h:29
 msgid "200ms"
-msgstr ""
+msgstr "200ms"
 
 #: ../data/ch-util.ui.h:30
 msgid "Maximum"
-msgstr ""
+msgstr "Maximum"
 
 #: ../data/ch-util.ui.h:31
 msgid "Firmware version:"
@@ -278,20 +278,20 @@ msgstr "Aktualizuj firmware na ColorHug kolorimetru"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
-msgstr ""
+msgstr "Jestli se má aktualizovat na testovací firmware"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr ""
+msgstr "Jestli se má uživateli nabízet testovací firmware."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The location of where firmware updates are stored"
-msgstr ""
+msgstr "Umístění aktualizací firmware"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid "The location of where firmware updates and the metadata is stored."
-msgstr ""
+msgstr "Umístění aktualizací firmware a informací o nich."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:5
 msgid "The location of where CCMX files are stored"
@@ -323,16 +323,16 @@ msgstr "Soubor má nulovou velikost"
 
 #: ../src/ch-ccmx.c:430
 msgid "Failed to load data"
-msgstr ""
+msgstr "Nepodařilo se načíst data"
 
 #. TRANSLATORS: the request failed
-#: ../src/ch-ccmx.c:461 ../src/ch-flash.c:1252 ../src/ch-flash.c:1282
+#: ../src/ch-ccmx.c:461 ../src/ch-flash.c:1265 ../src/ch-flash.c:1295
 msgid "Failed to contact ColorHug"
 msgstr "Nepodařilo se spojení s ColorHug"
 
 #. TRANSLATORS: internal error when setting up HTTP request
 #: ../src/ch-ccmx.c:476 ../src/ch-ccmx.c:1315 ../src/ch-ccmx.c:1442
-#: ../src/ch-flash.c:735 ../src/ch-flash.c:1104 ../src/ch-flash.c:1215
+#: ../src/ch-flash.c:748 ../src/ch-flash.c:1117 ../src/ch-flash.c:1228
 msgid "Failed to setup message"
 msgstr "Nepodařilo se připravit HTTP požadavek"
 
@@ -377,7 +377,7 @@ msgstr "Zrušit"
 #. * maps a specific matrix to a display type
 #: ../src/ch-ccmx.c:694
 msgid "Failed to get the calibration data"
-msgstr ""
+msgstr "Nepodařilo se načíst informace o kalibraci."
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 #: ../src/ch-ccmx.c:762
@@ -412,12 +412,12 @@ msgstr "Všech 64 slotů je zaplněno."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
-#: ../src/ch-ccmx.c:1019 ../src/ch-ccmx.c:1189 ../src/ch-flash.c:1084
+#: ../src/ch-ccmx.c:1019 ../src/ch-ccmx.c:1189 ../src/ch-flash.c:1097
 msgid "Failed to load file"
 msgstr "Nepodařilo se načíst soubor"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:1082 ../src/ch-flash.c:1345
+#: ../src/ch-ccmx.c:1082 ../src/ch-flash.c:1358
 msgid "Failed to open device"
 msgstr "Nepodařilo se otevřít zařízení"
 
@@ -446,551 +446,563 @@ msgid "Getting latest data from the web..."
 msgstr "Získávám nejnovější data z internetu..."
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:1590 ../src/ch-flash.c:1523
+#: ../src/ch-ccmx.c:1590 ../src/ch-flash.c:1536
 msgid "Failed to setup networking"
 msgstr "Nepodařilo se nastavit síť"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:1670 ../src/ch-flash.c:1615 ../src/ch-flash.c:1618
-#: ../src/ch-main.c:2291
+#: ../src/ch-ccmx.c:1674 ../src/ch-flash.c:1632 ../src/ch-flash.c:1635
+#: ../src/ch-main.c:2216
 msgid "Show extra debugging information"
 msgstr "Zobrazit "
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:1673
+#: ../src/ch-ccmx.c:1677
 msgid "Repair the factory calibration matrix"
 msgstr "Opravit kalibrační matici"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:1687
+#: ../src/ch-ccmx.c:1691
 msgid "ColorHug CCMX loader"
 msgstr "Nahrávač ColorHug CCMX"
 
-#: ../src/ch-ccmx.c:1693 ../src/ch-flash.c:1637 ../src/ch-util.c:952
+#: ../src/ch-ccmx.c:1697 ../src/ch-flash.c:1654 ../src/ch-util.c:952
 msgid "Failed to parse command line options"
 msgstr "Nepodařilo se zpracovat parametry příkazové řádky"
 
+#: ../src/ch-flash.c:72 ../src/ch-flash.c:231
+msgid "ColorHug Updater"
+msgstr "ColorHug aktualizace"
+
+#: ../src/ch-flash.c:73
+msgid "Calibration Failed"
+msgstr "Kalibrace selhala"
+
 #. TRANSLATORS: we broke the device
-#: ../src/ch-flash.c:100
+#: ../src/ch-flash.c:107
 msgid "Flashing the device failed but the ColorHug is not damaged."
 msgstr "Zápis nového firmware selhal, ale ColorHug není poškozen."
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
-#: ../src/ch-flash.c:104
+#: ../src/ch-flash.c:111
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
 msgstr "Odpojte ColorHug od počítače, znovu ho připojte a znovu spusťte tento program."
 
 #. TRANSLATORS: the user has to be online to get firmware
-#: ../src/ch-flash.c:159
+#: ../src/ch-flash.c:166
 msgid "Connect to the internet to check for updates"
 msgstr "Připojit k internetu pro kontrolu aktualizací"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
-#: ../src/ch-flash.c:205
+#: ../src/ch-flash.c:212
 msgid "Failed to set the flash success true"
 msgstr "Nepodařilo se zaznamenat úspěšné nahrání"
 
 #. TRANSLATORS: we've uploaded new firmware
-#: ../src/ch-flash.c:214
+#: ../src/ch-flash.c:221
 msgid "Device successfully updated"
 msgstr "Zařízení bylo úspěšně aktualizováno"
 
+#: ../src/ch-flash.c:232
+msgid "Calibration Completed"
+msgstr "Kalibrace dokončena"
+
 #. TRANSLATORS: tell the hardware we succeeded
-#: ../src/ch-flash.c:236
+#: ../src/ch-flash.c:249
 msgid "Setting flash success..."
 msgstr "Zaznamenávám úspěšné nahrání..."
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
-#: ../src/ch-flash.c:264
+#: ../src/ch-flash.c:277
 msgid "Failed to startup the ColorHug"
 msgstr "Nepodařilo se zapnout ColorHug"
 
 #. TRANSLATORS: the new firmware will not load
-#: ../src/ch-flash.c:294
+#: ../src/ch-flash.c:307
 msgid "Failed to boot the ColorHug"
 msgstr "Nepodařilo se nabootovat ColorHug"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:328
+#: ../src/ch-flash.c:341
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Nepodařilo se ověřit firmware."
 
 #. TRANSLATORS: boot into the new firmware
-#: ../src/ch-flash.c:345
+#: ../src/ch-flash.c:358
 msgid "Starting the new firmware..."
 msgstr "Spouštím nový firmware..."
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:388
+#: ../src/ch-flash.c:401
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Nepodařilo se zapsat firmware."
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
-#: ../src/ch-flash.c:398
+#: ../src/ch-flash.c:411
 msgid "Verifying new firmware..."
 msgstr "Ověřuji nový firmware..."
 
 #. TRANSLATORS: now write the new firmware chunks
-#: ../src/ch-flash.c:427
+#: ../src/ch-flash.c:440
 msgid "Writing new firmware..."
 msgstr "Zapisuji nový firmware..."
 
 #. TRANSLATORS: the device failed to come back alive
-#: ../src/ch-flash.c:458
+#: ../src/ch-flash.c:471
 msgid "Failed to reboot the ColorHug"
 msgstr "Nepodařilo se rebootovat ColorHug"
 
 #. TRANSLATORS: we restart the device in bootloader mode
-#: ../src/ch-flash.c:488
+#: ../src/ch-flash.c:501
 msgid "Failed to reset the ColorHug"
 msgstr "Nepodařilo se restartovat ColorHug"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
-#: ../src/ch-flash.c:519
+#: ../src/ch-flash.c:532
 msgid "Resetting into bootloader..."
 msgstr "Restartuji do zavaděče..."
 
 #. TRANSLATORS: failed to get the firmware file
-#: ../src/ch-flash.c:552
+#: ../src/ch-flash.c:565
 msgid "Failed to get firmware"
 msgstr "Nepodařilo se získat firmware"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:561
+#: ../src/ch-flash.c:574
 msgid "Firmware has zero size"
 msgstr "Firmware má nulovou velikost"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:573
+#: ../src/ch-flash.c:586
 msgid "Firmware has incorrect checksum"
 msgstr "Firmware má chybný kontrolní součet"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:661
+#: ../src/ch-flash.c:674
 msgid "Warnings about this update"
 msgstr "Varování o této aktualizaci"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
-#: ../src/ch-flash.c:669
+#: ../src/ch-flash.c:682
 msgid "Flash anyway"
 msgstr "Přesto nahrát"
 
 #. TRANSLATORS: this is the button text to abort the flash process
-#: ../src/ch-flash.c:671
+#: ../src/ch-flash.c:684
 msgid "Do not flash"
 msgstr "Nenahrávat"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
-#: ../src/ch-flash.c:716
+#: ../src/ch-flash.c:729
 msgid "Downloading update..."
 msgstr "Stahování aktualizace..."
 
 #. TRANSLATORS: the user is already running the latest firmware
-#: ../src/ch-flash.c:809
+#: ../src/ch-flash.c:822
 msgid "There are no updates available."
 msgstr "Žádné aktualizace nejsou k dispozici."
 
 #. TRANSLATORS: the user is running an old firmware version
-#: ../src/ch-flash.c:829
+#: ../src/ch-flash.c:842
 msgid "A firmware update is available."
 msgstr "Aktualizace firmwaru je k dispozici."
 
 #. TRANSLATORS: the HTTP request failed
-#: ../src/ch-flash.c:853
+#: ../src/ch-flash.c:866
 msgid "Failed to get the listing of firmware files"
 msgstr "Nepodařilo se získat seznam souborů s firmware"
 
 #. TRANSLATORS: we got an invalid response from the server
-#: ../src/ch-flash.c:862
+#: ../src/ch-flash.c:875
 msgid "The firmware listing has zero size"
 msgstr "Seznam firmware má nulovou velikost"
 
 #. TRANSLATORS: the XML file was corrupt
-#: ../src/ch-flash.c:876
+#: ../src/ch-flash.c:889
 msgid "Failed to parse the update metadata"
 msgstr "Nepodařilo se zpracovat informace o aktualizaci"
 
 #. TRANSLATORS: this is test firmware
-#: ../src/ch-flash.c:903
+#: ../src/ch-flash.c:916
 msgid "This is a test firmware not intended for general release."
 msgstr ""
 
 #. TRANSLATORS: all bets are off
-#: ../src/ch-flash.c:905
+#: ../src/ch-flash.c:918
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Firmware nebyl dostatečně otestován a nemusí fungovat správně."
 
 #. TRANSLATORS: the device refused our request to mark
 #. * it lost or stolen
-#: ../src/ch-flash.c:964
+#: ../src/ch-flash.c:977
 msgid "Failed to set the device as lost or stolen"
 msgstr "Nepodařilo se nastavit zařízení jako ztracené nebo ukradené"
 
 #. TRANSLATORS: we have a blacklist that we match the device against
-#: ../src/ch-flash.c:979
+#: ../src/ch-flash.c:992
 msgid "This ColorHug has been registered as lost or stolen."
 msgstr "Tento ColorHug byl nahlášen jako ztracený nebo ukradený."
 
 #. TRANSLATORS: We disable the device so it can't go into
 #. * firmware mode without a magic incantation
-#: ../src/ch-flash.c:988
+#: ../src/ch-flash.c:1001
 msgid "The device has now been deactivated."
 msgstr "Zařízení je nyní deaktivováno."
 
 #. TRANSLATORS: We can tell the user the magic incantation if we've
 #. * made a mistake
-#: ../src/ch-flash.c:993
+#: ../src/ch-flash.c:1006
 msgid "Please contact <tt>info@hughski.com</tt> for more details."
 msgstr "Pro více informací prosím kontaktujte <tt>info@hughski.com</tt>."
 
 #. TRANSLATORS: we failed to get the blacklist from the server
-#: ../src/ch-flash.c:1049
+#: ../src/ch-flash.c:1062
 msgid "Failed to get device blacklist"
 msgstr "Nepodařilo se načíst seznam nepodporovaných zařízení"
 
 #. TRANSLATORS: we've specified a local file
-#: ../src/ch-flash.c:1074
+#: ../src/ch-flash.c:1087
 msgid "Flashing firmware file..."
 msgstr "Nahrávám soubor s firmware..."
 
 #. TRANSLATORS: pre-production hardware
-#: ../src/ch-flash.c:1149
+#: ../src/ch-flash.c:1162
 msgid "Prototype ColorHug Detected"
 msgstr "Zjištěn prototyp ColorHug"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1153
+#: ../src/ch-flash.c:1166
 msgid "ColorHug Detected"
 msgstr "Zjištěn ColorHug"
 
 #. TRANSLATORS: fake hardware
-#: ../src/ch-flash.c:1157
+#: ../src/ch-flash.c:1170
 msgid "Emulated ColorHug Detected"
 msgstr "Zjištěn emulovaný ColorHug"
 
 #. TRANSLATORS: new-issue hardware
-#: ../src/ch-flash.c:1161
+#: ../src/ch-flash.c:1174
 #, c-format
 msgid "ColorHug v%i Detected"
 msgstr "Zjištěn v%i ColorHug"
 
 #. TRANSLATORS: the device is in bootloader mode
-#: ../src/ch-flash.c:1172
+#: ../src/ch-flash.c:1185
 msgid "Bootloader version"
 msgstr "Verze bootloaderu"
 
 #. TRANSLATORS: the device is in firmware mode
-#: ../src/ch-flash.c:1180
+#: ../src/ch-flash.c:1193
 msgid "Firmware version"
 msgstr "Firmware verze"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
-#: ../src/ch-flash.c:1199
+#: ../src/ch-flash.c:1212
 msgid "Checking for updates..."
 msgstr "Kontroluji aktualizace..."
 
 #. TRANSLATORS: request the firmware version from the device
-#: ../src/ch-flash.c:1360
+#: ../src/ch-flash.c:1373
 msgid "Getting firmware version..."
 msgstr "Získávám verzi firmwaru..."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:1399
+#: ../src/ch-flash.c:1412
 msgid "Update details"
 msgstr "Detaily aktualizace"
 
 #. TRANSLATORS: show the user some markdown formatted text
-#: ../src/ch-flash.c:1489
+#: ../src/ch-flash.c:1502
 msgid "See details about the update"
 msgstr "Zobrazit podrobnosti o této aktualizaci"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
-#: ../src/ch-flash.c:1631
+#: ../src/ch-flash.c:1648
 msgid "ColorHug Flash Program"
 msgstr "Flashovací program pro ColorHug"
 
 #. TRANSLATORS: this is a command alias
-#: ../src/ch-main.c:88
+#: ../src/ch-main.c:87
 #, c-format
 msgid "Alias to %s"
 msgstr "Zástupce pro %s"
 
-#: ../src/ch-main.c:166
+#: ../src/ch-main.c:165
 msgid "Command not found, valid commands are:"
 msgstr "Příkaz nenalezen, platné příkazy jsou:"
 
 #. TRANSLATORS: ask before we set these
-#: ../src/ch-main.c:1396
+#: ../src/ch-main.c:1321
 msgid "Set these values as the dark offsets"
 msgstr "Nastavit tyto hodnoty jako posun tmavých barev"
 
 #. TRANSLATORS: this is the enabled sensor color
-#: ../src/ch-main.c:1536
+#: ../src/ch-main.c:1461
 msgid "Color"
 msgstr "Barva"
 
 #. TRANSLATORS: this is the sensor scale factor
-#: ../src/ch-main.c:1540 ../src/ch-main.c:1581 ../src/ch-main.c:1632
+#: ../src/ch-main.c:1465 ../src/ch-main.c:1506 ../src/ch-main.c:1557
 msgid "Multiplier"
 msgstr "Násobitel"
 
 #. TRANSLATORS: this is the sensor sample time
-#: ../src/ch-main.c:1544 ../src/ch-main.c:1585 ../src/ch-main.c:1636
+#: ../src/ch-main.c:1469 ../src/ch-main.c:1510 ../src/ch-main.c:1561
 msgid "Integral"
 msgstr "Vzorkovací doba"
 
 #. TRANSLATORS: this is the number of pulses detected
-#: ../src/ch-main.c:1547
+#: ../src/ch-main.c:1472
 msgid "Pulses"
 msgstr "Počet vzorků"
 
 #. TRANSLATORS: confirmation
-#: ../src/ch-main.c:1863
+#: ../src/ch-main.c:1788
 msgid "Flash the device?"
 msgstr "Aktualizovat zařízení?"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2312
+#: ../src/ch-main.c:2237
 msgid "Gets the sensor color filter"
 msgstr "Načíst barevné filtry čidla"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2317
+#: ../src/ch-main.c:2242
 msgid "Sets the sensor color filter"
 msgstr "Nastavit barevný filtr senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2322
+#: ../src/ch-main.c:2247
 msgid "Gets the sensor multiplier"
 msgstr "Načíst násobitel čidla"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2327
+#: ../src/ch-main.c:2252
 msgid "Sets the sensor multiplier"
 msgstr "Nastaví násobitel senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2332
+#: ../src/ch-main.c:2257
 msgid "Gets the sensor sample read time"
 msgstr "Načte dobu čtení vzorku"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2337
+#: ../src/ch-main.c:2262
 msgid "Sets the sensor sample read time"
 msgstr "Nastaví dobu čtení vzorku"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2342
+#: ../src/ch-main.c:2267
 msgid "Gets the sensor firmware version"
 msgstr "Získá verzi firmwaru senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2347
+#: ../src/ch-main.c:2272
 msgid "Gets the sensor calibration matrix"
 msgstr "Načíst kalibrační matici čidla"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2352
+#: ../src/ch-main.c:2277
 msgid "Sets the sensor calibration matrix"
 msgstr "Nastavit kalibrační matici čidla"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2357
+#: ../src/ch-main.c:2282
 msgid "Clear the sensor calibration matrix"
 msgstr "Obnovit kalibrační matici senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2362
+#: ../src/ch-main.c:2287
 msgid "List the sensor calibration matrices"
 msgstr "Vypsat kalibrační matice senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2367
+#: ../src/ch-main.c:2292
 msgid "Sets the sensor calibration matrix from a CCMX file"
 msgstr "Nastaví kalibrační matici senzoru ze souboru CCMX"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2372
+#: ../src/ch-main.c:2297
 msgid "Gets the sensor serial number"
 msgstr "Získá sériové číslo senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2377
+#: ../src/ch-main.c:2302
 msgid "Sets the sensor serial number"
 msgstr "Nastaví sériové číslo senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2382
+#: ../src/ch-main.c:2307
 msgid "Gets the owner's name"
 msgstr "Načte jméno majitele"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2387
+#: ../src/ch-main.c:2312
 msgid "Sets the owner's name"
 msgstr "Nastaví jméno majitele"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2392
+#: ../src/ch-main.c:2317
 msgid "Gets the owner's email address"
 msgstr "Načte email majitele"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2397
+#: ../src/ch-main.c:2322
 msgid "Sets the owner's email address"
 msgstr "Nastaví email majitele"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2402
+#: ../src/ch-main.c:2327
 msgid "Gets the LED values"
 msgstr "Získat hodnoty LED"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2407
+#: ../src/ch-main.c:2332
 msgid "Sets the LEDs"
 msgstr "Nastavit LEDky"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2412
+#: ../src/ch-main.c:2337
 msgid "Gets the PCB errata"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2417
+#: ../src/ch-main.c:2342
 msgid "Sets the PCB errata"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2422
+#: ../src/ch-main.c:2347
 msgid "Gets the dark offset values"
 msgstr "Načíst kompenzaci šera"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2427
+#: ../src/ch-main.c:2352
 msgid "Sets the dark offset values"
 msgstr "Nastavit kompenzaci šera"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2432
+#: ../src/ch-main.c:2357
 msgid "Writes the EEPROM with updated values"
 msgstr "Zapsat do EEPROM změněné hodnoty"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2437
+#: ../src/ch-main.c:2362
 msgid "Takes a reading"
 msgstr "Provede čtení"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2442
+#: ../src/ch-main.c:2367
 msgid "Takes all color readings (to device RGB)"
 msgstr "Provede čtení všech barev (v RGB)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2447
+#: ../src/ch-main.c:2372
 msgid "Takes all color readings (to XYZ)"
 msgstr "Načíst všechny barvy (jako XYZ)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2452
+#: ../src/ch-main.c:2377
 msgid "Reset the processor back to the bootloader"
 msgstr "Restartuje procesor do zavaděče"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2457 ../src/ch-main.c:2462
+#: ../src/ch-main.c:2382 ../src/ch-main.c:2387
 msgid "Flash firmware into the processor"
 msgstr "Nahrát firmware do procesoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2467
+#: ../src/ch-main.c:2392
 msgid "Read EEPROM at a specified address"
 msgstr "Přečte EEPROM na zadané adrese"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2472
+#: ../src/ch-main.c:2397
 msgid "Erase EEPROM at a specified address"
 msgstr "Vymaže EEPROM na zadané adrese"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2477
+#: ../src/ch-main.c:2402
 msgid "Write EEPROM at a specified address"
 msgstr "Zapíše do EEPROM na zadané adrese"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2482
+#: ../src/ch-main.c:2407
 msgid "Gets the pre scale constant"
 msgstr "Načte měřítko čtení"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2487
+#: ../src/ch-main.c:2412
 msgid "Sets the pre scale constant"
 msgstr "Nastaví měřítko čtení"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2492
+#: ../src/ch-main.c:2417
 msgid "Gets the post scale constant"
 msgstr "Načte měřítko XYZ"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2497
+#: ../src/ch-main.c:2422
 msgid "Sets the post scale constant"
 msgstr "Nastaví měřítko XYZ"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2502
+#: ../src/ch-main.c:2427
 msgid "Sets the flash success"
 msgstr "Zaznamená úspěšné nahrání"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2507
+#: ../src/ch-main.c:2432
 msgid "Boots from the bootloader into the firmware"
 msgstr "Nastartuje firmware ze zavaděče"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2512
+#: ../src/ch-main.c:2437
 msgid "Gets the sensor calibration map"
 msgstr "Načte kalibrační mapu senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2517
+#: ../src/ch-main.c:2442
 msgid "Sets the sensor calibration map"
 msgstr "Nastaví kalibrační mapu senzoru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2522
+#: ../src/ch-main.c:2447
 msgid "Gets the hardware version"
 msgstr "Získá verzi hardwaru"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2527
+#: ../src/ch-main.c:2452
 msgid "Gets an array of raw samples"
-msgstr ""
+msgstr "Načte seznam surových vzroků"
 
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:2540
+#: ../src/ch-main.c:2465
 msgid "Color Management"
 msgstr "Správa barev"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:2557
+#: ../src/ch-main.c:2482
 msgid "No connection to device:"
 msgstr "Žádné spojení se zařízením:"
 
 #. TRANSLATORS: internal device error
 #: ../src/ch-util.c:184
 msgid "Failed to get device status"
-msgstr ""
+msgstr "Nepodařilo se zjistit stav zařízení"
 
 #. TRANSLATORS: internal device error
 #: ../src/ch-util.c:249

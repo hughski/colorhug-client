@@ -1,3 +1,22 @@
+Version 0.1.9
+~~~~~~~~~~~~~
+Released: 2012-05-22
+
+New Features:
+ - Add commands to get and set the remote profile hash on the device (Richard Hughes)
+ - Add support for the new self-test command (Richard Hughes)
+ - Allow the colorhug tool to download and upload icc profiles (Richard Hughes)
+ - Hughski Limited now has its own USB Vendor ID (Richard Hughes)
+ - Remove the device blacklist anti-feature (Richard Hughes)
+
+Bugfixes:
+ - Fix up the documentation for the command line tool options (Richard Hughes)
+ - Install the colorhug command line tool as /usr/bin/colorhug-cmd (Richard Hughes)
+ - Remove colorhug-gui, it's no longer useful (Richard Hughes)
+ - Set the multiplier to maximum when doing 'take-readings' (Richard Hughes)
+ - Use CdIt8 for ccmx parsing and bump the colord dep to 0.1.20 (Richard Hughes)
+ - When failing, set the device error enum as the GError code (Richard Hughes)
+
 Version 0.1.8
 ~~~~~~~~~~~~~
 Released: 2012-04-17
