@@ -26,6 +26,7 @@
 #include <glib-object.h>
 #include <gusb.h>
 #include <math.h>
+#include <colord.h>
 
 #include "ch-math.h"
 #include "ch-hash.h"
@@ -112,7 +113,7 @@ ch_test_device_queue_func (void)
 		device = g_ptr_array_index (devices, i);
 		if (g_usb_device_get_vid (device) != CH_USB_VID)
 			continue;
-		if (g_usb_device_get_pid (device) != CH_USB_PID)
+		if (g_usb_device_get_pid (device) != CH_USB_PID_FIRMWARE)
 			continue;
 
 		valid_devices++;
@@ -182,7 +183,7 @@ ch_test_device_queue_func (void)
 		device = g_ptr_array_index (devices, i);
 		if (g_usb_device_get_vid (device) != CH_USB_VID)
 			continue;
-		if (g_usb_device_get_pid (device) != CH_USB_PID)
+		if (g_usb_device_get_pid (device) != CH_USB_PID_FIRMWARE)
 			continue;
 		ch_device_queue_add (device_queue,
 				     device,
@@ -454,7 +455,7 @@ ch_client_get_default (GError **error)
 	g_usb_device_list_coldplug (list);
 	device = g_usb_device_list_find_by_vid_pid (list,
 						    CH_USB_VID,
-						    CH_USB_PID,
+						    CH_USB_PID_FIRMWARE,
 						    error);
 	if (device == NULL)
 		goto out;

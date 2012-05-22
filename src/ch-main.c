@@ -26,6 +26,7 @@
 #include <locale.h>
 #include <stdio.h>
 #include <math.h>
+#include <colord.h>
 #include <colorhug.h>
 #include <libsoup/soup.h>
 

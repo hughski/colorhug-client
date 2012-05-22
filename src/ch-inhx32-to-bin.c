@@ -23,6 +23,7 @@
 
 #include <glib/gi18n.h>
 #include <stdio.h>
+#include <colord.h>
 #include <colorhug.h>
 
 #define	CH_RECORD_TYPE_DATA		0
