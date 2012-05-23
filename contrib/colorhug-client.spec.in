@@ -29,7 +29,7 @@ the firmware on the sensor or to access the sensor from command line
 scripts.
 
 %package devel
-Summary: GLib Libraries and headers for zif
+Summary: GLib Libraries and headers for colorhug-client
 Requires: %{name} = %{version}-%{release}
 Requires: glib2-devel
 Requires: libgusb-devel
