@@ -1572,7 +1572,8 @@ ch_ccmx_device_added_cb (GUsbDeviceList *list,
 	g_debug ("Added: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
-	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE) {
+	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE ||
+	    ch_device_get_mode (device) == CH_DEVICE_MODE_LEGACY) {
 		priv->device = g_object_ref (device);
 		ch_ccmx_got_device (priv);
 	}
@@ -1589,7 +1590,8 @@ ch_ccmx_device_removed_cb (GUsbDeviceList *list,
 	g_debug ("Removed: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
-	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE) {
+	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE ||
+	    ch_device_get_mode (device) == CH_DEVICE_MODE_LEGACY) {
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
 		priv->device = NULL;
