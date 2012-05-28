@@ -578,7 +578,7 @@ static gboolean
 ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	ChFreqScale multiplier;
+	ChFreqScale multiplier = CH_FREQ_SCALE_0;
 
 	/* get from HW */
 	ch_device_queue_get_multiplier (priv->device_queue,
@@ -1094,7 +1094,7 @@ static gboolean
 ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
-	guint32 serial_number;
+	guint32 serial_number = G_MAXUINT32;
 
 	/* get from HW */
 	ch_device_queue_get_serial_number (priv->device_queue,
