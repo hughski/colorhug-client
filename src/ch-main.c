@@ -760,7 +760,7 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 	if (g_strv_length (values) != 6) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect '#lcd' '#crt' '#projector' '0' '0' '0'");
+				     "invalid input, expect '#lcd' '#crt' '#projector' '#led' '0' '0'");
 		goto out;
 	}
 	for (i = 0; i < 6; i++)
@@ -864,9 +864,10 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 		goto out;
 
 	g_print ("index: %i\n", calibration_index);
-	g_print ("supports LCD: %i\n", (types & 0x01) > 0);
-	g_print ("supports CRT: %i\n", (types & 0x02) > 0);
-	g_print ("supports projector: %i\n", (types & 0x04) > 0);
+	g_print ("supports LCD: %i\n", (types & CH_CALIBRATION_TYPE_LCD) > 0);
+	g_print ("supports LED: %i\n", (types & CH_CALIBRATION_TYPE_LED) > 0);
+	g_print ("supports CRT: %i\n", (types & CH_CALIBRATION_TYPE_CRT) > 0);
+	g_print ("supports projector: %i\n", (types & CH_CALIBRATION_TYPE_PROJECTOR) > 0);
 	g_print ("description: %s\n", description);
 	ch_util_show_calibration (&calibration);
 out:
@@ -898,6 +899,8 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* try to parse magic constants */
 	if (g_strstr_len (values[1], -1, "lcd") != NULL)
 		types += CH_CALIBRATION_TYPE_LCD;
+	if (g_strstr_len (values[1], -1, "led") != NULL)
+		types += CH_CALIBRATION_TYPE_LED;
 	if (g_strstr_len (values[1], -1, "crt") != NULL)
 		types += CH_CALIBRATION_TYPE_CRT;
 	if (g_strstr_len (values[1], -1, "projector") != NULL)
@@ -905,7 +908,7 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (types == 0) {
 		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
-				     "invalid type, expected 'lcd', 'crt', 'projector'");
+				     "invalid type, expected 'lcd', 'led', 'crt', 'projector'");
 		goto out;
 	}
 	calibration_tmp = cd_mat33_get_data (&calibration);
