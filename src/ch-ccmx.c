@@ -38,7 +38,7 @@ typedef struct {
 	GUsbDevice	*device;
 	GUsbDeviceList	*device_list;
 	SoupSession	*session;
-	guint16		 calibration_map[6];
+	guint16		 calibration_map[CH_CALIBRATION_MAX];
 	guint		 ccmx_idx;
 	guint8		 ccmx_types[CH_CALIBRATION_MAX];
 	gchar		*ccmx_description[CH_CALIBRATION_MAX];
@@ -387,7 +387,9 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 	gboolean ret;
 	gchar *location = NULL;
 	GError *error = NULL;
+	GtkListStore *list_store;
 	SoupURI *uri;
+	guint i;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -421,6 +423,21 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 		g_error_free (error);
 		goto out;
 	}
+
+	/* reset the calibration map too */
+	for (i = 0; i < CH_CALIBRATION_MAX; i++)
+		priv->calibration_map[i] = 0;
+
+	/* clear any existing profiles */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
+	gtk_list_store_clear (list_store);
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_led"));
+	gtk_list_store_clear (list_store);
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
+	gtk_list_store_clear (list_store);
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
+	gtk_list_store_clear (list_store);
+	g_hash_table_remove_all (priv->hash);
 out:
 	g_free (location);
 }
