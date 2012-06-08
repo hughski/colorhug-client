@@ -862,7 +862,6 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	const CdMat3x3 *calibration;
 	const gchar *description;
 	gboolean ret = TRUE;
-	gboolean type_factory = FALSE;
 	guint8 types = 0;
 
 	/* read ccmx */
@@ -880,16 +879,20 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 		goto out;
 	}
 
-	/* get the types */
-	type_factory = cd_it8_has_option (it8, "TYPE_FACTORY");
-	if (type_factory || cd_it8_has_option (it8, "TYPE_LCD"))
-		types += CH_CALIBRATION_TYPE_LCD;
-	if (type_factory || cd_it8_has_option (it8, "TYPE_LED"))
-		types += CH_CALIBRATION_TYPE_LED;
-	if (type_factory || cd_it8_has_option (it8, "TYPE_CRT"))
-		types += CH_CALIBRATION_TYPE_CRT;
-	if (type_factory || cd_it8_has_option (it8, "TYPE_PROJECTOR"))
-		types += CH_CALIBRATION_TYPE_PROJECTOR;
+	/* get the supported display types */
+	if (cd_it8_has_option (it8, "TYPE_FACTORY")) {
+		types = CH_CALIBRATION_TYPE_ALL;
+	} else {
+		types = 0;
+		if (cd_it8_has_option (it8, "TYPE_LCD"))
+			types += CH_CALIBRATION_TYPE_LCD;
+		if (cd_it8_has_option (it8, "TYPE_LED"))
+			types += CH_CALIBRATION_TYPE_LED;
+		if (cd_it8_has_option (it8, "TYPE_CRT"))
+			types += CH_CALIBRATION_TYPE_CRT;
+		if (cd_it8_has_option (it8, "TYPE_PROJECTOR"))
+			types += CH_CALIBRATION_TYPE_PROJECTOR;
+	}
 
 	/* set to HW */
 	calibration = cd_it8_get_matrix (it8);
