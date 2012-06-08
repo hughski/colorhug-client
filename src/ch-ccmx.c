@@ -701,9 +701,6 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	/* add local files */
 	ch_ccmx_add_local_files (priv);
 
-
-{
-
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
 	gtk_widget_hide (widget);
@@ -724,15 +721,14 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	priv->done_get_cal = TRUE;
 
 	/* offer to repair the device */
-	if (priv->needs_repair)
+	if (priv->needs_repair) {
+		priv->force_repair = FALSE;
 		ch_ccmx_device_needs_repair (priv);
-	else if (priv->force_repair) {
+	} else if (priv->force_repair) {
 		ch_ccmx_device_force_repair (priv);
 		/* Force repair only once */
 		priv->force_repair = FALSE;
 	}
-}
-
 out:
 	return;
 }
