@@ -180,7 +180,7 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	gsize ccmx_size;
 	GtkListStore *list_store;
 	GtkTreeIter iter;
-	guint8 types = 0;
+	guint8 types;
 
 	/* load file */
 	g_debug ("opening %s", filename);
@@ -213,15 +213,20 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 		goto out;
 	}
 
-	/* get the types */
-	if (cd_it8_has_option (it8, "TYPE_LCD"))
-		types += CH_CALIBRATION_TYPE_LCD;
-	if (cd_it8_has_option (it8, "TYPE_LED"))
-		types += CH_CALIBRATION_TYPE_LED;
-	if (cd_it8_has_option (it8, "TYPE_CRT"))
-		types += CH_CALIBRATION_TYPE_CRT;
-	if (cd_it8_has_option (it8, "TYPE_PROJECTOR"))
-		types += CH_CALIBRATION_TYPE_PROJECTOR;
+	/* get the supported display types */
+	if (cd_it8_has_option (it8, "TYPE_FACTORY")) {
+		types = CH_CALIBRATION_TYPE_ALL;
+	} else {
+		types = 0;
+		if (cd_it8_has_option (it8, "TYPE_LCD"))
+			types += CH_CALIBRATION_TYPE_LCD;
+		if (cd_it8_has_option (it8, "TYPE_LED"))
+			types += CH_CALIBRATION_TYPE_LED;
+		if (cd_it8_has_option (it8, "TYPE_CRT"))
+			types += CH_CALIBRATION_TYPE_CRT;
+		if (cd_it8_has_option (it8, "TYPE_PROJECTOR"))
+			types += CH_CALIBRATION_TYPE_PROJECTOR;
+	}
 
 	/* is suitable for LCD */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
