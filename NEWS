@@ -1,3 +1,15 @@
+Version 0.1.10
+~~~~~~~~~~~~~~
+Released: 2012-06-11
+
+Bugfixes:
+ - Add support for TYPE_FACTORY when loading CCMX files from disk (Richard Hughes)
+ - Also reset the calibration map when resetting the factory calibration (Richard Hughes)
+ - Do not offer to repair twice when using 'colorhug-ccmx --repair' on a broken device (Richard Hughes)
+ - Initialize the multiplier before calling into ch_device_queue_get_multiplier (Richard Hughes)
+ - Re-enable support for legacy USB IDs in colorhug-ccmx (Thilo Fromm)
+ - Support LED types in colorhug-cmd get/set-calibration (Ian Munsie)
+
 Version 0.1.9
 ~~~~~~~~~~~~~
 Released: 2012-05-22
