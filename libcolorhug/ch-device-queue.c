@@ -1000,6 +1000,7 @@ ch_device_queue_set_calibration_ccmx (ChDeviceQueue *device_queue,
 	const gchar *description;
 	gboolean ret = TRUE;
 	gdouble *calibration_tmp;
+	guint8 types = 0;
 	guint i;
 
 	g_return_val_if_fail (CD_IS_IT8 (ccmx), FALSE);
@@ -1010,6 +1011,27 @@ ch_device_queue_set_calibration_ccmx (ChDeviceQueue *device_queue,
 	if (cd_it8_get_kind (ccmx) != CD_IT8_KIND_CCMX) {
 		ret = FALSE;
 		g_set_error (error, 1, 0, "is not a CCMX file");
+		goto out;
+	}
+
+	/* get the supported display types */
+	if (cd_it8_has_option (ccmx, "TYPE_FACTORY")) {
+		types = CH_CALIBRATION_TYPE_ALL;
+	} else {
+		if (cd_it8_has_option (ccmx, "TYPE_LCD"))
+			types += CH_CALIBRATION_TYPE_LCD;
+		if (cd_it8_has_option (ccmx, "TYPE_LED"))
+			types += CH_CALIBRATION_TYPE_LED;
+		if (cd_it8_has_option (ccmx, "TYPE_CRT"))
+			types += CH_CALIBRATION_TYPE_CRT;
+		if (cd_it8_has_option (ccmx, "TYPE_PROJECTOR"))
+			types += CH_CALIBRATION_TYPE_PROJECTOR;
+	}
+
+	/* no types set in CCMX file */
+	if (types == 0) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0, "No TYPE_x in ccmx file");
 		goto out;
 	}
 
@@ -1041,7 +1063,7 @@ ch_device_queue_set_calibration_ccmx (ChDeviceQueue *device_queue,
 					 device,
 					 calibration_index,
 					 calibration,
-					 CH_CALIBRATION_TYPE_ALL,
+					 types,
 					 description);
 out:
 	return ret;
