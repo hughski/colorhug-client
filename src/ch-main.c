@@ -987,6 +987,24 @@ out:
 }
 
 /**
+ * ch_util_types_to_short_string:
+ **/
+static gchar *
+ch_util_types_to_short_string (guint8 types)
+{
+	GString *str = g_string_new ("");
+	if ((types & CH_CALIBRATION_TYPE_LCD) > 0)
+		g_string_append (str, "L");
+	if ((types & CH_CALIBRATION_TYPE_CRT) > 0)
+		g_string_append (str, "C");
+	if ((types & CH_CALIBRATION_TYPE_PROJECTOR) > 0)
+		g_string_append (str, "P");
+	if ((types & CH_CALIBRATION_TYPE_LED) > 0)
+		g_string_append (str, "E");
+	return g_string_free (str, FALSE);
+}
+
+/**
  * ch_util_list_calibration:
  **/
 static gboolean
@@ -994,9 +1012,11 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gchar description[CH_CALIBRATION_DESCRIPTION_LEN];
+	gchar *tmp;
 	GError *error_local = NULL;
 	GString *string;
 	guint16 i;
+	guint8 types;
 
 	string = g_string_new ("");
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
@@ -1005,7 +1025,7 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 						 priv->device,
 						 i,
 						 NULL,
-						 NULL,
+						 &types,
 						 description);
 		ret = ch_device_queue_process (priv->device_queue,
 					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
@@ -1013,8 +1033,10 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					       &error_local);
 		if (ret) {
 			if (description[0] != '\0') {
-				g_string_append_printf (string, "%i\t%s\n",
-							i, description);
+				tmp = ch_util_types_to_short_string (types);
+				g_string_append_printf (string, "%i\t%s [%s]\n",
+							i, description, tmp);
+				g_free (tmp);
 			}
 		} else {
 			g_debug ("ignoring error: %s", error_local->message);
