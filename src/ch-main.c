@@ -1589,10 +1589,11 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 {
 	gboolean ret;
 	CdColorRGB value_old;
+	CdColorRGB value_zero;
 	CdColorRGB value;
 
 	/* set dark offsets */
-	cd_color_set_rgb (&value, 0.0f, 0.0f, 0.0f);
+	cd_color_set_rgb (&value_zero, 0.0f, 0.0f, 0.0f);
 
 	/* get from HW */
 	ch_device_queue_get_dark_offsets (priv->device_queue,
@@ -1600,7 +1601,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 					  &value_old);
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
-					  &value);
+					  &value_zero);
 	ch_device_queue_set_integral_time (priv->device_queue,
 					   priv->device,
 					   CH_INTEGRAL_TIME_VALUE_MAX);
