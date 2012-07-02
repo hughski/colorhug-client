@@ -183,23 +183,27 @@ static gboolean
 ch_util_get_prompt (const gchar *question, gboolean defaultyes)
 {
 	gboolean ret = FALSE;
-	gboolean valid = FALSE;
 	gchar value;
 
 	g_print ("%s %s ",
 		 question,
 		 defaultyes ? "[Y/n]" : "[N/y]");
-	while (!valid) {
+	while (TRUE) {
 		value = getchar ();
 		if (value == 'y' || value == 'Y') {
-			valid = TRUE;
 			ret = TRUE;
+			goto out;
 		}
 		if (value == 'n' || value == 'N') {
-			valid = TRUE;
 			ret = FALSE;
+			goto out;
+		}
+		if (value == '\n') {
+			ret = defaultyes;
+			goto out;
 		}
 	}
+out:
 	return ret;
 }
 
