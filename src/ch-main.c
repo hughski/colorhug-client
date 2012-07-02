@@ -1425,6 +1425,8 @@ ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 	if ((pcb_errata & CH_PCB_ERRATA_SWAPPED_LEDS) > 0)
 		g_print ("Errata: swapped-leds\n");
+	if ((pcb_errata & CH_PCB_ERRATA_NO_WELCOME) > 0)
+		g_print ("Errata: no-welcome\n");
 out:
 	return ret;
 }
@@ -1450,6 +1452,10 @@ ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (g_strstr_len (values[0], -1, "swapped-leds") != NULL) {
 		g_print ("Errata: swapped-leds\n");
 		pcb_errata += CH_PCB_ERRATA_SWAPPED_LEDS;
+	}
+	if (g_strstr_len (values[0], -1, "no-welcome") != NULL) {
+		g_print ("Errata: no-welcome\n");
+		pcb_errata += CH_PCB_ERRATA_NO_WELCOME;
 	}
 
 	/* nothing known by this client version */
