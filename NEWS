@@ -1,3 +1,24 @@
+Version 0.1.11
+~~~~~~~~~~~~~~
+Released: 2012-07-02
+
+Notes:
+ - If you've used the set-dark-offsets command, you've probably
+   overwritten your dark cal with values that are 3000x too large.
+ - Just install this version of colorhug-client and re-execute
+   '$ colorhug set-dark-offsets' and save the new values.
+
+New Features:
+ - Show the calibration types when doing 'list-calibration' (Richard Hughes)
+ - Ask the user to cover the aperture before doing a dark cal (Richard Hughes)
+
+Bugfixes:
+ - Do not hardcode the type as 'all' when loading a CCMX  (Richard Hughes)
+ - Recognise the INVALID_CALIBRATION error enum (Richard Hughes)
+ - Recognise the NO_WELCOME errata enum (Richard Hughes)
+ - Do not spin if enter is pressed at [Y/n] (Richard Hughes)
+ - Set the post-scale to unity for the dark offsets (Richard Hughes)
+
 Version 0.1.10
 ~~~~~~~~~~~~~~
 Released: 2012-06-11
