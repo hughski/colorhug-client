@@ -108,6 +108,9 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_SELF_TEST_COLOR_SELECT:
 		str = "Self test failed: Color Select";
 		break;
+	case CH_ERROR_INVALID_CALIBRATION:
+		str = "Invalid calibration";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
