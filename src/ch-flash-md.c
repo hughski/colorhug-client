@@ -163,7 +163,7 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 			priv->pos = CH_FLASH_MD_POS_CHANGELOG;
 			return;
 		}
-		g_debug ("unknown start tag %s for updates", element_name);
+		g_debug ("unknown start tag %s for update", element_name);
 		return;
 	}
 	if (priv->pos == CH_FLASH_MD_POS_CHANGELOG) {
@@ -175,7 +175,7 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 			priv->pos = CH_FLASH_MD_POS_WARNING;
 			return;
 		}
-		g_debug ("unknown start tag %s for updates", element_name);
+		g_debug ("unknown start tag %s for changelog", element_name);
 		return;
 	}
 	g_debug ("unknown start pos value: %s",
