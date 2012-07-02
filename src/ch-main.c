@@ -1588,6 +1588,7 @@ static gboolean
 ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 {
 	gboolean ret;
+	gdouble post_scale_old = 0.0f;
 	CdColorRGB value_old;
 	CdColorRGB value_zero;
 	CdColorRGB value;
@@ -1607,12 +1608,18 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	ch_device_queue_get_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value_old);
+	ch_device_queue_get_post_scale (priv->device_queue,
+					priv->device,
+					&post_scale_old);
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value_zero);
 	ch_device_queue_set_integral_time (priv->device_queue,
 					   priv->device,
 					   CH_INTEGRAL_TIME_VALUE_MAX);
+	ch_device_queue_set_post_scale (priv->device_queue,
+					priv->device,
+					1);
 	ch_device_queue_set_multiplier (priv->device_queue,
 					priv->device,
 					CH_FREQ_SCALE_100);
@@ -1635,6 +1642,9 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 		ch_device_queue_set_dark_offsets (priv->device_queue,
 						  priv->device,
 						  &value_old);
+		ch_device_queue_set_post_scale (priv->device_queue,
+						priv->device,
+						post_scale_old);
 		ret = ch_device_queue_process (priv->device_queue,
 					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 					       NULL,
@@ -1650,6 +1660,9 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value);
+	ch_device_queue_set_post_scale (priv->device_queue,
+					priv->device,
+					post_scale_old);
 	ch_device_queue_write_eeprom (priv->device_queue,
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
