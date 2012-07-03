@@ -218,7 +218,7 @@ void		 ch_device_queue_write_eeprom		(ChDeviceQueue	*device_queue,
 							 const gchar	*magic);
 void		 ch_device_queue_take_reading_raw	(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,
-							 guint16	*take_reading);
+							 guint32	*take_reading);
 void		 ch_device_queue_take_readings		(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,
 							 CdColorRGB	*value);

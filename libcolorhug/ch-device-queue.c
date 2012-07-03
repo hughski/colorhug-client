@@ -1604,7 +1604,7 @@ ch_device_queue_set_dark_offsets (ChDeviceQueue *device_queue,
 void
 ch_device_queue_take_reading_raw (ChDeviceQueue *device_queue,
 				  GUsbDevice *device,
-				  guint16 *take_reading)
+				  guint32 *take_reading)
 {
 	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
 	g_return_if_fail (G_USB_IS_DEVICE (device));
@@ -1616,8 +1616,8 @@ ch_device_queue_take_reading_raw (ChDeviceQueue *device_queue,
 				      NULL,
 				      0,
 				      (guint8 *) take_reading,
-				      sizeof(guint16),
-				      ch_device_queue_buffer_uint16_from_le_cb,
+				      sizeof(guint32),
+				      ch_device_queue_buffer_uint32_from_le_cb,
 				      NULL);
 }
 

@@ -1760,7 +1760,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChMeasureMode measure_mode = 0;
 	gboolean ret;
 	guint16 integral_time = 0;
-	guint16 take_reading;
+	guint32 take_reading;
 
 	/* get from HW */
 	ch_device_queue_get_color_select (priv->device_queue,
@@ -1801,7 +1801,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 
 	/* TRANSLATORS: this is the number of pulses detected */
-	g_print ("%s:\t\t%i\n", _("Pulses"), take_reading);
+	g_print ("%s:\t\t%" G_GUINT32_FORMAT "\n", _("Pulses"), take_reading);
 out:
 	return ret;
 }

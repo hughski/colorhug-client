@@ -310,7 +310,7 @@
  * Take a raw reading.
  *
  * IN:  [1:cmd]
- * OUT: [1:retval][1:cmd][2:count]
+ * OUT: [1:retval][1:cmd][4:count]
  *
  * This command is only available in firmware mode.
  **/
