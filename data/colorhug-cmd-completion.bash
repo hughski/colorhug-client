@@ -34,6 +34,7 @@ __colorhug_cmd_commandlist="
     get-hardware-version
     get-integral-time
     get-leds
+    get-measure-mode
     get-multiplier
     get-owner-email
     get-owner-name
@@ -54,6 +55,7 @@ __colorhug_cmd_commandlist="
     set-flash-success
     set-integral-time
     set-leds
+    set-measure-mode
     set-multiplier
     set-owner-email
     set-owner-name

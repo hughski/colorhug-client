@@ -297,3 +297,24 @@ ch_command_to_string (guint8 cmd)
 	}
 	return str;
 }
+
+/**
+ * ch_measure_mode_to_string:
+ **/
+const gchar *
+ch_measure_mode_to_string (ChMeasureMode measure_mode)
+{
+	const char *str = NULL;
+	switch (measure_mode) {
+	case CH_MEASURE_MODE_FREQUENCY:
+		str = "frequency";
+		break;
+	case CH_MEASURE_MODE_DURATION:
+		str = "duration";
+		break;
+	default:
+		str = "unknown";
+		break;
+	}
+	return str;
+}

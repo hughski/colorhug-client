@@ -269,6 +269,12 @@ void		 ch_device_queue_get_owner_email	(ChDeviceQueue	*device_queue,
 void		 ch_device_queue_take_reading_array	(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,
 							 guint8		*reading_array);
+void		 ch_device_queue_get_measure_mode	(ChDeviceQueue	*device_queue,
+							 GUsbDevice	*device,
+							 ChMeasureMode	*measure_mode);
+void		 ch_device_queue_set_measure_mode	(ChDeviceQueue	*device_queue,
+							 GUsbDevice	*device,
+							 ChMeasureMode	 measure_mode);
 
 /* command utility functions */
 gboolean	 ch_device_queue_set_calibration_ccmx	(ChDeviceQueue	*device_queue,

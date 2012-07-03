@@ -1757,6 +1757,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	ChColorSelect color_select = 0;
 	ChFreqScale multiplier = 0;
+	ChMeasureMode measure_mode = 0;
 	gboolean ret;
 	guint16 integral_time = 0;
 	guint16 take_reading;
@@ -1768,6 +1769,9 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_get_multiplier (priv->device_queue,
 					priv->device,
 					&multiplier);
+	ch_device_queue_get_measure_mode (priv->device_queue,
+					  priv->device,
+					  &measure_mode);
 	ch_device_queue_get_integral_time (priv->device_queue,
 					   priv->device,
 					   &integral_time);
@@ -1788,6 +1792,10 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* TRANSLATORS: this is the sensor scale factor */
 	g_print ("%s:\t%s\n", _("Multiplier"),
 		 ch_multiplier_to_string (multiplier));
+
+	/* TRANSLATORS: this is the measurement mode */
+	g_print ("%s:\t%s\n", _("Measure mode"),
+		 ch_measure_mode_to_string (measure_mode));
 
 	/* TRANSLATORS: this is the sensor sample time */
 	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
@@ -2522,6 +2530,84 @@ out:
 }
 
 /**
+ * ch_util_get_measure_mode:
+ **/
+static gboolean
+ch_util_get_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChMeasureMode measure_mode = CH_MEASURE_MODE_FREQUENCY;
+
+	/* get from HW */
+	ch_device_queue_get_measure_mode (priv->device_queue,
+					  priv->device,
+					  &measure_mode);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	switch (measure_mode) {
+	case CH_MEASURE_MODE_FREQUENCY:
+	case CH_MEASURE_MODE_DURATION:
+		g_print ("%s\n", ch_measure_mode_to_string (measure_mode));
+		break;
+	default:
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid measure_mode value %i",
+			     measure_mode);
+	}
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_measure_mode:
+ **/
+static gboolean
+ch_util_set_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChMeasureMode measure_mode;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'frequency|duration'");
+		goto out;
+	}
+	if (g_strcmp0 (values[0], "frequency") == 0)
+		measure_mode = CH_MEASURE_MODE_FREQUENCY;
+	else if (g_strcmp0 (values[0], "duration") == 0)
+		measure_mode = CH_MEASURE_MODE_DURATION;
+	else {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid input '%s', expect 'frequency|duration'",
+			     values[0]);
+		goto out;
+	}
+
+	/* set to HW */
+	ch_device_queue_set_measure_mode (priv->device_queue,
+					  priv->device,
+					  measure_mode);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+out:
+	return ret;
+}
+
+/**
  * ch_util_ignore_cb:
  **/
 static void
@@ -2807,6 +2893,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Does a quick self test on the device"),
 		     ch_util_self_test);
+	ch_util_add (priv->cmd_array,
+		     "get-measure-mode",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor measurement mode"),
+		     ch_util_get_measure_mode);
+	ch_util_add (priv->cmd_array,
+		     "set-measure-mode",
+		     /* TRANSLATORS: command description */
+		     _("Sets the sensor measurement mode"),
+		     ch_util_set_measure_mode);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

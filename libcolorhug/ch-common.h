@@ -617,6 +617,32 @@
 #define	CH_CMD_GET_REMOTE_HASH			0x35
 
 /**
+ * CH_CMD_SET_MEASURE_MODE:
+ *
+ * Sets the measurement mode. The mode can either be frequency or pulse
+ * duration. The former is well tested, but the latter is much more
+ * precise.
+ *
+ * IN:  [1:cmd][1:measure_mode]
+ * OUT: [1:retval][1:cmd]
+ *
+ * This command is available in firmware mode.
+ **/
+#define	CH_CMD_SET_MEASURE_MODE			0x36
+
+/**
+ * CH_CMD_GET_MEASURE_MODE:
+ *
+ * Gets the measurement mode.
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][1:measure_mode]
+ *
+ * This command is available in firmware mode.
+ **/
+#define	CH_CMD_GET_MEASURE_MODE			0x37
+
+/**
  * CH_CMD_SELF_TEST:
  *
  * Tests the device by trying to get a non-zero reading from each
@@ -726,6 +752,12 @@ typedef enum {
 	CH_ERROR_LAST
 } ChError;
 
+/* the measure mode */
+typedef enum {
+	CH_MEASURE_MODE_FREQUENCY,
+	CH_MEASURE_MODE_DURATION
+} ChMeasureMode;
+
 /* any problems with the PCB */
 typedef enum {
 	CH_PCB_ERRATA_NONE		= 0,
@@ -738,5 +770,6 @@ const gchar	*ch_strerror			(ChError	 error_enum);
 const gchar	*ch_command_to_string		(guint8		 cmd);
 const gchar	*ch_multiplier_to_string	(ChFreqScale	 multiplier);
 const gchar	*ch_color_select_to_string	(ChColorSelect	 color_select);
+const gchar	*ch_measure_mode_to_string	(ChMeasureMode	 color_select);
 
 #endif

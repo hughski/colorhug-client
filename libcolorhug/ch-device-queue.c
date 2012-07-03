@@ -2199,6 +2199,49 @@ ch_device_queue_take_reading_array (ChDeviceQueue *device_queue,
 			     30);
 }
 
+/**
+ * ch_device_queue_get_measure_mode:
+ **/
+void
+ch_device_queue_get_measure_mode (ChDeviceQueue *device_queue,
+				  GUsbDevice *device,
+				  ChMeasureMode *measure_mode)
+{
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+	g_return_if_fail (measure_mode != NULL);
+
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_GET_MEASURE_MODE,
+			     NULL,
+			     0,
+			     (guint8 *) measure_mode,
+			     1);
+}
+
+/**
+ * ch_device_queue_set_measure_mode:
+ **/
+void
+ch_device_queue_set_measure_mode (ChDeviceQueue *device_queue,
+				  GUsbDevice *device,
+				  ChMeasureMode measure_mode)
+{
+	guint8 tmp = measure_mode;
+
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_SET_MEASURE_MODE,
+			     &tmp,
+			     1,
+			     NULL,
+			     0);
+}
+
 /**********************************************************************/
 
 /**
