@@ -3,6 +3,7 @@ INCLUDES =						\
 	$(GTK_CFLAGS)					\
 	$(GUSB_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
+	$(COLORD_GTK_CFLAGS)				\
 	$(SOUP_CFLAGS)					\
 	$(CANBERRA_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"Ch\"				\
@@ -13,6 +14,24 @@ INCLUDES =						\
 
 COLORHUG_LIBS =						\
 	$(top_builddir)/libcolorhug/libcolorhug.la
+
+noinst_PROGRAMS =					\
+	colorhug-profile
+
+colorhug_profile_SOURCES =				\
+	ch-profile.c
+
+colorhug_profile_LDADD =				\
+	$(COLORD_LIBS)					\
+	$(COLORD_GTK_LIBS)				\
+	$(GUSB_LIBS)					\
+	$(GLIB_LIBS)					\
+	$(SOUP_LIBS)					\
+	$(COLORHUG_LIBS)				\
+	-lm
+
+colorhug_profile_CFLAGS =				\
+	$(WARNINGFLAGS_C)
 
 libexec_PROGRAMS =					\
 	colorhug-inhx32-to-bin
