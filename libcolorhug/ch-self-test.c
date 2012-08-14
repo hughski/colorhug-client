@@ -855,7 +855,7 @@ ch_test_reading_func (void)
 {
 	gboolean ret;
 	GError *error = NULL;
-	guint16 take_reading = 0;
+	guint32 take_reading = 0;
 	GUsbDevice *device;
 	ChDeviceQueue *device_queue;
 
