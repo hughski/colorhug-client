@@ -105,45 +105,24 @@ main (int argc, char *argv[])
 {
 	CdColorRGB source;
 	CdColorRGB value_rgb;
-	CdIt8 *it8 = NULL;
 	ChDeviceQueue *device_queue = NULL;
-	ChMeasureMode measure_mode;
 	gboolean ret;
 	GError *error = NULL;
 	GFile *file = NULL;
 	gint rc = EXIT_SUCCESS;
 	GMainLoop *loop = NULL;
+	GString *string = NULL;
+	GTimer *timer = NULL;
 	GtkWindow *sample_window = NULL;
 	guint i;
 	GUsbDevice *device = NULL;
 
 	gtk_init (&argc, &argv);
 
-	/* parse the command */
-	if (argc != 2) {
-		g_print ("Usage: colorhug-profile duration|frequency\n");
-		goto out;
-	}
-	if (g_strcmp0 (argv[1], "duration") == 0) {
-		measure_mode = CH_MEASURE_MODE_DURATION;
-	} else if (g_strcmp0 (argv[1], "frequency") == 0) {
-		measure_mode = CH_MEASURE_MODE_FREQUENCY;
-	} else {
-		g_print ("Usage: colorhug-profile duration|frequency\n");
-		goto out;
-	}
-
 	/* use a sample window to get the measurements */
 	sample_window = cd_sample_window_new ();
 	gtk_window_set_keep_above (sample_window, TRUE);
 	loop = g_main_loop_new (NULL, FALSE);
-	it8 = cd_it8_new_with_kind (CD_IT8_KIND_TI3);
-	cd_it8_set_originator (it8, "colorhug-profile");
-	if (measure_mode == CH_MEASURE_MODE_FREQUENCY)
-		cd_it8_set_title (it8, "colorhug freq");
-	else
-		cd_it8_set_title (it8, "colorhug duration");
-	cd_it8_set_normalized (it8, TRUE);
 
 	device_queue = ch_device_queue_new ();
 	device = ch_util_get_default_device (&error);
@@ -154,15 +133,13 @@ main (int argc, char *argv[])
 		goto out;
 	}
 
+	/* set up display */
 	ch_device_queue_set_multiplier (device_queue,
 					device,
 					CH_FREQ_SCALE_100);
 	ch_device_queue_set_integral_time (device_queue,
 					   device,
 					   0xffff);
-	ch_device_queue_set_measure_mode (device_queue,
-					  device,
-					  measure_mode);
 	ret = ch_device_queue_process (device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
@@ -177,6 +154,17 @@ main (int argc, char *argv[])
 	/* move to the center of device lvds1 */
 	gtk_window_present (sample_window);
 
+	/* record the sample time of each sample */
+	timer = g_timer_new ();
+	string = g_string_new ("Index,"
+			       "Frequency R,"
+			       "Frequency G,"
+			       "Frequency B,"
+			       "Frequency Time,"
+			       "Duration R,"
+			       "Duration G,"
+			       "Duration B,"
+			       "Duration Time,\n");
 	for (i = 0; i <= 256; i += 1) {
 
 		source.R = (1.0f / 256.0f) * i;
@@ -187,6 +175,15 @@ main (int argc, char *argv[])
 		g_timeout_add (200, (GSourceFunc) cd_sample_window_loop_cb, loop);
 		g_main_loop_run (loop);
 
+		/* add 'Index' */
+		g_string_append_printf (string, "%i,", i);
+
+		/* do frequency sample */
+		g_timer_reset (timer);
+
+		ch_device_queue_set_measure_mode (device_queue,
+						  device,
+						  CH_MEASURE_MODE_FREQUENCY);
 		ch_device_queue_take_readings (device_queue,
 					       device,
 					       &value_rgb);
@@ -196,28 +193,67 @@ main (int argc, char *argv[])
 					       &error);
 		if (!ret) {
 			rc = EXIT_FAILURE;
-			g_print ("Failed to get XYZ reading: %s\n", error->message);
+			g_print ("Failed to get freq RGB reading: %s\n", error->message);
 			g_error_free (error);
 			goto out;
 		}
-		g_print ("%f,%f,%f\n", value_rgb.R, value_rgb.G, value_rgb.B);
 
-		cd_it8_add_data (it8, &source, (CdColorXYZ *) &value_rgb);
+		/* add 'Frequency R,G,B' and 'Frequency Time' */
+		g_string_append_printf (string, "%lf,%lf,%lf,",
+					value_rgb.R,
+					value_rgb.G,
+					value_rgb.B);
+		g_string_append_printf (string, "%lf,",
+					g_timer_elapsed (timer, NULL) * 1000);
+		g_print ("FRQ: %lf,%lf,%lf\n",
+			 value_rgb.R, value_rgb.G, value_rgb.B);
+
+		/* do duration sample */
+		g_timer_reset (timer);
+		ch_device_queue_set_measure_mode (device_queue,
+						  device,
+						  CH_MEASURE_MODE_DURATION);
+		ch_device_queue_take_readings (device_queue,
+					       device,
+					       &value_rgb);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		if (!ret) {
+			rc = EXIT_FAILURE;
+			g_print ("Failed to get duration RGB reading: %s\n", error->message);
+			g_error_free (error);
+			goto out;
+		}
+
+		/* add 'Duration R,G,B' and 'Duration Time' */
+		g_string_append_printf (string, "%lf,%lf,%lf,",
+					value_rgb.R,
+					value_rgb.G,
+					value_rgb.B);
+		g_string_append_printf (string, "%lf,",
+					g_timer_elapsed (timer, NULL) * 1000);
+		g_print ("DUR: %lf,%lf,%lf\n",
+			 value_rgb.R, value_rgb.G, value_rgb.B);
+		g_string_append (string, "\n");
 	}
 
 	/* save file */
-	if (measure_mode == CH_MEASURE_MODE_FREQUENCY)
-		file = g_file_new_for_path ("./freq.ti3");
-	else
-		file = g_file_new_for_path ("./duration.ti3");
-	ret = cd_it8_save_to_file (it8, file, &error);
+	ret = g_file_set_contents ("./data.csv",
+				   string->str, -1, &error);
 	if (!ret) {
 		rc = EXIT_FAILURE;
-		g_print ("Failed to save file: %s\n", error->message);
+		g_print ("Failed to save data file: %s\n",
+			 error->message);
 		g_error_free (error);
 		goto out;
 	}
 out:
+	if (string != NULL)
+		g_string_free (string, TRUE);
+	if (timer != NULL)
+		g_timer_destroy (timer);
 	if (device != NULL)
 		g_object_unref (device);
 	if (file != NULL)
@@ -228,7 +264,5 @@ out:
 		gtk_widget_destroy (GTK_WIDGET (sample_window));
 	if (device_queue != NULL)
 		g_object_unref (device_queue);
-	if (it8 != NULL)
-		g_object_unref (it8);
 	return rc;
 }
