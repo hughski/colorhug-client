@@ -73,12 +73,14 @@ typedef struct {
 	ChDeviceQueueDataState	 state;
 	GUsbDevice		*device;
 	guint8			 cmd;
-	guint8			*buffer_in;	/* we own this */
+	guint8			*buffer_in;
 	gsize			 buffer_in_len;
-	guint8			*buffer_out;	/* we sometimes own this */
+	guint8			*buffer_out;
 	gsize			 buffer_out_len;
+	GDestroyNotify		 buffer_out_destroy_func;
 	ChDeviceQueueParseFunc	 parse_func;
 	gpointer		 user_data;
+	GDestroyNotify		 user_data_destroy_func;
 } ChDeviceQueueData;
 
 typedef struct {
@@ -99,6 +101,10 @@ static gboolean ch_device_queue_process_data (ChDeviceQueueHelper *helper, ChDev
 static void
 ch_device_queue_data_free (ChDeviceQueueData *data)
 {
+	if (data->buffer_out_destroy_func != NULL)
+		data->buffer_out_destroy_func (data->buffer_out);
+	if (data->user_data_destroy_func != NULL)
+		data->user_data_destroy_func (data->user_data);
 	g_free (data->buffer_in);
 	g_object_unref (data->device);
 	g_free (data);
@@ -493,8 +499,10 @@ ch_device_queue_add_internal (ChDeviceQueue		*device_queue,
 			      gsize			 buffer_in_len,
 			      guint8			*buffer_out,
 			      gsize			 buffer_out_len,
+			      GDestroyNotify		 buffer_out_destroy_func,
 			      ChDeviceQueueParseFunc	 parse_func,
-			      gpointer			 user_data)
+			      gpointer			 user_data,
+			      GDestroyNotify		 user_data_destroy_func)
 {
 	ChDeviceQueueData *data;
 
@@ -505,6 +513,7 @@ ch_device_queue_add_internal (ChDeviceQueue		*device_queue,
 	data->state = CH_DEVICE_QUEUE_DATA_STATE_PENDING;
 	data->parse_func = parse_func;
 	data->user_data = user_data;
+	data->user_data_destroy_func = user_data_destroy_func;
 	data->cmd = cmd;
 	data->device = g_object_ref (device);
 	if (buffer_in != NULL)
@@ -512,6 +521,7 @@ ch_device_queue_add_internal (ChDeviceQueue		*device_queue,
 	data->buffer_in_len = buffer_in_len;
 	data->buffer_out = buffer_out;
 	data->buffer_out_len = buffer_out_len;
+	data->buffer_out_destroy_func = buffer_out_destroy_func;
 	g_ptr_array_add (device_queue->priv->data_array, data);
 }
 
@@ -534,6 +544,8 @@ ch_device_queue_add (ChDeviceQueue	*device_queue,
 				      buffer_in_len,
 				      buffer_out,
 				      buffer_out_len,
+				      NULL,
+				      NULL,
 				      NULL,
 				      NULL);
 }
@@ -697,7 +709,9 @@ ch_device_queue_get_integral_time (ChDeviceQueue *device_queue,
 				      0,
 				      (guint8 *) integral_time,
 				      2,
+				      NULL,
 				      ch_device_queue_buffer_uint16_from_le_cb,
+				      NULL,
 				      NULL);
 }
 
@@ -800,10 +814,6 @@ ch_device_queue_buffer_to_firmware_ver_cb (guint8 *output_buffer,
 	*helper->major = GUINT16_FROM_LE (tmp[0]);
 	*helper->minor = GUINT16_FROM_LE (tmp[1]);
 	*helper->micro = GUINT16_FROM_LE (tmp[2]);
-
-	/* yes, we own this */
-	g_free (output_buffer);
-	g_free (helper);
 out:
 	return ret;
 }
@@ -841,8 +851,10 @@ ch_device_queue_get_firmware_ver (ChDeviceQueue *device_queue,
 				      0,
 				      buffer,
 				      sizeof (guint16) * 3,
+				      g_free,
 				      ch_device_queue_buffer_to_firmware_ver_cb,
-				      helper);
+				      helper,
+				      g_free);
 }
 
 /* tiny helper */
@@ -894,10 +906,6 @@ ch_device_queue_buffer_to_get_calibration_cb (guint8 *output_buffer,
 			 (const char *) output_buffer + 9*4 + 1,
 			 CH_CALIBRATION_DESCRIPTION_LEN);
 	}
-
-	/* yes, we own this */
-	g_free (output_buffer);
-	g_free (helper);
 out:
 	return ret;
 }
@@ -934,8 +942,10 @@ ch_device_queue_get_calibration (ChDeviceQueue *device_queue,
 				      sizeof(guint16),
 				      (guint8 *) buffer,
 				      9*4 + 1 + CH_CALIBRATION_DESCRIPTION_LEN,
+				      g_free,
 				      ch_device_queue_buffer_to_get_calibration_cb,
-				      helper);
+				      helper,
+				      g_free);
 }
 
 /**
@@ -1200,7 +1210,6 @@ ch_device_queue_buffer_to_double_cb (guint8 *output_buffer,
 
 	/* convert back into floating point */
 	ch_packed_float_to_double (buffer, value);
-	g_free (output_buffer);
 out:
 	return ret;
 }
@@ -1228,8 +1237,10 @@ ch_device_queue_get_pre_scale (ChDeviceQueue *device_queue,
 				     0,
 				     buffer,
 				     sizeof(ChPackedFloat),
+				     g_free,
 				     ch_device_queue_buffer_to_double_cb,
-				     pre_scale);
+				     pre_scale,
+				     NULL);
 }
 
 /**
@@ -1278,10 +1289,12 @@ ch_device_queue_get_post_scale (ChDeviceQueue *device_queue,
 				      CH_CMD_GET_POST_SCALE,
 				      NULL,
 				      0,
-				     buffer,
-				     sizeof(ChPackedFloat),
-				     ch_device_queue_buffer_to_double_cb,
-				     post_scale);
+				      buffer,
+				      sizeof(ChPackedFloat),
+				      g_free,
+				      ch_device_queue_buffer_to_double_cb,
+				      post_scale,
+				      NULL);
 }
 
 /**
@@ -1329,7 +1342,9 @@ ch_device_queue_get_serial_number (ChDeviceQueue *device_queue,
 				      0,
 				      (guint8 *) serial_number,
 				      sizeof(guint32),
+				      NULL,
 				      ch_device_queue_buffer_uint32_from_le_cb,
+				      NULL,
 				      NULL);
 }
 
@@ -1540,9 +1555,6 @@ ch_device_queue_buffer_dark_offsets_cb (guint8 *output_buffer,
 	value->R = (gdouble) buffer[0] / (gdouble) 0xffff;
 	value->G = (gdouble) buffer[1] / (gdouble) 0xffff;
 	value->B = (gdouble) buffer[2] / (gdouble) 0xffff;
-
-	/* yes, we own this */
-	g_free (buffer);
 out:
 	return ret;
 }
@@ -1569,8 +1581,10 @@ ch_device_queue_get_dark_offsets (ChDeviceQueue *device_queue,
 				      0,
 				      buffer,
 				      sizeof(guint16) * 3,
+				      g_free,
 				      ch_device_queue_buffer_dark_offsets_cb,
-				      value);
+				      value,
+				      NULL);
 }
 
 /**
@@ -1617,7 +1631,9 @@ ch_device_queue_take_reading_raw (ChDeviceQueue *device_queue,
 				      0,
 				      (guint8 *) take_reading,
 				      sizeof(guint32),
+				      NULL,
 				      ch_device_queue_buffer_uint32_from_le_cb,
+				      NULL,
 				      NULL);
 }
 
@@ -1647,9 +1663,6 @@ ch_device_queue_buffer_triple_rgb_cb (guint8 *output_buffer,
 	ch_packed_float_to_double (&buffer[0], &value->R);
 	ch_packed_float_to_double (&buffer[1], &value->G);
 	ch_packed_float_to_double (&buffer[2], &value->B);
-
-	/* yes, we own this */
-	g_free (buffer);
 out:
 	return ret;
 }
@@ -1676,8 +1689,10 @@ ch_device_queue_take_readings (ChDeviceQueue *device_queue,
 				      0,
 				      buffer,
 				      sizeof(ChPackedFloat) * 3,
+				      g_free,
 				      ch_device_queue_buffer_triple_rgb_cb,
-				      value);
+				      value,
+				      NULL);
 }
 
 /**
@@ -1706,9 +1721,6 @@ ch_device_queue_buffer_triple_xyz_cb (guint8 *output_buffer,
 	ch_packed_float_to_double (&buffer[0], &value->X);
 	ch_packed_float_to_double (&buffer[1], &value->Y);
 	ch_packed_float_to_double (&buffer[2], &value->Z);
-
-	/* yes, we own this */
-	g_free (buffer);
 out:
 	return ret;
 }
@@ -1736,8 +1748,10 @@ ch_device_queue_take_readings_xyz (ChDeviceQueue *device_queue,
 				     sizeof(guint16),
 				     buffer,
 				     sizeof(ChPackedFloat) * 3,
+				     g_free,
 				     ch_device_queue_buffer_triple_xyz_cb,
-				     value);
+				     value,
+				     NULL);
 }
 
 /**
@@ -1845,8 +1859,6 @@ ch_device_queue_buffer_read_flash_cb (guint8 *output_buffer,
 	/* copy data to final location */
 	memcpy (helper->data, output_buffer + 1, helper->len);
 out:
-	g_free (output_buffer);
-	g_free (helper);
 	return ret;
 }
 
@@ -1885,8 +1897,10 @@ ch_device_queue_read_flash (ChDeviceQueue *device_queue,
 				      sizeof(buffer_tx),
 				      buffer,
 				      len + 1,
+				      g_free,
 				      ch_device_queue_buffer_read_flash_cb,
-				      helper);
+				      helper,
+				      g_free);
 }
 
 /**
@@ -1933,10 +1947,15 @@ ch_device_queue_buffer_verify_flash_cb (guint8 *output_buffer,
 		goto out;
 	}
 out:
-	g_free (output_buffer);
+	return ret;
+}
+
+static void
+ch_device_queue_verify_flash_helper_destroy (gpointer data)
+{
+	ChDeviceQueueReadFlashHelper *helper = (ChDeviceQueueReadFlashHelper *) data;
 	g_free (helper->data);
 	g_free (helper);
-	return ret;
 }
 
 /**
@@ -1974,8 +1993,10 @@ ch_device_queue_verify_flash (ChDeviceQueue *device_queue,
 				      sizeof(buffer_tx),
 				      buffer,
 				      len + 1,
+				      g_free,
 				      ch_device_queue_buffer_verify_flash_cb,
-				      helper);
+				      helper,
+				      ch_device_queue_verify_flash_helper_destroy);
 }
 
 /**
@@ -2295,7 +2316,10 @@ ch_device_queue_init (ChDeviceQueue *device_queue)
 {
 	device_queue->priv = CH_DEVICE_QUEUE_GET_PRIVATE (device_queue);
 	device_queue->priv->data_array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_device_queue_data_free);
-	device_queue->priv->devices_in_use = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	device_queue->priv->devices_in_use = g_hash_table_new_full (g_str_hash,
+								    g_str_equal,
+								    g_free,
+								    NULL);
 }
 
 /**
