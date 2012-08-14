@@ -235,7 +235,8 @@ ch_device_reply_cb (GObject *source_object,
 	/* parse */
 	if (helper->buffer[CH_BUFFER_OUTPUT_RETVAL] != CH_ERROR_NONE ||
 	    helper->buffer[CH_BUFFER_OUTPUT_CMD] != helper->cmd ||
-	    actual_len != helper->buffer_out_len + CH_BUFFER_OUTPUT_DATA) {
+	    (actual_len != helper->buffer_out_len + CH_BUFFER_OUTPUT_DATA &&
+	     actual_len != CH_USB_HID_EP_SIZE)) {
 		error_enum = helper->buffer[CH_BUFFER_OUTPUT_RETVAL];
 		msg = g_strdup_printf ("Invalid read: retval=0x%02x [%s] "
 				       "cmd=0x%02x (expected 0x%x [%s]) "
