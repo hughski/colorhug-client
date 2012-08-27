@@ -15,6 +15,7 @@ INCLUDES =						\
 COLORHUG_LIBS =						\
 	$(top_builddir)/libcolorhug/libcolorhug.la
 
+if CD_BUILD_DEBUGGING
 noinst_PROGRAMS =					\
 	colorhug-profile
 
@@ -32,6 +33,7 @@ colorhug_profile_LDADD =				\
 
 colorhug_profile_CFLAGS =				\
 	$(WARNINGFLAGS_C)
+endif
 
 libexec_PROGRAMS =					\
 	colorhug-inhx32-to-bin
