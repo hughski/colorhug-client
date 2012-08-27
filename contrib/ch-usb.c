@@ -82,7 +82,7 @@ write_command (usb_dev_handle *handle,
 
 	/* read status */
 	rc = usb_interrupt_read (handle, 0x81, buffer, 64, 5000);
-	if (rc != 2 + out_size) {
+	if (rc != 2 + out_size && rc != 64) {
 		printf ("Failed to read, got %i bytes\n", rc);
 		goto out;
 	}
