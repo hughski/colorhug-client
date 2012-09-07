@@ -114,6 +114,9 @@ ch_device_get_mode (GUsbDevice *device)
 	case CH_USB_PID_FIRMWARE:
 		state = CH_DEVICE_MODE_FIRMWARE;
 		break;
+	case CH_USB_PID_FIRMWARE_SPECTRO:
+		state = CH_DEVICE_MODE_FIRMWARE_SPECTRO;
+		break;
 	default:
 		state = CH_DEVICE_MODE_UNKNOWN;
 		break;
