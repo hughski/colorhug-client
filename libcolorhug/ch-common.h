@@ -790,6 +790,7 @@ typedef enum {
 	CH_PCB_ERRATA_NONE		= 0,
 	CH_PCB_ERRATA_SWAPPED_LEDS	= 1 << 0,
 	CH_PCB_ERRATA_NO_WELCOME	=  1 << 1,
+	CH_PCB_ERRATA_LAST		= 1 << 2
 } ChPcbErrata;
 
 /* prototypes */
