@@ -2608,6 +2608,126 @@ out:
 }
 
 /**
+ * ch_util_sram_write:
+ **/
+static gboolean
+ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gsize len;
+	guint32 address;
+	guint8 *data = NULL;
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 2) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
+		goto out;
+	}
+
+	/* read sram */
+	address = g_ascii_strtoull (values[0], NULL, 16);
+	if (address > 0xffff) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid address 0x%04x",
+			     address);
+		goto out;
+	}
+	len = g_ascii_strtoull (values[1], NULL, 10);
+	if (len < 1 || len > 60) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
+			     len);
+		goto out;
+	}
+
+	/* just write zeros */
+	data = g_new0 (guint8, len);
+	for (i = 0; i < len; i++)
+		data[i] = g_random_int_range (0x00, 0xff);
+	ch_device_queue_write_sram (priv->device_queue,
+				    priv->device,
+				    (guint16) address,
+				    data,
+				    len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	g_print ("Wrote:\n");
+	for (i=0; i< len; i++)
+		g_print ("0x%04x = %02x\n", address + i, data[i]);
+out:
+	g_free (data);
+	return ret;
+}
+
+/**
+ * ch_util_sram_read:
+ **/
+static gboolean
+ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gsize len;
+	guint32 address;
+	guint8 *data = NULL;
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 2) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
+		goto out;
+	}
+
+	/* read sram */
+	address = g_ascii_strtoull (values[0], NULL, 16);
+	if (address > 0xffff) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid address 0x%04x",
+			     address);
+		goto out;
+	}
+	len = g_ascii_strtoull (values[1], NULL, 10);
+	if (len < 1 || len > 60) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
+			     len);
+		goto out;
+	}
+	data = g_new0 (guint8, len);
+	ch_device_queue_read_sram (priv->device_queue,
+				   priv->device,
+				   (guint16) address,
+				   data,
+				   len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	g_print ("Read:\n");
+	for (i=0; i< len; i++)
+		g_print ("0x%04x = %02x\n", address + i, data[i]);
+out:
+	g_free (data);
+	return ret;
+}
+
+/**
  * ch_util_ignore_cb:
  **/
 static void
@@ -2903,6 +3023,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the sensor measurement mode"),
 		     ch_util_set_measure_mode);
+	ch_util_add (priv->cmd_array,
+		     "sram-read",
+		     /* TRANSLATORS: command description */
+		     _("Read SRAM at a specified address"),
+		     ch_util_sram_read);
+	ch_util_add (priv->cmd_array,
+		     "sram-write",
+		     /* TRANSLATORS: command description */
+		     _("Write SRAM at a specified address"),
+		     ch_util_sram_write);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

@@ -111,6 +111,12 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_INVALID_CALIBRATION:
 		str = "Invalid calibration";
 		break;
+	case CH_ERROR_SRAM_FAILED:
+		str = "SRAM failed";
+		break;
+	case CH_ERROR_OUT_OF_MEMORY:
+		str = "Out of memory";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
@@ -290,6 +296,12 @@ ch_command_to_string (guint8 cmd)
 		break;
 	case CH_CMD_SELF_TEST:
 		str = "self-test";
+		break;
+	case CH_CMD_WRITE_SRAM:
+		str = "write-sram";
+		break;
+	case CH_CMD_READ_SRAM:
+		str = "read-sram";
 		break;
 	default:
 		str = "unknown-command";

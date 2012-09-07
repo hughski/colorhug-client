@@ -275,6 +275,16 @@ void		 ch_device_queue_get_measure_mode	(ChDeviceQueue	*device_queue,
 void		 ch_device_queue_set_measure_mode	(ChDeviceQueue	*device_queue,
 							 GUsbDevice	*device,
 							 ChMeasureMode	 measure_mode);
+void		 ch_device_queue_write_sram		(ChDeviceQueue	*device_queue,
+							 GUsbDevice	*device,
+							 guint16	 address,
+							 guint8		*data,
+							 gsize		 len);
+void		 ch_device_queue_read_sram		(ChDeviceQueue	*device_queue,
+							 GUsbDevice	*device,
+							 guint16	 address,
+							 guint8		*data,
+							 gsize		 len);
 
 /* command utility functions */
 gboolean	 ch_device_queue_set_calibration_ccmx	(ChDeviceQueue	*device_queue,

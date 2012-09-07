@@ -2263,6 +2263,62 @@ ch_device_queue_set_measure_mode (ChDeviceQueue *device_queue,
 			     0);
 }
 
+/**
+ * ch_device_queue_write_sram:
+ **/
+void
+ch_device_queue_write_sram (ChDeviceQueue *device_queue,
+			     GUsbDevice *device,
+			     guint16 address,
+			     guint8 *data,
+			     gsize len)
+{
+	guint16 addr_le;
+	guint8 buffer_tx[CH_USB_HID_EP_SIZE];
+
+	/* set address, length, checksum, data */
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
+	buffer_tx[2] = len;
+	memcpy (buffer_tx + 3, data, len);
+
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_WRITE_SRAM,
+			     buffer_tx,
+			     len + 3,
+			     NULL,
+			     0);
+}
+
+/**
+ * ch_device_queue_read_sram:
+ **/
+void
+ch_device_queue_read_sram (ChDeviceQueue *device_queue,
+			   GUsbDevice *device,
+			   guint16 address,
+			   guint8 *data,
+			   gsize len)
+{
+	guint16 addr_le;
+	guint8 buffer_tx[3];
+
+	/* set address, length, data */
+	addr_le = GUINT16_TO_LE (address);
+	memcpy (buffer_tx + 0, &addr_le, 2);
+	buffer_tx[2] = len;
+
+	ch_device_queue_add (device_queue,
+			     device,
+			     CH_CMD_READ_SRAM,
+			     buffer_tx,
+			     sizeof(buffer_tx),
+			     data,
+			     len);
+}
+
+
 /**********************************************************************/
 
 /**

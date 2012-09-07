@@ -64,6 +64,8 @@ __colorhug_cmd_commandlist="
     set-pre-scale
     set-remote-hash
     set-serial-number
+    sram-read
+    sram-write
     take-reading-array
     take-reading-raw
     take-readings
