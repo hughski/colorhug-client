@@ -108,7 +108,7 @@ ch_device_get_mode (GUsbDevice *device)
 
 	/* use the product ID to work out the state */
 	switch (g_usb_device_get_pid (device)) {
-	case CH_USB_PID_BOOTLADER:
+	case CH_USB_PID_BOOTLOADER:
 		state = CH_DEVICE_MODE_BOOTLOADER;
 		break;
 	case CH_USB_PID_FIRMWARE:
