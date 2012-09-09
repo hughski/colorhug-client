@@ -1779,7 +1779,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 					  priv->device,
 					  &take_reading);
 	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_CONTINUE_ERRORS,
 				       NULL,
 				       error);
 	if (!ret)
