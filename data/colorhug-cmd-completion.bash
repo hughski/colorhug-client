@@ -47,6 +47,7 @@ __colorhug_cmd_commandlist="
     reset
     remote-profile-download
     remote-profile-upload
+    self-test
     set-calibration
     set-calibration-ccmx
     set-calibration-map
