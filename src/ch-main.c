@@ -487,7 +487,7 @@ ch_util_remote_profile_upload (ChUtilPrivate *priv, gchar **values, GError **err
 			     msg->reason_phrase);
 		goto out;
 	}
-	uri = soup_message_headers_get (msg->response_headers, "Location");
+	uri = soup_message_headers_get_one (msg->response_headers, "Location");
 	g_debug ("Successfully uploaded to %s", uri);
 
 	/* print something machine readable */
