@@ -303,6 +303,12 @@ ch_command_to_string (guint8 cmd)
 	case CH_CMD_READ_SRAM:
 		str = "read-sram";
 		break;
+	case CH_CMD_GET_MEASURE_MODE:
+		str = "get-measure-mode";
+		break;
+	case CH_CMD_SET_MEASURE_MODE:
+		str = "set-measure-mode";
+		break;
 	default:
 		str = "unknown-command";
 		break;
