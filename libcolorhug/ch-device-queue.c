@@ -1269,6 +1269,35 @@ ch_device_queue_set_pre_scale (ChDeviceQueue *device_queue,
 }
 
 /**
+ * ch_device_queue_get_temperature:
+ **/
+void
+ch_device_queue_get_temperature (ChDeviceQueue *device_queue,
+				 GUsbDevice *device,
+				 gdouble *temperature)
+{
+	guint8 *buffer;
+
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+	g_return_if_fail (temperature != NULL);
+
+	*temperature = 0.0f;
+	buffer = g_new0 (guint8, sizeof (ChPackedFloat));
+	ch_device_queue_add_internal (device_queue,
+				     device,
+				     CH_CMD_GET_TEMPERATURE,
+				     NULL,
+				     0,
+				     buffer,
+				     sizeof(ChPackedFloat),
+				     g_free,
+				     ch_device_queue_buffer_to_double_cb,
+				     temperature,
+				     NULL);
+}
+
+/**
  * ch_device_queue_get_post_scale:
  **/
 void

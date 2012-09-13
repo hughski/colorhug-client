@@ -2222,6 +2222,31 @@ out:
 }
 
 /**
+ * ch_util_get_temperature:
+ **/
+static gboolean
+ch_util_get_temperature (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble temperature = 0.0f;
+
+	/* get from HW */
+	ch_device_queue_get_temperature (priv->device_queue,
+				         priv->device,
+				         &temperature);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	g_print ("Temperature: %f\n", temperature);
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_post_scale:
  **/
 static gboolean
@@ -3033,6 +3058,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Write SRAM at a specified address"),
 		     ch_util_sram_write);
+	ch_util_add (priv->cmd_array,
+		     "get-temperature",
+		     /* TRANSLATORS: command description */
+		     _("Gets the sensor temperature"),
+		     ch_util_get_temperature);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

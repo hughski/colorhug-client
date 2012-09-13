@@ -43,6 +43,7 @@ __colorhug_cmd_commandlist="
     get-pre-scale
     get-remote-hash
     get-serial-number
+    get-temperature
     list-calibration
     reset
     remote-profile-download

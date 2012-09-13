@@ -108,6 +108,9 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_SELF_TEST_COLOR_SELECT:
 		str = "Self test failed: Color Select";
 		break;
+	case CH_ERROR_SELF_TEST_TEMPERATURE:
+		str = "Self test failed: Temperature";
+		break;
 	case CH_ERROR_INVALID_CALIBRATION:
 		str = "Invalid calibration";
 		break;
@@ -308,6 +311,9 @@ ch_command_to_string (guint8 cmd)
 		break;
 	case CH_CMD_SET_MEASURE_MODE:
 		str = "set-measure-mode";
+		break;
+	case CH_CMD_GET_TEMPERATURE:
+		str = "get-temperature";
 		break;
 	default:
 		str = "unknown-command";

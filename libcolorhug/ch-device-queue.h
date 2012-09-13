@@ -285,6 +285,9 @@ void		 ch_device_queue_read_sram		(ChDeviceQueue	*device_queue,
 							 guint16	 address,
 							 guint8		*data,
 							 gsize		 len);
+void		 ch_device_queue_get_temperature	(ChDeviceQueue	*device_queue,
+							 GUsbDevice	*device,
+							 gdouble	*temperature);
 
 /* command utility functions */
 gboolean	 ch_device_queue_set_calibration_ccmx	(ChDeviceQueue	*device_queue,

@@ -668,6 +668,18 @@
 #define	CH_CMD_WRITE_SRAM			0x39
 
 /**
+ * CH_CMD_GET_TEMPERATURE:
+ *
+ * Gets the temperature of the sensor in degrees celsius
+ *
+ * IN:  [1:cmd]
+ * OUT: [1:retval][1:cmd][4:temperature]
+ *
+ * This command is only available in firmware mode.
+ **/
+#define	CH_CMD_GET_TEMPERATURE			0x3b
+
+/**
  * CH_CMD_SELF_TEST:
  *
  * Tests the device by trying to get a non-zero reading from each
@@ -776,6 +788,7 @@ typedef enum {
 	CH_ERROR_INVALID_CALIBRATION,
 	CH_ERROR_SRAM_FAILED,
 	CH_ERROR_OUT_OF_MEMORY,
+	CH_ERROR_SELF_TEST_TEMPERATURE,
 	CH_ERROR_LAST
 } ChError;
 
