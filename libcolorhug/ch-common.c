@@ -120,6 +120,9 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_OUT_OF_MEMORY:
 		str = "Out of memory";
 		break;
+	case CH_ERROR_SELF_TEST_I2C:
+		str = "Self test failed: I2C";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
