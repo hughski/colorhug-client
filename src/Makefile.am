@@ -97,6 +97,7 @@ colorhug_inhx32_to_bin_SOURCES =			\
 
 colorhug_inhx32_to_bin_LDADD =				\
 	$(GLIB_LIBS)					\
+	$(COLORHUG_LIBS)				\
 	-lm
 
 colorhug_inhx32_to_bin_CFLAGS =				\

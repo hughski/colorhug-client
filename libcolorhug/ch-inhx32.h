@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2012 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2011-2012 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -19,20 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __COLORHUG_H
-#define __COLORHUG_H
+#if !defined (__COLORHUG_H_INSIDE__) && !defined (CH_COMPILATION)
+#error "Only <colorhug.h> can be included directly."
+#endif
 
-#define __COLORHUG_H_INSIDE__
+#ifndef __CH_INHX32_H
+#define __CH_INHX32_H
 
-#include <ch-common.h>
-#include <ch-device.h>
-#include <ch-device-queue.h>
-#include <ch-hash.h>
-#include <ch-inhx32.h>
-#include <ch-math.h>
-#include <ch-version.h>
+#include <glib.h>
 
-#undef __COLORHUG_H_INSIDE__
+#include "ch-common.h"
 
-#endif /* __COLORHUG_H */
+G_BEGIN_DECLS
 
+gboolean	 ch_inhx32_to_bin		(const gchar	*in_buffer,
+						 guint8		**out_buffer,
+						 gsize		*out_size,
+						 GError		**error);
+
+G_END_DECLS
+
+#endif /* __CH_INHX32_H */

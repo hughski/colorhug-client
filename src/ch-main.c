@@ -1993,7 +1993,8 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 				 GError **error)
 {
 	gboolean ret;
-	gchar *data = NULL;
+	gchar *data_raw = NULL;
+	guint8 *data = NULL;
 	gsize len = 0;
 	GUsbDevice *device = NULL;
 	GMainLoop *loop = NULL;
@@ -2002,9 +2003,26 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	/* load file */
-	ret = g_file_get_contents (filename, &data, &len, error);
+	ret = g_file_get_contents (filename, &data_raw, &len, error);
 	if (!ret)
 		goto out;
+
+	/* unpack the hex file to a binary blob if required */
+	if (g_str_has_suffix (filename, ".bin")) {
+		data = g_memdup (data_raw, len);
+	} else if (g_str_has_suffix (filename, ".hex")) {
+		ret = ch_inhx32_to_bin (data_raw,
+					&data,
+					&len,
+					error);
+		if (!ret)
+			goto out;
+	} else {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid file type, expect .bin or .hex");
+		goto out;
+	}
 
 	/* boot to bootloader */
 	device = ch_util_get_default_device (error);
@@ -2035,7 +2053,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 					   0x00);
 	ch_device_queue_write_firmware (priv->device_queue,
 					device,
-					(const guint8 *) data,
+					data,
 					len);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
@@ -2047,7 +2065,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	/* read firmware */
 	ch_device_queue_verify_firmware (priv->device_queue,
 					 device,
-					 (const guint8 *) data,
+					 data,
 					 len);
 	ch_device_queue_boot_flash (priv->device_queue,
 				    device);
@@ -2084,6 +2102,7 @@ out:
 	if (device != NULL)
 		g_object_unref (device);
 	g_free (data);
+	g_free (data_raw);
 	return ret;
 }
 
