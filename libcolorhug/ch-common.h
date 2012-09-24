@@ -728,7 +728,7 @@
 #define	CH_FLASH_ERASE_BLOCK_SIZE		0x400	/* 1024 */
 #define	CH_FLASH_WRITE_BLOCK_SIZE		0x040	/* 64 */
 #define	CH_FLASH_TRANSFER_BLOCK_SIZE		0x020	/* 32 */
-#define	CH_FLASH_RECONNECT_TIMEOUT		2500	/* ms */
+#define	CH_FLASH_RECONNECT_TIMEOUT		5000	/* ms */
 
 /* calibration remapping contants */
 #define	CH_CALIBRATION_INDEX_LCD		(CH_CALIBRATION_MAX + 0)
