@@ -2083,8 +2083,10 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		       loop);
 	g_main_loop_run (loop);
 	device = ch_util_get_default_device (error);
-	if (device == NULL)
+	if (device == NULL) {
+		ret = FALSE;
 		goto out;
+	}
 
 	/* set flash success true */
 	ch_device_queue_set_flash_success (priv->device_queue,
