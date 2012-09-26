@@ -29,16 +29,9 @@
 #include <glib.h>
 #include <gusb.h>
 
-#define CH_DEVICE_ERROR		(ch_device_error_quark ())
+#include "ch-common.h"
 
-typedef enum {
-	CH_DEVICE_MODE_UNKNOWN,
-	CH_DEVICE_MODE_LEGACY,
-	CH_DEVICE_MODE_BOOTLOADER,
-	CH_DEVICE_MODE_FIRMWARE,
-	CH_DEVICE_MODE_FIRMWARE_SPECTRO,
-	CH_DEVICE_MODE_LAST
-} ChDeviceMode;
+#define CH_DEVICE_ERROR		(ch_device_error_quark ())
 
 GQuark		 ch_device_error_quark		(void);
 gboolean	 ch_device_open			(GUsbDevice	*device,

@@ -345,3 +345,33 @@ ch_measure_mode_to_string (ChMeasureMode measure_mode)
 	}
 	return str;
 }
+
+/**
+ * ch_device_mode_to_string:
+ **/
+const gchar *
+ch_device_mode_to_string (ChDeviceMode device_mode)
+{
+	const char *str = NULL;
+	switch (device_mode) {
+	case CH_DEVICE_MODE_LEGACY:
+		str = "legacy";
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER:
+		str = "bootloader";
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER_SPECTRO:
+		str = "bootloader-spectro";
+		break;
+	case CH_DEVICE_MODE_FIRMWARE:
+		str = "firmware";
+		break;
+	case CH_DEVICE_MODE_FIRMWARE_SPECTRO:
+		str = "firmware-spectro";
+		break;
+	default:
+		str = "unknown";
+		break;
+	}
+	return str;
+}

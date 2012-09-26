@@ -691,6 +691,30 @@ ch_flash_show_warning_dialog (ChFlashPrivate *priv)
 }
 
 /**
+ * ch_flash_get_device_download_kind:
+ **/
+static const gchar *
+ch_flash_get_device_download_kind (ChFlashPrivate *priv)
+{
+	const char *str = NULL;
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_LEGACY:
+	case CH_DEVICE_MODE_BOOTLOADER:
+	case CH_DEVICE_MODE_FIRMWARE:
+		str = "colorhug";
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER_SPECTRO:
+	case CH_DEVICE_MODE_FIRMWARE_SPECTRO:
+		str = "colorhug-spectro";
+		break;
+	default:
+		str = "unknown";
+		break;
+	}
+	return str;
+}
+
+/**
  * ch_flash_flash_button_cb:
  **/
 static void
@@ -734,8 +758,10 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.0f);
 
 	/* download file */
-	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
+	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	uri = g_build_filename (server_uri,
+				ch_flash_get_device_download_kind (priv),
+				"firmware",
 				priv->filename,
 				NULL);
 	g_debug ("Downloading %s", uri);
@@ -989,6 +1015,10 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 		/* TRANSLATORS: first release hardware */
 		str = g_strdup (_("ColorHug Detected"));
 		break;
+	case 0x02:
+		/* TRANSLATORS: first release hardware */
+		str = g_strdup (_("ColorHug Spectro Detected"));
+		break;
 	case 0xff:
 		/* TRANSLATORS: fake hardware */
 		str = g_strdup (_("Emulated ColorHug Detected"));
@@ -1061,8 +1091,10 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	}
 
 	/* get the latest manifest file */
-	server_uri = g_settings_get_string (priv->settings, "firmware-uri");
+	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	uri = g_build_filename (server_uri,
+				ch_flash_get_device_download_kind (priv),
+				"firmware",
 				"metadata.xml",
 				NULL);
 	base_uri = soup_uri_new (uri);

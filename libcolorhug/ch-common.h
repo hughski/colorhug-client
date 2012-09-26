@@ -34,6 +34,7 @@
 #define	CH_USB_PID_BOOTLOADER			0x1000
 #define	CH_USB_PID_FIRMWARE			0x1001
 #define	CH_USB_PID_FIRMWARE_SPECTRO		0x1002
+#define	CH_USB_PID_BOOTLOADER_SPECTRO		0x1003
 #define	CH_USB_CONFIG				0x0001
 #define	CH_USB_INTERFACE			0x0000
 #define	CH_USB_HID_EP				0x0001
@@ -807,11 +808,22 @@ typedef enum {
 	CH_PCB_ERRATA_LAST		= 1 << 2
 } ChPcbErrata;
 
+typedef enum {
+	CH_DEVICE_MODE_UNKNOWN,
+	CH_DEVICE_MODE_LEGACY,
+	CH_DEVICE_MODE_BOOTLOADER,
+	CH_DEVICE_MODE_FIRMWARE,
+	CH_DEVICE_MODE_BOOTLOADER_SPECTRO,
+	CH_DEVICE_MODE_FIRMWARE_SPECTRO,
+	CH_DEVICE_MODE_LAST
+} ChDeviceMode;
+
 /* prototypes */
 const gchar	*ch_strerror			(ChError	 error_enum);
 const gchar	*ch_command_to_string		(guint8		 cmd);
 const gchar	*ch_multiplier_to_string	(ChFreqScale	 multiplier);
 const gchar	*ch_color_select_to_string	(ChColorSelect	 color_select);
-const gchar	*ch_measure_mode_to_string	(ChMeasureMode	 color_select);
+const gchar	*ch_measure_mode_to_string	(ChMeasureMode	 measure_mode);
+const gchar	*ch_device_mode_to_string	(ChDeviceMode	 device_mode);
 
 #endif

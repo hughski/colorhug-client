@@ -443,6 +443,30 @@ out:
 }
 
 /**
+ * ch_ccmx_get_device_download_kind:
+ **/
+static const gchar *
+ch_ccmx_get_device_download_kind (ChCcmxPrivate *priv)
+{
+	const char *str = NULL;
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_LEGACY:
+	case CH_DEVICE_MODE_BOOTLOADER:
+	case CH_DEVICE_MODE_FIRMWARE:
+		str = "colorhug";
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER_SPECTRO:
+	case CH_DEVICE_MODE_FIRMWARE_SPECTRO:
+		str = "colorhug-spectro";
+		break;
+	default:
+		str = "unknown";
+		break;
+	}
+	return str;
+}
+
+/**
  * ch_ccmx_get_serial_number_cb:
  **/
 static void
@@ -471,9 +495,11 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	}
 
 	/* download the correct factory calibration file */
-	server_uri = g_settings_get_string (priv->settings, "calibration-uri");
-	uri = g_strdup_printf ("%s/calibration-%06i.ccmx",
+	server_uri = g_settings_get_string (priv->settings, "server-uri");
+	uri = g_strdup_printf ("%s/%s/%s/calibration-%06i.ccmx",
 			       server_uri,
+			       ch_ccmx_get_device_download_kind (priv),
+			       "archive",
 			       priv->serial_number);
 	base_uri = soup_uri_new (uri);
 	msg = soup_message_new_from_uri (SOUP_METHOD_GET, base_uri);
@@ -1346,7 +1372,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 	priv->ccmx_idx = 0;
 
 	/* read file */
-	server_uri = g_settings_get_string (priv->settings, "ccmx-uri");
+	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	lines = g_strsplit (msg->response_body->data, "\n", -1);
 	for (i = 0; lines[i] != NULL; i++) {
 		if (lines[i][0] == '\0')
@@ -1359,6 +1385,8 @@ ch_ccmx_got_index_cb (SoupSession *session,
 		ret = g_file_test (filename_tmp, G_FILE_TEST_EXISTS);
 		if (!ret) {
 			uri_tmp = g_build_filename (server_uri,
+						    ch_ccmx_get_device_download_kind (priv),
+						    "ccmx",
 						    lines[i],
 						    NULL);
 			priv->ccmx_idx++;
@@ -1403,8 +1431,10 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	gtk_widget_show_all (widget);
 
 	/* get the latest INDEX file */
-	server_uri = g_settings_get_string (priv->settings, "ccmx-uri");
+	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	uri = g_build_filename (server_uri,
+				ch_ccmx_get_device_download_kind (priv),
+				"ccmx",
 				"INDEX",
 				NULL);
 	base_uri = soup_uri_new (uri);

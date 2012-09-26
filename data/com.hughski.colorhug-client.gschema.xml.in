@@ -5,20 +5,10 @@
       <_summary>Whether we should update to test firmware</_summary>
       <_description>Whether we should show test firmware and allow the user to update to it.</_description>
     </key>
-    <key name="firmware-uri" type="s">
-      <default>'http://www.hughski.com/downloads/colorhug/firmware'</default>
-      <_summary>The location of where firmware updates are stored</_summary>
-      <_description>The location of where firmware updates and the metadata is stored.</_description>
-    </key>
-    <key name="ccmx-uri" type="s">
-      <default>'http://www.hughski.com/downloads/colorhug/ccmx'</default>
-      <_summary>The location of where CCMX files are stored</_summary>
-      <_description>The location of where CCMX files and the metadata is stored.</_description>
-    </key>
-    <key name="calibration-uri" type="s">
-      <default>'http://www.hughski.com/downloads/colorhug/archive'</default>
-      <_summary>The location of where device calibration files are stored</_summary>
-      <_description>The location of where device calibration files are stored.</_description>
+    <key name="server-uri" type="s">
+      <default>'http://www.hughski.com/downloads'</default>
+      <_summary>The remote location of ColorHug files</_summary>
+      <_description>The location of where firmware updates and calibration files are stored.</_description>
     </key>
   </schema>
 </schemalist>
