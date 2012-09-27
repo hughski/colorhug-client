@@ -2293,14 +2293,14 @@ ch_device_queue_set_measure_mode (ChDeviceQueue *device_queue,
 }
 
 /**
- * ch_device_queue_write_sram:
+ * ch_device_queue_write_sram_internal:
  **/
-void
-ch_device_queue_write_sram (ChDeviceQueue *device_queue,
-			     GUsbDevice *device,
-			     guint16 address,
-			     guint8 *data,
-			     gsize len)
+static void
+ch_device_queue_write_sram_internal (ChDeviceQueue *device_queue,
+				     GUsbDevice *device,
+				     guint16 address,
+				     guint8 *data,
+				     gsize len)
 {
 	guint16 addr_le;
 	guint8 buffer_tx[CH_USB_HID_EP_SIZE];
@@ -2321,14 +2321,47 @@ ch_device_queue_write_sram (ChDeviceQueue *device_queue,
 }
 
 /**
- * ch_device_queue_read_sram:
+ * ch_device_queue_write_sram:
  **/
 void
-ch_device_queue_read_sram (ChDeviceQueue *device_queue,
-			   GUsbDevice *device,
-			   guint16 address,
-			   guint8 *data,
-			   gsize len)
+ch_device_queue_write_sram (ChDeviceQueue *device_queue,
+			    GUsbDevice *device,
+			    guint16 address,
+			    guint8 *data,
+			    gsize len)
+{
+	gsize chunk_len = 60;
+	guint idx = 0;
+
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+	g_return_if_fail (data != NULL);
+	g_return_if_fail (len > 0);
+
+	/* write in 60 byte chunks */
+	do {
+		if (idx + chunk_len > len)
+			chunk_len = len - idx;
+		g_debug ("Writing SRAM at %04x size %" G_GSIZE_FORMAT,
+			 idx, chunk_len);
+		ch_device_queue_write_sram_internal (device_queue,
+						     device,
+						     idx,
+						     data + idx,
+						     chunk_len);
+		idx += chunk_len;
+	} while (idx < len);
+}
+
+/**
+ * ch_device_queue_read_sram_internal:
+ **/
+static void
+ch_device_queue_read_sram_internal (ChDeviceQueue *device_queue,
+				    GUsbDevice *device,
+				    guint16 address,
+				    guint8 *data,
+				    gsize len)
 {
 	guint16 addr_le;
 	guint8 buffer_tx[3];
@@ -2347,6 +2380,38 @@ ch_device_queue_read_sram (ChDeviceQueue *device_queue,
 			     len);
 }
 
+/**
+ * ch_device_queue_read_sram:
+ **/
+void
+ch_device_queue_read_sram (ChDeviceQueue *device_queue,
+			   GUsbDevice *device,
+			   guint16 address,
+			   guint8 *data,
+			   gsize len)
+{
+	gsize chunk_len = 60;
+	guint idx = 0;
+
+	g_return_if_fail (CH_IS_DEVICE_QUEUE (device_queue));
+	g_return_if_fail (G_USB_IS_DEVICE (device));
+	g_return_if_fail (data != NULL);
+	g_return_if_fail (len > 0);
+
+	/* write in 60 byte chunks */
+	do {
+		if (idx + chunk_len > len)
+			chunk_len = len - idx;
+		g_debug ("Reading SRAM at %04x size %" G_GSIZE_FORMAT,
+			 idx, chunk_len);
+		ch_device_queue_read_sram_internal (device_queue,
+						    device,
+						    idx,
+						    data + idx,
+						    chunk_len);
+		idx += chunk_len;
+	} while (idx < len);
+}
 
 /**********************************************************************/
 
