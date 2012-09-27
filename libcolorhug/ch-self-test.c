@@ -113,7 +113,8 @@ ch_test_device_queue_func (void)
 		device = g_ptr_array_index (devices, i);
 		if (g_usb_device_get_vid (device) != CH_USB_VID)
 			continue;
-		if (g_usb_device_get_pid (device) != CH_USB_PID_FIRMWARE)
+		if (g_usb_device_get_pid (device) != CH_USB_PID_FIRMWARE &&
+		    g_usb_device_get_pid (device) != CH_USB_PID_FIRMWARE_SPECTRO)
 			continue;
 
 		valid_devices++;
@@ -456,7 +457,13 @@ ch_client_get_default (GError **error)
 	device = g_usb_device_list_find_by_vid_pid (list,
 						    CH_USB_VID,
 						    CH_USB_PID_FIRMWARE,
-						    error);
+						    NULL);
+	if (device == NULL) {
+		device = g_usb_device_list_find_by_vid_pid (list,
+							    CH_USB_VID,
+							    CH_USB_PID_FIRMWARE_SPECTRO,
+							    error);
+	}
 	if (device == NULL)
 		goto out;
 	g_debug ("Found ColorHug device %s",
@@ -475,13 +482,16 @@ static void
 ch_test_state_func (void)
 {
 	ChColorSelect color_select = 0;
+	ChDeviceQueue *device_queue;
 	ChFreqScale multiplier = 0;
 	gboolean ret;
+	gdouble elapsed;
 	GError *error = NULL;
+	GTimer *timer;
 	guint16 integral_time = 0;
 	guint8 leds = 0;
+	guint i;
 	GUsbDevice *device;
-	ChDeviceQueue *device_queue;
 
 	/* load the device */
 	device = ch_client_get_default (&error);
@@ -521,46 +531,48 @@ ch_test_state_func (void)
 	g_assert_cmpint (leds, ==, 3);
 
 	/* verify color select */
-	ch_device_queue_set_color_select (device_queue,
-					  device,
-					  CH_COLOR_SELECT_BLUE);
-	ret = ch_device_queue_process (device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	ch_device_queue_get_color_select (device_queue,
-					  device,
-					  &color_select);
-	ret = ch_device_queue_process (device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	g_assert_cmpint (color_select, ==, CH_COLOR_SELECT_BLUE);
+	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_set_color_select (device_queue,
+						  device,
+						  CH_COLOR_SELECT_BLUE);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		ch_device_queue_get_color_select (device_queue,
+						  device,
+						  &color_select);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		g_assert_cmpint (color_select, ==, CH_COLOR_SELECT_BLUE);
 
-	/* verify multiplier */
-	ch_device_queue_set_multiplier (device_queue,
-					device,
-					CH_FREQ_SCALE_2);
-	ret = ch_device_queue_process (device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	ch_device_queue_get_multiplier (device_queue,
-					device,
-					&multiplier);
-	ret = ch_device_queue_process (device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-	g_assert_cmpint (multiplier, ==, CH_FREQ_SCALE_2);
+		/* verify multiplier */
+		ch_device_queue_set_multiplier (device_queue,
+						device,
+						CH_FREQ_SCALE_2);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		ch_device_queue_get_multiplier (device_queue,
+						device,
+						&multiplier);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		g_assert_cmpint (multiplier, ==, CH_FREQ_SCALE_2);
+	}
 
 	/* verify integral */
 	ch_device_queue_set_integral_time (device_queue,
@@ -582,6 +594,48 @@ ch_test_state_func (void)
 	g_assert_no_error (error);
 	g_assert (ret);
 	g_assert_cmpint (integral_time, ==, 100);
+
+	/* verify sram access time */
+	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE_SPECTRO) {
+		guint8 data[3500*2];
+		for (i = 0; i < sizeof(data); i++)
+			data[i] = i;
+
+		/* test writing */
+		timer = g_timer_new ();
+		ch_device_queue_write_sram (device_queue,
+					    device,
+					    0x0000,
+					    data,
+					    sizeof(data));
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		elapsed = g_timer_elapsed (timer, NULL);
+		g_debug ("%li writes in %.1fms", sizeof(data) / 60, elapsed * 1000);
+		g_assert_cmpfloat (elapsed, <, 0.75);
+
+		/* test reading */
+		g_timer_reset (timer);
+		ch_device_queue_read_sram (device_queue,
+					   device,
+					   0x0000,
+					   data,
+					   sizeof(data));
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+		elapsed = g_timer_elapsed (timer, NULL);
+		g_debug ("%li reads in %.1fms", sizeof(data) / 60, elapsed * 1000);
+		g_assert_cmpfloat (elapsed, <, 0.75);
+		g_timer_destroy (timer);
+	}
 
 	g_object_unref (device_queue);
 }
@@ -873,26 +927,28 @@ ch_test_reading_func (void)
 
 	/* set color select */
 	device_queue = ch_device_queue_new ();
-	ch_device_queue_set_color_select (device_queue,
-					  device,
-					  CH_COLOR_SELECT_WHITE);
-	ret = ch_device_queue_process (device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
+	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_set_color_select (device_queue,
+						  device,
+						  CH_COLOR_SELECT_WHITE);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
 
-	/* set multiplier */
-	ch_device_queue_set_multiplier (device_queue,
-					device,
-					CH_FREQ_SCALE_100);
-	ret = ch_device_queue_process (device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       &error);
-	g_assert_no_error (error);
-	g_assert (ret);
+		/* set multiplier */
+		ch_device_queue_set_multiplier (device_queue,
+						device,
+						CH_FREQ_SCALE_100);
+		ret = ch_device_queue_process (device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       &error);
+		g_assert_no_error (error);
+		g_assert (ret);
+	}
 
 	/* set integral and take a reading from the hardware */
 	ch_device_queue_set_integral_time (device_queue,
