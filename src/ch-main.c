@@ -2025,10 +2025,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	}
 
 	/* boot to bootloader */
-	device = ch_util_get_default_device (error);
-	if (!ret)
-		goto out;
-	ch_device_queue_reset (priv->device_queue, device);
+	ch_device_queue_reset (priv->device_queue, priv->device);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
@@ -2042,7 +2039,6 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		       ch_util_helper_quit_loop_cb,
 		       loop);
 	g_main_loop_run (loop);
-	g_object_unref (device);
 	device = ch_util_get_default_device (error);
 	if (device == NULL)
 		goto out;
