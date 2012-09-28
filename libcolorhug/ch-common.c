@@ -123,6 +123,15 @@ ch_strerror (ChError error_enum)
 	case CH_ERROR_SELF_TEST_I2C:
 		str = "Self test failed: I2C";
 		break;
+	case CH_ERROR_SELF_TEST_ADC_VDD:
+		str = "Self test failed: ADC Vdd";
+		break;
+	case CH_ERROR_SELF_TEST_ADC_VSS:
+		str = "Self test failed: ADC Vss";
+		break;
+	case CH_ERROR_SELF_TEST_ADC_VREF:
+		str = "Self test failed: ADC Vref";
+		break;
 	default:
 		str = "Unknown error, please report";
 		break;
