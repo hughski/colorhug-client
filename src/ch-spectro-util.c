@@ -98,16 +98,22 @@ static void
 ch_util_refresh_device (ChCcmxPrivate *priv)
 {
 	ChPointObj *point;
+	const gchar *title;
 	gboolean ret;
+	gchar *temp_str = NULL;
 	gdouble sample;
+	gdouble temp;
 	GError *error = NULL;
 	GPtrArray *array;
+	GtkWidget *widget;
 	guint16 buffer[3694];
-	guint i;
-	const gchar *title;
 	guint32 color;
+	guint i;
 
 	/* get 3694 samples from the sram */
+	ch_device_queue_get_temperature (priv->device_queue,
+					 priv->device,
+					 &temp);
 	ch_device_queue_read_sram (priv->device_queue,
 				   priv->device,
 				   0x0000,
@@ -124,6 +130,12 @@ ch_util_refresh_device (ChCcmxPrivate *priv)
 		g_error_free (error);
 		return;
 	}
+
+	/* update temperature */
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_temp"));
+	temp_str = g_strdup_printf ("%.2fᴼC", temp);
+	gtk_label_set_label (GTK_LABEL (widget), temp_str);
+	g_free (temp_str);
 
 	/* convert to a voltage measurement */
 	array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
