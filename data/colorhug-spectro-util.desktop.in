@@ -1,0 +1,10 @@
+[Desktop Entry]
+_Name=ColorHug Spectro Utility
+_Comment=Play with the ColorHug Spectro
+Icon=colorhug-spectro-util
+Exec=colorhug-spectro-util %F
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;System;
+StartupNotify=true
+NoDisplay=true

@@ -7,6 +7,7 @@ dist_bashcompletion_DATA = colorhug-cmd-completion.bash
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files =					\
+	colorhug-spectro-util.desktop.in		\
 	colorhug-ccmx.desktop.in			\
 	colorhug-flash.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
@@ -17,6 +18,7 @@ gsettings_schemas_in_files = com.hughski.colorhug-client.gschema.xml.in
 gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
 
 pkgdata_DATA =						\
+	ch-spectro-util.ui				\
 	ch-ccmx.ui					\
 	ch-flash.ui
 
@@ -30,6 +32,7 @@ clean-local :
 
 DISTCLEANFILES =					\
 	com.hughski.colorhug-client.gschema.xml		\
+	colorhug-spectro-util.desktop			\
 	colorhug-ccmx.desktop				\
 	colorhug-flash.desktop
 
