@@ -2740,10 +2740,10 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 		goto out;
 	}
 	len = g_ascii_strtoull (values[1], NULL, 10);
-	if (len < 1 || len > 60) {
+	if (len < 1) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
-			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
+			     "invalid length %" G_GSIZE_FORMAT,
 			     len);
 		goto out;
 	}
