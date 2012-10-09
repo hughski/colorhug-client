@@ -297,7 +297,7 @@ ch_graph_widget_assign (ChGraphWidget *graph, ChGraphWidgetPlot plot, GPtrArray 
 
 	/* make a deep copy */
 	copy = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
-	for (i=0; i<data->len; i++) {
+	for (i = 0; i < data->len; i++) {
 		obj = ch_point_obj_copy (g_ptr_array_index (data, i));
 		g_ptr_array_add (copy, obj);
 	}
@@ -451,7 +451,7 @@ ch_graph_widget_draw_labels (ChGraphWidget *graph, cairo_t *cr)
 
 	/* do x text */
 	cairo_set_source_rgb (cr, 0, 0, 0);
-	for (i=0; i<11; i++) {
+	for (i = 0; i < 11; i++) {
 		b = graph->priv->box_x + ((gdouble) i * divwidth);
 		value = ((length_x / 10.0f) * (gdouble) i) + (gdouble) graph->priv->start_x;
 		text = ch_get_axis_label (graph->priv->type_x, value);
@@ -474,7 +474,7 @@ ch_graph_widget_draw_labels (ChGraphWidget *graph, cairo_t *cr)
 	}
 
 	/* do y text */
-	for (i=0; i<11; i++) {
+	for (i = 0; i < 11; i++) {
 		b = graph->priv->box_y + ((gdouble) i * divheight);
 		value = ((gdouble) length_y / 10.0f) * (10 - (gdouble) i) + graph->priv->start_y;
 		text = ch_get_axis_label (graph->priv->type_y, value);
@@ -531,7 +531,7 @@ ch_graph_widget_get_y_label_max_width (ChGraphWidget *graph, cairo_t *cr)
 	guint biggest = 0;
 
 	/* do y text */
-	for (i=0; i<11; i++) {
+	for (i = 0; i < 11; i++) {
 		value = (length_y / 10) * (10 - (gdouble) i) + graph->priv->start_y;
 		text = ch_get_axis_label (graph->priv->type_y, value);
 		pango_layout_set_text (graph->priv->layout, text, -1);
