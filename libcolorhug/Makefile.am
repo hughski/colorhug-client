@@ -121,7 +121,7 @@ introspection_sources =						\
 	ch-device-queue.h
 
 ColorHug-1.0.gir: libcolorhug.la
-ColorHug_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0
+ColorHug_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0 GUsb-1.0 Colord-1.0
 ColorHug_1_0_gir_CFLAGS = $(INCLUDES)
 ColorHug_1_0_gir_SCANNERFLAGS = --identifier-prefix=Ch \
 				--symbol-prefix=ch_ \

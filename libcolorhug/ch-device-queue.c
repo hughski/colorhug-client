@@ -666,7 +666,7 @@ out:
 }
 
 /**
- * ch_device_queue_buffer_uint16_from_le_cb:
+ * ch_device_queue_buffer_uint32_from_le_cb:
  **/
 static gboolean
 ch_device_queue_buffer_uint32_from_le_cb (guint8 *output_buffer,

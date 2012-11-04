@@ -460,8 +460,7 @@ ch_device_write_command_finish_cb (GObject *source,
 
 /**
  * ch_device_write_command:
- *
- * @client:		A #ChClient
+ * @device:		A #GUsbDevice
  * @cmd:		The command to use, e.g. %CH_CMD_GET_COLOR_SELECT
  * @buffer_in:		The input buffer of data, or %NULL
  * @buffer_in_len:	The input buffer length
@@ -472,6 +471,7 @@ ch_device_write_command_finish_cb (GObject *source,
  *
  * Sends a message to the device and waits for a reply.
  *
+ * Return value: %TRUE if the command was executed successfully.
  **/
 gboolean
 ch_device_write_command (GUsbDevice *device,

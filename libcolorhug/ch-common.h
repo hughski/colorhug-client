@@ -283,7 +283,7 @@
 #define	CH_CMD_GET_OWNER_EMAIL			0x13
 
 /**
- * CH_CMD_SET_OWNER_NAME:
+ * CH_CMD_SET_OWNER_EMAIL:
  *
  * Set User's Email Address
  *
