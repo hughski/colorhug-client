@@ -1,3 +1,35 @@
+Version 0.1.13
+~~~~~~~~~~~~~~
+Released: 2012-11-06
+
+Notes:
+ - This is the first release that adds support for the as-yet-unreleased
+   ColorHug Spectro. The new application should be regarded as proof of
+   concept and unfinished.
+
+New Features:
+ - Add various demo programs for resetting the ColorHug (Richard Hughes)
+ - Add a utility program to interface with the ColorHug Spectro (Richard Hughes)
+ - Add client support for getting the device ambient temperature (Richard Hughes)
+ - Add commands to read and write from the SRAM (Richard Hughes)
+ - Add defines for the ColorHug Spectro (Richard Hughes)
+ - Allow the user to flash an Intel HEX file from the command line (Richard Hughes)
+ - Show the spectro temperature in the power utility (Richard Hughes)
+
+Bugfixes:
+ - Add self-test to the list of completion commands (Richard Hughes)
+ - Add the ChSha1 symbol to the introspection data (Richard Hughes)
+ - Add the missing GObjectIntrospection markup to ChDeviceQueue (Richard Hughes)
+ - Cope with device errors without aborting when taking a raw measurement (Richard Hughes)
+ - Don't return flashing success when the device failed to re-appear (Richard Hughes)
+ - Fix flashing firmware with libusbx 1.0.13 (Richard Hughes)
+ - Fix make check when a ColorHug Spectro is inserted (Richard Hughes)
+ - Fix the example to work when firmware > 1.2.0 is used (Richard Hughes)
+ - Fix up the remaining introspection warnings (Richard Hughes)
+ - Increase the device reset timeout for slow USB hubs (Richard Hughes)
+ - Only require colord-gtk when building the debugging tools (Richard Hughes)
+ - Remove some dead code spotted by coverity (Richard Hughes)
+
 Version 0.1.12
 ~~~~~~~~~~~~~~
 Released: 2012-08-20
