@@ -946,8 +946,6 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 				       NULL,
 				       ch_ccmx_set_calibration_cb,
 				       priv);
-	if (!ret)
-		goto out;
 out:
 	return ret;
 }
