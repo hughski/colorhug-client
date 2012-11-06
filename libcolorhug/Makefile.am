@@ -117,6 +117,8 @@ introspection_sources =						\
 	ch-common.h						\
 	ch-device.c						\
 	ch-device.h						\
+	ch-hash.c						\
+	ch-hash.h						\
 	ch-device-queue.c					\
 	ch-device-queue.h
 
