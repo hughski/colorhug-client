@@ -1593,7 +1593,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	CdColorRGB value_zero;
 	CdColorRGB value;
 
-	/* TRANSLATORS: wait for user to press the device into a desk... */
+	/* TRANSLATORS: wait for user to press the device into a desk… */
 	ret = ch_util_get_prompt (_("Ensure the ColorHug aperture is blocked"), TRUE);
 	if (!ret) {
 		g_set_error_literal (error, 1, 0,

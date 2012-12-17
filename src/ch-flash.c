@@ -246,7 +246,7 @@ ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: tell the hardware we succeeded */
-	title = _("Setting flash success...");
+	title = _("Setting flash success…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* need to boot into bootloader */
@@ -355,7 +355,7 @@ ch_flash_verify_firmware_cb (GObject *source,
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	/* TRANSLATORS: boot into the new firmware */
-	title = _("Starting the new firmware...");
+	title = _("Starting the new firmware…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_detected"));
 	gtk_widget_show (widget);
@@ -408,7 +408,7 @@ ch_flash_write_firmware_cb (GObject *source,
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: now we've written the firmware, we have to
 	 * verify it before we tell the device it was successfull */
-	title = _("Verifying new firmware...");
+	title = _("Verifying new firmware…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* verify firmware */
@@ -437,7 +437,7 @@ ch_flash_set_flash_success_0 (ChFlashPrivate *priv)
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: now write the new firmware chunks */
-	title = _("Writing new firmware...");
+	title = _("Writing new firmware…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* write firmware */
@@ -529,7 +529,7 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: switch from firmware mode into bootloader mode */
-	title = _("Resetting into bootloader...");
+	title = _("Resetting into bootloader…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* this is planned */
@@ -750,7 +750,7 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: downloading the firmware binary file from a
 	 * remote server */
-	title = _("Downloading update...");
+	title = _("Downloading update…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* set progressbar to zero */
@@ -1063,7 +1063,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	/* TRANSLATORS: Check for newer version of the firmware compared
 	 * to what is installed on the device */
-	title = _("Checking for updates...");
+	title = _("Checking for updates…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "spinner_progress"));
 	gtk_widget_show (widget);
@@ -1071,7 +1071,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	/* we've manually specified a local firmware file */
 	if (priv->filename != NULL) {
 		/* TRANSLATORS: we've specified a local file */
-		title = _("Flashing firmware file...");
+		title = _("Flashing firmware file…");
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 		gtk_label_set_label (GTK_LABEL (widget), title);
 		ret = g_file_get_contents (priv->filename,
@@ -1248,7 +1248,7 @@ fake_device:
 		gtk_widget_show (widget);
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 		/* TRANSLATORS: request the firmware version from the device */
-		title = _("Getting firmware version...");
+		title = _("Getting firmware version…");
 		gtk_label_set_label (GTK_LABEL (widget), title);
 	}
 

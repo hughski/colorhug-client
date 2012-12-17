@@ -1095,7 +1095,7 @@ fake_device:
 	gtk_widget_show (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	/* TRANSLATORS: get the calibration matrices from the device */
-	title = _("Getting calibration from device...");
+	title = _("Getting calibration from device…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	gtk_widget_show (widget);
@@ -1423,7 +1423,7 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	/* TRANSLATORS: get the list of firmwares from the internet */
-	title = _("Getting latest data from the web...");
+	title = _("Getting latest data from the web…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
 	gtk_widget_show_all (widget);
