@@ -1487,6 +1487,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	GtkWidget *main_window;
 	GtkWidget *widget;
 	GdkPixbuf *pixbuf;
+	GtkListStore *list_store;
 
 	/* get UI */
 	priv->builder = gtk_builder_new ();
@@ -1527,6 +1528,24 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget),
 				      "colorhug-gray",
 				      GTK_ICON_SIZE_DIALOG);
+
+	/* setup list stores */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
+					      COLUMN_DESCRIPTION,
+					      GTK_SORT_ASCENDING);
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_led"));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
+					      COLUMN_DESCRIPTION,
+					      GTK_SORT_ASCENDING);
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_crt"));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
+					      COLUMN_DESCRIPTION,
+					      GTK_SORT_ASCENDING);
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
+					      COLUMN_DESCRIPTION,
+					      GTK_SORT_ASCENDING);
 
 	/* setup comboboxes */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_lcd"));
