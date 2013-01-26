@@ -121,6 +121,7 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.31.10 gobject-2.0 gmodule-2.0 gio-2.0 >= 2
 PKG_CHECK_MODULES(GUSB, gusb >= 0.1.2)
 PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.0)
 PKG_CHECK_MODULES(COLORD, colord >= 0.1.20)
+PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
 
@@ -130,10 +131,6 @@ dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(debugging, AS_HELP_STRING([--enable-debugging],[enable debugging tools]),
 	      enable_debugging=$enableval,enable_debugging=no)
 AM_CONDITIONAL(CD_BUILD_DEBUGGING, test x$enable_debugging = xyes)
-if test x$enable_debugging = xyes; then
-	PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.20)
-fi
-
 
 dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files

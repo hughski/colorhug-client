@@ -109,6 +109,7 @@ colorhug_ccmx_SOURCES =					\
 
 colorhug_ccmx_LDADD =					\
 	$(COLORD_LIBS)					\
+	$(COLORD_GTK_LIBS)				\
 	$(GLIB_LIBS)					\
 	$(GTK_LIBS)					\
 	$(GUSB_LIBS)					\
