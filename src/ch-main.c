@@ -529,6 +529,70 @@ out:
 }
 
 /**
+ * ch_util_ccmx_upload:
+ **/
+static gboolean
+ch_util_ccmx_upload (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	const gchar *uri;
+	gboolean ret = TRUE;
+	gchar *data = NULL;
+	gsize length;
+	guint status_code;
+	SoupBuffer *buffer = NULL;
+	SoupMessage *msg = NULL;
+	SoupMultipart *multipart = NULL;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'filename.ccmx'");
+		goto out;
+	}
+
+	/* read file */
+	ret = g_file_get_contents (values[0], &data, &length, error);
+	if (!ret)
+		goto out;
+
+	/* create multipart form and upload file */
+	multipart = soup_multipart_new (SOUP_FORM_MIME_TYPE_MULTIPART);
+	buffer = soup_buffer_new (SOUP_MEMORY_STATIC, data, length);
+	soup_multipart_append_form_file (multipart,
+					 "upload",
+					 values[0],
+					 NULL,
+					 buffer);
+	msg = soup_form_request_new_from_multipart ("http://www.hughski.com/ccmx-store.php", multipart);
+	status_code = soup_session_send_message (priv->session, msg);
+	if (!SOUP_STATUS_IS_SUCCESSFUL (status_code)) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "Failed to upload file: %s",
+			     msg->reason_phrase);
+		goto out;
+	}
+	uri = soup_message_headers_get_one (msg->response_headers, "Location");
+	g_debug ("Successfully uploaded to %s", uri);
+
+	/* print something machine readable */
+	if (g_strcmp0 (g_getenv ("COLORHUG_OUTPUT"), "plain") == 0)
+		g_print ("%s\n", uri);
+	else
+		g_print ("Uploaded CCMX to %s\n", uri);
+out:
+	if (buffer != NULL)
+		soup_buffer_free (buffer);
+	if (msg != NULL)
+		g_object_unref (msg);
+	if (multipart != NULL)
+		soup_multipart_free (multipart);
+	g_free (data);
+	return ret;
+}
+
+/**
  * ch_util_set_color_select:
  **/
 static gboolean
@@ -3049,6 +3113,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Uploads a remote profile"),
 		     ch_util_remote_profile_upload);
+	ch_util_add (priv->cmd_array,
+		     "ccmx-upload",
+		     /* TRANSLATORS: command description */
+		     _("Uploads a correction matrix"),
+		     ch_util_ccmx_upload);
 	ch_util_add (priv->cmd_array,
 		     "self-test",
 		     /* TRANSLATORS: command description */
