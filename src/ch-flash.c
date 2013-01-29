@@ -246,7 +246,7 @@ ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: tell the hardware we succeeded */
-	title = _("Setting flash success…");
+	title = _("Completing firmware upgrade…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* need to boot into bootloader */
@@ -529,7 +529,7 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_status"));
 	/* TRANSLATORS: switch from firmware mode into bootloader mode */
-	title = _("Resetting into bootloader…");
+	title = _("Starting firmware upgrade…");
 	gtk_label_set_label (GTK_LABEL (widget), title);
 
 	/* this is planned */
