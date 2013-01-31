@@ -376,7 +376,7 @@ ch_get_axis_label (ChGraphWidgetType axis, gdouble value)
 		/* TRANSLATORS: This is %.1f Volts*/
 		text = g_strdup_printf (_("%.1fV"), value);
 	} else if (axis == CH_GRAPH_WIDGET_TYPE_WAVELENGTH) {
-		/* TRANSLATORS: This is %.1f Volts*/
+		/* TRANSLATORS: This is %.1f nanometers */
 		text = g_strdup_printf (_("%.0f nm"), value);
 	} else {
 		text = g_strdup_printf ("%i", (gint) value);
