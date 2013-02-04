@@ -2,7 +2,16 @@ AUTOMAKE_OPTIONS = 1.7
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = po libcolorhug man src data
+SUBDIRS = po man data
+
+if USE_BUNDLED_LIBCOLORHUG
+SUBDIRS += libcolorhug
+endif
+
+SUBDIRS += src
+
+DISTCHECK_CONFIGURE_FLAGS =				\
+	--enable-bundled-libcolorhug
 
 EXTRA_DIST =						\
 	COPYING						\

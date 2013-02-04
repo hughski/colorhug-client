@@ -4,17 +4,14 @@ AM_CPPFLAGS =						\
 	$(GTK_CFLAGS)					\
 	$(GUSB_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
+	$(COLORHUG_CFLAGS)				\
 	$(COLORD_GTK_CFLAGS)				\
 	$(SOUP_CFLAGS)					\
 	$(CANBERRA_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"Ch\"				\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
-	-DLOCALEDIR=\""$(localedir)"\"			\
-	-I$(top_srcdir)/libcolorhug
-
-COLORHUG_LIBS =						\
-	$(top_builddir)/libcolorhug/libcolorhug.la
+	-DLOCALEDIR=\""$(localedir)"\"
 
 noinst_PROGRAMS =					\
 	colorhug-spectro-util
@@ -48,6 +45,7 @@ colorhug_profile_SOURCES =				\
 colorhug_profile_LDADD =				\
 	$(COLORD_LIBS)					\
 	$(COLORD_GTK_LIBS)				\
+	$(COLORHUG_LIBS)				\
 	$(GUSB_LIBS)					\
 	$(GLIB_LIBS)					\
 	$(SOUP_LIBS)					\
