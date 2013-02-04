@@ -7,7 +7,7 @@ git shortlog COLORHUG_CLIENT_0_1_14.. | grep -i -v trivial | uniq | grep -v Merg
 --------------------------------------------------------------------------------
 Version 0.1.15
 ~~~~~~~~~~~~~~
-Released: 2012-xx-xx
+Released: 2013-xx-xx
 
 Notes:
 
