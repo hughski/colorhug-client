@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 18:37+0000\n"
-"PO-Revision-Date: 2012-11-06 18:34+0000\n"
+"POT-Creation-Date: 2013-01-30 09:06+0000\n"
+"PO-Revision-Date: 2013-01-30 09:07+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,61 +23,83 @@ msgstr ""
 msgid "ColorHug CCMX Loader"
 msgstr "カラーハッグCCMXローダー"
 
+#: ../data/ch-ccmx.ui.h:2
+msgid "Generate CCMX"
+msgstr ""
+
 #. Button to import a CCMX file
-#: ../data/ch-ccmx.ui.h:3
+#: ../data/ch-ccmx.ui.h:4
 msgid "Import file"
 msgstr "ファイルをインポートする"
 
-#: ../data/ch-ccmx.ui.h:4
+#: ../data/ch-ccmx.ui.h:5
 msgid "Import a local CCMX file"
 msgstr "ローかるCCMXファイルを取り込む"
 
-#: ../data/ch-ccmx.ui.h:5 ../data/ch-flash.ui.h:2
+#: ../data/ch-ccmx.ui.h:6 ../data/ch-flash.ui.h:2
 #: ../data/ch-spectro-util.ui.h:2
 msgid "Close this window"
 msgstr "ウインドウを閉じる"
 
-#: ../data/ch-ccmx.ui.h:6
+#: ../data/ch-ccmx.ui.h:7
 msgid "Refresh the list of matrices from the device"
 msgstr "デバイスの行列をリフレッシュ"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
-#: ../data/ch-ccmx.ui.h:8
+#: ../data/ch-ccmx.ui.h:9
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
 msgstr "適切な校正行列を選択すれば正確さを最大化することは出来ます"
 
 #. Only advanced users have to change this...
-#: ../data/ch-ccmx.ui.h:10
+#: ../data/ch-ccmx.ui.h:11
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
 msgstr "規定校正行列を使っても許容な校正は作れます"
 
 #. Default liquid crystal display matrix
-#: ../data/ch-ccmx.ui.h:12
+#: ../data/ch-ccmx.ui.h:13
 msgid "LCD"
 msgstr "液晶"
 
 #. Default cathode ray tube (ask your parents...) matrix
-#: ../data/ch-ccmx.ui.h:14
+#: ../data/ch-ccmx.ui.h:15
 msgid "CRT"
 msgstr "ブラウン管"
 
 #. Default projector (beamer etc) matrix
-#: ../data/ch-ccmx.ui.h:16
+#: ../data/ch-ccmx.ui.h:17
 msgid "Projector"
 msgstr "映写機"
 
 #. Default light emitting diode matrix
-#: ../data/ch-ccmx.ui.h:18
+#: ../data/ch-ccmx.ui.h:19
 msgid "LED"
 msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:19 ../src/ch-flash.c:1329
+#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1329
 msgid "Please connect your ColorHug"
 msgstr "カラーハッグを接続してください"
+
+#: ../data/ch-ccmx.ui.h:21
+msgid "Select the screen to use when generating the color calibration matrix."
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1722 ../src/ch-ccmx.c:1749
+msgid "Do not remove the device whilst measurement is in progress"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:23
+msgid "Save file"
+msgstr ""
+
+#: ../data/ch-ccmx.ui.h:24
+msgid ""
+"Share with\n"
+"the community"
+msgstr ""
 
 #: ../data/ch-flash.ui.h:1
 msgid "ColorHug Firmware Updater"
@@ -200,164 +222,190 @@ msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr ""
 
-#: ../src/ch-ccmx.c:130
+#: ../src/ch-ccmx.c:167
 msgid "Failed to create directory"
 msgstr "フォルダー作成失敗しました"
 
-#: ../src/ch-ccmx.c:401 ../src/ch-ccmx.c:1254
+#: ../src/ch-ccmx.c:438 ../src/ch-ccmx.c:1293
 msgid "Failed to download file"
 msgstr "ファイルダウンロード失敗しました"
 
-#: ../src/ch-ccmx.c:409 ../src/ch-ccmx.c:1262
+#: ../src/ch-ccmx.c:446 ../src/ch-ccmx.c:1301
 msgid "File has zero size"
 msgstr "ファイルの容量は０です"
 
-#: ../src/ch-ccmx.c:421
+#: ../src/ch-ccmx.c:458
 msgid "Failed to load data"
 msgstr "ロードに失敗"
 
 #. TRANSLATORS: the request failed
-#: ../src/ch-ccmx.c:491 ../src/ch-flash.c:1143 ../src/ch-flash.c:1173
+#: ../src/ch-ccmx.c:528 ../src/ch-flash.c:1143 ../src/ch-flash.c:1173
 msgid "Failed to contact ColorHug"
 msgstr "カラーハッグに連絡出来なかった"
 
 #. TRANSLATORS: internal error when setting up HTTP request
-#: ../src/ch-ccmx.c:508 ../src/ch-ccmx.c:1313 ../src/ch-ccmx.c:1444
+#: ../src/ch-ccmx.c:545 ../src/ch-ccmx.c:1352 ../src/ch-ccmx.c:2075
 #: ../src/ch-flash.c:774 ../src/ch-flash.c:1106
 msgid "Failed to setup message"
 msgstr "メセージの設定出来ませんでした"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:558
+#: ../src/ch-ccmx.c:595
 msgid "The ColorHug is missing the factory calibration values."
 msgstr ""
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
-#: ../src/ch-ccmx.c:566
+#: ../src/ch-ccmx.c:603
 msgid "Device calibration error"
 msgstr ""
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:571
+#: ../src/ch-ccmx.c:608
 msgid "Ignore"
 msgstr "無視"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:574 ../src/ch-ccmx.c:610
+#: ../src/ch-ccmx.c:611 ../src/ch-ccmx.c:647
 msgid "Repair"
 msgstr "修復"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:594
+#: ../src/ch-ccmx.c:631
 msgid "Update the factory calibration values?"
 msgstr ""
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
-#: ../src/ch-ccmx.c:602
+#: ../src/ch-ccmx.c:639
 msgid "Device calibration update"
 msgstr ""
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:607
+#: ../src/ch-ccmx.c:644
 msgid "Cancel"
 msgstr "キャンセル"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:726
+#: ../src/ch-ccmx.c:763
 msgid "Failed to get the calibration data"
 msgstr "測定値の取得に失敗しました"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
-#: ../src/ch-ccmx.c:790
+#: ../src/ch-ccmx.c:829
 msgid "Select correction matrix"
 msgstr "校正行列を選択してください"
 
 #. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-ccmx.c:801
+#: ../src/ch-ccmx.c:840
 msgid "Correction matrices"
 msgstr "校正行列"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:835
+#: ../src/ch-ccmx.c:874
 msgid "Failed to set the calibration map"
 msgstr "校正マップをセット出来ませんでした"
 
-#: ../src/ch-ccmx.c:867
+#: ../src/ch-ccmx.c:906
 msgid "Failed to set the calibration matrix"
 msgstr "校正行列をセット出来ませんでした"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
-#: ../src/ch-ccmx.c:1008 ../src/ch-ccmx.c:1176
+#: ../src/ch-ccmx.c:1047 ../src/ch-ccmx.c:1215
 msgid "No space left on device"
 msgstr "デバイスメモリはいっぱいです"
 
-#: ../src/ch-ccmx.c:1009 ../src/ch-ccmx.c:1178
+#: ../src/ch-ccmx.c:1048 ../src/ch-ccmx.c:1217
 msgid "All 64 slots are used up."
 msgstr "全ての64スロットは使用中"
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
-#: ../src/ch-ccmx.c:1017 ../src/ch-ccmx.c:1187 ../src/ch-flash.c:1084
+#: ../src/ch-ccmx.c:1056 ../src/ch-ccmx.c:1226 ../src/ch-flash.c:1084
 msgid "Failed to load file"
 msgstr "ファイルをロード出来ませんでした。"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:1080 ../src/ch-flash.c:1236 ../src/ch-spectro-util.c:249
+#: ../src/ch-ccmx.c:1119 ../src/ch-flash.c:1236 ../src/ch-spectro-util.c:249
 msgid "Failed to open device"
 msgstr "デバイスにアクセス出来ませんでした"
 
 #. TRANSLATORS: get the calibration matrices from the device
-#: ../src/ch-ccmx.c:1098
-msgid "Getting calibration from device..."
-msgstr "デバイスからの校正は読み込み中"
+#: ../src/ch-ccmx.c:1137
+msgid "Getting calibration from device…"
+msgstr ""
 
-#: ../src/ch-ccmx.c:1280
+#: ../src/ch-ccmx.c:1319
 msgid "Failed to write file"
 msgstr "ファイルの書き込み出来ませんでした"
 
 #. TRANSLATORS: could not download the directory listing
-#: ../src/ch-ccmx.c:1348
+#: ../src/ch-ccmx.c:1387
 msgid "Failed to get the list of firmware files"
 msgstr "ファームウェア ファイルの一覧を表示出来ませんでした"
 
 #. TRANSLATORS: the directory listing returned no results
-#: ../src/ch-ccmx.c:1356
+#: ../src/ch-ccmx.c:1395
 msgid "Firmware list has zero size"
 msgstr "ファームウェア ファイルの容量は０です"
 
+#. TRANSLATORS: the user needs to change something on the device
+#: ../src/ch-ccmx.c:1511
+msgid "Set the device to the calibrate position and click 'Next'."
+msgstr ""
+
+#. TRANSLATORS: the user needs to change something on the device
+#: ../src/ch-ccmx.c:1529
+msgid "Set the device to the surface position and click 'Next'."
+msgstr ""
+
+#: ../src/ch-ccmx.c:1706
+msgid "Put the photospectrometer on the screen and click 'Next'."
+msgstr ""
+
+#: ../src/ch-ccmx.c:1736
+msgid "Now put the ColorHug on the screen and click 'Next' again."
+msgstr ""
+
+#: ../src/ch-ccmx.c:1793
+msgid "Correction matrix failed to be generated!"
+msgstr ""
+
+#: ../src/ch-ccmx.c:1799
+msgid "Correction matrix successfully generated!"
+msgstr ""
+
 #. TRANSLATORS: get the list of firmwares from the internet
-#: ../src/ch-ccmx.c:1426
-msgid "Getting latest data from the web..."
-msgstr "インターネットから最新データはダウンロード中です"
+#: ../src/ch-ccmx.c:2057
+msgid "Getting latest data from the web…"
+msgstr ""
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:1592 ../src/ch-flash.c:1414 ../src/ch-main.c:3122
+#: ../src/ch-ccmx.c:2514 ../src/ch-flash.c:1414 ../src/ch-main.c:3191
 msgid "Failed to setup networking"
 msgstr "ネットワークに接続出来ませんでした"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:1676 ../src/ch-flash.c:1508 ../src/ch-main.c:2795
+#: ../src/ch-ccmx.c:2605 ../src/ch-flash.c:1508 ../src/ch-main.c:2859
 #: ../src/ch-spectro-util.c:528
 msgid "Show extra debugging information"
 msgstr "デバッギング情報を表示する"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:1679
+#: ../src/ch-ccmx.c:2608
 msgid "Repair the factory calibration matrix"
 msgstr ""
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:1693 ../src/ch-spectro-util.c:542
+#: ../src/ch-ccmx.c:2622 ../src/ch-spectro-util.c:542
 msgid "ColorHug CCMX loader"
 msgstr "CCMX ローダー"
 
-#: ../src/ch-ccmx.c:1699 ../src/ch-flash.c:1530 ../src/ch-spectro-util.c:548
+#: ../src/ch-ccmx.c:2628 ../src/ch-flash.c:1530 ../src/ch-spectro-util.c:548
 msgid "Failed to parse command line options"
 msgstr "コマンドオープション解析失敗しました"
 
@@ -403,8 +451,8 @@ msgstr ""
 
 #. TRANSLATORS: tell the hardware we succeeded
 #: ../src/ch-flash.c:249
-msgid "Setting flash success..."
-msgstr "最新の成功記録中"
+msgid "Completing firmware upgrade…"
+msgstr ""
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
@@ -425,8 +473,8 @@ msgstr ""
 
 #. TRANSLATORS: boot into the new firmware
 #: ../src/ch-flash.c:358
-msgid "Starting the new firmware..."
-msgstr "新しいファームウェアは起動中です"
+msgid "Starting the new firmware…"
+msgstr ""
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
@@ -437,13 +485,13 @@ msgstr ""
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
 #: ../src/ch-flash.c:411
-msgid "Verifying new firmware..."
-msgstr "確認中..."
+msgid "Verifying new firmware…"
+msgstr ""
 
 #. TRANSLATORS: now write the new firmware chunks
 #: ../src/ch-flash.c:440
-msgid "Writing new firmware..."
-msgstr "書き込み中..."
+msgid "Writing new firmware…"
+msgstr ""
 
 #. TRANSLATORS: the device failed to come back alive
 #: ../src/ch-flash.c:471
@@ -457,8 +505,8 @@ msgstr "リセット失敗しました"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 #: ../src/ch-flash.c:532
-msgid "Resetting into bootloader..."
-msgstr "ブートローダーに再起動"
+msgid "Starting firmware upgrade…"
+msgstr ""
 
 #. TRANSLATORS: failed to get the firmware file
 #: ../src/ch-flash.c:565
@@ -495,8 +543,8 @@ msgstr ""
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
 #: ../src/ch-flash.c:753
-msgid "Downloading update..."
-msgstr "ダウンロード中..."
+msgid "Downloading update…"
+msgstr ""
 
 #. TRANSLATORS: the user is already running the latest firmware
 #: ../src/ch-flash.c:848
@@ -572,18 +620,18 @@ msgstr "ファームウェア バージョン"
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
 #: ../src/ch-flash.c:1066
-msgid "Checking for updates..."
-msgstr "最新版確認中..."
+msgid "Checking for updates…"
+msgstr ""
 
 #. TRANSLATORS: we've specified a local file
 #: ../src/ch-flash.c:1074
-msgid "Flashing firmware file..."
+msgid "Flashing firmware file…"
 msgstr ""
 
 #. TRANSLATORS: request the firmware version from the device
 #: ../src/ch-flash.c:1251
-msgid "Getting firmware version..."
-msgstr "ファームウェア バージョン確認中"
+msgid "Getting firmware version…"
+msgstr ""
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
@@ -666,7 +714,7 @@ msgstr ""
 msgid "%.1fV"
 msgstr ""
 
-#. TRANSLATORS: This is %.1f Volts
+#. TRANSLATORS: This is %.1f nanometers
 #: ../src/ch-graph-widget.c:380
 #, c-format
 msgid "%.0f nm"
@@ -682,326 +730,331 @@ msgstr "%s をエイリアスにする"
 msgid "Command not found, valid commands are:"
 msgstr "不明なコマンド、有効なコマンドは："
 
-#. TRANSLATORS: wait for user to press the device into a desk...
-#: ../src/ch-main.c:1597
+#. TRANSLATORS: wait for user to press the device into a desk…
+#: ../src/ch-main.c:1661
 msgid "Ensure the ColorHug aperture is blocked"
 msgstr ""
 
 #. TRANSLATORS: ask before we set these
-#: ../src/ch-main.c:1639
+#: ../src/ch-main.c:1703
 msgid "Set these values as the dark offsets"
 msgstr ""
 
 #. TRANSLATORS: this is the enabled sensor color
-#: ../src/ch-main.c:1789
+#: ../src/ch-main.c:1853
 msgid "Color"
 msgstr "カラー"
 
 #. TRANSLATORS: this is the sensor scale factor
-#: ../src/ch-main.c:1793 ../src/ch-main.c:1884
+#: ../src/ch-main.c:1857 ../src/ch-main.c:1948
 msgid "Multiplier"
 msgstr ""
 
 #. TRANSLATORS: this is the measurement mode
-#: ../src/ch-main.c:1797
+#: ../src/ch-main.c:1861
 msgid "Measure mode"
 msgstr ""
 
 #. TRANSLATORS: this is the sensor sample time
-#: ../src/ch-main.c:1801 ../src/ch-main.c:1837 ../src/ch-main.c:1888
+#: ../src/ch-main.c:1865 ../src/ch-main.c:1901 ../src/ch-main.c:1952
 msgid "Integral"
 msgstr ""
 
 #. TRANSLATORS: this is the number of pulses detected
-#: ../src/ch-main.c:1804
+#: ../src/ch-main.c:1868
 msgid "Pulses"
 msgstr ""
 
-#: ../src/ch-main.c:1947
+#: ../src/ch-main.c:2011
 msgid "Multiple ColorHug devices are attached"
 msgstr ""
 
-#: ../src/ch-main.c:1954
+#: ../src/ch-main.c:2018
 msgid "No ColorHug devices were found"
 msgstr ""
 
 #. TRANSLATORS: confirmation
-#: ../src/ch-main.c:2156
+#: ../src/ch-main.c:2220
 msgid "Flash the device?"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2815
+#: ../src/ch-main.c:2879
 msgid "Gets the sensor color filter"
 msgstr "センサーの色フイルターを表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2820
+#: ../src/ch-main.c:2884
 msgid "Sets the sensor color filter"
 msgstr "センサーの色フイルターをセットします"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2825
+#: ../src/ch-main.c:2889
 msgid "Gets the sensor multiplier"
 msgstr "センサーの倍率器を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2830
+#: ../src/ch-main.c:2894
 msgid "Sets the sensor multiplier"
 msgstr "センサーの倍率器をセットします"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2835
+#: ../src/ch-main.c:2899
 msgid "Gets the sensor sample read time"
 msgstr "センサーのサンプル読み込み期間を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2840
+#: ../src/ch-main.c:2904
 msgid "Sets the sensor sample read time"
 msgstr "センサーのサンプル読み込み期間をセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2845
+#: ../src/ch-main.c:2909
 msgid "Gets the sensor firmware version"
 msgstr "センサーのファームウェアのバージョンを表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2850
+#: ../src/ch-main.c:2914
 msgid "Gets the sensor calibration matrix"
 msgstr "センサー目盛り定め行列を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2855
+#: ../src/ch-main.c:2919
 msgid "Sets the sensor calibration matrix"
 msgstr "センサー目盛り定め行列をセットします"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2860
+#: ../src/ch-main.c:2924
 msgid "Clear the sensor calibration matrix"
 msgstr "センサー校正行列をリセットします"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2865
+#: ../src/ch-main.c:2929
 msgid "List the sensor calibration matrices"
 msgstr "センサー校正行列を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2870
+#: ../src/ch-main.c:2934
 msgid "Sets the sensor calibration matrix from a CCMX file"
 msgstr "ファイルからセンサー校正行列をロードする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2875
+#: ../src/ch-main.c:2939
 msgid "Gets the sensor serial number"
 msgstr "シリアル番号を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2880
+#: ../src/ch-main.c:2944
 msgid "Sets the sensor serial number"
 msgstr "シリアル番号をセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2885
+#: ../src/ch-main.c:2949
 msgid "Gets the owner's name"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2890
+#: ../src/ch-main.c:2954
 msgid "Sets the owner's name"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2895
+#: ../src/ch-main.c:2959
 msgid "Gets the owner's email address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2900
+#: ../src/ch-main.c:2964
 msgid "Sets the owner's email address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2905
+#: ../src/ch-main.c:2969
 msgid "Gets the LED values"
 msgstr "LED置を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2910
+#: ../src/ch-main.c:2974
 msgid "Sets the LEDs"
 msgstr "LED置をセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2915
+#: ../src/ch-main.c:2979
 msgid "Gets the PCB errata"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2920
+#: ../src/ch-main.c:2984
 msgid "Sets the PCB errata"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2925
+#: ../src/ch-main.c:2989
 msgid "Gets the remote profile SHA1 hash"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2930
+#: ../src/ch-main.c:2994
 msgid "Sets the remote profile SHA1 hash"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2935
+#: ../src/ch-main.c:2999
 msgid "Gets the dark offset values"
 msgstr "暗いオフセット値を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2940
+#: ../src/ch-main.c:3004
 msgid "Sets the dark offset values"
 msgstr "暗いオフセット値をセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2945
+#: ../src/ch-main.c:3009
 msgid "Writes the EEPROM with updated values"
 msgstr "EEPROMの値を最新する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2950
+#: ../src/ch-main.c:3014
 msgid "Takes a reading"
 msgstr "読み取ります"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2955
+#: ../src/ch-main.c:3019
 msgid "Takes all color readings (to device RGB)"
 msgstr "色を読み込む(デバイスRGB）"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2960
+#: ../src/ch-main.c:3024
 msgid "Takes all color readings (to XYZ)"
 msgstr "各色を読み取ります(XYZ)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2965
+#: ../src/ch-main.c:3029
 msgid "Reset the processor back to the bootloader"
 msgstr "ブートローダーから再起動"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2970 ../src/ch-main.c:2975
+#: ../src/ch-main.c:3034 ../src/ch-main.c:3039
 msgid "Flash firmware into the processor"
 msgstr "ファームウェアを最新する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2980
+#: ../src/ch-main.c:3044
 msgid "Read EEPROM at a specified address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2985
+#: ../src/ch-main.c:3049
 msgid "Erase EEPROM at a specified address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2990
+#: ../src/ch-main.c:3054
 msgid "Write EEPROM at a specified address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2995
+#: ../src/ch-main.c:3059
 msgid "Gets the pre scale constant"
 msgstr "尺度前の一定を表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3000
+#: ../src/ch-main.c:3064
 msgid "Sets the pre scale constant"
 msgstr "尺度前の一定をセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3005
+#: ../src/ch-main.c:3069
 msgid "Gets the post scale constant"
 msgstr "尺度前の一定を取り込む"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3010
+#: ../src/ch-main.c:3074
 msgid "Sets the post scale constant"
 msgstr "尺度前の一定をセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3015
+#: ../src/ch-main.c:3079
 msgid "Sets the flash success"
 msgstr "最新成功にセットする"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3020
+#: ../src/ch-main.c:3084
 msgid "Boots from the bootloader into the firmware"
 msgstr "ブート・ローダーからファームウェアを起動する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3025
+#: ../src/ch-main.c:3089
 msgid "Gets the sensor calibration map"
 msgstr "センサー校正マップを表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3030
+#: ../src/ch-main.c:3094
 msgid "Sets the sensor calibration map"
 msgstr "センサー校正マップをセット"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3035
+#: ../src/ch-main.c:3099
 msgid "Gets the hardware version"
 msgstr "デバイスバージョンを表示する"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3040
+#: ../src/ch-main.c:3104
 msgid "Gets an array of raw samples"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3045
+#: ../src/ch-main.c:3109
 msgid "Downloads a remote profile"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3050
+#: ../src/ch-main.c:3114
 msgid "Uploads a remote profile"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3055
+#: ../src/ch-main.c:3119
+msgid "Uploads a correction matrix"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:3124
 msgid "Does a quick self test on the device"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3060
+#: ../src/ch-main.c:3129
 msgid "Gets the sensor measurement mode"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3065
+#: ../src/ch-main.c:3134
 msgid "Sets the sensor measurement mode"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3070
+#: ../src/ch-main.c:3139
 msgid "Read SRAM at a specified address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3075
+#: ../src/ch-main.c:3144
 msgid "Write SRAM at a specified address"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3080
+#: ../src/ch-main.c:3149
 msgid "Gets the sensor temperature"
 msgstr ""
 
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:3093
+#: ../src/ch-main.c:3162
 msgid "Color Management"
 msgstr "カラーマネジメント"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:3110
+#: ../src/ch-main.c:3179
 msgid "No connection to device:"
 msgstr "デバイスが見つかりません"
 

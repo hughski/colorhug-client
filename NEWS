@@ -1,3 +1,27 @@
+Version 0.1.14
+~~~~~~~~~~~~~~
+Released: 2012-02-04
+
+Notes:
+- You can now easily generate a CCMX matrix for your screen and the ColorHug
+  if you have a photospectrometer connected whilst running colorhug-ccmx.
+- Lots of translation updates.
+- If colord 0.1.29 is available then libcolorhug is used from that, although
+  for older colord versions the internal version is still used.
+
+New Features:
+ - Compile the GtkBuilder files as a GResources to speed up startup (Richard Hughes)
+ - Add a 'ccmx-upload' command to colorhug-cmd (Richard Hughes)
+ - Allow the user to easily generate a CCMX correction matrix (Richard Hughes)
+
+Bugfixes:
+ - Use the UTF-8 '…' rather than '...' in UI code (Richard Hughes)
+ - Sort the profiles by name in colorhug-ccmx (Richard Hughes)
+ - Don't use the deprecated INCLUDES in Makefile.am (Richard Hughes)
+ - Never use -Werror when building (Richard Hughes)
+ - Fix two difficult to translate strings (Richard Hughes)
+ - Use an external libcolorhug if it exists rather than the internal copy (Richard Hughes)
+
 Version 0.1.13
 ~~~~~~~~~~~~~~
 Released: 2012-11-06
