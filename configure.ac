@@ -25,6 +25,7 @@ AM_PROG_CC_C_O
 IT_PROG_INTLTOOL([0.35.0])
 GLIB_GSETTINGS
 GOBJECT_INTROSPECTION_CHECK([0.9.8])
+YELP_HELP_INIT
 
 # use this in ch-version.h
 CH_MAJOR_VERSION=ch_major_version
@@ -178,6 +179,7 @@ data/icons/48x48/Makefile
 data/icons/64x64/Makefile
 data/icons/256x256/Makefile
 data/icons/scalable/Makefile
+help/Makefile
 libcolorhug/Makefile
 libcolorhug/colorhug.pc
 libcolorhug/ch-version.h

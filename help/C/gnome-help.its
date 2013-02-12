@@ -1,0 +1,14 @@
+<its:rules xmlns:its="http://www.w3.org/2005/11/its"
+           xmlns:mal="http://projectmallard.org/1.0/"
+           version="1.0">
+  <!--
+  It's common to use a gui element alone as a title for a terms item, or
+  as the only text in a list item. Make it so translators don't have to
+  deal with this extra markup.
+  -->
+  <its:withinTextRule
+      selector="//mal:gui[
+                (parent::mal:title or parent::mal:p) and
+                not(preceding-sibling::node() or following-sibling::node())]"
+      withinText="no"/>
+</its:rules>

@@ -1,0 +1,38 @@
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="getting-started">
+
+  <info>
+    <link type="guide" xref="index"/>
+    <link type="topic" xref="load-ccmx"/>
+    <link type="topic" xref="update-firmware"/>
+    <link type="seealso" xref="color-whatisprofile"/>
+    <desc>Getting started with the ColorHug display colorimeter.</desc>
+    <credit type="author">
+      <name>Richard Hughes</name>
+      <email>richard@hughsie.com</email>
+    </credit>
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Getting Started</title>
+  <p>
+    Calibrating your display is easy.
+    By the end of this page, you will have a display profile that can be used
+    on your Windows, Linux or OS-X computer.
+  </p>
+  <steps>
+   <item><p>Connect your ColorHug device.</p></item>
+   <item><p>Click the display device that you want to calibrate.</p></item>
+   <item><p>Click the <gui>Calibrate</gui> button.</p></item>
+   <item><p>Follow the intructions from the wizard.</p></item>
+   <item><p>Copy the <code>.icc</code> file to your actual system using a blank CD-R or USB drive.</p></item>
+   <item><p>Double click on the <code>.icc</code> file on your computer.</p></item>
+  </steps>
+  <note style="advanced">
+   <p>
+     Use <guiseq><gui>Applications</gui><gui>System Tools</gui><gui>System Settings</gui></guiseq>
+     and click on the <gui>Color</gui> item if you want to open the control panel
+     again without having to remove and re-insert the device.
+   </p>
+  </note>
+
+</page>

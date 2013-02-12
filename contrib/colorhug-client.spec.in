@@ -20,6 +20,10 @@ BuildRequires: libtool
 BuildRequires: docbook-utils
 BuildRequires: libcanberra-devel >= 0.10
 BuildRequires: gobject-introspection-devel
+BuildRequires: gnome-doc-utils
+BuildRequires: itstool
+
+Requires: yelp
 
 %description
 The Hughski ColorHug colorimeter is a low cost open-source hardware
@@ -72,6 +76,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
 %{_mandir}/man1/*.1.gz
 %{_sysconfdir}/bash_completion.d/*-completion.bash
+%{_datadir}/help/*/colorhug-client
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#

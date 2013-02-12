@@ -1,0 +1,53 @@
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="update-firmware">
+
+  <info>
+    <link type="guide" xref="index"/>
+    <credit type="author">
+      <name>Richard Hughes</name>
+      <email>richard@hughsie.com</email>
+    </credit>
+    <desc>Checking for firmware updates for your device.</desc>
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Updating Firmware</title>
+
+  <p>
+    Firmware is the code that runs on the device and is responsible for taking
+    measurements and communicating with the host computer.
+    Newer firmware releases fix bugs, add features and improve performance.
+  </p>
+
+  <note>
+    <p>
+      It is not dangerous to update the firmware on your ColorHug.
+      If the update failed or if the new firmware is corrupt, the device
+      reverts to a safe startup mode.
+      If this happens you will see the LEDs flashing in a red, green repeating
+      pattern.
+      If this happens, just run <guiseq><gui>Firmware Updater</gui></guiseq>
+      again to complete the operation.
+    </p>
+  </note>
+
+  <p>
+    Ensure you are connected to the Internet and then use the
+    <guiseq><gui>Applications</gui><gui>System Tools</gui>
+    <gui>Firmware Updater</gui></guiseq> tool to update your device to the
+    latest version of the firmware.
+  </p>
+
+  <figure>
+    <title>Check and update firmware</title>
+    <media type="image" src="colorhug-flash.png"/>
+  </figure>
+
+  <note style="tip">
+    <p>
+      Firmware updates are normally announced on the
+      <link href="https://groups.google.com/forum/#!forum/colorhug-users">colorhug-users</link>
+      mailing list.
+    </p>
+  </note>
+
+</page>

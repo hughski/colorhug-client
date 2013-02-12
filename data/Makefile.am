@@ -5,6 +5,10 @@ bashcompletiondir = ${SYSCONFDIR}/bash_completion.d
 dist_bashcompletion_DATA = colorhug-cmd-completion.bash
 
 @INTLTOOL_DESKTOP_RULE@
+pkgdata_in_files = colorhug-docs.desktop.in
+pkgdata_DATA = $(pkgdata_in_files:.desktop.in=.desktop)
+
+@INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files =					\
 	colorhug-spectro-util.desktop.in		\
@@ -25,6 +29,7 @@ UI_FILES =						\
 EXTRA_DIST =						\
 	$(gsettings_schemas_in_files)			\
 	$(desktop_in_files)				\
+	$(pkgdata_DATA)					\
 	$(UI_FILES)
 
 clean-local :
@@ -34,6 +39,7 @@ DISTCLEANFILES =					\
 	com.hughski.colorhug-client.gschema.xml		\
 	colorhug-spectro-util.desktop			\
 	colorhug-ccmx.desktop				\
+	colorhug-docs.desktop				\
 	colorhug-flash.desktop
 
 -include $(top_srcdir)/git.mk

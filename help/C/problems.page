@@ -1,0 +1,34 @@
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="problems">
+
+  <info>
+    <link type="guide" xref="index"/>
+    <desc>Solving problems that may happen with your device.</desc>
+    <credit type="author">
+      <name>Richard Hughes</name>
+      <email>richard@hughsie.com</email>
+    </credit>
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Solving Problems</title>
+  <p>
+   Check the hardware can be accessed. Connect the ColorHug and run:
+   <cmd>colorhug-cmd set-leds green 5 200 200</cmd>
+   This should flash the green LED 5 times.
+  </p>
+  <p>
+    Measure a test patch using <cmd>/usr/bin/gcm-picker</cmd>.
+    Hold the device against the screen and click the <gui>Measure</gui> button.
+    The color on the screen should roughly match the sample color.
+  </p>
+  <p>
+   If your display has got an obvious color shift after calibration then
+   bear in mind calibrating to a warmer temperature of D65 is going to
+   look a lot less blue than is native for some displays.
+   It may take some time to adjust to working on a D65 screen.
+   If it is obviously wrong, have a look at <link href="http://blog.pcode.nl/2012/06/15/colorhug-red-shift-workaround/">
+   this blog post</link> which explains things in more detail.
+   Usually <link xref="load-ccmx">loading a closer CCMX</link> is the solution.
+  </p>
+
+</page>

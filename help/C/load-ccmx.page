@@ -1,0 +1,54 @@
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="load-ccmx">
+
+  <info>
+    <link type="guide" xref="index"/>
+    <desc>Loading a custom CCMX matrix onto the device.</desc>
+    <credit type="author">
+      <name>Richard Hughes</name>
+      <email>richard@hughsie.com</email>
+    </credit>
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Loading a CCMX</title>
+  <p>
+    A CCMX file is a 3x3 matrix with some extra metadata that allows the
+    ColorHug to measure display types that it was not calibrated against.
+    Many people have shared thier correction matricies with the community,
+    which allows the colorimeter to return more accurate readings for a specific
+    display technology.
+  </p>
+  <p>
+    If the default Factory Calibration matrix produces results that have a heavy
+    color cast, try to choose another display matrix that is a closer match
+    to your hardware.
+    You will need to select a different matrix if you have a wide gamut or LED
+    display, although the default matrix usually produces good results.
+  </p>
+  <note style="advanced">
+    <p>
+      All colorimeter devices from different vendors need a set of CCMX files
+      as tristimulus colorimeters by definition can only measure one set of
+      device primaries.
+    </p>
+  </note>
+
+  <p>
+    Use the <guiseq><gui>Applications</gui><gui>System Tools</gui><gui>CCMX Loader</gui></guiseq>
+    tool to load new CCMX files.
+  </p>
+
+  <figure>
+    <title>Load CCMX matrices onto the device</title>
+    <media type="image" src="colorhug-ccmx.png"/>
+  </figure>
+
+  <note style="tip">
+    <p>
+      If the computer is connected to the Internet you can click the
+      <gui>Refresh</gui> button to download all the community contributed
+      files, which will then be selectable for each display type.
+    </p>
+  </note>
+
+</page>

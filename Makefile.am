@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = 1.7
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = po man data
+SUBDIRS = po man data help
 
 if USE_BUNDLED_LIBCOLORHUG
 SUBDIRS += libcolorhug

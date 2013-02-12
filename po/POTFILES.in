@@ -3,6 +3,7 @@
 [type: gettext/glade]data/ch-flash.ui
 [type: gettext/glade]data/ch-spectro-util.ui
 data/colorhug-ccmx.desktop.in
+data/colorhug-docs.desktop.in
 data/colorhug-flash.desktop.in
 data/colorhug-spectro-util.desktop.in
 data/com.hughski.colorhug-client.gschema.xml.in
