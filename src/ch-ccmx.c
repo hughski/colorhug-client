@@ -137,6 +137,24 @@ ch_ccmx_close_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 }
 
 /**
+ * ch_ccmx_help_button_cb:
+ **/
+static void
+ch_ccmx_help_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+{
+	gboolean ret;
+	GError *error = NULL;
+	ret = gtk_show_uri (NULL,
+			    "help:colorhug-client/load-ccmx",
+			    GDK_CURRENT_TIME,
+			    &error);
+	if (!ret) {
+		g_warning ("Failed to load help document: %s", error->message);
+		g_error_free (error);
+	}
+}
+
+/**
  * ch_ccmx_gen_close_button_cb:
  **/
 static void
@@ -2394,6 +2412,9 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_ccmx_close_button_cb), priv);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_help"));
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (ch_ccmx_help_button_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_close"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_ccmx_gen_close_button_cb), priv);

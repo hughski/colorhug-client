@@ -91,6 +91,24 @@ ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *me
 }
 
 /**
+ * ch_flash_help_button_cb:
+ **/
+static void
+ch_flash_help_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
+{
+	gboolean ret;
+	GError *error = NULL;
+	ret = gtk_show_uri (NULL,
+			    "help:colorhug-client/update-firmware",
+			    GDK_CURRENT_TIME,
+			    &error);
+	if (!ret) {
+		g_warning ("Failed to load help document: %s", error->message);
+		g_error_free (error);
+	}
+}
+
+/**
  * ch_flash_error_do_not_panic:
  **/
 static void
@@ -1372,6 +1390,9 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_flash_close_button_cb), priv);
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_help"));
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (ch_flash_help_button_cb), priv);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (ch_flash_flash_button_cb), priv);
