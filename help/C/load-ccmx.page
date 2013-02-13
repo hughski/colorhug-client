@@ -2,7 +2,7 @@
 
   <info>
     <link type="guide" xref="index"/>
-    <desc>Loading a custom CCMX matrix onto the device.</desc>
+    <desc>Loading a custom color correction matrix onto the device.</desc>
     <credit type="author">
       <name>Richard Hughes</name>
       <email>richard@hughsie.com</email>
@@ -12,8 +12,9 @@
 
   <title>Loading a CCMX</title>
   <p>
-    A CCMX file is a 3x3 matrix with some extra metadata that allows the
-    ColorHug to measure display types that it was not calibrated against.
+    A color correction matrix file (known as a CCMX) is a 3x3 matrix with some
+    extra metadata that allows the ColorHug to measure display types that it
+    was not calibrated against.
     Many people have shared thier correction matricies with the community,
     which allows the colorimeter to return more accurate readings for a specific
     display technology.

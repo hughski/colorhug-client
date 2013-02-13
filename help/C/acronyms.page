@@ -1,0 +1,51 @@
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="acronyms">
+
+  <info>
+    <link type="guide" xref="index"/>
+    <desc>A list of acronyms and other terminology used in color management.</desc>
+    <credit type="author">
+      <name>Richard Hughes</name>
+      <email>richard@hughsie.com</email>
+    </credit>
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Acronyms</title>
+  <terms>
+    <title>Defintions of words and acronyms as used in color management</title>
+    <item>
+      <title>CCMX</title>
+       <p>
+        Color Correction Matrix, as used to adapt a colorimter to a different
+        display technology to the one it was calibrated against.
+        For instance, you can use a CCMX file to measure the colors on an AMOLED
+        screen when the calibration device was calibrated against a wide gamut
+        LCD screen.
+      </p>
+    </item>
+    <item>
+      <title>ICC Profile</title>
+      <p>
+       An ICC profile is a small file with an <code>.icc</code> extension.
+       It is used in color management to model a device behaviour, or to model
+       a known working space, for instance sRGB or Adobe RGB.
+      </p>
+    </item>
+    <item>
+      <title>Calibration</title>
+      <p>
+       Calibration is when we modify the device behaviour, for instance
+       turning a brightness or contrast knob or loading in a different gamma
+       ramp to make the device behave differently.
+       The calibration parameters are normally stored in the ICC profile.
+      </p>
+    </item>
+    <item>
+      <title>Characterization</title>
+      <p>
+       Characterization is where we measure what colors the device can display.
+      </p>
+    </item>
+  </terms>
+
+</page>

@@ -13,6 +13,7 @@ HELP_MEDIA =								\
 
 HELP_FILES =								\
 	legal.xml							\
+	acronyms.page							\
 	getting-started.page						\
 	index.page							\
 	load-ccmx.page							\
