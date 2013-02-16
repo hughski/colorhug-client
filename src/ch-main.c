@@ -1407,8 +1407,8 @@ out:
 static gboolean
 ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-	guint8 leds;
+	gboolean ret = FALSE;
+	guint8 leds = 0;
 	guint8 repeat = 0;
 	guint8 time_on = 0x00;
 	guint8 time_off = 0x00;
@@ -1416,30 +1416,39 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* parse */
 	if (g_strv_length (values) != 1 &&
 	    g_strv_length (values) != 4) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect "
-				     "'<red|green|both> <repeat> <time_on> <time_off>' or "
+				     "'<red|green|blue|white|off> <repeat> <time_on> <time_off>' or "
 				     "'<leds>'");
 		goto out;
 	}
 
 	/* get the LEDs value */
-	if (g_strcmp0 (values[0], "red") == 0) {
-		leds = CH_STATUS_LED_RED;
-	} else if (g_strcmp0 (values[0], "green") == 0) {
-		leds = CH_STATUS_LED_GREEN;
-	} else if (g_strcmp0 (values[0], "both") == 0) {
-		leds = CH_STATUS_LED_RED | CH_STATUS_LED_GREEN;
-	} else {
-		leds = g_ascii_strtoull (values[0], NULL, 10);
-		if (leds > 3) {
-			ret = FALSE;
-			g_set_error (error, 1, 0,
-				     "invalid leds value %i",
-				     leds);
-			goto out;
-		}
+	if (g_strstr_len (values[0], -1, "red") != NULL) {
+		leds |= CH_STATUS_LED_RED;
+		ret = TRUE;
+	}
+	if (g_strstr_len (values[0], -1, "green") != NULL) {
+		leds |= CH_STATUS_LED_GREEN;
+		ret = TRUE;
+	}
+	if (g_strstr_len (values[0], -1, "blue") != NULL) {
+		leds |= CH_STATUS_LED_BLUE;
+		ret = TRUE;
+	}
+	if (g_strstr_len (values[0], -1, "white") != NULL) {
+		leds |= CH_STATUS_LED_RED |
+			CH_STATUS_LED_GREEN |
+			CH_STATUS_LED_BLUE;
+		ret = TRUE;
+	}
+
+	/* nothing recognised */
+	if (!ret) {
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect "
+				     "'<red|green|blue|white|off>");
+		goto out;
 	}
 
 	/* get the optional other parameters */
