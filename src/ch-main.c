@@ -2312,6 +2312,36 @@ out:
 }
 
 /**
+ * ch_util_get_adc_vrefs:
+ **/
+static gboolean
+ch_util_get_adc_vrefs (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble vref_neg = 0.0f;
+	gdouble vref_pos = 0.0f;
+
+	/* get from HW */
+	ch_device_queue_get_adc_vref_neg (priv->device_queue,
+					  priv->device,
+					  &vref_neg);
+	ch_device_queue_get_adc_vref_pos (priv->device_queue,
+					  priv->device,
+					  &vref_pos);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	g_print ("ADC Vref+: %f Volts\n", vref_pos);
+	g_print ("ADC Vref-: %f Volts\n", vref_neg);
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_temperature:
  **/
 static gboolean
@@ -3157,6 +3187,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Gets the sensor temperature"),
 		     ch_util_get_temperature);
+	ch_util_add (priv->cmd_array,
+		     "get-adc-vrefs",
+		     /* TRANSLATORS: command description */
+		     _("Gets the ADC Vref values"),
+		     ch_util_get_adc_vrefs);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

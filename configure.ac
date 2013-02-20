@@ -125,7 +125,7 @@ PKG_CHECK_MODULES(COLORD, colord >= 0.1.20)
 PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
-PKG_CHECK_MODULES(COLORHUG, colorhug >= 0.1.30)
+PKG_CHECK_MODULES(COLORHUG, colorhug >= 0.1.31)
 
 dnl ---------------------------------------------------------------------------
 dnl - Build debugging tools

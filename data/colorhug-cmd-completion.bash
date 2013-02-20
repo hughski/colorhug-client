@@ -26,6 +26,7 @@ __colorhug_cmd_commandlist="
     eeprom-read
     eeprom-write
     flash-firmware
+    get-adc-vrefs
     get-calibration
     get-calibration-map
     get-color-select
