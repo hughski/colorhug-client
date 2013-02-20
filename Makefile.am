@@ -4,14 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = po man data help
 
-if USE_BUNDLED_LIBCOLORHUG
-SUBDIRS += libcolorhug
-endif
-
 SUBDIRS += src
-
-DISTCHECK_CONFIGURE_FLAGS =				\
-	--enable-bundled-libcolorhug
 
 EXTRA_DIST =						\
 	COPYING						\

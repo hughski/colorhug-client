@@ -125,23 +125,7 @@ PKG_CHECK_MODULES(COLORD, colord >= 0.1.20)
 PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
-
-dnl ---------------------------------------------------------------------------
-dnl - Is libcolorhug available from colord?
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(bundled-libcolorhug, AS_HELP_STRING([--enable-bundled-libcolorhug],[enable bundled libcolorhug]),
-	      enable_bundled_libcolorhug=$enableval,enable_bundled_libcolorhug=no)
-use_external_libcolorhug=no
-if test x$enable_bundled_libcolorhug = xno; then
-	PKG_CHECK_MODULES(COLORHUG, colorhug >= 0.1.29, use_external_libcolorhug=yes, use_external_libcolorhug=no)
-fi
-if test x$use_external_libcolorhug = xno; then
-	COLORHUG_LIBS="\${top_builddir}/libcolorhug/libcolorhug.la"
-	AC_SUBST(COLORHUG_LIBS)
-	COLORHUG_CFLAGS="-I\${top_srcdir}/libcolorhug"
-	AC_SUBST(COLORHUG_CFLAGS)
-fi
-AM_CONDITIONAL(USE_BUNDLED_LIBCOLORHUG, test x$use_external_libcolorhug = xno)
+PKG_CHECK_MODULES(COLORHUG, colorhug >= 0.1.30)
 
 dnl ---------------------------------------------------------------------------
 dnl - Build debugging tools
@@ -180,9 +164,6 @@ data/icons/64x64/Makefile
 data/icons/256x256/Makefile
 data/icons/scalable/Makefile
 help/Makefile
-libcolorhug/Makefile
-libcolorhug/colorhug.pc
-libcolorhug/ch-version.h
 src/Makefile
 man/Makefile
 po/Makefile.in
@@ -199,5 +180,4 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         cppflags:                  ${CPPFLAGS}
-        external libcolorhug:      ${use_external_libcolorhug}
 "
