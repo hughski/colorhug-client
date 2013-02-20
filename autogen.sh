@@ -9,20 +9,18 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-test -n "$srcdir" || srcdir=`dirname "$0"`
-test -n "$srcdir" || srcdir=.
+srcdir=`dirname $0`
+test -z "$srcdir" && srcdir=.
 
-olddir=`pwd`
-cd "$srcdir"
+(test -f $srcdir/configure.ac) || {
+    echo -n "**Error**: Directory \"\'$srcdir\'\" does not look like the"
+    echo " top-level package directory"
+    exit 1
+}
 
-AUTORECONF=`which autoreconf`
-if test -z $AUTORECONF; then
-        echo "*** No autoreconf found, please install it ***"
-        exit 1
-fi
+which gnome-autogen.sh || {
+    echo "You need to install gnome-common!"
+    exit 1
+}
 
-autopoint --force
-ACLOCAL="${ACLOCAL-aclocal} $ACLOCAL_FLAGS"  AUTOPOINT='intltoolize --automake --copy' autoreconf --force --install --verbose
-
-cd "$olddir"
-test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
+REQUIRED_AUTOMAKE_VERSION=1.7 GNOME_DATADIR="$gnome_datadir" USE_GNOME2_MACROS=1 . gnome-autogen.sh
