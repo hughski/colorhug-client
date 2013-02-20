@@ -8,6 +8,7 @@ AM_CPPFLAGS =						\
 	$(COLORD_GTK_CFLAGS)				\
 	$(SOUP_CFLAGS)					\
 	$(CANBERRA_CFLAGS)				\
+	-DCD_DISABLE_DEPRECATED				\
 	-DG_LOG_DOMAIN=\"Ch\"				\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\

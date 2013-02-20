@@ -1675,7 +1675,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	}
 
 	/* set dark offsets */
-	cd_color_set_rgb (&value_zero, 0.0f, 0.0f, 0.0f);
+	cd_color_rgb_set (&value_zero, 0.0f, 0.0f, 0.0f);
 
 	/* get from HW */
 	ch_device_queue_get_dark_offsets (priv->device_queue,
