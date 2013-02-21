@@ -2289,6 +2289,7 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 			      ChCcmxPrivate *priv)
 {
 	gboolean ret;
+	gchar *title_ccmx = NULL;
 	GError *error = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -2325,11 +2326,17 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 		goto out;
 	}
 
+	/* set default CCMX title */
+	title_ccmx = g_strdup_printf ("%s %s",
+				      cd_device_get_vendor (priv->gen_device),
+				      cd_device_get_model (priv->gen_device));
+	cd_it8_set_title (priv->gen_ccmx, title_ccmx);
+
 	/* set next button */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
 	gtk_widget_set_sensitive (widget, TRUE);
 out:
-	return;
+	g_free (title_ccmx);
 }
 
 /**
@@ -2341,7 +2348,6 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	CdColorRGB rgb;
 	CdColorXYZ xyz;
 	const gchar *title;
-	gchar *title_ccmx = NULL;
 	GdkPixbuf *pixbuf;
 	GError *error = NULL;
 	gint retval;
@@ -2386,10 +2392,6 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	priv->gen_ccmx = cd_it8_new_with_kind (CD_IT8_KIND_CCMX);
 	cd_it8_add_option (priv->gen_ccmx, "TYPE_LCD");
 	cd_it8_set_originator (priv->gen_ccmx, "colorhug-ccmx");
-	title_ccmx = g_strdup_printf ("%s %s",
-				      cd_device_get_vendor (priv->gen_device),
-				      cd_device_get_model (priv->gen_device));
-	cd_it8_set_title (priv->gen_ccmx, title_ccmx);
 
 	/* setup devices treeview */
 	renderer = gtk_cell_renderer_text_new ();
@@ -2562,7 +2564,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	/* show main UI */
 	gtk_widget_show (main_window);
 out:
-	g_free (title_ccmx);
+	return;
 }
 
 /**
