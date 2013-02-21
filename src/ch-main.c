@@ -2342,6 +2342,86 @@ out:
 }
 
 /**
+ * ch_util_get_ccd_calibration:
+ **/
+static gboolean
+ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 ccd_calibration[3] = { 0x0000, 0x0000, 0x0000 };
+
+	/* get from HW */
+	ch_device_queue_get_ccd_calibration (priv->device_queue,
+					     priv->device,
+					     ccd_calibration);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	g_print ("CCD Calibration: %i %i %i\n",
+		 ccd_calibration[0],
+		 ccd_calibration[1],
+		 ccd_calibration[2]);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_ccd_calibration:
+ **/
+static gboolean
+ch_util_set_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	guint16 ccd_calibration[3] = { 0x0000, 0x0000, 0x0000 };
+	guint16 last = 0;
+	guint i;
+
+	/* parse */
+	if (g_strv_length (values) != 3) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'red', 'green', 'blue'");
+		goto out;
+	}
+	for (i = 0; i < 3; i++) {
+		ccd_calibration[i] = g_ascii_strtoll (values[i], NULL, 10);
+		if (ccd_calibration[i] == 0 ||
+		    ccd_calibration[i] > CH_CCD_SPECTRAL_RESOLUTION) {
+			ret = FALSE;
+			g_set_error (error, 1, 0,
+				     "invalid ccd calibration value %s",
+				     values[i]);
+			goto out;
+		}
+		if (ccd_calibration[i] <= last) {
+			ret = FALSE;
+			g_set_error (error, 1, 0,
+				     "ccd calibration values should increase %s",
+				     values[i]);
+			goto out;
+		}
+		last = ccd_calibration[i];
+	}
+
+	/* get from HW */
+	ch_device_queue_set_ccd_calibration (priv->device_queue,
+					     priv->device,
+					     ccd_calibration);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_temperature:
  **/
 static gboolean
@@ -3192,6 +3272,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Gets the ADC Vref values"),
 		     ch_util_get_adc_vrefs);
+	ch_util_add (priv->cmd_array,
+		     "get-ccd-calibration",
+		     /* TRANSLATORS: command description */
+		     _("Gets the CCD calibration values"),
+		     ch_util_get_ccd_calibration);
+	ch_util_add (priv->cmd_array,
+		     "set-ccd-calibration",
+		     /* TRANSLATORS: command description */
+		     _("Sets the CCD calibration values"),
+		     ch_util_set_ccd_calibration);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,

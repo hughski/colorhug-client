@@ -29,6 +29,7 @@ __colorhug_cmd_commandlist="
     get-adc-vrefs
     get-calibration
     get-calibration-map
+    get-ccd-calibration
     get-color-select
     get-dark-offsets
     get-firmware-version
@@ -53,6 +54,7 @@ __colorhug_cmd_commandlist="
     set-calibration
     set-calibration-ccmx
     set-calibration-map
+    set-ccd-calibration
     set-color-select
     set-dark-offsets
     set-flash-success
