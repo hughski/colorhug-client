@@ -1966,6 +1966,68 @@ out:
 }
 
 /**
+ * ch_util_take_reading_spectral:
+ **/
+static gboolean
+ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble scale;
+	gsize len;
+	guint16 *data = NULL;
+	guint16 largest = 0;
+	guint16 sram_addr = 0x0000;
+	guint i;
+	guint j;
+
+	/* get from HW */
+	ch_device_queue_set_integral_time (priv->device_queue,
+					    priv->device,
+					    50);
+	ch_device_queue_take_reading_spectral (priv->device_queue,
+						 priv->device,
+						 &sram_addr);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	len = CH_CCD_SPECTRAL_RESOLUTION;
+	data = g_new0 (guint16, len);
+	g_print ("Got data at %04x\n", sram_addr);
+	ch_device_queue_read_sram (priv->device_queue,
+				   priv->device,
+				   sram_addr,
+				   (guint8 *) data,
+				   len);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	/* find biggest value */
+	for (i = 0; i < len; i++) {
+		if (data[i] > largest)
+			largest = data[i];
+	}
+	scale = 72.0f / (gdouble) largest;
+
+	g_print ("Read:\n");
+	for (i = 0; i < len; i++) {
+		for (j = 0; j < data[i] * scale; j++)
+			g_print ("#");
+		g_print ("\n");
+	}
+out:
+	g_free (data);
+	return ret;
+}
+
+/**
  * ch_util_reset:
  **/
 static gboolean
@@ -3142,6 +3204,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Takes all color readings (to XYZ)"),
 		     ch_util_take_readings_xyz);
+	ch_util_add (priv->cmd_array,
+		     "take-reading-spectral",
+		     /* TRANSLATORS: command description */
+		     _("Takes a spectral reading (saving to SRAM)"),
+		     ch_util_take_reading_spectral);
 	ch_util_add (priv->cmd_array,
 		     "reset",
 		     /* TRANSLATORS: command description */

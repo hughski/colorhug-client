@@ -73,6 +73,7 @@ __colorhug_cmd_commandlist="
     sram-write
     take-reading-array
     take-reading-raw
+    take-reading-spectral
     take-readings
     take-readings-xyz
     write-eeprom
