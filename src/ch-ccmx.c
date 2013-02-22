@@ -1076,9 +1076,6 @@ ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 		g_error_free (error);
 		goto out;
 	}
-
-	/* update the combos */
-	ch_ccmx_refresh_calibration_data (priv);
 out:
 	g_free (filename);
 }
