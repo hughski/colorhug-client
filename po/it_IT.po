@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Luca Ferretti <elle.uca@libero.it>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-30 09:06+0000\n"
-"PO-Revision-Date: 2013-01-30 09:07+0000\n"
+"POT-Creation-Date: 2013-05-01 11:15+0100\n"
+"PO-Revision-Date: 2013-05-01 10:15+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +24,7 @@ msgstr "Caricamento ColorHug CCMX"
 
 #: ../data/ch-ccmx.ui.h:2
 msgid "Generate CCMX"
-msgstr ""
+msgstr "Genera CCMX"
 
 #. Button to import a CCMX file
 #: ../data/ch-ccmx.ui.h:4
@@ -34,14 +35,14 @@ msgstr "Importa file"
 msgid "Import a local CCMX file"
 msgstr "Importa un file CCMX locale"
 
-#: ../data/ch-ccmx.ui.h:6 ../data/ch-flash.ui.h:2
+#: ../data/ch-ccmx.ui.h:6
+msgid "Refresh the list of matrices from the device"
+msgstr "Aggiorna l'elenco delle matrici dal dispositivo "
+
+#: ../data/ch-ccmx.ui.h:7 ../data/ch-flash.ui.h:2
 #: ../data/ch-spectro-util.ui.h:2
 msgid "Close this window"
 msgstr "Chiudi questa finestra"
-
-#: ../data/ch-ccmx.ui.h:7
-msgid "Refresh the list of matrices from the device"
-msgstr "Aggiorna la lista delle matrici dal dispositivo "
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -54,7 +55,7 @@ msgstr "Selezionando una matrice di correzione si migliora l'accuratezza di Colo
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "L'utilizzo della matrice di default darà a gran parte degli utenti un risultato soddisfacente."
+msgstr "L'utilizzo della matrice predefinita offrirà a gran parte degli utenti un risultato soddisfacente."
 
 #. Default liquid crystal display matrix
 #: ../data/ch-ccmx.ui.h:13
@@ -74,34 +75,34 @@ msgstr "Proiettore"
 #. Default light emitting diode matrix
 #: ../data/ch-ccmx.ui.h:19
 msgid "LED"
-msgstr ""
+msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1329
+#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1347
 msgid "Please connect your ColorHug"
-msgstr "Connetti il tuo ColorHug"
+msgstr "Connettere il proprio ColorHug"
 
 #: ../data/ch-ccmx.ui.h:21
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr ""
+msgstr "Selezionare lo schermo da usare durante la generazione della matrice di calibrazione colore."
 
-#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1722 ../src/ch-ccmx.c:1749
+#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1737 ../src/ch-ccmx.c:1764
 msgid "Do not remove the device whilst measurement is in progress"
-msgstr ""
+msgstr "Non rimuovere il dispositivo mentre la misura è in corso"
 
 #: ../data/ch-ccmx.ui.h:23
 msgid "Save file"
-msgstr ""
+msgstr "Salva file"
 
 #: ../data/ch-ccmx.ui.h:24
 msgid ""
 "Share with\n"
 "the community"
-msgstr ""
+msgstr "Condividi con\nla community"
 
 #: ../data/ch-flash.ui.h:1
 msgid "ColorHug Firmware Updater"
-msgstr "Aggiornamento del Firmware ColorHug"
+msgstr "Aggiornamento firmware ColorHug"
 
 #. Button to update to a newer version of the firmware
 #: ../data/ch-flash.ui.h:4
@@ -114,7 +115,7 @@ msgstr "Esegui il flash del firmware nel dispositivo"
 
 #: ../data/ch-flash.ui.h:6
 msgid "Firmware version unknown"
-msgstr "Versione firmware sconosciuta."
+msgstr "Versione firmware sconosciuta"
 
 #. We are flashing the device, so we have to be careful
 #: ../data/ch-flash.ui.h:8
@@ -123,56 +124,56 @@ msgstr "Non scollegare il dispositivo e non spegnere il computer."
 
 #: ../data/ch-spectro-util.ui.h:1 ../data/colorhug-spectro-util.desktop.in.h:1
 msgid "ColorHug Spectro Utility"
-msgstr ""
+msgstr "Utilità spettro ColorHug"
 
 #: ../data/ch-spectro-util.ui.h:3
 msgid "Auto update:"
-msgstr ""
+msgstr "Aggiornamento automatico:"
 
 #: ../data/ch-spectro-util.ui.h:4
 msgid "Force Refresh"
-msgstr ""
+msgstr "Forza aggiornamento"
 
 #: ../data/ch-spectro-util.ui.h:5
 msgid "Temperature:"
-msgstr ""
+msgstr "Temperatura:"
 
 #: ../data/ch-spectro-util.ui.h:6
 msgid "Interval:"
-msgstr ""
+msgstr "Intervallo:"
 
 #: ../data/ch-spectro-util.ui.h:7
 msgid "This shows the raw sensor reading without calibration"
-msgstr ""
+msgstr "Mostra la lettura del sensore raw senza calibrazione"
 
 #: ../data/ch-spectro-util.ui.h:8
 msgid "Raw Sensor"
-msgstr ""
+msgstr "Sensore raw"
 
 #: ../data/ch-spectro-util.ui.h:9
 msgid "This shows the dark calibration at 25 degrees C"
-msgstr ""
+msgstr "Mostra la calibrazione dark a 25 gradi C"
 
 #: ../data/ch-spectro-util.ui.h:10
 msgid "Dark Calibration"
-msgstr ""
+msgstr "Calibrazione dark"
 
 #: ../data/ch-spectro-util.ui.h:11
 msgid ""
 "This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr ""
+msgstr "Mostra la funzione corrispondenza colore usata per conversione XYZ interna al dispositivo"
 
 #: ../data/ch-spectro-util.ui.h:12
 msgid "Color Match"
-msgstr ""
+msgstr "Corrispondenza colore"
 
 #: ../data/ch-spectro-util.ui.h:13
 msgid "This shows the temperature calibration factor"
-msgstr ""
+msgstr "Mostra il fattore di calibrazione della temperatura"
 
 #: ../data/ch-spectro-util.ui.h:14
 msgid "Temperature Compensation"
-msgstr ""
+msgstr "Compensazione temperatura"
 
 #: ../data/ch-spectro-util.ui.h:15
 msgid "This shows the calibrated spectra result"
@@ -184,11 +185,19 @@ msgstr ""
 
 #: ../data/colorhug-ccmx.desktop.in.h:1
 msgid "CCMX Loader"
-msgstr "Carica CCMX"
+msgstr "Loader CCMX"
 
 #: ../data/colorhug-ccmx.desktop.in.h:2
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Modifica la matrice di calibrazione nel dispositivo ColorHug"
+
+#: ../data/colorhug-docs.desktop.in.h:1
+msgid "ColorHug Documentation"
+msgstr ""
+
+#: ../data/colorhug-docs.desktop.in.h:2
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr ""
 
 #: ../data/colorhug-flash.desktop.in.h:1
 msgid "Firmware Updater"
@@ -204,451 +213,451 @@ msgstr ""
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
-msgstr ""
+msgstr "Indica se aggiornare al firmware di test"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr ""
+msgstr "Indica se mostrare il firmware di test e consentire all'utente di aggiornare a tale versione."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The remote location of ColorHug files"
-msgstr ""
+msgstr "La posizione remota dei file di ColorHug"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid ""
 "The location of where firmware updates and calibration files are stored."
-msgstr ""
+msgstr "La posizione in cui sono memorizzati i file di calibrazione e gli aggiornamenti firmware."
 
-#: ../src/ch-ccmx.c:167
+#: ../src/ch-ccmx.c:185
 msgid "Failed to create directory"
 msgstr "Impossibile creare la directory"
 
-#: ../src/ch-ccmx.c:438 ../src/ch-ccmx.c:1293
+#: ../src/ch-ccmx.c:456 ../src/ch-ccmx.c:1308
 msgid "Failed to download file"
-msgstr "Impossibile eseguire il download del file"
+msgstr "Scaricamento del file non riuscito"
 
-#: ../src/ch-ccmx.c:446 ../src/ch-ccmx.c:1301
+#: ../src/ch-ccmx.c:464 ../src/ch-ccmx.c:1316
 msgid "File has zero size"
 msgstr "Il file ha dimensione zero"
 
-#: ../src/ch-ccmx.c:458
+#: ../src/ch-ccmx.c:476
 msgid "Failed to load data"
-msgstr ""
+msgstr "Caricamento dati non riuscito"
 
 #. TRANSLATORS: the request failed
-#: ../src/ch-ccmx.c:528 ../src/ch-flash.c:1143 ../src/ch-flash.c:1173
+#: ../src/ch-ccmx.c:546 ../src/ch-flash.c:1161 ../src/ch-flash.c:1191
 msgid "Failed to contact ColorHug"
 msgstr "Impossibile contattare ColorHug"
 
 #. TRANSLATORS: internal error when setting up HTTP request
-#: ../src/ch-ccmx.c:545 ../src/ch-ccmx.c:1352 ../src/ch-ccmx.c:2075
-#: ../src/ch-flash.c:774 ../src/ch-flash.c:1106
+#: ../src/ch-ccmx.c:563 ../src/ch-ccmx.c:1367 ../src/ch-ccmx.c:2090
+#: ../src/ch-flash.c:792 ../src/ch-flash.c:1124
 msgid "Failed to setup message"
-msgstr "Impossibile impostare il messaggio"
+msgstr "Impostazione del messaggio non riuscita"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:595
+#: ../src/ch-ccmx.c:613
 msgid "The ColorHug is missing the factory calibration values."
-msgstr ""
+msgstr "Il ColorHug non contiene i valori di calibrazione di fabbrica"
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
-#: ../src/ch-ccmx.c:603
+#: ../src/ch-ccmx.c:621
 msgid "Device calibration error"
-msgstr ""
+msgstr "Errore calibrazione dispositivo"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:608
+#: ../src/ch-ccmx.c:626
 msgid "Ignore"
-msgstr ""
+msgstr "Ignora"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:611 ../src/ch-ccmx.c:647
+#: ../src/ch-ccmx.c:629 ../src/ch-ccmx.c:665
 msgid "Repair"
-msgstr ""
+msgstr "Ripara"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:631
+#: ../src/ch-ccmx.c:649
 msgid "Update the factory calibration values?"
-msgstr ""
+msgstr "Aggiornare i valori di calibrazione di fabbrica?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
-#: ../src/ch-ccmx.c:639
+#: ../src/ch-ccmx.c:657
 msgid "Device calibration update"
-msgstr ""
+msgstr "Aggiornamento calibrazione dispositivo"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:644
+#: ../src/ch-ccmx.c:662
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:763
+#: ../src/ch-ccmx.c:781
 msgid "Failed to get the calibration data"
-msgstr ""
+msgstr "Recupero dei dati di calibrazione non riuscito"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
-#: ../src/ch-ccmx.c:829
+#: ../src/ch-ccmx.c:847
 msgid "Select correction matrix"
 msgstr "Seleziona la matrice di correzione"
 
 #. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-ccmx.c:840
+#: ../src/ch-ccmx.c:858
 msgid "Correction matrices"
 msgstr "Matrici di correzione"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:874
+#: ../src/ch-ccmx.c:892
 msgid "Failed to set the calibration map"
-msgstr "Impossibile impostare la mappa di calibrazione"
+msgstr "Impostazione della mappa di calibrazione non riuscita"
 
-#: ../src/ch-ccmx.c:906
+#: ../src/ch-ccmx.c:924
 msgid "Failed to set the calibration matrix"
-msgstr "Impossible impostare la matrice di calibrazione"
+msgstr "Impostazione della matrice di calibrazione non riuscita"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
-#: ../src/ch-ccmx.c:1047 ../src/ch-ccmx.c:1215
+#: ../src/ch-ccmx.c:1065 ../src/ch-ccmx.c:1230
 msgid "No space left on device"
 msgstr "Spazio non disponibile sul dispositivo"
 
-#: ../src/ch-ccmx.c:1048 ../src/ch-ccmx.c:1217
+#: ../src/ch-ccmx.c:1066 ../src/ch-ccmx.c:1232
 msgid "All 64 slots are used up."
 msgstr "Tutti i 64 slot sono occupati."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
-#: ../src/ch-ccmx.c:1056 ../src/ch-ccmx.c:1226 ../src/ch-flash.c:1084
+#: ../src/ch-ccmx.c:1074 ../src/ch-ccmx.c:1241 ../src/ch-flash.c:1102
 msgid "Failed to load file"
-msgstr "Impossibile caricare il file"
+msgstr "Caricamento del file non riuscito"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:1119 ../src/ch-flash.c:1236 ../src/ch-spectro-util.c:249
+#: ../src/ch-ccmx.c:1134 ../src/ch-flash.c:1254 ../src/ch-spectro-util.c:249
 msgid "Failed to open device"
-msgstr "Impossibile accedere al dispositivo "
+msgstr "Accesso al dispositivo non riuscito"
 
 #. TRANSLATORS: get the calibration matrices from the device
-#: ../src/ch-ccmx.c:1137
+#: ../src/ch-ccmx.c:1152
 msgid "Getting calibration from device…"
-msgstr ""
+msgstr "Recupero calibrazione dal dispositivo…"
 
-#: ../src/ch-ccmx.c:1319
+#: ../src/ch-ccmx.c:1334
 msgid "Failed to write file"
-msgstr "Impossibile scrivere il file"
+msgstr "Scrittura del file non riuscita"
 
 #. TRANSLATORS: could not download the directory listing
-#: ../src/ch-ccmx.c:1387
+#: ../src/ch-ccmx.c:1402
 msgid "Failed to get the list of firmware files"
-msgstr "Impossibile ottenere la lista dei file firmware"
+msgstr "Recupero dell'elenco dei file firmware non riuscito"
 
 #. TRANSLATORS: the directory listing returned no results
-#: ../src/ch-ccmx.c:1395
+#: ../src/ch-ccmx.c:1410
 msgid "Firmware list has zero size"
-msgstr "La lista dei firmware ha dimensione zero"
+msgstr "L'elenco dei firmware ha dimensione zero"
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1511
+#: ../src/ch-ccmx.c:1526
 msgid "Set the device to the calibrate position and click 'Next'."
-msgstr ""
+msgstr "Impostare il dispositivo nella modalità calibrazione e fare clic su «Avanti»."
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1529
+#: ../src/ch-ccmx.c:1544
 msgid "Set the device to the surface position and click 'Next'."
-msgstr ""
+msgstr "Impostare il dispositivo nella modalità superficie e fare clic su «Avanti»."
 
-#: ../src/ch-ccmx.c:1706
+#: ../src/ch-ccmx.c:1721
 msgid "Put the photospectrometer on the screen and click 'Next'."
-msgstr ""
+msgstr "Posizionare il fotospettrometro sullo schermo e fare clic su «Avanti»."
 
-#: ../src/ch-ccmx.c:1736
+#: ../src/ch-ccmx.c:1751
 msgid "Now put the ColorHug on the screen and click 'Next' again."
-msgstr ""
+msgstr "Ora posizionare il ColorHug sullo schermo e fare nuovamente clic su «Avanti»."
 
-#: ../src/ch-ccmx.c:1793
+#: ../src/ch-ccmx.c:1808
 msgid "Correction matrix failed to be generated!"
-msgstr ""
+msgstr "Generazione della matrice di correzione non riuscita."
 
-#: ../src/ch-ccmx.c:1799
+#: ../src/ch-ccmx.c:1814
 msgid "Correction matrix successfully generated!"
-msgstr ""
+msgstr "Matrice di correzione generata in modo corretto."
 
 #. TRANSLATORS: get the list of firmwares from the internet
-#: ../src/ch-ccmx.c:2057
+#: ../src/ch-ccmx.c:2072
 msgid "Getting latest data from the web…"
-msgstr ""
+msgstr "Recupero dati aggiornati dal web…"
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:2514 ../src/ch-flash.c:1414 ../src/ch-main.c:3191
+#: ../src/ch-ccmx.c:2539 ../src/ch-flash.c:1435 ../src/ch-main.c:3392
 msgid "Failed to setup networking"
-msgstr "Impossibile impostare la rete"
+msgstr "Impostazione della rete non riuscita"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2605 ../src/ch-flash.c:1508 ../src/ch-main.c:2859
+#: ../src/ch-ccmx.c:2630 ../src/ch-flash.c:1529 ../src/ch-main.c:3040
 #: ../src/ch-spectro-util.c:528
 msgid "Show extra debugging information"
-msgstr "Mostra le informazioni di debug"
+msgstr "Mostra informazioni aggiuntive di debug"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2608
+#: ../src/ch-ccmx.c:2633
 msgid "Repair the factory calibration matrix"
-msgstr ""
+msgstr "Ripara la matrice di calibrazione di fabbrica"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:2622 ../src/ch-spectro-util.c:542
+#: ../src/ch-ccmx.c:2647 ../src/ch-spectro-util.c:542
 msgid "ColorHug CCMX loader"
-msgstr "Carica ColorHug CCMX"
+msgstr "Loader CCMX ColorHug"
 
-#: ../src/ch-ccmx.c:2628 ../src/ch-flash.c:1530 ../src/ch-spectro-util.c:548
+#: ../src/ch-ccmx.c:2653 ../src/ch-flash.c:1551 ../src/ch-spectro-util.c:548
 msgid "Failed to parse command line options"
-msgstr "Impossibile eseguire il parsing delle opzioni da riga di comando"
+msgstr "Analisi delle opzioni da riga di comando non riuscita"
 
-#: ../src/ch-flash.c:72 ../src/ch-flash.c:231
+#: ../src/ch-flash.c:72 ../src/ch-flash.c:249
 msgid "ColorHug Updater"
 msgstr ""
 
 #: ../src/ch-flash.c:73
 msgid "Calibration Failed"
-msgstr ""
+msgstr "Calibrazione non riuscita"
 
 #. TRANSLATORS: we broke the device
-#: ../src/ch-flash.c:107
+#: ../src/ch-flash.c:125
 msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Il flashing del dispositivo è fallito ma il ColorHug non è danneggiato."
+msgstr "Il flashing del dispositivo non è riuscito, ma il ColorHug non è danneggiato."
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
-#: ../src/ch-flash.c:111
+#: ../src/ch-flash.c:129
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
-msgstr ""
+msgstr "Rimuovere il dispositivo ColorHug dal computer, reinserirlo ed eseguire nuovamente questo programma."
 
 #. TRANSLATORS: the user has to be online to get firmware
-#: ../src/ch-flash.c:166
+#: ../src/ch-flash.c:184
 msgid "Connect to the internet to check for updates"
 msgstr "Connettiti ad internet per controllare gli aggiornamenti"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
-#: ../src/ch-flash.c:212
+#: ../src/ch-flash.c:230
 msgid "Failed to set the flash success true"
 msgstr "Impossibile impostare l'esito del flash a vero"
 
 #. TRANSLATORS: we've uploaded new firmware
-#: ../src/ch-flash.c:221
+#: ../src/ch-flash.c:239
 msgid "Device successfully updated"
 msgstr "Dispositivo aggiornato correttamente"
 
-#: ../src/ch-flash.c:232
+#: ../src/ch-flash.c:250
 msgid "Calibration Completed"
-msgstr ""
+msgstr "Calibrazione completata"
 
 #. TRANSLATORS: tell the hardware we succeeded
-#: ../src/ch-flash.c:249
+#: ../src/ch-flash.c:267
 msgid "Completing firmware upgrade…"
-msgstr ""
+msgstr "Completamento aggiornamento firmware…"
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
-#: ../src/ch-flash.c:277
+#: ../src/ch-flash.c:295
 msgid "Failed to startup the ColorHug"
-msgstr "Impossibile avviare il ColorHug"
+msgstr "Avvio del ColorHug non riuscito"
 
 #. TRANSLATORS: the new firmware will not load
-#: ../src/ch-flash.c:307
+#: ../src/ch-flash.c:325
 msgid "Failed to boot the ColorHug"
-msgstr "Impossibile eseguire il boot di ColorHug"
+msgstr "Boot del ColorHug non riuscito"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:341
+#: ../src/ch-flash.c:359
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Verifica del firmware non riuscita"
 
 #. TRANSLATORS: boot into the new firmware
-#: ../src/ch-flash.c:358
+#: ../src/ch-flash.c:376
 msgid "Starting the new firmware…"
-msgstr ""
+msgstr "Avvio del nuovo firmware…"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:401
+#: ../src/ch-flash.c:419
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Scrittura del firmware non riuscita"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
-#: ../src/ch-flash.c:411
+#: ../src/ch-flash.c:429
 msgid "Verifying new firmware…"
-msgstr ""
+msgstr "Verifica del nuovo firmware…"
 
 #. TRANSLATORS: now write the new firmware chunks
-#: ../src/ch-flash.c:440
+#: ../src/ch-flash.c:458
 msgid "Writing new firmware…"
-msgstr ""
+msgstr "Scrittura del nuovo firmware…"
 
 #. TRANSLATORS: the device failed to come back alive
-#: ../src/ch-flash.c:471
+#: ../src/ch-flash.c:489
 msgid "Failed to reboot the ColorHug"
-msgstr "Impossibile riavviare ColorHug"
+msgstr "Riavvio del ColorHug non riuscito"
 
 #. TRANSLATORS: we restart the device in bootloader mode
-#: ../src/ch-flash.c:501
+#: ../src/ch-flash.c:519
 msgid "Failed to reset the ColorHug"
-msgstr "Impossibile resettare ColorHug"
+msgstr "Reset del ColorHug non riuscito"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
-#: ../src/ch-flash.c:532
+#: ../src/ch-flash.c:550
 msgid "Starting firmware upgrade…"
-msgstr ""
+msgstr "Avvio aggiornamento firmware…"
 
 #. TRANSLATORS: failed to get the firmware file
-#: ../src/ch-flash.c:565
+#: ../src/ch-flash.c:583
 msgid "Failed to get firmware"
-msgstr "Impossibile ottenere il firmware"
+msgstr "Recupero del firmware non riuscito"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:574
+#: ../src/ch-flash.c:592
 msgid "Firmware has zero size"
 msgstr "Il firmware ha dimensione zero"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:586
+#: ../src/ch-flash.c:604
 msgid "Firmware has incorrect checksum"
-msgstr ""
+msgstr "Il firmware presenta un checksum non corretto"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:674
+#: ../src/ch-flash.c:692
 msgid "Warnings about this update"
-msgstr ""
+msgstr "Avvisi per questo aggiornamento"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
-#: ../src/ch-flash.c:682
+#: ../src/ch-flash.c:700
 msgid "Flash anyway"
 msgstr ""
 
 #. TRANSLATORS: this is the button text to abort the flash process
-#: ../src/ch-flash.c:684
+#: ../src/ch-flash.c:702
 msgid "Do not flash"
 msgstr ""
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
-#: ../src/ch-flash.c:753
+#: ../src/ch-flash.c:771
 msgid "Downloading update…"
-msgstr ""
+msgstr "Scaricamento dell'aggiornamento…"
 
 #. TRANSLATORS: the user is already running the latest firmware
-#: ../src/ch-flash.c:848
+#: ../src/ch-flash.c:866
 msgid "There are no updates available."
 msgstr "Non ci sono aggiornamenti disponibili."
 
 #. TRANSLATORS: the user is running an old firmware version
-#: ../src/ch-flash.c:868
+#: ../src/ch-flash.c:886
 msgid "A firmware update is available."
-msgstr "E' disponibile un nuovo firmware aggiornato."
+msgstr "È disponibile un nuovo firmware aggiornato."
 
 #. TRANSLATORS: the HTTP request failed
-#: ../src/ch-flash.c:892
+#: ../src/ch-flash.c:910
 msgid "Failed to get the listing of firmware files"
-msgstr "Impossibile ottenere la lista dei file Firmware"
+msgstr "Recupero dell'elenco dei file firmware non riuscito"
 
 #. TRANSLATORS: we got an invalid response from the server
-#: ../src/ch-flash.c:901
+#: ../src/ch-flash.c:919
 msgid "The firmware listing has zero size"
 msgstr "La lista dei firmware ha dimensione zero"
 
 #. TRANSLATORS: the XML file was corrupt
-#: ../src/ch-flash.c:915
+#: ../src/ch-flash.c:933
 msgid "Failed to parse the update metadata"
-msgstr ""
+msgstr "Analisi dei metadati di aggiornamento non riuscita"
 
 #. TRANSLATORS: this is test firmware
-#: ../src/ch-flash.c:942
+#: ../src/ch-flash.c:960
 msgid "This is a test firmware not intended for general release."
-msgstr ""
+msgstr "Questo è un firmware di test non adatto a un rilascio generico."
 
 #. TRANSLATORS: all bets are off
-#: ../src/ch-flash.c:944
+#: ../src/ch-flash.c:962
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Questo firmware non è stato testato ampiamente e potrebbe non funzionare nel modo previsto."
 
 #. TRANSLATORS: pre-production hardware
-#: ../src/ch-flash.c:1012
+#: ../src/ch-flash.c:1030
 msgid "Prototype ColorHug Detected"
 msgstr "Prototipo ColorHug rilevato."
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1016
+#: ../src/ch-flash.c:1034
 msgid "ColorHug Detected"
 msgstr "ColorHug rilevato"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1020
+#: ../src/ch-flash.c:1038
 msgid "ColorHug Spectro Detected"
 msgstr ""
 
 #. TRANSLATORS: fake hardware
-#: ../src/ch-flash.c:1024
+#: ../src/ch-flash.c:1042
 msgid "Emulated ColorHug Detected"
 msgstr "Emulatore ColorHug rilevato"
 
 #. TRANSLATORS: new-issue hardware
-#: ../src/ch-flash.c:1028
+#: ../src/ch-flash.c:1046
 #, c-format
 msgid "ColorHug v%i Detected"
 msgstr "ColorHug v%i rilevato"
 
 #. TRANSLATORS: the device is in bootloader mode
-#: ../src/ch-flash.c:1039
+#: ../src/ch-flash.c:1057
 msgid "Bootloader version"
 msgstr "Versione Bootloader"
 
 #. TRANSLATORS: the device is in firmware mode
-#: ../src/ch-flash.c:1047
+#: ../src/ch-flash.c:1065
 msgid "Firmware version"
 msgstr "Versione Firmware"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
-#: ../src/ch-flash.c:1066
+#: ../src/ch-flash.c:1084
 msgid "Checking for updates…"
-msgstr ""
+msgstr "Controllo degli aggiornamenti…"
 
 #. TRANSLATORS: we've specified a local file
-#: ../src/ch-flash.c:1074
+#: ../src/ch-flash.c:1092
 msgid "Flashing firmware file…"
 msgstr ""
 
 #. TRANSLATORS: request the firmware version from the device
-#: ../src/ch-flash.c:1251
+#: ../src/ch-flash.c:1269
 msgid "Getting firmware version…"
-msgstr ""
+msgstr "Recupero versione firmware…"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:1290
+#: ../src/ch-flash.c:1308
 msgid "Update details"
 msgstr "Dettagli aggiornamento"
 
 #. TRANSLATORS: show the user some markdown formatted text
-#: ../src/ch-flash.c:1380
+#: ../src/ch-flash.c:1401
 msgid "See details about the update"
 msgstr "Visualizza dettagli sull'aggiornamento"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-flash.c:1511
+#: ../src/ch-flash.c:1532
 msgid "Flash a specific firmware file"
 msgstr ""
 
 #. TRANSLATORS: a program to update the firmware flash on the device
-#: ../src/ch-flash.c:1524
+#: ../src/ch-flash.c:1545
 msgid "ColorHug Flash Program"
 msgstr "Programma per il Flash di ColorHug"
 
@@ -656,412 +665,432 @@ msgstr "Programma per il Flash di ColorHug"
 #: ../src/ch-graph-widget.c:342
 #, c-format
 msgid "%id"
-msgstr ""
+msgstr "%ig"
 
 #. Translators: This is %i days %02i hours
 #: ../src/ch-graph-widget.c:345
 #, c-format
 msgid "%id%02ih"
-msgstr ""
+msgstr "%ig%02ih"
 
 #. Translators: This is %i hours
 #: ../src/ch-graph-widget.c:350
 #, c-format
 msgid "%ih"
-msgstr ""
+msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
 #: ../src/ch-graph-widget.c:353
 #, c-format
 msgid "%ih%02im"
-msgstr ""
+msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
 #: ../src/ch-graph-widget.c:358
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
 #: ../src/ch-graph-widget.c:361
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
 #: ../src/ch-graph-widget.c:365
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2is"
 
 #. TRANSLATORS: This is %i Percentage
 #: ../src/ch-graph-widget.c:369
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
 #: ../src/ch-graph-widget.c:372
 #, c-format
 msgid "%.1fW"
-msgstr ""
+msgstr "%.1fW"
 
 #. TRANSLATORS: This is %.1f Volts
 #: ../src/ch-graph-widget.c:377
 #, c-format
 msgid "%.1fV"
-msgstr ""
+msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
 #: ../src/ch-graph-widget.c:380
 #, c-format
 msgid "%.0f nm"
-msgstr ""
+msgstr "%.0f nm"
 
 #. TRANSLATORS: this is a command alias
 #: ../src/ch-main.c:90
 #, c-format
 msgid "Alias to %s"
-msgstr "Collegamento a %s"
+msgstr "Alias a %s"
 
 #: ../src/ch-main.c:168
 msgid "Command not found, valid commands are:"
 msgstr "Comando non trovato, i comandi validi sono:"
 
 #. TRANSLATORS: wait for user to press the device into a desk…
-#: ../src/ch-main.c:1661
+#: ../src/ch-main.c:1670
 msgid "Ensure the ColorHug aperture is blocked"
 msgstr ""
 
 #. TRANSLATORS: ask before we set these
-#: ../src/ch-main.c:1703
+#: ../src/ch-main.c:1712
 msgid "Set these values as the dark offsets"
 msgstr ""
 
 #. TRANSLATORS: this is the enabled sensor color
-#: ../src/ch-main.c:1853
+#: ../src/ch-main.c:1862
 msgid "Color"
-msgstr ""
+msgstr "Colore"
 
 #. TRANSLATORS: this is the sensor scale factor
-#: ../src/ch-main.c:1857 ../src/ch-main.c:1948
+#: ../src/ch-main.c:1866 ../src/ch-main.c:1957
 msgid "Multiplier"
-msgstr ""
+msgstr "Moltiplicatore"
 
 #. TRANSLATORS: this is the measurement mode
-#: ../src/ch-main.c:1861
+#: ../src/ch-main.c:1870
 msgid "Measure mode"
-msgstr ""
+msgstr "Modalità misura"
 
 #. TRANSLATORS: this is the sensor sample time
-#: ../src/ch-main.c:1865 ../src/ch-main.c:1901 ../src/ch-main.c:1952
+#: ../src/ch-main.c:1874 ../src/ch-main.c:1910 ../src/ch-main.c:1961
 msgid "Integral"
 msgstr ""
 
 #. TRANSLATORS: this is the number of pulses detected
-#: ../src/ch-main.c:1868
+#: ../src/ch-main.c:1877
 msgid "Pulses"
 msgstr ""
 
-#: ../src/ch-main.c:2011
+#: ../src/ch-main.c:2082
 msgid "Multiple ColorHug devices are attached"
-msgstr ""
+msgstr "È collegato più di un ColorHug"
 
-#: ../src/ch-main.c:2018
+#: ../src/ch-main.c:2089
 msgid "No ColorHug devices were found"
-msgstr ""
+msgstr "Nessun dispositivo ColorHug trovato"
 
 #. TRANSLATORS: confirmation
-#: ../src/ch-main.c:2220
+#: ../src/ch-main.c:2291
 msgid "Flash the device?"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2879
+#: ../src/ch-main.c:3060
 msgid "Gets the sensor color filter"
-msgstr "Ottiene il filtro colore del sensore"
+msgstr "Recupera il filtro colore del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2884
+#: ../src/ch-main.c:3065
 msgid "Sets the sensor color filter"
 msgstr "Imposta il filtro colore del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2889
+#: ../src/ch-main.c:3070
 msgid "Gets the sensor multiplier"
-msgstr "Ottiene il moltiplicatore del sensore"
+msgstr "Recupera il moltiplicatore del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2894
+#: ../src/ch-main.c:3075
 msgid "Sets the sensor multiplier"
 msgstr "Imposta il moltiplicatore del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2899
+#: ../src/ch-main.c:3080
 msgid "Gets the sensor sample read time"
-msgstr "Ottiene il tempo di campionamento del sensore"
+msgstr "Recupera il tempo di campionamento del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2904
+#: ../src/ch-main.c:3085
 msgid "Sets the sensor sample read time"
 msgstr "Imposta il tempo di campionamento del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2909
+#: ../src/ch-main.c:3090
 msgid "Gets the sensor firmware version"
-msgstr "Ottiene la versione del firmware del sensore"
+msgstr "Recupera la versione del firmware del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2914
+#: ../src/ch-main.c:3095
 msgid "Gets the sensor calibration matrix"
-msgstr "Ottiene la matrice di calibrazione del sensore"
+msgstr "Recupera la matrice di calibrazione del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2919
+#: ../src/ch-main.c:3100
 msgid "Sets the sensor calibration matrix"
 msgstr "Imposta la matrice di calibrazione del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2924
+#: ../src/ch-main.c:3105
 msgid "Clear the sensor calibration matrix"
 msgstr "Pulisci la matrice di calibrazione sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2929
+#: ../src/ch-main.c:3110
 msgid "List the sensor calibration matrices"
 msgstr "Elenca le matrici di calibrazione sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2934
+#: ../src/ch-main.c:3115
 msgid "Sets the sensor calibration matrix from a CCMX file"
 msgstr "Imposta la matrice di calibrazione sensore da un file CCMX"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2939
+#: ../src/ch-main.c:3120
 msgid "Gets the sensor serial number"
-msgstr "Ottiene il numero seriale del sensore"
+msgstr "Recupera il numero seriale del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2944
+#: ../src/ch-main.c:3125
 msgid "Sets the sensor serial number"
 msgstr "Imposta il numero seriale del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2949
+#: ../src/ch-main.c:3130
 msgid "Gets the owner's name"
-msgstr ""
+msgstr "Recupera il nome del proprietario"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2954
+#: ../src/ch-main.c:3135
 msgid "Sets the owner's name"
-msgstr ""
+msgstr "Imposta il nome del proprietario"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2959
+#: ../src/ch-main.c:3140
 msgid "Gets the owner's email address"
-msgstr ""
+msgstr "Recupera l'indirizzo email del proprietario"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2964
+#: ../src/ch-main.c:3145
 msgid "Sets the owner's email address"
-msgstr ""
+msgstr "Imposta l''indirizzo email del proprietario"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2969
+#: ../src/ch-main.c:3150
 msgid "Gets the LED values"
-msgstr "Ottiene i valori dei LED"
+msgstr "Recupera i valori dei LED"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2974
+#: ../src/ch-main.c:3155
 msgid "Sets the LEDs"
 msgstr "Imposta i LED"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2979
+#: ../src/ch-main.c:3160
 msgid "Gets the PCB errata"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2984
+#: ../src/ch-main.c:3165
 msgid "Sets the PCB errata"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2989
+#: ../src/ch-main.c:3170
 msgid "Gets the remote profile SHA1 hash"
-msgstr ""
+msgstr "Recupera l'hash SHA1 del profilo remoto"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2994
+#: ../src/ch-main.c:3175
 msgid "Sets the remote profile SHA1 hash"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:2999
+#: ../src/ch-main.c:3180
 msgid "Gets the dark offset values"
-msgstr "Ottiene i valori di offset per l'oscurità"
+msgstr "Recupera i valori di offset per l'oscurità"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3004
+#: ../src/ch-main.c:3185
 msgid "Sets the dark offset values"
 msgstr "Imposta i valori di offset per l'oscurità"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3009
+#: ../src/ch-main.c:3190
 msgid "Writes the EEPROM with updated values"
 msgstr "Scrive la EEPROM con i valori aggiornati"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3014
+#: ../src/ch-main.c:3195
 msgid "Takes a reading"
 msgstr "Effettua una lettura"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3019
+#: ../src/ch-main.c:3200
 msgid "Takes all color readings (to device RGB)"
 msgstr "Esegue le letture per tutti i colori (al dispositivo RGB)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3024
+#: ../src/ch-main.c:3205
 msgid "Takes all color readings (to XYZ)"
 msgstr "Effettua una lettura per tutti i colori (in XYZ)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3029
+#: ../src/ch-main.c:3210
+msgid "Takes a spectral reading (saving to SRAM)"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:3215
 msgid "Reset the processor back to the bootloader"
 msgstr "Resetta il processore indietro al bootloader"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3034 ../src/ch-main.c:3039
+#: ../src/ch-main.c:3220 ../src/ch-main.c:3225
 msgid "Flash firmware into the processor"
 msgstr "Esegui il flash del firmware sul processore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3044
+#: ../src/ch-main.c:3230
 msgid "Read EEPROM at a specified address"
-msgstr ""
+msgstr "Legge l'EEPROM da un indirizzo specificato"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3049
+#: ../src/ch-main.c:3235
 msgid "Erase EEPROM at a specified address"
-msgstr ""
+msgstr "Elimina l'EEPROM da un indirizzo specificato"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3054
+#: ../src/ch-main.c:3240
 msgid "Write EEPROM at a specified address"
-msgstr ""
+msgstr "Scrive l'EEPROM su un indirizzo specificato"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3059
+#: ../src/ch-main.c:3245
 msgid "Gets the pre scale constant"
-msgstr "Ottiene la costante di pre-scala"
+msgstr "Recupera la costante di pre-scala"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3064
+#: ../src/ch-main.c:3250
 msgid "Sets the pre scale constant"
 msgstr "Imposta la costante di pre-scala"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3069
+#: ../src/ch-main.c:3255
 msgid "Gets the post scale constant"
-msgstr "Ottiene la costante di post-scala"
+msgstr "Recupera la costante di post-scala"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3074
+#: ../src/ch-main.c:3260
 msgid "Sets the post scale constant"
 msgstr "Imposta la costante di post-scala"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3079
+#: ../src/ch-main.c:3265
 msgid "Sets the flash success"
 msgstr "Imposta l'esito del flash"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3084
+#: ../src/ch-main.c:3270
 msgid "Boots from the bootloader into the firmware"
 msgstr "Avvia dal bootloader presente nel firmware"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3089
+#: ../src/ch-main.c:3275
 msgid "Gets the sensor calibration map"
-msgstr "Ottiene la mappa di calibrazione del sensore"
+msgstr "Recupera la mappa di calibrazione del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3094
+#: ../src/ch-main.c:3280
 msgid "Sets the sensor calibration map"
 msgstr "Imposta la mappa di calibrazione del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3099
+#: ../src/ch-main.c:3285
 msgid "Gets the hardware version"
-msgstr "Ottiene la versione hardware"
+msgstr "Recupera la versione hardware"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3104
+#: ../src/ch-main.c:3290
 msgid "Gets an array of raw samples"
-msgstr ""
+msgstr "Recupera un array di campioni raw"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3109
+#: ../src/ch-main.c:3295
 msgid "Downloads a remote profile"
-msgstr ""
+msgstr "Scarica un profilo remoto"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3114
+#: ../src/ch-main.c:3300
 msgid "Uploads a remote profile"
-msgstr ""
+msgstr "Carica un profilo remoto"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3119
+#: ../src/ch-main.c:3305
 msgid "Uploads a correction matrix"
-msgstr ""
+msgstr "Carica una matrice di correzione"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3124
+#: ../src/ch-main.c:3310
 msgid "Does a quick self test on the device"
-msgstr ""
+msgstr "Esegue un rapido auto-test sul dispositivo"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3129
+#: ../src/ch-main.c:3315
 msgid "Gets the sensor measurement mode"
-msgstr ""
+msgstr "Recupera la modalità di misurazione del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3134
+#: ../src/ch-main.c:3320
 msgid "Sets the sensor measurement mode"
-msgstr ""
+msgstr "Imposta la modalità di misurazione del sensore"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3139
+#: ../src/ch-main.c:3325
 msgid "Read SRAM at a specified address"
-msgstr ""
+msgstr "Legge la SDRAM a un indirizzo specificato"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3144
+#: ../src/ch-main.c:3330
 msgid "Write SRAM at a specified address"
+msgstr "Scrive la SDRAM a un indirizzo specificato"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:3335
+msgid "Gets the sensor temperature"
+msgstr "Recupera la temperatura del sensore"
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:3340
+msgid "Gets the ADC Vref values"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3149
-msgid "Gets the sensor temperature"
+#: ../src/ch-main.c:3345
+msgid "Gets the CCD calibration values"
+msgstr ""
+
+#. TRANSLATORS: command description
+#: ../src/ch-main.c:3350
+msgid "Sets the CCD calibration values"
 msgstr ""
 
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:3162
+#: ../src/ch-main.c:3363
 msgid "Color Management"
 msgstr "Gestione Colore"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:3179
+#: ../src/ch-main.c:3380
 msgid "No connection to device:"
 msgstr "Nessuna connessione al dispositivo:"
 
 #. TRANSLATORS: permissions error perhaps?
 #: ../src/ch-spectro-util.c:128
 msgid "Failed to get samples from device"
-msgstr ""
+msgstr "Recupero di campioni dal dispositivo non riuscito"
 
 #. TRANSLATORS: permissions error perhaps?
 #: ../src/ch-spectro-util.c:202
 msgid "Failed to get raw reading"
-msgstr ""
+msgstr "Recupero della lettura raw non riuscito"

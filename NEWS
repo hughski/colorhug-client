@@ -1,3 +1,25 @@
+Version 0.2.0
+~~~~~~~~~~~~~
+Released: 2013-05-01
+
+Notes:
+ - This release requires colord >= 0.1.31 and colord-gtk >= 0.1.24
+
+New Features:
+ - Add a command to get the spectral data from the CCD (Richard Hughes)
+ - Add a 'get-adc-vrefs' command to show the ADC Vref+ and Vref- (Richard Hughes)
+ - Add help buttons to colorhug-flash and colorhug-ccmx (Richard Hughes)
+ - Add some yelp documentation for the ColorHug device (Richard Hughes)
+ - Add the ability to get and set CCD calibration values (Richard Hughes)
+ - Support setting the blue LED in the ColorHug Spectro (Richard Hughes)
+
+Bugfixes:
+ - Do not refresh the calibration data twice when setting a custom CCMX (Richard Hughes)
+ - Do not use deprecated colord functionality (Richard Hughes)
+ - Remove the internal libcolorhug and depend on the system copy (Richard Hughes)
+ - Set a title when generating a CCMX file (Richard Hughes)
+ - Use gnome-autogen.sh to setup yelp rather than rolling our own thing (Richard Hughes)
+
 Version 0.1.14
 ~~~~~~~~~~~~~~
 Released: 2013-02-04

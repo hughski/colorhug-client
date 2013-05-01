@@ -3,61 +3,59 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# gentilemathieu <gentilemathieu@gmail.com>, 2012-2013
-# Olivier W <olivierwong@gmail.com>, 2012
-# Olivier W <olivierwong@gmail.com>, 2012
+# Zoltan Hoppár <hopparz@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-01 11:15+0100\n"
-"PO-Revision-Date: 2013-05-01 10:15+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2013-02-04 22:22+0000\n"
+"PO-Revision-Date: 2013-02-23 20:08+0000\n"
+"Last-Translator: Zoltan Hoppár <hopparz@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/ch-ccmx.ui.h:1
 msgid "ColorHug CCMX Loader"
-msgstr "ColorHug CCMX"
+msgstr "ColorHug CCMX betöltő"
 
 #: ../data/ch-ccmx.ui.h:2
 msgid "Generate CCMX"
-msgstr ""
+msgstr "CCMX előállítása"
 
 #. Button to import a CCMX file
 #: ../data/ch-ccmx.ui.h:4
 msgid "Import file"
-msgstr "Importer un fichier"
+msgstr "Fájl importálása"
 
 #: ../data/ch-ccmx.ui.h:5
 msgid "Import a local CCMX file"
-msgstr "Importer un fichier CCMX local"
+msgstr "Lokális CCMX fájl importálása"
 
-#: ../data/ch-ccmx.ui.h:6
-msgid "Refresh the list of matrices from the device"
-msgstr "Rafraîchir la liste des matrices à partir du capteur"
-
-#: ../data/ch-ccmx.ui.h:7 ../data/ch-flash.ui.h:2
+#: ../data/ch-ccmx.ui.h:6 ../data/ch-flash.ui.h:2
 #: ../data/ch-spectro-util.ui.h:2
 msgid "Close this window"
-msgstr "Fermer cette fenêtre"
+msgstr "Zárja be ezt az ablakot"
+
+#: ../data/ch-ccmx.ui.h:7
+msgid "Refresh the list of matrices from the device"
+msgstr "Frissítse a márixlistát az eszközről"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
 #: ../data/ch-ccmx.ui.h:9
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
-msgstr "Sélectionner une matrice de correction optimise la précision du ColorHug."
+msgstr "A korrekciós mátrix kiválasztásával maximalizálja a ColorHug precizitását."
 
 #. Only advanced users have to change this...
 #: ../data/ch-ccmx.ui.h:11
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "Utiliser la matrice par défaut donnera à la plupart des utilisateurs un résultat d'étalonnage acceptable."
+msgstr "Az alapértelmezett mátrix használatával a legtöbb felhasználó számára elfogadható kalibrációs értéket ad."
 
 #. Default liquid crystal display matrix
 #: ../data/ch-ccmx.ui.h:13
@@ -72,7 +70,7 @@ msgstr "CRT"
 #. Default projector (beamer etc) matrix
 #: ../data/ch-ccmx.ui.h:17
 msgid "Projector"
-msgstr "Projecteur"
+msgstr "Kivetítő"
 
 #. Default light emitting diode matrix
 #: ../data/ch-ccmx.ui.h:19
@@ -80,588 +78,580 @@ msgid "LED"
 msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1347
+#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1329
 msgid "Please connect your ColorHug"
-msgstr "Veuillez connecter votre ColorHug"
+msgstr "Kérem csatlakoztassa a ColorHug eszközét"
 
 #: ../data/ch-ccmx.ui.h:21
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr ""
+msgstr "Válassza ki a kijelzőt a használathoz amikor színkalibrációs mátrixot készít."
 
-#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1737 ../src/ch-ccmx.c:1764
+#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1722 ../src/ch-ccmx.c:1749
 msgid "Do not remove the device whilst measurement is in progress"
-msgstr ""
+msgstr "Ne távolítsa el az eszközt amíg a mérés folyik"
 
 #: ../data/ch-ccmx.ui.h:23
 msgid "Save file"
-msgstr ""
+msgstr "Fájl mentése"
 
 #: ../data/ch-ccmx.ui.h:24
 msgid ""
 "Share with\n"
 "the community"
-msgstr ""
+msgstr "Megosztás\na közösséggel"
 
 #: ../data/ch-flash.ui.h:1
 msgid "ColorHug Firmware Updater"
-msgstr "Mise à jour du micrologiciel du ColorHug"
+msgstr "ColorHug Firmware Frissítő"
 
 #. Button to update to a newer version of the firmware
 #: ../data/ch-flash.ui.h:4
 msgid "Update!"
-msgstr "Mise à jour !"
+msgstr "Frissíts!"
 
 #: ../data/ch-flash.ui.h:5
 msgid "Flash new firmware to the device"
-msgstr "Flash du micrologiciel dans le capteur"
+msgstr "Formázza meg az új firmware-t az eszközre"
 
 #: ../data/ch-flash.ui.h:6
 msgid "Firmware version unknown"
-msgstr "Version du micrologiciel inconnue"
+msgstr "Firmware verzió ismeretlen"
 
 #. We are flashing the device, so we have to be careful
 #: ../data/ch-flash.ui.h:8
 msgid "Do not unplug the device and do not turn off the computer."
-msgstr "Ne pas débrancher l'appareil et ne pas éteindre l'ordinateur."
+msgstr "Ne húzza ki és ne kapcsolja ki a számítógépét."
 
 #: ../data/ch-spectro-util.ui.h:1 ../data/colorhug-spectro-util.desktop.in.h:1
 msgid "ColorHug Spectro Utility"
-msgstr "Outil ColorHug Spectro"
+msgstr "ColorHug Spectro kisalkalmazás"
 
 #: ../data/ch-spectro-util.ui.h:3
 msgid "Auto update:"
-msgstr "Mise à jour automatique:"
+msgstr "Automatikus frissítés:"
 
 #: ../data/ch-spectro-util.ui.h:4
 msgid "Force Refresh"
-msgstr "Forcer le rafraichissement"
+msgstr "Frissítés eröltetése"
 
 #: ../data/ch-spectro-util.ui.h:5
 msgid "Temperature:"
-msgstr "Temperature:"
+msgstr "Hőmérséklet:"
 
 #: ../data/ch-spectro-util.ui.h:6
 msgid "Interval:"
-msgstr "Intervalle:"
+msgstr "Tartomány:"
 
 #: ../data/ch-spectro-util.ui.h:7
 msgid "This shows the raw sensor reading without calibration"
-msgstr "Ceci montre la mesure brute du capteur sans calibration"
+msgstr "Ez mutatja a puszta szenzor érzékelési adatait kalibráció nélkül"
 
 #: ../data/ch-spectro-util.ui.h:8
 msgid "Raw Sensor"
-msgstr "Capteur brut"
+msgstr "Puszta szenzor"
 
 #: ../data/ch-spectro-util.ui.h:9
 msgid "This shows the dark calibration at 25 degrees C"
-msgstr "Ceci montre l'étalonage sombre à 25°C"
+msgstr "Ezt mutatja a sötét kalibrációkor 25 celsiuson"
 
 #: ../data/ch-spectro-util.ui.h:10
 msgid "Dark Calibration"
-msgstr "Etalonage sombre"
+msgstr "Sötét kalibráció"
 
 #: ../data/ch-spectro-util.ui.h:11
 msgid ""
 "This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr "Ceci montre la fonction d'ajustement de couleur pour la conversion XYZ interne à l'appareil"
+msgstr "Ez mutatja a felhasznált Színhűség funkciót az eszközön belüli XYZ konverzióhoz"
 
 #: ../data/ch-spectro-util.ui.h:12
 msgid "Color Match"
-msgstr "Ajustement de couleur"
+msgstr "Színhűség"
 
 #: ../data/ch-spectro-util.ui.h:13
 msgid "This shows the temperature calibration factor"
-msgstr "Ceci montre le facteur d'étalonage de température"
+msgstr "Ez mutatja a szín kalibrációs faktort"
 
 #: ../data/ch-spectro-util.ui.h:14
 msgid "Temperature Compensation"
-msgstr "Compensation de température"
+msgstr "Hőmérséklet kompenzáció"
 
 #: ../data/ch-spectro-util.ui.h:15
 msgid "This shows the calibrated spectra result"
-msgstr "Ceci montre le résultat de spectre étaloné"
+msgstr "Ez mutatja a kalibrált spektra eredményeit"
 
 #: ../data/ch-spectro-util.ui.h:16
 msgid "Spectra Result"
-msgstr "Spectre résultat"
+msgstr "Spektra eredmények"
 
 #: ../data/colorhug-ccmx.desktop.in.h:1
 msgid "CCMX Loader"
-msgstr "CCMX"
+msgstr "CCMX betöltő"
 
 #: ../data/colorhug-ccmx.desktop.in.h:2
 msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Modifier les matrices d'étalonnage sur le ColorHug"
-
-#: ../data/colorhug-docs.desktop.in.h:1
-msgid "ColorHug Documentation"
-msgstr ""
-
-#: ../data/colorhug-docs.desktop.in.h:2
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr ""
+msgstr "Módosítsa a kalibrációs mátrixokat a ColorHug eszközön"
 
 #: ../data/colorhug-flash.desktop.in.h:1
 msgid "Firmware Updater"
-msgstr "Gestionnaire de mise à jour du micrologiciel"
+msgstr "Firmware Frissítő"
 
 #: ../data/colorhug-flash.desktop.in.h:2
 msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Mettre à jour le micrologiciel du colorimètre ColorHug"
+msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
 
 #: ../data/colorhug-spectro-util.desktop.in.h:2
 msgid "Play with the ColorHug Spectro"
-msgstr "Jouer avec ColorHug Spectro"
+msgstr "játék a ColorHug Spectro-val"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
-msgstr "Option de mise à jour vers un micrologiciel de test"
+msgstr "Mindenképp frissítenie kell, hogy tesztelni tudja a firmware-t"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr "Option permettant de voir les micrologiciels de test et d'effectuer la mise à jour par l'utilisateur."
+msgstr "Mindenképp meg kell jeleníteni a firmware tesztjét és hagyni hogy a felhasználó frissíthesse azt."
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The remote location of ColorHug files"
-msgstr "Location distante des fichiers ColorHug"
+msgstr "A távoli helye a ColorHug fájloknak"
 
 #: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid ""
 "The location of where firmware updates and calibration files are stored."
-msgstr "Location du stockage des mises à jour firmware et fichiers de calibration"
+msgstr "A firmware frissítések és kalibrációs fájlok tárolásának helye."
 
-#: ../src/ch-ccmx.c:185
+#: ../src/ch-ccmx.c:167
 msgid "Failed to create directory"
-msgstr "Impossible de créer le répertoire"
+msgstr "Nem sikerült a mappa elkészítése"
 
-#: ../src/ch-ccmx.c:456 ../src/ch-ccmx.c:1308
+#: ../src/ch-ccmx.c:438 ../src/ch-ccmx.c:1293
 msgid "Failed to download file"
-msgstr "Échec du téléchargement du fichier"
+msgstr "Nem sikerült a fájl letöltése"
 
-#: ../src/ch-ccmx.c:464 ../src/ch-ccmx.c:1316
+#: ../src/ch-ccmx.c:446 ../src/ch-ccmx.c:1301
 msgid "File has zero size"
-msgstr "Le fichier a une taille nulle"
+msgstr "A fájl zéró méretű"
 
-#: ../src/ch-ccmx.c:476
+#: ../src/ch-ccmx.c:458
 msgid "Failed to load data"
-msgstr "Echec du chargement des données"
+msgstr "Az adatok betöltése sikertelen"
 
 #. TRANSLATORS: the request failed
-#: ../src/ch-ccmx.c:546 ../src/ch-flash.c:1161 ../src/ch-flash.c:1191
+#: ../src/ch-ccmx.c:528 ../src/ch-flash.c:1143 ../src/ch-flash.c:1173
 msgid "Failed to contact ColorHug"
-msgstr "Impossible de contacter le ColorHug"
+msgstr "Nem sikerült a kapcsolódás a ColorHug-hoz"
 
 #. TRANSLATORS: internal error when setting up HTTP request
-#: ../src/ch-ccmx.c:563 ../src/ch-ccmx.c:1367 ../src/ch-ccmx.c:2090
-#: ../src/ch-flash.c:792 ../src/ch-flash.c:1124
+#: ../src/ch-ccmx.c:545 ../src/ch-ccmx.c:1352 ../src/ch-ccmx.c:2075
+#: ../src/ch-flash.c:774 ../src/ch-flash.c:1106
 msgid "Failed to setup message"
-msgstr "Échec lors de la création du message"
+msgstr "Sikertelen az üzenet beállítása"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:613
+#: ../src/ch-ccmx.c:595
 msgid "The ColorHug is missing the factory calibration values."
-msgstr "ColorHug ne dispose pas des réglages d'usine."
+msgstr "A ColorHug nem találja a gyári kalibrációs értékeket."
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
-#: ../src/ch-ccmx.c:621
+#: ../src/ch-ccmx.c:603
 msgid "Device calibration error"
-msgstr "Erreur d'étalonnage de l'appareil"
+msgstr "Eszköz kalibrációs hiba"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:626
+#: ../src/ch-ccmx.c:608
 msgid "Ignore"
-msgstr "Ignorer"
+msgstr "Kihagyás"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:629 ../src/ch-ccmx.c:665
+#: ../src/ch-ccmx.c:611 ../src/ch-ccmx.c:647
 msgid "Repair"
-msgstr "Réparer"
+msgstr "Javítás"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:649
+#: ../src/ch-ccmx.c:631
 msgid "Update the factory calibration values?"
-msgstr "Mettre à jour les réglages d'usine ?"
+msgstr "Frissítse a gyári kalibrációs értékeket?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
-#: ../src/ch-ccmx.c:657
+#: ../src/ch-ccmx.c:639
 msgid "Device calibration update"
-msgstr "Mise à jour de l'étalonnage de l'appareil"
+msgstr "Eszköz kalibrációs frissítés"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:662
+#: ../src/ch-ccmx.c:644
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Mégsem"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:781
+#: ../src/ch-ccmx.c:763
 msgid "Failed to get the calibration data"
-msgstr "Echec de la récupération des données d'étalonnage"
+msgstr "Nem sikerült a kalibrációs adatok lekérdezése"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
-#: ../src/ch-ccmx.c:847
+#: ../src/ch-ccmx.c:829
 msgid "Select correction matrix"
-msgstr "Sélectionner la matrice de correction"
+msgstr "Válasszon korrekciós mátrixot"
 
 #. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-ccmx.c:858
+#: ../src/ch-ccmx.c:840
 msgid "Correction matrices"
-msgstr "Matrices de correction"
+msgstr "Korrekciós mátrixok"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:892
+#: ../src/ch-ccmx.c:874
 msgid "Failed to set the calibration map"
-msgstr "Impossible de définir la carte d'étalonnage"
+msgstr "Nem sikerült a kalibrációs térkép beállítása"
 
-#: ../src/ch-ccmx.c:924
+#: ../src/ch-ccmx.c:906
 msgid "Failed to set the calibration matrix"
-msgstr "Échec du réglage de la matrice de calibration"
+msgstr "A kalibrációs mátrix beállítása nem sikerült"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
-#: ../src/ch-ccmx.c:1065 ../src/ch-ccmx.c:1230
+#: ../src/ch-ccmx.c:1047 ../src/ch-ccmx.c:1215
 msgid "No space left on device"
-msgstr "Plus d'espace libre sur le disque"
+msgstr "Nincs több szabad hely az eszközön"
 
-#: ../src/ch-ccmx.c:1066 ../src/ch-ccmx.c:1232
+#: ../src/ch-ccmx.c:1048 ../src/ch-ccmx.c:1217
 msgid "All 64 slots are used up."
-msgstr "Les 64 emplacements sont épuisés."
+msgstr "Az összes 64 hely felhasználásra került."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
-#: ../src/ch-ccmx.c:1074 ../src/ch-ccmx.c:1241 ../src/ch-flash.c:1102
+#: ../src/ch-ccmx.c:1056 ../src/ch-ccmx.c:1226 ../src/ch-flash.c:1084
 msgid "Failed to load file"
-msgstr "Échec lors du chargement du fichier"
+msgstr "Sikertelen a fájl betöltése"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:1134 ../src/ch-flash.c:1254 ../src/ch-spectro-util.c:249
+#: ../src/ch-ccmx.c:1119 ../src/ch-flash.c:1236 ../src/ch-spectro-util.c:249
 msgid "Failed to open device"
-msgstr "Impossible d'ouvrir l'appareil"
+msgstr "Nem sikerült az eszközt megnyitni"
 
 #. TRANSLATORS: get the calibration matrices from the device
-#: ../src/ch-ccmx.c:1152
+#: ../src/ch-ccmx.c:1137
 msgid "Getting calibration from device…"
-msgstr ""
+msgstr "Kalibráció lekérdezése az eszközről..."
 
-#: ../src/ch-ccmx.c:1334
+#: ../src/ch-ccmx.c:1319
 msgid "Failed to write file"
-msgstr "Impossible d'écrire le fichier"
+msgstr "Sikertelen a fájlba mentés"
 
 #. TRANSLATORS: could not download the directory listing
-#: ../src/ch-ccmx.c:1402
+#: ../src/ch-ccmx.c:1387
 msgid "Failed to get the list of firmware files"
-msgstr "Échec de la récupération de la liste des fichiers de micrologiciel"
+msgstr "Nem sikerült a firmware lista letöltése"
 
 #. TRANSLATORS: the directory listing returned no results
-#: ../src/ch-ccmx.c:1410
+#: ../src/ch-ccmx.c:1395
 msgid "Firmware list has zero size"
-msgstr "La liste des micrologiciels a une taille nulle"
+msgstr "Firmware lista zéró méretű"
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1526
+#: ../src/ch-ccmx.c:1511
 msgid "Set the device to the calibrate position and click 'Next'."
-msgstr ""
+msgstr "Állítsa az eszközt kalibrációs helyzetbe és kattintson a 'Következő' gombra."
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1544
+#: ../src/ch-ccmx.c:1529
 msgid "Set the device to the surface position and click 'Next'."
-msgstr ""
+msgstr "Állítsa az eszközt felszíni pozícióba és kattintson a 'Következő' gombra."
 
-#: ../src/ch-ccmx.c:1721
+#: ../src/ch-ccmx.c:1706
 msgid "Put the photospectrometer on the screen and click 'Next'."
-msgstr ""
+msgstr "Tegye a fotóspektrométert a kijelzőre, és kattintson a 'Következő' gombra."
 
-#: ../src/ch-ccmx.c:1751
+#: ../src/ch-ccmx.c:1736
 msgid "Now put the ColorHug on the screen and click 'Next' again."
-msgstr ""
+msgstr "Most tegye a ColorHug-ot a kijelzőre és kattintson újra a 'Következő' gombra."
 
-#: ../src/ch-ccmx.c:1808
+#: ../src/ch-ccmx.c:1793
 msgid "Correction matrix failed to be generated!"
-msgstr ""
+msgstr "Korrekciós mátrix előállítása nem sikerült!"
 
-#: ../src/ch-ccmx.c:1814
+#: ../src/ch-ccmx.c:1799
 msgid "Correction matrix successfully generated!"
-msgstr ""
+msgstr "Korrekciós mátrix sikeresen elkészült!"
 
 #. TRANSLATORS: get the list of firmwares from the internet
-#: ../src/ch-ccmx.c:2072
+#: ../src/ch-ccmx.c:2057
 msgid "Getting latest data from the web…"
-msgstr ""
+msgstr "Legutolsó adatok beszerzése az internetről..."
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:2539 ../src/ch-flash.c:1435 ../src/ch-main.c:3392
+#: ../src/ch-ccmx.c:2514 ../src/ch-flash.c:1414 ../src/ch-main.c:3191
 msgid "Failed to setup networking"
-msgstr "Échec de la configuration réseau"
+msgstr "Sikertelen a hálózat beállítása"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2630 ../src/ch-flash.c:1529 ../src/ch-main.c:3040
+#: ../src/ch-ccmx.c:2605 ../src/ch-flash.c:1508 ../src/ch-main.c:2859
 #: ../src/ch-spectro-util.c:528
 msgid "Show extra debugging information"
-msgstr "Afficher les informations de débogage supplémentaires"
+msgstr "Jelenítse meg az bővebb hibakeresési információkat"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2633
+#: ../src/ch-ccmx.c:2608
 msgid "Repair the factory calibration matrix"
-msgstr "Réparer la matrice d'étalonnage d'usine"
+msgstr "Javítsd a gyári kalibrációs mátrixot"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:2647 ../src/ch-spectro-util.c:542
+#: ../src/ch-ccmx.c:2622 ../src/ch-spectro-util.c:542
 msgid "ColorHug CCMX loader"
-msgstr "ColorHug CCMX"
+msgstr "ColorHug CCMX betöltő"
 
-#: ../src/ch-ccmx.c:2653 ../src/ch-flash.c:1551 ../src/ch-spectro-util.c:548
+#: ../src/ch-ccmx.c:2628 ../src/ch-flash.c:1530 ../src/ch-spectro-util.c:548
 msgid "Failed to parse command line options"
-msgstr "Échec de l'analyse des options en ligne de commande"
+msgstr "Parancssori opciók értelmezése nem sikerült"
 
-#: ../src/ch-flash.c:72 ../src/ch-flash.c:249
+#: ../src/ch-flash.c:72 ../src/ch-flash.c:231
 msgid "ColorHug Updater"
-msgstr "Gestionnaire de mise à jour ColorHug"
+msgstr "ColorHug Frissítő"
 
 #: ../src/ch-flash.c:73
 msgid "Calibration Failed"
-msgstr "Echec de l'étalonnage"
+msgstr "Kalibráció sikertelen"
 
 #. TRANSLATORS: we broke the device
-#: ../src/ch-flash.c:125
+#: ../src/ch-flash.c:107
 msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Échec du flash de l'appareil mais le ColorHug n'est pas endommagé."
+msgstr "Az eszköz formázása sikertelen, de a ColorHug maga nem sérült."
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
-#: ../src/ch-flash.c:129
+#: ../src/ch-flash.c:111
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
-msgstr "Déconnectez l'appareil ColorHug de votre ordinateur, puis rebranchez le et réexécutez ce programme."
+msgstr "Távolítsa el a ColorHug eszközt a számítógépből, illessze be újra, és indítsa el ezt a programot megint."
 
 #. TRANSLATORS: the user has to be online to get firmware
-#: ../src/ch-flash.c:184
+#: ../src/ch-flash.c:166
 msgid "Connect to the internet to check for updates"
-msgstr "Connectez-vous à internet pour rechercher des mises à jour"
+msgstr "Csatlakozzon az internetre, hogy vannak-e elérhető frissítések"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
-#: ../src/ch-flash.c:230
+#: ../src/ch-flash.c:212
 msgid "Failed to set the flash success true"
-msgstr "Impossible de définir le succès du flash comme vrai"
+msgstr "Nem sikerült a flash sikeres folyamatát átbillenteni igazra"
 
 #. TRANSLATORS: we've uploaded new firmware
-#: ../src/ch-flash.c:239
+#: ../src/ch-flash.c:221
 msgid "Device successfully updated"
-msgstr "Mise à jour de l'appareil réussie"
+msgstr "Eszköz sikeresen frissítve"
 
-#: ../src/ch-flash.c:250
+#: ../src/ch-flash.c:232
 msgid "Calibration Completed"
-msgstr "Etalonnage terminé"
+msgstr "Kalibráció befejeződött"
 
 #. TRANSLATORS: tell the hardware we succeeded
-#: ../src/ch-flash.c:267
+#: ../src/ch-flash.c:249
 msgid "Completing firmware upgrade…"
-msgstr ""
+msgstr "Firmware frissítés befejezése..."
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
-#: ../src/ch-flash.c:295
+#: ../src/ch-flash.c:277
 msgid "Failed to startup the ColorHug"
-msgstr "Échec du démarrage de ColorHug"
+msgstr "ColorHug elindítása sikertelen"
 
 #. TRANSLATORS: the new firmware will not load
-#: ../src/ch-flash.c:325
+#: ../src/ch-flash.c:307
 msgid "Failed to boot the ColorHug"
-msgstr "Impossible de démarrer le ColorHug"
+msgstr "ColorHug bootolása sikertelen"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:359
+#: ../src/ch-flash.c:341
 msgid "Failed to verify the firmware"
-msgstr "Echec à la vérification du micrologiciel"
+msgstr "Sikertelen a firmware ellenőrzése"
 
 #. TRANSLATORS: boot into the new firmware
-#: ../src/ch-flash.c:376
+#: ../src/ch-flash.c:358
 msgid "Starting the new firmware…"
-msgstr ""
+msgstr "Az új firmware elindul..."
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:419
+#: ../src/ch-flash.c:401
 msgid "Failed to write the firmware"
-msgstr "Echec à l'écriture du micrologiciel"
+msgstr "Sikertelen a firmware rögzítése"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
-#: ../src/ch-flash.c:429
+#: ../src/ch-flash.c:411
 msgid "Verifying new firmware…"
-msgstr ""
+msgstr "Az új firmware ellenőrzése..."
 
 #. TRANSLATORS: now write the new firmware chunks
-#: ../src/ch-flash.c:458
+#: ../src/ch-flash.c:440
 msgid "Writing new firmware…"
-msgstr ""
+msgstr "Az új firmware rögzítése..."
 
 #. TRANSLATORS: the device failed to come back alive
-#: ../src/ch-flash.c:489
+#: ../src/ch-flash.c:471
 msgid "Failed to reboot the ColorHug"
-msgstr "Échec lors du redémarrage du ColorHug"
+msgstr "ColorHug újraindítása sikertelen"
 
 #. TRANSLATORS: we restart the device in bootloader mode
-#: ../src/ch-flash.c:519
+#: ../src/ch-flash.c:501
 msgid "Failed to reset the ColorHug"
-msgstr "Échec de réinitialisation du ColorHug"
+msgstr "ColorHug alaphelyzetbe állítása sikertelen"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
-#: ../src/ch-flash.c:550
+#: ../src/ch-flash.c:532
 msgid "Starting firmware upgrade…"
-msgstr ""
+msgstr "Firmware frissítés elindítása..."
 
 #. TRANSLATORS: failed to get the firmware file
-#: ../src/ch-flash.c:583
+#: ../src/ch-flash.c:565
 msgid "Failed to get firmware"
-msgstr "Échec lors de l'obtention du microprogramme"
+msgstr "FIrmware letöltése sikertelen"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:592
+#: ../src/ch-flash.c:574
 msgid "Firmware has zero size"
-msgstr "Le micrologiciel a une taille nulle"
+msgstr "Firmware zérő méretű"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:604
+#: ../src/ch-flash.c:586
 msgid "Firmware has incorrect checksum"
-msgstr "Somme de contrôle du micrologiciel incorrecte."
+msgstr "Firmware helytelen ellenőrző összeggel rendelkezik"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:692
+#: ../src/ch-flash.c:674
 msgid "Warnings about this update"
-msgstr "Avertissement à propos de cette mise à jour"
+msgstr "Figyelmeztetés  ezzel a frissítéssel kapcsolatban"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
-#: ../src/ch-flash.c:700
+#: ../src/ch-flash.c:682
 msgid "Flash anyway"
-msgstr "Flasher tout de même"
+msgstr "Formázza meg mindenképp"
 
 #. TRANSLATORS: this is the button text to abort the flash process
-#: ../src/ch-flash.c:702
+#: ../src/ch-flash.c:684
 msgid "Do not flash"
-msgstr "Ne pas flasher"
+msgstr "Ne formázza meg"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
-#: ../src/ch-flash.c:771
+#: ../src/ch-flash.c:753
 msgid "Downloading update…"
-msgstr ""
+msgstr "Frissítés letöltése..."
 
 #. TRANSLATORS: the user is already running the latest firmware
-#: ../src/ch-flash.c:866
+#: ../src/ch-flash.c:848
 msgid "There are no updates available."
-msgstr "Aucune mise à jour disponible."
+msgstr "Nincsenek elérhető újabb frissítések."
 
 #. TRANSLATORS: the user is running an old firmware version
-#: ../src/ch-flash.c:886
+#: ../src/ch-flash.c:868
 msgid "A firmware update is available."
-msgstr "Une mise à jour du micrologiciel est disponible."
+msgstr "Egy firmware frissítés elérhető."
 
 #. TRANSLATORS: the HTTP request failed
-#: ../src/ch-flash.c:910
+#: ../src/ch-flash.c:892
 msgid "Failed to get the listing of firmware files"
-msgstr "Impossible de récupérer la liste des fichiers de micrologiciels"
+msgstr "Nem sikerült a firmware fájlok listájának letöltése"
 
 #. TRANSLATORS: we got an invalid response from the server
-#: ../src/ch-flash.c:919
+#: ../src/ch-flash.c:901
 msgid "The firmware listing has zero size"
-msgstr "Le listing du micrologiciel a une taille nulle"
+msgstr "A firmware lista zéró méretű"
 
 #. TRANSLATORS: the XML file was corrupt
-#: ../src/ch-flash.c:933
+#: ../src/ch-flash.c:915
 msgid "Failed to parse the update metadata"
-msgstr "Echec lors de la lecture des métadonnées de mise à jour"
+msgstr "A frissítési metaadatok értelmezése nem sikerült"
 
 #. TRANSLATORS: this is test firmware
-#: ../src/ch-flash.c:960
+#: ../src/ch-flash.c:942
 msgid "This is a test firmware not intended for general release."
-msgstr "Ceci est un micrologiciel de test non prévu pour une diffusion grand public."
+msgstr "Ez egy teszt firmware nem javasolt általános használatra."
 
 #. TRANSLATORS: all bets are off
-#: ../src/ch-flash.c:962
+#: ../src/ch-flash.c:944
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr "Ce micrologiciel n'a pas été beaucoup testé et pourrait ne pas fonctionner comme prévu."
+msgstr "Ez a firmware nem volt széles körben tesztelve, és előfordulhat hogy nem úgy működik ahogy az elvárható lenne."
 
 #. TRANSLATORS: pre-production hardware
-#: ../src/ch-flash.c:1030
+#: ../src/ch-flash.c:1012
 msgid "Prototype ColorHug Detected"
-msgstr "Prototype ColorHug détecté"
+msgstr "Prototípus ColorHug észlelve"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1034
+#: ../src/ch-flash.c:1016
 msgid "ColorHug Detected"
-msgstr "ColorHug détecté"
+msgstr "ColorHug észlelve"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1038
+#: ../src/ch-flash.c:1020
 msgid "ColorHug Spectro Detected"
-msgstr "ColorHug Spectro détecté"
+msgstr "ColorHug Spectro észlelve"
 
 #. TRANSLATORS: fake hardware
-#: ../src/ch-flash.c:1042
+#: ../src/ch-flash.c:1024
 msgid "Emulated ColorHug Detected"
-msgstr "ColorHug émulé détecté"
+msgstr "Emulált ColorHug észlelve"
 
 #. TRANSLATORS: new-issue hardware
-#: ../src/ch-flash.c:1046
+#: ../src/ch-flash.c:1028
 #, c-format
 msgid "ColorHug v%i Detected"
-msgstr "ColorHug v%i détecté"
+msgstr "ColorHug v%i észlelve"
 
 #. TRANSLATORS: the device is in bootloader mode
-#: ../src/ch-flash.c:1057
+#: ../src/ch-flash.c:1039
 msgid "Bootloader version"
-msgstr "Version du chargeur d'amorçage"
+msgstr "Rendszertöltő verzió"
 
 #. TRANSLATORS: the device is in firmware mode
-#: ../src/ch-flash.c:1065
+#: ../src/ch-flash.c:1047
 msgid "Firmware version"
-msgstr "Version du micrologiciel"
+msgstr "Firmware verzió"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
-#: ../src/ch-flash.c:1084
+#: ../src/ch-flash.c:1066
 msgid "Checking for updates…"
-msgstr ""
+msgstr "Frissítések keresése..."
 
 #. TRANSLATORS: we've specified a local file
-#: ../src/ch-flash.c:1092
+#: ../src/ch-flash.c:1074
 msgid "Flashing firmware file…"
-msgstr ""
+msgstr "Firmware fájl formázása..."
 
 #. TRANSLATORS: request the firmware version from the device
-#: ../src/ch-flash.c:1269
+#: ../src/ch-flash.c:1251
 msgid "Getting firmware version…"
-msgstr ""
+msgstr "Firmware fájl verziójának lekérdezése..."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:1308
+#: ../src/ch-flash.c:1290
 msgid "Update details"
-msgstr "Détails de la mise à jour"
+msgstr "Részletek frissítése"
 
 #. TRANSLATORS: show the user some markdown formatted text
-#: ../src/ch-flash.c:1401
+#: ../src/ch-flash.c:1380
 msgid "See details about the update"
-msgstr "Voir les détails de la mise à jour"
+msgstr "Tekintse meg a frissítés részleteit"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-flash.c:1532
+#: ../src/ch-flash.c:1511
 msgid "Flash a specific firmware file"
-msgstr "Flash d'un micrologiciel spécifique"
+msgstr "Formázza meg egy specifikus firmware fájllal"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
-#: ../src/ch-flash.c:1545
+#: ../src/ch-flash.c:1524
 msgid "ColorHug Flash Program"
-msgstr "Programme de Flash pour ColorHug"
+msgstr "ColorHug Flash alkalmazás"
 
 #. Translators: This is %i days
 #: ../src/ch-graph-widget.c:342
@@ -733,366 +723,346 @@ msgstr "%.0f nm"
 #: ../src/ch-main.c:90
 #, c-format
 msgid "Alias to %s"
-msgstr "Alias pour %s"
+msgstr "Elnevezés ehhez: %s"
 
 #: ../src/ch-main.c:168
 msgid "Command not found, valid commands are:"
-msgstr "Commande non trouvée, les commandes valides sont :"
+msgstr "Parancs nem található, elérhető parancsok:"
 
 #. TRANSLATORS: wait for user to press the device into a desk…
-#: ../src/ch-main.c:1670
+#: ../src/ch-main.c:1661
 msgid "Ensure the ColorHug aperture is blocked"
-msgstr "Assurez-vous que l'ouverture du ColorHug est close"
+msgstr "Bizonyosodjon meg róla hogy a ColorHug ablaka kitakart"
 
 #. TRANSLATORS: ask before we set these
-#: ../src/ch-main.c:1712
+#: ../src/ch-main.c:1703
 msgid "Set these values as the dark offsets"
-msgstr "Définir ces valeurs comme références sombres"
+msgstr "Állítsa be ezeket az értékeket mint sötét offszeteket"
 
 #. TRANSLATORS: this is the enabled sensor color
-#: ../src/ch-main.c:1862
+#: ../src/ch-main.c:1853
 msgid "Color"
-msgstr "Couleur"
+msgstr "Szín"
 
 #. TRANSLATORS: this is the sensor scale factor
-#: ../src/ch-main.c:1866 ../src/ch-main.c:1957
+#: ../src/ch-main.c:1857 ../src/ch-main.c:1948
 msgid "Multiplier"
-msgstr "Multiplicateur"
+msgstr "Szorzó"
 
 #. TRANSLATORS: this is the measurement mode
-#: ../src/ch-main.c:1870
+#: ../src/ch-main.c:1861
 msgid "Measure mode"
-msgstr "Mode de mesure"
+msgstr "Mérési mód"
 
 #. TRANSLATORS: this is the sensor sample time
-#: ../src/ch-main.c:1874 ../src/ch-main.c:1910 ../src/ch-main.c:1961
+#: ../src/ch-main.c:1865 ../src/ch-main.c:1901 ../src/ch-main.c:1952
 msgid "Integral"
-msgstr "Intégrale"
+msgstr "Integrál"
 
 #. TRANSLATORS: this is the number of pulses detected
-#: ../src/ch-main.c:1877
+#: ../src/ch-main.c:1868
 msgid "Pulses"
-msgstr "Impulsions"
+msgstr "Villanások"
 
-#: ../src/ch-main.c:2082
+#: ../src/ch-main.c:2011
 msgid "Multiple ColorHug devices are attached"
-msgstr "Plusieurs sondes ColorHug connectées"
+msgstr "Több ColorHug is csatlakoztatva van"
 
-#: ../src/ch-main.c:2089
+#: ../src/ch-main.c:2018
 msgid "No ColorHug devices were found"
-msgstr "Aucune sonde ColorHug n'a été trouvée"
+msgstr "Egyetlen ColorHug eszköz sem található"
 
 #. TRANSLATORS: confirmation
-#: ../src/ch-main.c:2291
+#: ../src/ch-main.c:2220
 msgid "Flash the device?"
-msgstr "Flasher l'appareil ?"
+msgstr "Formázzuk az eszközt?"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3060
+#: ../src/ch-main.c:2879
 msgid "Gets the sensor color filter"
-msgstr "Obtient le filtre de couleur du capteur"
+msgstr "Lekérdezi az érzékelő színszűrőjét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3065
+#: ../src/ch-main.c:2884
 msgid "Sets the sensor color filter"
-msgstr "Définit le filtre de couleur du capteur"
+msgstr "Beállítja az érzékelő színszűrőjét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3070
+#: ../src/ch-main.c:2889
 msgid "Gets the sensor multiplier"
-msgstr "Obtient le multiplicateur du capteur"
+msgstr "Lekérdezi az érzékelő szorzóját"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3075
+#: ../src/ch-main.c:2894
 msgid "Sets the sensor multiplier"
-msgstr "Définit le multiplicateur du capteur"
+msgstr "Beállítja az érzékelő szorzóját"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3080
+#: ../src/ch-main.c:2899
 msgid "Gets the sensor sample read time"
-msgstr "Obtient le temps de lecture de l'échantillon"
+msgstr "Lekérdezi az érzékelő mintavételi idejét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3085
+#: ../src/ch-main.c:2904
 msgid "Sets the sensor sample read time"
-msgstr "Définit le temps de lecture de l'échantillon du capteur"
+msgstr "Beállítja az érzékelő mintavételi idejét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3090
+#: ../src/ch-main.c:2909
 msgid "Gets the sensor firmware version"
-msgstr "Obtient la version du micrologiciel du capteur"
+msgstr "Lekérdezi az érzékelő firmware verzióját"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3095
+#: ../src/ch-main.c:2914
 msgid "Gets the sensor calibration matrix"
-msgstr "Obtient la matrice d'étalonnage du capteur"
+msgstr "Lekérdezi az érzékelő kalibrációs mátrixát"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3100
+#: ../src/ch-main.c:2919
 msgid "Sets the sensor calibration matrix"
-msgstr "Définit la matrice d'étalonnage du capteur"
+msgstr "Beállítja az érzékelő kalibrációs mátrixát"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3105
+#: ../src/ch-main.c:2924
 msgid "Clear the sensor calibration matrix"
-msgstr "Nettoyage de la matrice d'étalonnage du capteur"
+msgstr "Tisztítsa ki az érzékelő kalibrációs mátrixát"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3110
+#: ../src/ch-main.c:2929
 msgid "List the sensor calibration matrices"
-msgstr "Lister les matrices d'étalonnage du capteur"
+msgstr "Listázza az érzékelő kalibrációs mátrixait"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3115
+#: ../src/ch-main.c:2934
 msgid "Sets the sensor calibration matrix from a CCMX file"
-msgstr "Définit la matrice d'étalonnage du capteur à partir d'un fichier CCMX"
+msgstr "Beállítja az érzékelő kalibrációs mátrixát egy CCMX fájlból"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3120
+#: ../src/ch-main.c:2939
 msgid "Gets the sensor serial number"
-msgstr "Obtient le numéro de série du capteur"
+msgstr "Lekérdezi az érzékelő sorozatszámát"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3125
+#: ../src/ch-main.c:2944
 msgid "Sets the sensor serial number"
-msgstr "Définit le numéro de série du capteur"
+msgstr "Beállítja az érzékelő sorozatszámát"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3130
+#: ../src/ch-main.c:2949
 msgid "Gets the owner's name"
-msgstr "Obtenir le nom du propriétaire"
+msgstr "Lekérdezi a tulajdonos nevét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3135
+#: ../src/ch-main.c:2954
 msgid "Sets the owner's name"
-msgstr "Définir le nom du propriétaire"
+msgstr "Beállítja a tulajdonos nevét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3140
+#: ../src/ch-main.c:2959
 msgid "Gets the owner's email address"
-msgstr "Obtenir l'adresse e-mail du propriétaire"
+msgstr "Lekérdezi a tulajdonos email címét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3145
+#: ../src/ch-main.c:2964
 msgid "Sets the owner's email address"
-msgstr "Définir l'adresse e-mail du propriétaire"
+msgstr "Beállítja a tulajdonos email címét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3150
+#: ../src/ch-main.c:2969
 msgid "Gets the LED values"
-msgstr "Obtient les valeurs des LED"
+msgstr "Lekérdezi a LED értékeit"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3155
+#: ../src/ch-main.c:2974
 msgid "Sets the LEDs"
-msgstr "Définit les LED"
+msgstr "Beállítja a LED-eket"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3160
+#: ../src/ch-main.c:2979
 msgid "Gets the PCB errata"
-msgstr "Récupère les erreurs PCB"
+msgstr "Lekérdezi a PCB hibajegyzéket"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3165
+#: ../src/ch-main.c:2984
 msgid "Sets the PCB errata"
-msgstr "Définit les erreurs PCB"
+msgstr "Beállítja a PCB hibajegyzéket"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3170
+#: ../src/ch-main.c:2989
 msgid "Gets the remote profile SHA1 hash"
-msgstr "Récupère l'empreinte SHA1 du profil distant"
+msgstr "Leérdezi a távoli profil SHA1 hash értékét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3175
+#: ../src/ch-main.c:2994
 msgid "Sets the remote profile SHA1 hash"
-msgstr "Définit l'empreinte SHA1 du profil distant"
+msgstr "Beállítja a távoli profil SHA1 hash értékét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3180
+#: ../src/ch-main.c:2999
 msgid "Gets the dark offset values"
-msgstr "Obtient les valeurs du point noir"
+msgstr "Lekérdezi a sötét offszet értékeket"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3185
+#: ../src/ch-main.c:3004
 msgid "Sets the dark offset values"
-msgstr "Définit les valeurs du point noir"
+msgstr "Beállítja a sötét offszet értékeket"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3190
+#: ../src/ch-main.c:3009
 msgid "Writes the EEPROM with updated values"
-msgstr "Écrit l'EEPROM avec les valeurs à jour"
+msgstr "Kiiírja az EEPROM tartalmat a frissített értékekkel"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3195
+#: ../src/ch-main.c:3014
 msgid "Takes a reading"
-msgstr "Effectue une acquisition"
+msgstr "Elindít egy olvasást"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3200
+#: ../src/ch-main.c:3019
 msgid "Takes all color readings (to device RGB)"
-msgstr "Prend toutes les lectures de couleur (à l'appareil RGB)"
+msgstr "Elindítja az összes szín leolvasását (az eszköz RGB-jére)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3205
+#: ../src/ch-main.c:3024
 msgid "Takes all color readings (to XYZ)"
-msgstr "Effectue une acquisition des couleurs (vers XYZ)"
+msgstr "Elindítja az összes olvasást (XYZ-től)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3210
-msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
-
-#. TRANSLATORS: command description
-#: ../src/ch-main.c:3215
+#: ../src/ch-main.c:3029
 msgid "Reset the processor back to the bootloader"
-msgstr "Réinitialise le processeur vers le chargeur d'amorçage"
+msgstr "Állítsa alaphelyzetbe a processzort egészen a rendszertöltőig"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3220 ../src/ch-main.c:3225
+#: ../src/ch-main.c:3034 ../src/ch-main.c:3039
 msgid "Flash firmware into the processor"
-msgstr "Flash du micrologiciel dans le processeur"
+msgstr "Formázza meg a firmware-t a processzorba"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3230
+#: ../src/ch-main.c:3044
 msgid "Read EEPROM at a specified address"
-msgstr "Lire l'EEPROM à une adresse spécifique"
+msgstr "Kiolvassa az EEPROM tartalmát a megadott címtől kezdve"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3235
+#: ../src/ch-main.c:3049
 msgid "Erase EEPROM at a specified address"
-msgstr "Effacer l'EEPROM à une adresse spécifique"
+msgstr "Letörli az EEPROM tartalmát a megadott címtől kezdve"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3240
+#: ../src/ch-main.c:3054
 msgid "Write EEPROM at a specified address"
-msgstr "Ecrire l'EEPROM à une adresse spécifique"
+msgstr "Rögzíti az EEPROM tartalmát a megadott címtől kezdve"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3245
+#: ../src/ch-main.c:3059
 msgid "Gets the pre scale constant"
-msgstr "Obtient la constante pré-échelle"
+msgstr "Lekérdezi az előméretező állandót"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3250
+#: ../src/ch-main.c:3064
 msgid "Sets the pre scale constant"
-msgstr "Définit la constante pré-échelle"
+msgstr "Beállítja az előméretező állandót"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3255
+#: ../src/ch-main.c:3069
 msgid "Gets the post scale constant"
-msgstr "Obtient la constante post-échelle"
+msgstr "Lekérdezi az utóméretező állandót"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3260
+#: ../src/ch-main.c:3074
 msgid "Sets the post scale constant"
-msgstr "Définit la constante post-échelle"
+msgstr "Beállítja az utóméretező állandót"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3265
+#: ../src/ch-main.c:3079
 msgid "Sets the flash success"
-msgstr "Définit le succès du flash"
+msgstr "Beállítja a formázási eljárást sikeresre"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3270
+#: ../src/ch-main.c:3084
 msgid "Boots from the bootloader into the firmware"
-msgstr "Démarre à partir du chargeur d'amorçage dans le micrologiciel"
+msgstr "Elindul a rendszertöltőből a firmware-be"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3275
+#: ../src/ch-main.c:3089
 msgid "Gets the sensor calibration map"
-msgstr "Obtient le plan d'étalonnage du capteur"
+msgstr "Lekérdezi az érzékelő kalibrációs térképét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3280
+#: ../src/ch-main.c:3094
 msgid "Sets the sensor calibration map"
-msgstr "Définit le plan d'étalonnage du capteur"
+msgstr "Beállítja az érzékelő kalibrációs térképét"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3285
+#: ../src/ch-main.c:3099
 msgid "Gets the hardware version"
-msgstr "Obtient la version du matériel"
+msgstr "Lekérdezi a hardver verziót"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3290
+#: ../src/ch-main.c:3104
 msgid "Gets an array of raw samples"
-msgstr "R2cupère un tableau d'échantillons bruts"
+msgstr "Lekérdez egy palettát a raw mintákból"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3295
+#: ../src/ch-main.c:3109
 msgid "Downloads a remote profile"
-msgstr "Télécharge un profil distant"
+msgstr "Letölti a távoli profilt"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3300
+#: ../src/ch-main.c:3114
 msgid "Uploads a remote profile"
-msgstr "Envoie un profil distant"
+msgstr "Feltölt egy távoli profilt"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3305
+#: ../src/ch-main.c:3119
 msgid "Uploads a correction matrix"
-msgstr ""
+msgstr "Egy korrekciós mátrix feltöltése"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3310
+#: ../src/ch-main.c:3124
 msgid "Does a quick self test on the device"
-msgstr "Effectue un auto-test rapide sur la sonde"
+msgstr "Egy gyors öntesztet végez az eszközön"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3315
+#: ../src/ch-main.c:3129
 msgid "Gets the sensor measurement mode"
-msgstr "Obtient le mode de mesure du capteur"
+msgstr "Lekérdezi az érzékelő mérési módját"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3320
+#: ../src/ch-main.c:3134
 msgid "Sets the sensor measurement mode"
-msgstr "Définit le mode de mesure du capteur"
+msgstr "Beállítja az érzékelő mérési módját"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3325
+#: ../src/ch-main.c:3139
 msgid "Read SRAM at a specified address"
-msgstr "Lire la SRAM à une adresse spécifique"
+msgstr "SRAM kiolvasása a megadott címtől"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3330
+#: ../src/ch-main.c:3144
 msgid "Write SRAM at a specified address"
-msgstr "Ecrire la SRAM à une adresse spécifique"
+msgstr "SRAM rögzítése a megadott címtől"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3335
+#: ../src/ch-main.c:3149
 msgid "Gets the sensor temperature"
-msgstr "Obtient la température du capteur"
-
-#. TRANSLATORS: command description
-#: ../src/ch-main.c:3340
-msgid "Gets the ADC Vref values"
-msgstr ""
-
-#. TRANSLATORS: command description
-#: ../src/ch-main.c:3345
-msgid "Gets the CCD calibration values"
-msgstr ""
-
-#. TRANSLATORS: command description
-#: ../src/ch-main.c:3350
-msgid "Sets the CCD calibration values"
-msgstr ""
+msgstr "Lekérdezi az érzékelő hőmérsékletét"
 
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:3363
+#: ../src/ch-main.c:3162
 msgid "Color Management"
-msgstr "Gestion des couleurs"
+msgstr "Színkezelés"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:3380
+#: ../src/ch-main.c:3179
 msgid "No connection to device:"
-msgstr "Aucune connexion à l'appareil :"
+msgstr "Nincs kapcsolat az eszközhöz:"
 
 #. TRANSLATORS: permissions error perhaps?
 #: ../src/ch-spectro-util.c:128
 msgid "Failed to get samples from device"
-msgstr "Echec à l'obtention des échantillons depuis l'appareil"
+msgstr "Minták lekérdezése nem sikerült"
 
 #. TRANSLATORS: permissions error perhaps?
 #: ../src/ch-spectro-util.c:202
 msgid "Failed to get raw reading"
-msgstr "Echec à l'obtention d'une valeur brute"
+msgstr "A raw olvasás nem sikerült"
