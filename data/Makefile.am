@@ -13,6 +13,7 @@ desktopdir = $(datadir)/applications
 desktop_in_files =					\
 	colorhug-spectro-util.desktop.in		\
 	colorhug-ccmx.desktop.in			\
+	colorhug-docs.desktop.in			\
 	colorhug-flash.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
