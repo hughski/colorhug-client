@@ -29,6 +29,9 @@
 #define	CH_USB_VID				0x273f
 #define	CH_USB_PID_FIRMWARE			0x1001
 
+#define	CH_USB_VID2				0x04d8
+#define	CH_USB_PID2_FIRMWARE			0xf8da
+
 static struct usb_device *
 find_colorhug_device (void)
 {
@@ -42,6 +45,11 @@ find_colorhug_device (void)
 		for (dev = bus->devices; dev; dev = dev->next) {
 			if (dev->descriptor.idVendor == CH_USB_VID &&
 			    dev->descriptor.idProduct == CH_USB_PID_FIRMWARE) {
+				found = dev;
+				goto out;
+			}
+			if (dev->descriptor.idVendor == CH_USB_VID2 &&
+			    dev->descriptor.idProduct == CH_USB_PID2_FIRMWARE) {
 				found = dev;
 				goto out;
 			}
