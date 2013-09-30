@@ -22,6 +22,11 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 gsettings_schemas_in_files = com.hughski.colorhug-client.gschema.xml.in
 gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
 
+@INTLTOOL_XML_RULE@
+appdatadir = $(datadir)/appdata
+dist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+appdata_in_files = colorhug-flash.appdata.xml.in
+
 UI_FILES =						\
 	ch-spectro-util.ui				\
 	ch-ccmx.ui					\
@@ -35,6 +40,9 @@ EXTRA_DIST =						\
 
 clean-local :
 	rm -f *~
+
+CLEANFILES =						\
+	colorhug-flash.appdata.xml
 
 DISTCLEANFILES =					\
 	com.hughski.colorhug-client.gschema.xml		\
