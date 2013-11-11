@@ -18,9 +18,7 @@ desktop_in_files =					\
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @GSETTINGS_RULES@
-@INTLTOOL_XML_NOMERGE_RULE@
-gsettings_schemas_in_files = com.hughski.colorhug-client.gschema.xml.in
-gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
+gsettings_SCHEMAS = com.hughski.colorhug-client.gschema.xml
 
 @INTLTOOL_XML_RULE@
 appdatadir = $(datadir)/appdata
@@ -35,7 +33,7 @@ UI_FILES =						\
 	ch-flash.ui
 
 EXTRA_DIST =						\
-	$(gsettings_schemas_in_files)			\
+	$(gsettings_SCHEMAS)				\
 	$(desktop_in_files)				\
 	$(pkgdata_DATA)					\
 	$(appdata_in_files)				\

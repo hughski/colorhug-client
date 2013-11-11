@@ -1,0 +1,14 @@
+<schemalist>
+  <schema id="com.hughski.colorhug-client" path="/com/hughski/colorhug-client/">
+    <key name="enable-test-firmware" type="b">
+      <default>false</default>
+      <summary>Whether we should update to test firmware</summary>
+      <description>Whether we should show test firmware and allow the user to update to it.</description>
+    </key>
+    <key name="server-uri" type="s">
+      <default>'http://www.hughski.com/downloads'</default>
+      <summary>The remote location of ColorHug files</summary>
+      <description>The location of where firmware updates and calibration files are stored.</description>
+    </key>
+  </schema>
+</schemalist>
