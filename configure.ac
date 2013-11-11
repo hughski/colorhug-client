@@ -3,7 +3,7 @@ AC_PREREQ(2.63)
 
 m4_define([ch_major_version], [0])
 m4_define([ch_minor_version], [2])
-m4_define([ch_micro_version], [1])
+m4_define([ch_micro_version], [2])
 m4_define([ch_version],
           [ch_major_version.ch_minor_version.ch_micro_version])
 
