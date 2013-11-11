@@ -3,8 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# wanpakboy <deaconmacmillan@gmail.com>, 2012
-# Nastuko Toda <m2330880989@shibuya-center.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
@@ -12,62 +10,62 @@ msgstr ""
 "POT-Creation-Date: 2013-11-11 16:39+0000\n"
 "PO-Revision-Date: 2013-11-11 16:39+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: Japanese (Japan) (http://www.transifex.com/projects/p/colorhug-client/language/ja_JP/)\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/colorhug-client/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja_JP\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "ColorHug CCMX Loader"
-msgstr "カラーハッグCCMXローダー"
+msgstr ""
 
 msgid "Generate CCMX"
 msgstr ""
 
 #. Button to import a CCMX file
 msgid "Import file"
-msgstr "ファイルをインポートする"
+msgstr ""
 
 msgid "Import a local CCMX file"
-msgstr "ローかるCCMXファイルを取り込む"
+msgstr ""
 
 msgid "Refresh the list of matrices from the device"
-msgstr "デバイスの行列をリフレッシュ"
+msgstr ""
 
 msgid "Close this window"
-msgstr "ウインドウを閉じる"
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
-msgstr "適切な校正行列を選択すれば正確さを最大化することは出来ます"
+msgstr ""
 
 #. Only advanced users have to change this...
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "規定校正行列を使っても許容な校正は作れます"
+msgstr ""
 
 #. Default liquid crystal display matrix
 msgid "LCD"
-msgstr "液晶"
+msgstr ""
 
 #. Default cathode ray tube (ask your parents...) matrix
 msgid "CRT"
-msgstr "ブラウン管"
+msgstr ""
 
 #. Default projector (beamer etc) matrix
 msgid "Projector"
-msgstr "映写機"
+msgstr ""
 
 #. Default light emitting diode matrix
 msgid "LED"
-msgstr "LED"
+msgstr ""
 
 #. TRANSLATORS: device is not connected to the computer
 msgid "Please connect your ColorHug"
-msgstr "カラーハッグを接続してください"
+msgstr ""
 
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr ""
@@ -84,21 +82,21 @@ msgid ""
 msgstr ""
 
 msgid "ColorHug Firmware Updater"
-msgstr "ファームウェア最新"
+msgstr ""
 
 #. Button to update to a newer version of the firmware
 msgid "Update!"
-msgstr "最新する"
+msgstr ""
 
 msgid "Flash new firmware to the device"
-msgstr "ファームウェアを最新する"
+msgstr ""
 
 msgid "Firmware version unknown"
-msgstr "ファームウェア バージョンを表示出来ませんでした"
+msgstr ""
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
-msgstr "注意！でバイスを抜いたりコンピュタの電源を切ったりするべからず"
+msgstr ""
 
 msgid "ColorHug Spectro Utility"
 msgstr ""
@@ -159,10 +157,10 @@ msgid ""
 msgstr ""
 
 msgid "CCMX Loader"
-msgstr "CCMX ローダー"
+msgstr ""
 
 msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "デバイスの校正行列を手直しする"
+msgstr ""
 
 msgid "ColorHug Documentation"
 msgstr ""
@@ -182,10 +180,10 @@ msgid ""
 msgstr ""
 
 msgid "Firmware Updater"
-msgstr "ファームウェア最新機能"
+msgstr ""
 
 msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "ファームウェア バジョンを最新する"
+msgstr ""
 
 msgid "Play with the ColorHug Spectro"
 msgstr ""
@@ -205,24 +203,24 @@ msgid ""
 msgstr ""
 
 msgid "Failed to create directory"
-msgstr "フォルダー作成失敗しました"
+msgstr ""
 
 msgid "Failed to download file"
-msgstr "ファイルダウンロード失敗しました"
+msgstr ""
 
 msgid "File has zero size"
-msgstr "ファイルの容量は０です"
+msgstr ""
 
 msgid "Failed to load data"
-msgstr "ロードに失敗"
+msgstr ""
 
 #. TRANSLATORS: the request failed
 msgid "Failed to contact ColorHug"
-msgstr "カラーハッグに連絡出来なかった"
+msgstr ""
 
 #. TRANSLATORS: internal error when setting up HTTP request
 msgid "Failed to setup message"
-msgstr "メセージの設定出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: device is broken and needs fixing
 msgid "The ColorHug is missing the factory calibration values."
@@ -235,11 +233,11 @@ msgstr ""
 
 #. TRANSLATORS: this is a button
 msgid "Ignore"
-msgstr "無視"
+msgstr ""
 
 #. TRANSLATORS: this is a button
 msgid "Repair"
-msgstr "修復"
+msgstr ""
 
 #. TRANSLATORS: device is broken and needs fixing
 msgid "Update the factory calibration values?"
@@ -252,16 +250,16 @@ msgstr ""
 
 #. TRANSLATORS: this is a button
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr ""
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to get the calibration data"
-msgstr "測定値の取得に失敗しました"
+msgstr ""
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 msgid "Select correction matrix"
-msgstr "校正行列を選択してください"
+msgstr ""
 
 msgid "_Cancel"
 msgstr ""
@@ -271,47 +269,47 @@ msgstr ""
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
-msgstr "校正行列"
+msgstr ""
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to set the calibration map"
-msgstr "校正マップをセット出来ませんでした"
+msgstr ""
 
 msgid "Failed to set the calibration matrix"
-msgstr "校正行列をセット出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
-msgstr "デバイスメモリはいっぱいです"
+msgstr ""
 
 msgid "All 64 slots are used up."
-msgstr "全ての64スロットは使用中"
+msgstr ""
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
 msgid "Failed to load file"
-msgstr "ファイルをロード出来ませんでした。"
+msgstr ""
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to open device"
-msgstr "デバイスにアクセス出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: get the calibration matrices from the device
 msgid "Getting calibration from device…"
 msgstr ""
 
 msgid "Failed to write file"
-msgstr "ファイルの書き込み出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of firmware files"
-msgstr "ファームウェア ファイルの一覧を表示出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
-msgstr "ファームウェア ファイルの容量は０です"
+msgstr ""
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the calibrate position and click 'Next'."
@@ -342,11 +340,11 @@ msgstr ""
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
-msgstr "ネットワークに接続出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Show extra debugging information"
-msgstr "デバッギング情報を表示する"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -355,10 +353,10 @@ msgstr ""
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug CCMX loader"
-msgstr "CCMX ローダー"
+msgstr ""
 
 msgid "Failed to parse command line options"
-msgstr "コマンドオープション解析失敗しました"
+msgstr ""
 
 msgid "ColorHug Updater"
 msgstr ""
@@ -368,7 +366,7 @@ msgstr ""
 
 #. TRANSLATORS: we broke the device
 msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "ファームウェア最新失敗しましたが、デバイスは無事です"
+msgstr ""
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
 msgid ""
@@ -378,16 +376,16 @@ msgstr ""
 
 #. TRANSLATORS: the user has to be online to get firmware
 msgid "Connect to the internet to check for updates"
-msgstr "最新ファームェアを確認する"
+msgstr ""
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
 msgid "Failed to set the flash success true"
-msgstr "最新の確認失敗しました"
+msgstr ""
 
 #. TRANSLATORS: we've uploaded new firmware
 msgid "Device successfully updated"
-msgstr "最新成功"
+msgstr ""
 
 msgid "Calibration Completed"
 msgstr ""
@@ -399,11 +397,11 @@ msgstr ""
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
 msgid "Failed to startup the ColorHug"
-msgstr "カラーハッグを起動が失敗しました"
+msgstr ""
 
 #. TRANSLATORS: the new firmware will not load
 msgid "Failed to boot the ColorHug"
-msgstr "カラーハッグの起動失敗しました"
+msgstr ""
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
@@ -430,11 +428,11 @@ msgstr ""
 
 #. TRANSLATORS: the device failed to come back alive
 msgid "Failed to reboot the ColorHug"
-msgstr "再起動失敗しました"
+msgstr ""
 
 #. TRANSLATORS: we restart the device in bootloader mode
 msgid "Failed to reset the ColorHug"
-msgstr "リセット失敗しました"
+msgstr ""
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
@@ -442,11 +440,11 @@ msgstr ""
 
 #. TRANSLATORS: failed to get the firmware file
 msgid "Failed to get firmware"
-msgstr "ファームウェアを読み込み出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has zero size"
-msgstr "ファームウェアは0kb"
+msgstr ""
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has incorrect checksum"
@@ -473,19 +471,19 @@ msgstr ""
 
 #. TRANSLATORS: the user is already running the latest firmware
 msgid "There are no updates available."
-msgstr "最新版はありません"
+msgstr ""
 
 #. TRANSLATORS: the user is running an old firmware version
 msgid "A firmware update is available."
-msgstr "最新ファームウェアはあります"
+msgstr ""
 
 #. TRANSLATORS: the HTTP request failed
 msgid "Failed to get the listing of firmware files"
-msgstr "ファームウェア ファイルの一覧を表示出来ませんでした"
+msgstr ""
 
 #. TRANSLATORS: we got an invalid response from the server
 msgid "The firmware listing has zero size"
-msgstr "ファームウェア一覧の容量は０です"
+msgstr ""
 
 #. TRANSLATORS: the XML file was corrupt
 msgid "Failed to parse the update metadata"
@@ -501,11 +499,11 @@ msgstr ""
 
 #. TRANSLATORS: pre-production hardware
 msgid "Prototype ColorHug Detected"
-msgstr "原型カラーハッグ発見"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
-msgstr "ファームウェア一覧の容量は０です"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Spectro Detected"
@@ -513,20 +511,20 @@ msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
-msgstr "バーチュアルカラーハッグ発見"
+msgstr ""
 
 #. TRANSLATORS: new-issue hardware
 #, c-format
 msgid "ColorHug v%i Detected"
-msgstr "カラーハッグ v%i 発見"
+msgstr ""
 
 #. TRANSLATORS: the device is in bootloader mode
 msgid "Bootloader version"
-msgstr "ブートローダー バージョン"
+msgstr ""
 
 #. TRANSLATORS: the device is in firmware mode
 msgid "Firmware version"
-msgstr "ファームウェア バージョン"
+msgstr ""
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
@@ -544,11 +542,11 @@ msgstr ""
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 msgid "Update details"
-msgstr "最新情報"
+msgstr ""
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
-msgstr "最新詳細"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -556,7 +554,7 @@ msgstr ""
 
 #. TRANSLATORS: a program to update the firmware flash on the device
 msgid "ColorHug Flash Program"
-msgstr "カラーハッグ"
+msgstr ""
 
 #. Translators: This is %i days
 #, c-format
@@ -616,10 +614,10 @@ msgstr ""
 #. TRANSLATORS: this is a command alias
 #, c-format
 msgid "Alias to %s"
-msgstr "%s をエイリアスにする"
+msgstr ""
 
 msgid "Command not found, valid commands are:"
-msgstr "不明なコマンド、有効なコマンドは："
+msgstr ""
 
 #. TRANSLATORS: wait for user to press the device into a desk…
 msgid "Ensure the ColorHug aperture is blocked"
@@ -631,7 +629,7 @@ msgstr ""
 
 #. TRANSLATORS: this is the enabled sensor color
 msgid "Color"
-msgstr "カラー"
+msgstr ""
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
@@ -661,59 +659,59 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"
-msgstr "センサーの色フイルターを表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor color filter"
-msgstr "センサーの色フイルターをセットします"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor multiplier"
-msgstr "センサーの倍率器を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor multiplier"
-msgstr "センサーの倍率器をセットします"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor sample read time"
-msgstr "センサーのサンプル読み込み期間を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor sample read time"
-msgstr "センサーのサンプル読み込み期間をセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor firmware version"
-msgstr "センサーのファームウェアのバージョンを表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration matrix"
-msgstr "センサー目盛り定め行列を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix"
-msgstr "センサー目盛り定め行列をセットします"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Clear the sensor calibration matrix"
-msgstr "センサー校正行列をリセットします"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "List the sensor calibration matrices"
-msgstr "センサー校正行列を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix from a CCMX file"
-msgstr "ファイルからセンサー校正行列をロードする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor serial number"
-msgstr "シリアル番号を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor serial number"
-msgstr "シリアル番号をセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's name"
@@ -733,11 +731,11 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the LED values"
-msgstr "LED置を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the LEDs"
-msgstr "LED置をセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the PCB errata"
@@ -757,27 +755,27 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the dark offset values"
-msgstr "暗いオフセット値を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the dark offset values"
-msgstr "暗いオフセット値をセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Writes the EEPROM with updated values"
-msgstr "EEPROMの値を最新する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Takes a reading"
-msgstr "読み取ります"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to device RGB)"
-msgstr "色を読み込む(デバイスRGB）"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to XYZ)"
-msgstr "各色を読み取ります(XYZ)"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
@@ -785,11 +783,11 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
-msgstr "ブートローダーから再起動"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Flash firmware into the processor"
-msgstr "ファームウェアを最新する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Read EEPROM at a specified address"
@@ -805,39 +803,39 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the pre scale constant"
-msgstr "尺度前の一定を表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
-msgstr "尺度前の一定をセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
-msgstr "尺度前の一定を取り込む"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the post scale constant"
-msgstr "尺度前の一定をセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the flash success"
-msgstr "最新成功にセットする"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Boots from the bootloader into the firmware"
-msgstr "ブート・ローダーからファームウェアを起動する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration map"
-msgstr "センサー校正マップを表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration map"
-msgstr "センサー校正マップをセット"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the hardware version"
-msgstr "デバイスバージョンを表示する"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets an array of raw samples"
@@ -893,11 +891,11 @@ msgstr ""
 
 #. TRANSLATORS: program name
 msgid "Color Management"
-msgstr "カラーマネジメント"
+msgstr ""
 
 #. TRANSLATORS: no colord available
 msgid "No connection to device:"
-msgstr "デバイスが見つかりません"
+msgstr ""
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get samples from device"

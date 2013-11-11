@@ -1,3 +1,15 @@
+Version 0.2.1
+~~~~~~~~~~~~~
+Released: 2013-11-11
+
+New Features:
+ - Add an AppData file for colorhug-flash and colorhug-ccmx (Richard Hughes)
+
+Bugfixes:
+ - Find the new ColorHug VID:PID in the USB example (Richard Hughes)
+ - Do not use g_type_init() for new versions of GLib (Richard Hughes)
+ - Rely on intltool >= 0.50 for GSettings translation (Richard Hughes)
+
 Version 0.2.0
 ~~~~~~~~~~~~~
 Released: 2013-05-01

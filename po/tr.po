@@ -8,1089 +8,900 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-01 11:15+0100\n"
-"PO-Revision-Date: 2013-05-01 10:15+0000\n"
+"POT-Creation-Date: 2013-11-11 16:39+0000\n"
+"PO-Revision-Date: 2013-11-11 16:39+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/colorhug-client/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../data/ch-ccmx.ui.h:1
 msgid "ColorHug CCMX Loader"
 msgstr "ColorHug CCMX Yükleyici"
 
-#: ../data/ch-ccmx.ui.h:2
 msgid "Generate CCMX"
 msgstr "CCMX üret"
 
 #. Button to import a CCMX file
-#: ../data/ch-ccmx.ui.h:4
 msgid "Import file"
 msgstr "Dosya al"
 
-#: ../data/ch-ccmx.ui.h:5
 msgid "Import a local CCMX file"
 msgstr "Yerel CCMX dosyasını al"
 
-#: ../data/ch-ccmx.ui.h:6
 msgid "Refresh the list of matrices from the device"
 msgstr "Cihazdan matrislerin listesini yenile"
 
-#: ../data/ch-ccmx.ui.h:7 ../data/ch-flash.ui.h:2
-#: ../data/ch-spectro-util.ui.h:2
 msgid "Close this window"
 msgstr "Bu pencereyi kapat"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
-#: ../data/ch-ccmx.ui.h:9
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
 msgstr "Düzeltme matrisi seçimi ColorHug doğruluğunu büyütüyor."
 
 #. Only advanced users have to change this...
-#: ../data/ch-ccmx.ui.h:11
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
 msgstr "Varsayılan matrisi kullanmak kullanıcıya en kabul edilebilir kalibrasyon sonucunu verir."
 
 #. Default liquid crystal display matrix
-#: ../data/ch-ccmx.ui.h:13
 msgid "LCD"
 msgstr "LCD"
 
 #. Default cathode ray tube (ask your parents...) matrix
-#: ../data/ch-ccmx.ui.h:15
 msgid "CRT"
 msgstr "CRT"
 
 #. Default projector (beamer etc) matrix
-#: ../data/ch-ccmx.ui.h:17
 msgid "Projector"
 msgstr "Projektör"
 
 #. Default light emitting diode matrix
-#: ../data/ch-ccmx.ui.h:19
 msgid "LED"
 msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1347
 msgid "Please connect your ColorHug"
 msgstr "Lütfen ColorHug'unuzu bağlayın"
 
-#: ../data/ch-ccmx.ui.h:21
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr "Renk kalibrasyon matrisi yaratılması üzere kullanacağınız ekranı seçiniz."
 
-#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1737 ../src/ch-ccmx.c:1764
 msgid "Do not remove the device whilst measurement is in progress"
 msgstr "Cihaz ölçüm yaparken cıhazı çıkarmayınız."
 
-#: ../data/ch-ccmx.ui.h:23
 msgid "Save file"
 msgstr "Dosyayı Kaydet"
 
-#: ../data/ch-ccmx.ui.h:24
 msgid ""
 "Share with\n"
 "the community"
 msgstr "Topluluk ile\npaylaş"
 
-#: ../data/ch-flash.ui.h:1
 msgid "ColorHug Firmware Updater"
 msgstr "ColorHug Yazılım Güncelleyici"
 
 #. Button to update to a newer version of the firmware
-#: ../data/ch-flash.ui.h:4
 msgid "Update!"
 msgstr "Güncelle!"
 
-#: ../data/ch-flash.ui.h:5
 msgid "Flash new firmware to the device"
 msgstr "Yeni yazılımı cihaza flashla"
 
-#: ../data/ch-flash.ui.h:6
 msgid "Firmware version unknown"
 msgstr "Yazılım Sürümü bilinmiyor"
 
 #. We are flashing the device, so we have to be careful
-#: ../data/ch-flash.ui.h:8
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Cihazı çıkarmayın ve bilgisayarı kapatmayınız."
 
-#: ../data/ch-spectro-util.ui.h:1 ../data/colorhug-spectro-util.desktop.in.h:1
 msgid "ColorHug Spectro Utility"
 msgstr "ColorHug Spectro Aracı"
 
-#: ../data/ch-spectro-util.ui.h:3
 msgid "Auto update:"
 msgstr "Otomatik Güncelleme"
 
-#: ../data/ch-spectro-util.ui.h:4
 msgid "Force Refresh"
 msgstr "Zorla Yenile"
 
-#: ../data/ch-spectro-util.ui.h:5
 msgid "Temperature:"
 msgstr "Sıcaklık:"
 
-#: ../data/ch-spectro-util.ui.h:6
 msgid "Interval:"
 msgstr "Zamanlıyıcı:"
 
-#: ../data/ch-spectro-util.ui.h:7
 msgid "This shows the raw sensor reading without calibration"
 msgstr "Bu ham sensor ölçümlerinin kalibre edilmemiş halini gösteriyor."
 
-#: ../data/ch-spectro-util.ui.h:8
 msgid "Raw Sensor"
 msgstr "Ham sensor"
 
-#: ../data/ch-spectro-util.ui.h:9
 msgid "This shows the dark calibration at 25 degrees C"
 msgstr "Bu karanlık kalibrasyonun 25 derecede olduğunu gösteriyor."
 
-#: ../data/ch-spectro-util.ui.h:10
 msgid "Dark Calibration"
 msgstr "Koyu Kalibrasyon"
 
-#: ../data/ch-spectro-util.ui.h:11
 msgid ""
 "This shows the Color Match Function used for the in-device XYZ conversion"
 msgstr "Bu cihazdaki XYZ dönüştürmesindeki Renk Uyum Fonksyionunu gösteriyor."
 
-#: ../data/ch-spectro-util.ui.h:12
 msgid "Color Match"
 msgstr "Renk uyumlu"
 
-#: ../data/ch-spectro-util.ui.h:13
 msgid "This shows the temperature calibration factor"
 msgstr "Bu kalibrasyon faktörü sıcaklığını gösteriyor."
 
-#: ../data/ch-spectro-util.ui.h:14
 msgid "Temperature Compensation"
 msgstr "Sıcaklık telafisi"
 
-#: ../data/ch-spectro-util.ui.h:15
 msgid "This shows the calibrated spectra result"
 msgstr "Bu kalibre edilmiş spektrumları sonucu gösterir"
 
-#: ../data/ch-spectro-util.ui.h:16
 msgid "Spectra Result"
 msgstr "Spectra Sonucu"
 
-#: ../data/colorhug-ccmx.desktop.in.h:1
+msgid ""
+"The ColorHug CCMX loader tool automatically downloads and installs user-"
+"submitted device correction matrices onto your Hughski ColorHug display "
+"colorimeter."
+msgstr ""
+
+msgid ""
+"Selecting a correction matrix maximises the accuracy of the ColorHug but "
+"using the default matrix will give most users an acceptable calibration "
+"result."
+msgstr ""
+
 msgid "CCMX Loader"
 msgstr "CCMX Yükleyici"
 
-#: ../data/colorhug-ccmx.desktop.in.h:2
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "ColorHug cihazının kalibrasyon matrislerini değiştir"
 
-#: ../data/colorhug-docs.desktop.in.h:1
 msgid "ColorHug Documentation"
 msgstr ""
 
-#: ../data/colorhug-docs.desktop.in.h:2
 msgid "Documentation for the ColorHug display colorimeter"
 msgstr ""
 
-#: ../data/colorhug-flash.desktop.in.h:1
+msgid ""
+"The ColorHug flash update tool automatically downloads new versions of the "
+"firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
+"will add features, fix bugs and improve accuracy."
+msgstr ""
+
+msgid ""
+"Using command line arguments, this tool can also flash custom flash files to"
+" the device."
+msgstr ""
+
 msgid "Firmware Updater"
 msgstr "Yazılım Güncelleyici"
 
-#: ../data/colorhug-flash.desktop.in.h:2
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "ColorHug Renkmetre yazılımını güncelle"
 
-#: ../data/colorhug-spectro-util.desktop.in.h:2
 msgid "Play with the ColorHug Spectro"
 msgstr "ColorHug Spectro ile oynayın"
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
 msgstr "Biz test yazılımı güncellemesi varsa günceller yada yoksa güncelleme yapılmaz."
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
 msgstr "Kullanıcıları test yazılımı güncellemesi olup olmadığını göstermek için izin vermeliyiz."
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The remote location of ColorHug files"
 msgstr "Uzak  ColorHug dosyaları konumu"
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr "Yazılım Güncellemesi ve kalibrasyon dosyalarının depolanacağı konum."
 
-#: ../src/ch-ccmx.c:185
 msgid "Failed to create directory"
 msgstr "Dizin yaratma başarısız"
 
-#: ../src/ch-ccmx.c:456 ../src/ch-ccmx.c:1308
 msgid "Failed to download file"
 msgstr "Dosya indirilmesi başarısız oldu"
 
-#: ../src/ch-ccmx.c:464 ../src/ch-ccmx.c:1316
 msgid "File has zero size"
 msgstr "Dosya boyutu sıfır"
 
-#: ../src/ch-ccmx.c:476
 msgid "Failed to load data"
 msgstr "Veri yükleme başarısız"
 
 #. TRANSLATORS: the request failed
-#: ../src/ch-ccmx.c:546 ../src/ch-flash.c:1161 ../src/ch-flash.c:1191
 msgid "Failed to contact ColorHug"
 msgstr "ColorHug bağlantısı başarısız"
 
 #. TRANSLATORS: internal error when setting up HTTP request
-#: ../src/ch-ccmx.c:563 ../src/ch-ccmx.c:1367 ../src/ch-ccmx.c:2090
-#: ../src/ch-flash.c:792 ../src/ch-flash.c:1124
 msgid "Failed to setup message"
 msgstr "Kurulum mesajı başarısız"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:613
 msgid "The ColorHug is missing the factory calibration values."
 msgstr "ColorHug fabrika kalibrasyon değerleri eksik"
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
-#: ../src/ch-ccmx.c:621
 msgid "Device calibration error"
 msgstr "Cihaz kalibrayon hatası"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:626
 msgid "Ignore"
 msgstr "Yoksay"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:629 ../src/ch-ccmx.c:665
 msgid "Repair"
 msgstr "Tamir et"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:649
 msgid "Update the factory calibration values?"
 msgstr "Fabrika kalibrayon değerlerini güncellemesi yap ?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
-#: ../src/ch-ccmx.c:657
 msgid "Device calibration update"
 msgstr "Cihaz kalibrasyon güncellemesi"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:662
 msgid "Cancel"
 msgstr "İptal"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:781
 msgid "Failed to get the calibration data"
 msgstr "Kalibrasyon Veri alması başarız"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
-#: ../src/ch-ccmx.c:847
 msgid "Select correction matrix"
 msgstr "Düzeltme matrisini seç"
 
+msgid "_Cancel"
+msgstr ""
+
+msgid "_Open"
+msgstr ""
+
 #. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-ccmx.c:858
 msgid "Correction matrices"
 msgstr "Düzeltme matrisleri"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:892
 msgid "Failed to set the calibration map"
 msgstr "Kalibrasyon haritası belirlemesi başarısız"
 
-#: ../src/ch-ccmx.c:924
 msgid "Failed to set the calibration matrix"
 msgstr "Kalibrasyon matrisi belirlemesi başarısız oldu"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
-#: ../src/ch-ccmx.c:1065 ../src/ch-ccmx.c:1230
 msgid "No space left on device"
 msgstr "Cihazda boş alan kalmadı"
 
-#: ../src/ch-ccmx.c:1066 ../src/ch-ccmx.c:1232
 msgid "All 64 slots are used up."
 msgstr "Bütün 64 slot kullanımdadır."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
-#: ../src/ch-ccmx.c:1074 ../src/ch-ccmx.c:1241 ../src/ch-flash.c:1102
 msgid "Failed to load file"
 msgstr "Dosya yükleme başarısız"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:1134 ../src/ch-flash.c:1254 ../src/ch-spectro-util.c:249
 msgid "Failed to open device"
 msgstr "Cihaz açılamadı"
 
 #. TRANSLATORS: get the calibration matrices from the device
-#: ../src/ch-ccmx.c:1152
 msgid "Getting calibration from device…"
 msgstr "Cihazdan kalibrasyon alınıyor ..."
 
-#: ../src/ch-ccmx.c:1334
 msgid "Failed to write file"
 msgstr "Dosya yazması başarsız"
 
 #. TRANSLATORS: could not download the directory listing
-#: ../src/ch-ccmx.c:1402
 msgid "Failed to get the list of firmware files"
 msgstr "Yazılım dosyaları listeleri alması başarısız oldu"
 
 #. TRANSLATORS: the directory listing returned no results
-#: ../src/ch-ccmx.c:1410
 msgid "Firmware list has zero size"
 msgstr "Yazılım listesi boyutu sıfır"
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1526
 msgid "Set the device to the calibrate position and click 'Next'."
 msgstr "Cihaz kalibrasyonunu ayarlayın ve 'İleri' düğmesine tıklayın."
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1544
 msgid "Set the device to the surface position and click 'Next'."
 msgstr "Cihaz yüzey pozisyonunu belirleyin ve \"İleri\" tıklayın"
 
-#: ../src/ch-ccmx.c:1721
 msgid "Put the photospectrometer on the screen and click 'Next'."
 msgstr "Fotospektrometreyi cihaz üstüne koyun ve \"İleri\" tıklayın"
 
-#: ../src/ch-ccmx.c:1751
 msgid "Now put the ColorHug on the screen and click 'Next' again."
 msgstr "Şimdi Colorhug cihazını ekrana yerleştirin ve tekrar \"İleri\" tıklayın"
 
-#: ../src/ch-ccmx.c:1808
 msgid "Correction matrix failed to be generated!"
 msgstr "Düzeltme matrisi başarılı olarak yaratılamadı."
 
-#: ../src/ch-ccmx.c:1814
 msgid "Correction matrix successfully generated!"
 msgstr "Düzeltme matrisi başarılı bir şekilde yaratıldı"
 
+msgid "_Save"
+msgstr ""
+
 #. TRANSLATORS: get the list of firmwares from the internet
-#: ../src/ch-ccmx.c:2072
 msgid "Getting latest data from the web…"
 msgstr "En son veriler internetten alınıyor"
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:2539 ../src/ch-flash.c:1435 ../src/ch-main.c:3392
 msgid "Failed to setup networking"
 msgstr "Ağ kurulumu başarısız"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2630 ../src/ch-flash.c:1529 ../src/ch-main.c:3040
-#: ../src/ch-spectro-util.c:528
 msgid "Show extra debugging information"
 msgstr "Extra hata ayıklama bilgilerini göster"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2633
 msgid "Repair the factory calibration matrix"
 msgstr "Fabrika kalibrasyon matrisini tamir et"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:2647 ../src/ch-spectro-util.c:542
 msgid "ColorHug CCMX loader"
 msgstr "ColorHug CCMX yükleyicisi"
 
-#: ../src/ch-ccmx.c:2653 ../src/ch-flash.c:1551 ../src/ch-spectro-util.c:548
 msgid "Failed to parse command line options"
 msgstr "Komut satırı seçenekleri ayrıştırılamadı"
 
-#: ../src/ch-flash.c:72 ../src/ch-flash.c:249
 msgid "ColorHug Updater"
 msgstr "ColorHug Güncelleyici"
 
-#: ../src/ch-flash.c:73
 msgid "Calibration Failed"
 msgstr "Kalibrasyon Başarısız"
 
 #. TRANSLATORS: we broke the device
-#: ../src/ch-flash.c:125
 msgid "Flashing the device failed but the ColorHug is not damaged."
 msgstr "Cihaz flashlama işlemi başarısız oldu ancak ColorHug zarar görmedi."
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
-#: ../src/ch-flash.c:129
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
 msgstr "ColorHug cihazını bilgisayardan kaldırın, yeniden takın ve bu programı yeniden çalıştırın."
 
 #. TRANSLATORS: the user has to be online to get firmware
-#: ../src/ch-flash.c:184
 msgid "Connect to the internet to check for updates"
 msgstr "Güncellemeleri kontrol etmek için internete bağlan"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
-#: ../src/ch-flash.c:230
 msgid "Failed to set the flash success true"
 msgstr "Flash başarı doğrulu belirlemesi başarısız"
 
 #. TRANSLATORS: we've uploaded new firmware
-#: ../src/ch-flash.c:239
 msgid "Device successfully updated"
 msgstr "Cihaz başarılı şekilde güncellendi."
 
-#: ../src/ch-flash.c:250
 msgid "Calibration Completed"
 msgstr "Kalibrasyon Tamamlandı"
 
 #. TRANSLATORS: tell the hardware we succeeded
-#: ../src/ch-flash.c:267
 msgid "Completing firmware upgrade…"
 msgstr "Yazılım güncellemesi tamamlanıyor..."
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
-#: ../src/ch-flash.c:295
 msgid "Failed to startup the ColorHug"
 msgstr "ColorHug başlangcı başarısız"
 
 #. TRANSLATORS: the new firmware will not load
-#: ../src/ch-flash.c:325
 msgid "Failed to boot the ColorHug"
 msgstr "ColorHug önyüklemesi başarısız"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:359
 msgid "Failed to verify the firmware"
 msgstr "Yazılım onaylaması başarısız"
 
 #. TRANSLATORS: boot into the new firmware
-#: ../src/ch-flash.c:376
 msgid "Starting the new firmware…"
 msgstr "Yeni yazılım başlıyor..."
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:419
 msgid "Failed to write the firmware"
 msgstr "Yazılım yazması başarısız"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
-#: ../src/ch-flash.c:429
 msgid "Verifying new firmware…"
 msgstr "Yeni yazılım onaylanıyor..."
 
 #. TRANSLATORS: now write the new firmware chunks
-#: ../src/ch-flash.c:458
 msgid "Writing new firmware…"
 msgstr "Yeni yazılım yazılıyor..."
 
 #. TRANSLATORS: the device failed to come back alive
-#: ../src/ch-flash.c:489
 msgid "Failed to reboot the ColorHug"
 msgstr "ColorHug yeniden başlaması başarısız"
 
 #. TRANSLATORS: we restart the device in bootloader mode
-#: ../src/ch-flash.c:519
 msgid "Failed to reset the ColorHug"
 msgstr "ColorHug resetlemesi başarısız"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
-#: ../src/ch-flash.c:550
 msgid "Starting firmware upgrade…"
 msgstr "Yazılım güncellemesi başlıyor..."
 
 #. TRANSLATORS: failed to get the firmware file
-#: ../src/ch-flash.c:583
 msgid "Failed to get firmware"
 msgstr "Yazılım alma başarısız"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:592
 msgid "Firmware has zero size"
 msgstr "Yazılım sıfır boyuta sahip"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:604
 msgid "Firmware has incorrect checksum"
 msgstr "Yazılım yanlış checksum'a sahip"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:692
 msgid "Warnings about this update"
 msgstr "Bu güncelleme hakkında ki uyarılar"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
-#: ../src/ch-flash.c:700
 msgid "Flash anyway"
 msgstr "Flashla"
 
 #. TRANSLATORS: this is the button text to abort the flash process
-#: ../src/ch-flash.c:702
 msgid "Do not flash"
 msgstr "Flashlama"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
-#: ../src/ch-flash.c:771
 msgid "Downloading update…"
 msgstr "Güncelleme indiriliyor..."
 
 #. TRANSLATORS: the user is already running the latest firmware
-#: ../src/ch-flash.c:866
 msgid "There are no updates available."
 msgstr "Güncelleme mevcut değildir."
 
 #. TRANSLATORS: the user is running an old firmware version
-#: ../src/ch-flash.c:886
 msgid "A firmware update is available."
 msgstr "Yazılım için güncelleme mevcut"
 
 #. TRANSLATORS: the HTTP request failed
-#: ../src/ch-flash.c:910
 msgid "Failed to get the listing of firmware files"
 msgstr "Yazılım dosyaları listelemesi başarısız oldu"
 
 #. TRANSLATORS: we got an invalid response from the server
-#: ../src/ch-flash.c:919
 msgid "The firmware listing has zero size"
 msgstr "Listelenen yazılım boyutu sıfır"
 
 #. TRANSLATORS: the XML file was corrupt
-#: ../src/ch-flash.c:933
 msgid "Failed to parse the update metadata"
 msgstr "Meta verileri güncellemesi başarısız oldu."
 
 #. TRANSLATORS: this is test firmware
-#: ../src/ch-flash.c:960
 msgid "This is a test firmware not intended for general release."
 msgstr "Bu test yazılımı genel sürüme yönelik değildir."
 
 #. TRANSLATORS: all bets are off
-#: ../src/ch-flash.c:962
 msgid "This firmware has not been widely tested and may not work as expected."
 msgstr "Bu yazılım geniş olarak test edilmedi ve beklendiği gibi doğru çalışmayabilir."
 
 #. TRANSLATORS: pre-production hardware
-#: ../src/ch-flash.c:1030
 msgid "Prototype ColorHug Detected"
 msgstr "Prototip ColorHug tespit edildi."
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1034
 msgid "ColorHug Detected"
 msgstr "Colorhug tespit Edildi."
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1038
 msgid "ColorHug Spectro Detected"
 msgstr "ColorHug Spectro Algılandı"
 
 #. TRANSLATORS: fake hardware
-#: ../src/ch-flash.c:1042
 msgid "Emulated ColorHug Detected"
 msgstr "Sanal ColorHug tespit edildi."
 
 #. TRANSLATORS: new-issue hardware
-#: ../src/ch-flash.c:1046
 #, c-format
 msgid "ColorHug v%i Detected"
 msgstr "ColorHug v%i tespit edildi."
 
 #. TRANSLATORS: the device is in bootloader mode
-#: ../src/ch-flash.c:1057
 msgid "Bootloader version"
 msgstr "Önyükleyici Sürümü"
 
 #. TRANSLATORS: the device is in firmware mode
-#: ../src/ch-flash.c:1065
 msgid "Firmware version"
 msgstr "Yazılım Sürümü"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
-#: ../src/ch-flash.c:1084
 msgid "Checking for updates…"
 msgstr "Güncelleme kontrol ediliyor"
 
 #. TRANSLATORS: we've specified a local file
-#: ../src/ch-flash.c:1092
 msgid "Flashing firmware file…"
 msgstr "Yazılım dosyası flashlanıyor..."
 
 #. TRANSLATORS: request the firmware version from the device
-#: ../src/ch-flash.c:1269
 msgid "Getting firmware version…"
 msgstr "Yazılım sürümü alınıyor."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:1308
 msgid "Update details"
 msgstr "Güncelleme Detayları"
 
 #. TRANSLATORS: show the user some markdown formatted text
-#: ../src/ch-flash.c:1401
 msgid "See details about the update"
 msgstr "Güncelleme hakkındaki detayları göster"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-flash.c:1532
 msgid "Flash a specific firmware file"
 msgstr "Belirli yazılım dosyasını flashla"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
-#: ../src/ch-flash.c:1545
 msgid "ColorHug Flash Program"
 msgstr "ColorHug Flash Programı"
 
 #. Translators: This is %i days
-#: ../src/ch-graph-widget.c:342
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: ../src/ch-graph-widget.c:345
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 #. Translators: This is %i hours
-#: ../src/ch-graph-widget.c:350
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/ch-graph-widget.c:353
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: ../src/ch-graph-widget.c:358
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/ch-graph-widget.c:361
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/ch-graph-widget.c:365
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. TRANSLATORS: This is %i Percentage
-#: ../src/ch-graph-widget.c:369
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
-#: ../src/ch-graph-widget.c:372
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. TRANSLATORS: This is %.1f Volts
-#: ../src/ch-graph-widget.c:377
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
-#: ../src/ch-graph-widget.c:380
 #, c-format
 msgid "%.0f nm"
 msgstr "%.0f nm"
 
 #. TRANSLATORS: this is a command alias
-#: ../src/ch-main.c:90
 #, c-format
 msgid "Alias to %s"
 msgstr "%s takma adı"
 
-#: ../src/ch-main.c:168
 msgid "Command not found, valid commands are:"
 msgstr "Komut bulanamadı, geçerli komutlar:"
 
 #. TRANSLATORS: wait for user to press the device into a desk…
-#: ../src/ch-main.c:1670
 msgid "Ensure the ColorHug aperture is blocked"
 msgstr "ColorHug deliğinin kapalı olduğundan emin olun."
 
 #. TRANSLATORS: ask before we set these
-#: ../src/ch-main.c:1712
 msgid "Set these values as the dark offsets"
 msgstr "Bu değerleri karanlık offsets olarak belirle"
 
 #. TRANSLATORS: this is the enabled sensor color
-#: ../src/ch-main.c:1862
 msgid "Color"
 msgstr "Renk"
 
 #. TRANSLATORS: this is the sensor scale factor
-#: ../src/ch-main.c:1866 ../src/ch-main.c:1957
 msgid "Multiplier"
 msgstr "Çarpan"
 
 #. TRANSLATORS: this is the measurement mode
-#: ../src/ch-main.c:1870
 msgid "Measure mode"
 msgstr "Ölçüm Modu"
 
 #. TRANSLATORS: this is the sensor sample time
-#: ../src/ch-main.c:1874 ../src/ch-main.c:1910 ../src/ch-main.c:1961
 msgid "Integral"
 msgstr "İntegral"
 
 #. TRANSLATORS: this is the number of pulses detected
-#: ../src/ch-main.c:1877
 msgid "Pulses"
 msgstr "Sinyaller"
 
-#: ../src/ch-main.c:2082
 msgid "Multiple ColorHug devices are attached"
 msgstr "Birden fazla ColorHug cihazı bağlandı."
 
-#: ../src/ch-main.c:2089
 msgid "No ColorHug devices were found"
 msgstr "ColorHug cihazı bulunamadı"
 
 #. TRANSLATORS: confirmation
-#: ../src/ch-main.c:2291
 msgid "Flash the device?"
 msgstr "Cihazı flashla ? "
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3060
 msgid "Gets the sensor color filter"
 msgstr "Sensör renk filtresini almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3065
 msgid "Sets the sensor color filter"
 msgstr "Sensör renk filtresini belirlemek"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3070
 msgid "Gets the sensor multiplier"
 msgstr "Sensör çarpanını almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3075
 msgid "Sets the sensor multiplier"
 msgstr "Sensör çarpanını belirlemek"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3080
 msgid "Gets the sensor sample read time"
 msgstr "Sensor örnek okuma zamanını al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3085
 msgid "Sets the sensor sample read time"
 msgstr "Sensor örnek okuma zamanını belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3090
 msgid "Gets the sensor firmware version"
 msgstr "Sensör yazılım sürümünü almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3095
 msgid "Gets the sensor calibration matrix"
 msgstr "Sensör kalibrasyon matriksini almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3100
 msgid "Sets the sensor calibration matrix"
 msgstr "Sesnör kalibrasyon matriksini belirlemek"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3105
 msgid "Clear the sensor calibration matrix"
 msgstr "Sensor kalibrasyon matrisini temizle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3110
 msgid "List the sensor calibration matrices"
 msgstr "Sensor kalibrasyon matrisini listele"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3115
 msgid "Sets the sensor calibration matrix from a CCMX file"
 msgstr "CCMX dosyasında ki Sensor kalibrasyon matrisini belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3120
 msgid "Gets the sensor serial number"
 msgstr "Sensör seri numarasını almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3125
 msgid "Sets the sensor serial number"
 msgstr "Sensör seri numarasını belirlemek"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3130
 msgid "Gets the owner's name"
 msgstr "Sahip ismini al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3135
 msgid "Sets the owner's name"
 msgstr "Sahip ismi belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3140
 msgid "Gets the owner's email address"
 msgstr "Sahip e-mail adresini al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3145
 msgid "Sets the owner's email address"
 msgstr "Sahip e-mail adresini belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3150
 msgid "Gets the LED values"
 msgstr "LED değerlerini almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3155
 msgid "Sets the LEDs"
 msgstr "LED'leri belirlemek"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3160
 msgid "Gets the PCB errata"
 msgstr "PCB errata'yı al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3165
 msgid "Sets the PCB errata"
 msgstr "PCB errata'yı belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3170
 msgid "Gets the remote profile SHA1 hash"
 msgstr "Uzak SHA1 Hash profilini al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3175
 msgid "Sets the remote profile SHA1 hash"
 msgstr "Uzak SHA1 Hash profilini belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3180
 msgid "Gets the dark offset values"
 msgstr "Karanlık offset değerini almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3185
 msgid "Sets the dark offset values"
 msgstr "Karanlık offset değerini belirlemek"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3190
 msgid "Writes the EEPROM with updated values"
 msgstr "Güncellenmiş EEPROM değerlerini yazıyor"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3195
 msgid "Takes a reading"
 msgstr "Ölçümleri almak"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3200
 msgid "Takes all color readings (to device RGB)"
 msgstr "Bütün renk ölçümlerini al(RGB cihazından)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3205
 msgid "Takes all color readings (to XYZ)"
 msgstr "Bütün renk ölçümleri alınıyor (XYZ 'e kadar)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3210
 msgid "Takes a spectral reading (saving to SRAM)"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3215
 msgid "Reset the processor back to the bootloader"
 msgstr "İşlemciyi önyükleyiciye dönmek için resetle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3220 ../src/ch-main.c:3225
 msgid "Flash firmware into the processor"
 msgstr "Yazılımı işlemci içine flashla"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3230
 msgid "Read EEPROM at a specified address"
 msgstr "EEPROM daki belirli adreslerini oku"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3235
 msgid "Erase EEPROM at a specified address"
 msgstr "EEPROM daki belirli adreslerini sil"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3240
 msgid "Write EEPROM at a specified address"
 msgstr "EEPROM daki belirli adreslerini yaz"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3245
 msgid "Gets the pre scale constant"
 msgstr "Önceden ölçekli sabitleri al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3250
 msgid "Sets the pre scale constant"
 msgstr "Önceden ölçekli sabitleri belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3255
 msgid "Gets the post scale constant"
 msgstr "Ölçeklendirilmiş sabitleri al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3260
 msgid "Sets the post scale constant"
 msgstr "Ölçeklendirilmiş sabitleri belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3265
 msgid "Sets the flash success"
 msgstr "Flashlama belirlemesi başarılı"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3270
 msgid "Boots from the bootloader into the firmware"
 msgstr "Yazılım içindeki önyükleyicisi önyükleniyor"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3275
 msgid "Gets the sensor calibration map"
 msgstr "Sensor kalibrasyon haritasını al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3280
 msgid "Sets the sensor calibration map"
 msgstr "Sensor kalibrasyon haritasını belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3285
 msgid "Gets the hardware version"
 msgstr "Donanım sürümünü al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3290
 msgid "Gets an array of raw samples"
 msgstr "Ham dizini örneklerini al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3295
 msgid "Downloads a remote profile"
 msgstr "Uzak profilini indir."
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3300
 msgid "Uploads a remote profile"
 msgstr "Uzak profili yükle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3305
 msgid "Uploads a correction matrix"
 msgstr "Doğrulama matrisi yükleniyor"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3310
 msgid "Does a quick self test on the device"
 msgstr "Cihaza hızlı test yap"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3315
 msgid "Gets the sensor measurement mode"
 msgstr "Sensor ölçüm modlarını al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3320
 msgid "Sets the sensor measurement mode"
 msgstr "Sensor ölçüm modlarını belirle"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3325
 msgid "Read SRAM at a specified address"
 msgstr "SRAM'deki belirtilen adresi oku"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3330
 msgid "Write SRAM at a specified address"
 msgstr "SRAM'deki belirtilen adresi yaz"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3335
 msgid "Gets the sensor temperature"
 msgstr "Sensor sıcaklığını al"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3340
 msgid "Gets the ADC Vref values"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3345
 msgid "Gets the CCD calibration values"
 msgstr ""
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3350
 msgid "Sets the CCD calibration values"
 msgstr ""
 
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:3363
 msgid "Color Management"
 msgstr "Renk Yönetimi"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:3380
 msgid "No connection to device:"
 msgstr "Cihaz bağlantısı yok"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-spectro-util.c:128
 msgid "Failed to get samples from device"
 msgstr "Cihazdan örnekleme alımı başarısız oldu."
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-spectro-util.c:202
 msgid "Failed to get raw reading"
 msgstr "Ham ölçüm alımı başarısız"

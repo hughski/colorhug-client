@@ -8,1089 +8,900 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-01 11:15+0100\n"
-"PO-Revision-Date: 2013-05-01 10:15+0000\n"
+"POT-Creation-Date: 2013-11-11 16:39+0000\n"
+"PO-Revision-Date: 2013-11-11 16:39+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: Ukrainian (http://www.transifex.com/projects/p/colorhug-client/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../data/ch-ccmx.ui.h:1
 msgid "ColorHug CCMX Loader"
 msgstr "Завантажувач CCMX ColorHug"
 
-#: ../data/ch-ccmx.ui.h:2
 msgid "Generate CCMX"
 msgstr "Створення CCMX"
 
 #. Button to import a CCMX file
-#: ../data/ch-ccmx.ui.h:4
 msgid "Import file"
 msgstr "Імпортувати файл"
 
-#: ../data/ch-ccmx.ui.h:5
 msgid "Import a local CCMX file"
 msgstr "Імпортувати локальний файл CCMX"
 
-#: ../data/ch-ccmx.ui.h:6
 msgid "Refresh the list of matrices from the device"
 msgstr "Оновити список матриць з пристрою"
 
-#: ../data/ch-ccmx.ui.h:7 ../data/ch-flash.ui.h:2
-#: ../data/ch-spectro-util.ui.h:2
 msgid "Close this window"
 msgstr "Закрити це вікно"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
-#: ../data/ch-ccmx.ui.h:9
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
 msgstr "Вибір матриці виправлення максимально збільшує точність ColorHug."
 
 #. Only advanced users have to change this...
-#: ../data/ch-ccmx.ui.h:11
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
 msgstr "Використання типової матриці переважно дає прийнятні для більшості користувачів результати калібрування."
 
 #. Default liquid crystal display matrix
-#: ../data/ch-ccmx.ui.h:13
 msgid "LCD"
 msgstr "РКД"
 
 #. Default cathode ray tube (ask your parents...) matrix
-#: ../data/ch-ccmx.ui.h:15
 msgid "CRT"
 msgstr "ЕПТ"
 
 #. Default projector (beamer etc) matrix
-#: ../data/ch-ccmx.ui.h:17
 msgid "Projector"
 msgstr "Проектор"
 
 #. Default light emitting diode matrix
-#: ../data/ch-ccmx.ui.h:19
 msgid "LED"
 msgstr "LED"
 
 #. TRANSLATORS: device is not connected to the computer
-#: ../data/ch-ccmx.ui.h:20 ../src/ch-flash.c:1347
 msgid "Please connect your ColorHug"
 msgstr "Будь ласка, з’єднайте з комп’ютером ваш ColorHug"
 
-#: ../data/ch-ccmx.ui.h:21
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr "Виберіть екран, який буде використано для створення матриці калібрування кольорів."
 
-#: ../data/ch-ccmx.ui.h:22 ../src/ch-ccmx.c:1737 ../src/ch-ccmx.c:1764
 msgid "Do not remove the device whilst measurement is in progress"
 msgstr "Не вилучайте пристрій до завершення вимірювань"
 
-#: ../data/ch-ccmx.ui.h:23
 msgid "Save file"
 msgstr "Зберегти файл"
 
-#: ../data/ch-ccmx.ui.h:24
 msgid ""
 "Share with\n"
 "the community"
 msgstr "Поділитися\nзі спільнотою"
 
-#: ../data/ch-flash.ui.h:1
 msgid "ColorHug Firmware Updater"
 msgstr "Засіб оновлення мікропрограми ColorHug"
 
 #. Button to update to a newer version of the firmware
-#: ../data/ch-flash.ui.h:4
 msgid "Update!"
 msgstr "Оновити!"
 
-#: ../data/ch-flash.ui.h:5
 msgid "Flash new firmware to the device"
 msgstr "Записати нову мікропрограму на пристрій"
 
-#: ../data/ch-flash.ui.h:6
 msgid "Firmware version unknown"
 msgstr "Невідома версія мікропрограми"
 
 #. We are flashing the device, so we have to be careful
-#: ../data/ch-flash.ui.h:8
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Не від’єднуйте пристрій від комп’ютера і не вимикайте комп’ютер."
 
-#: ../data/ch-spectro-util.ui.h:1 ../data/colorhug-spectro-util.desktop.in.h:1
 msgid "ColorHug Spectro Utility"
 msgstr "Службова програма Spectro ColorHug"
 
-#: ../data/ch-spectro-util.ui.h:3
 msgid "Auto update:"
 msgstr "Автооновлення:"
 
-#: ../data/ch-spectro-util.ui.h:4
 msgid "Force Refresh"
 msgstr "Примусове освіження"
 
-#: ../data/ch-spectro-util.ui.h:5
 msgid "Temperature:"
 msgstr "Температура:"
 
-#: ../data/ch-spectro-util.ui.h:6
 msgid "Interval:"
 msgstr "Інтервал:"
 
-#: ../data/ch-spectro-util.ui.h:7
 msgid "This shows the raw sensor reading without calibration"
 msgstr "Показує дані датчика без обробки, прочитані без калібрування"
 
-#: ../data/ch-spectro-util.ui.h:8
 msgid "Raw Sensor"
 msgstr "Датчик без обробки"
 
-#: ../data/ch-spectro-util.ui.h:9
 msgid "This shows the dark calibration at 25 degrees C"
 msgstr "Показує калібрування темного за 25°C"
 
-#: ../data/ch-spectro-util.ui.h:10
 msgid "Dark Calibration"
 msgstr "Калібрування темного"
 
-#: ../data/ch-spectro-util.ui.h:11
 msgid ""
 "This shows the Color Match Function used for the in-device XYZ conversion"
 msgstr "Показує функцію відповідності кольорів, використано під час внутрішнього перетворення XYZ на пристрої"
 
-#: ../data/ch-spectro-util.ui.h:12
 msgid "Color Match"
 msgstr "Відповідність кольорів"
 
-#: ../data/ch-spectro-util.ui.h:13
 msgid "This shows the temperature calibration factor"
 msgstr "Показує коефіцієнт калібрування температури"
 
-#: ../data/ch-spectro-util.ui.h:14
 msgid "Temperature Compensation"
 msgstr "Компенсація температури"
 
-#: ../data/ch-spectro-util.ui.h:15
 msgid "This shows the calibrated spectra result"
 msgstr "Показує результат каліброваного спектра"
 
-#: ../data/ch-spectro-util.ui.h:16
 msgid "Spectra Result"
 msgstr "Результат спектра"
 
-#: ../data/colorhug-ccmx.desktop.in.h:1
+msgid ""
+"The ColorHug CCMX loader tool automatically downloads and installs user-"
+"submitted device correction matrices onto your Hughski ColorHug display "
+"colorimeter."
+msgstr ""
+
+msgid ""
+"Selecting a correction matrix maximises the accuracy of the ColorHug but "
+"using the default matrix will give most users an acceptable calibration "
+"result."
+msgstr ""
+
 msgid "CCMX Loader"
 msgstr "Завантажувач CCMX"
 
-#: ../data/colorhug-ccmx.desktop.in.h:2
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Змінити матриці калібрування на пристрої ColorHug"
 
-#: ../data/colorhug-docs.desktop.in.h:1
 msgid "ColorHug Documentation"
-msgstr ""
+msgstr "Документація з ColorHug"
 
-#: ../data/colorhug-docs.desktop.in.h:2
 msgid "Documentation for the ColorHug display colorimeter"
+msgstr "Документація щодо колориметра для дисплеїв ColorHug"
+
+msgid ""
+"The ColorHug flash update tool automatically downloads new versions of the "
+"firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
+"will add features, fix bugs and improve accuracy."
 msgstr ""
 
-#: ../data/colorhug-flash.desktop.in.h:1
+msgid ""
+"Using command line arguments, this tool can also flash custom flash files to"
+" the device."
+msgstr ""
+
 msgid "Firmware Updater"
 msgstr "Оновлення мікропрограми"
 
-#: ../data/colorhug-flash.desktop.in.h:2
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Оновлює мікропрограму на колориметрі ColorHug"
 
-#: ../data/colorhug-spectro-util.desktop.in.h:2
 msgid "Play with the ColorHug Spectro"
 msgstr "Погратися з ColorHug Spectro"
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:1
 msgid "Whether we should update to test firmware"
 msgstr "Чи слід виконувати оновлення для перевірки мікрокоду"
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:2
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
 msgstr "Чи слід перевіряти мікрокод і надавати змогу користувачеві оновлювати його."
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:3
 msgid "The remote location of ColorHug files"
 msgstr "Віддалене сховище файлів ColorHug"
 
-#: ../data/com.hughski.colorhug-client.gschema.xml.in.h:4
 msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr "Адреса, за якою зберігаються оновлення мікрокоду та файли калібрування."
 
-#: ../src/ch-ccmx.c:185
 msgid "Failed to create directory"
 msgstr "Не вдалося створити теку"
 
-#: ../src/ch-ccmx.c:456 ../src/ch-ccmx.c:1308
 msgid "Failed to download file"
 msgstr "Не вдалося завантажити файл"
 
-#: ../src/ch-ccmx.c:464 ../src/ch-ccmx.c:1316
 msgid "File has zero size"
 msgstr "Файл має нульовий розмір"
 
-#: ../src/ch-ccmx.c:476
 msgid "Failed to load data"
 msgstr "Не вдалося завантажити дані"
 
 #. TRANSLATORS: the request failed
-#: ../src/ch-ccmx.c:546 ../src/ch-flash.c:1161 ../src/ch-flash.c:1191
 msgid "Failed to contact ColorHug"
 msgstr "Не вдалося встановити зв’язок з ColorHug"
 
 #. TRANSLATORS: internal error when setting up HTTP request
-#: ../src/ch-ccmx.c:563 ../src/ch-ccmx.c:1367 ../src/ch-ccmx.c:2090
-#: ../src/ch-flash.c:792 ../src/ch-flash.c:1124
 msgid "Failed to setup message"
 msgstr "Не вдалося налаштувати повідомлення"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:613
 msgid "The ColorHug is missing the factory calibration values."
 msgstr "ColorHug не виявлено стандартних значень калібрування."
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
-#: ../src/ch-ccmx.c:621
 msgid "Device calibration error"
 msgstr "Помилка під час калібрування пристрою"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:626
 msgid "Ignore"
 msgstr "Ігнорувати"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:629 ../src/ch-ccmx.c:665
 msgid "Repair"
 msgstr "Відновити"
 
 #. TRANSLATORS: device is broken and needs fixing
-#: ../src/ch-ccmx.c:649
 msgid "Update the factory calibration values?"
 msgstr "Оновити стандартні значення калібрування?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
-#: ../src/ch-ccmx.c:657
 msgid "Device calibration update"
 msgstr "Оновлення даних калібрування пристрою"
 
 #. TRANSLATORS: this is a button
-#: ../src/ch-ccmx.c:662
 msgid "Cancel"
 msgstr "Скасувати"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:781
 msgid "Failed to get the calibration data"
 msgstr "Не вдалося отримати дані калібрування"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
-#: ../src/ch-ccmx.c:847
 msgid "Select correction matrix"
 msgstr "Виберіть матрицю виправлення"
 
+msgid "_Cancel"
+msgstr ""
+
+msgid "_Open"
+msgstr ""
+
 #. TRANSLATORS: filter name on the file->open dialog
-#: ../src/ch-ccmx.c:858
 msgid "Correction matrices"
 msgstr "Матриці виправлення"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
-#: ../src/ch-ccmx.c:892
 msgid "Failed to set the calibration map"
 msgstr "Не вдалося встановити карту калібрування"
 
-#: ../src/ch-ccmx.c:924
 msgid "Failed to set the calibration matrix"
 msgstr "Не вдалося встановити матрицю калібрування"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
-#: ../src/ch-ccmx.c:1065 ../src/ch-ccmx.c:1230
 msgid "No space left on device"
 msgstr "Недостатньо місця на пристрої"
 
-#: ../src/ch-ccmx.c:1066 ../src/ch-ccmx.c:1232
 msgid "All 64 slots are used up."
 msgstr "Всі 64 слоти використано."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
-#: ../src/ch-ccmx.c:1074 ../src/ch-ccmx.c:1241 ../src/ch-flash.c:1102
 msgid "Failed to load file"
 msgstr "Не вдалося завантажити файл"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-ccmx.c:1134 ../src/ch-flash.c:1254 ../src/ch-spectro-util.c:249
 msgid "Failed to open device"
 msgstr "Не вдалося відкрити пристрій"
 
 #. TRANSLATORS: get the calibration matrices from the device
-#: ../src/ch-ccmx.c:1152
 msgid "Getting calibration from device…"
 msgstr "Отримання даних калібрування з пристрою…"
 
-#: ../src/ch-ccmx.c:1334
 msgid "Failed to write file"
 msgstr "Помилка запису до файла"
 
 #. TRANSLATORS: could not download the directory listing
-#: ../src/ch-ccmx.c:1402
 msgid "Failed to get the list of firmware files"
 msgstr "Не вдалося отримати список файлів мікропрограм"
 
 #. TRANSLATORS: the directory listing returned no results
-#: ../src/ch-ccmx.c:1410
 msgid "Firmware list has zero size"
 msgstr "Список мікропрограм має нульовий розмір"
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1526
 msgid "Set the device to the calibrate position and click 'Next'."
 msgstr "Встановіть пристрій у позицію для калібрування і натисніть кнопку «Далі»."
 
 #. TRANSLATORS: the user needs to change something on the device
-#: ../src/ch-ccmx.c:1544
 msgid "Set the device to the surface position and click 'Next'."
 msgstr "Встановіть пристрій у позицію на поверхні і натисніть кнопку «Далі»."
 
-#: ../src/ch-ccmx.c:1721
 msgid "Put the photospectrometer on the screen and click 'Next'."
 msgstr "Спрямуйте фотоспектрометр на екран і натисніть кнопку «Далі»."
 
-#: ../src/ch-ccmx.c:1751
 msgid "Now put the ColorHug on the screen and click 'Next' again."
 msgstr "Тепер спрямуйте ColorHug на екран і натисніть кнопку «Далі»."
 
-#: ../src/ch-ccmx.c:1808
 msgid "Correction matrix failed to be generated!"
 msgstr "Не вдалося створити матрицю виправлення!"
 
-#: ../src/ch-ccmx.c:1814
 msgid "Correction matrix successfully generated!"
 msgstr "Матрицю виправлення успішно створено!"
 
+msgid "_Save"
+msgstr ""
+
 #. TRANSLATORS: get the list of firmwares from the internet
-#: ../src/ch-ccmx.c:2072
 msgid "Getting latest data from the web…"
 msgstr "Отримання найсвіжіших даних з інтернету…"
 
 #. TRANSLATORS: internal error when setting up HTTP
-#: ../src/ch-ccmx.c:2539 ../src/ch-flash.c:1435 ../src/ch-main.c:3392
 msgid "Failed to setup networking"
 msgstr "Не вдалося налаштувати роботу у мережі"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2630 ../src/ch-flash.c:1529 ../src/ch-main.c:3040
-#: ../src/ch-spectro-util.c:528
 msgid "Show extra debugging information"
 msgstr "Показувати додаткові дані для усування вад"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-ccmx.c:2633
 msgid "Repair the factory calibration matrix"
 msgstr "Відновити стандартну матрицю калібрування"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
-#: ../src/ch-ccmx.c:2647 ../src/ch-spectro-util.c:542
 msgid "ColorHug CCMX loader"
 msgstr "Завантажувач CCMX ColorHug"
 
-#: ../src/ch-ccmx.c:2653 ../src/ch-flash.c:1551 ../src/ch-spectro-util.c:548
 msgid "Failed to parse command line options"
 msgstr "Не вдалося обробити параметри командного рядка"
 
-#: ../src/ch-flash.c:72 ../src/ch-flash.c:249
 msgid "ColorHug Updater"
 msgstr "Оновлювач ColorHug"
 
-#: ../src/ch-flash.c:73
 msgid "Calibration Failed"
 msgstr "Помилка калібрування"
 
 #. TRANSLATORS: we broke the device
-#: ../src/ch-flash.c:125
 msgid "Flashing the device failed but the ColorHug is not damaged."
 msgstr "Спроба запису мікропрограми на пристрій завершилася невдало, але запис на ColorHug не пошкоджено."
 
 #. TRANSLATORS: hopefully we can "fix" this automatically
-#: ../src/ch-flash.c:129
 msgid ""
 "Remove the ColorHug device from the computer, reinsert it and re-run this "
 "program."
 msgstr "Від’єднайте пристрій ColorHug від комп’ютера, з’єднайте його знову і перезапустіть цю програму."
 
 #. TRANSLATORS: the user has to be online to get firmware
-#: ../src/ch-flash.c:184
 msgid "Connect to the internet to check for updates"
 msgstr "Встановіть з’єднання з мережею інтернет, щоб виконати пошуку оновлень"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
-#: ../src/ch-flash.c:230
 msgid "Failed to set the flash success true"
 msgstr "Не вдалося встановити стан успішного запису у значення true"
 
 #. TRANSLATORS: we've uploaded new firmware
-#: ../src/ch-flash.c:239
 msgid "Device successfully updated"
 msgstr "Мікропрограму пристрою успішно оновлено"
 
-#: ../src/ch-flash.c:250
 msgid "Calibration Completed"
 msgstr "Калібрування завершено"
 
 #. TRANSLATORS: tell the hardware we succeeded
-#: ../src/ch-flash.c:267
 msgid "Completing firmware upgrade…"
 msgstr "Завершуємо оновлення мікропрограми…"
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
-#: ../src/ch-flash.c:295
 msgid "Failed to startup the ColorHug"
 msgstr "Не вдалося запустити ColorHug"
 
 #. TRANSLATORS: the new firmware will not load
-#: ../src/ch-flash.c:325
 msgid "Failed to boot the ColorHug"
 msgstr "Не вдалося завантажити ColorHug"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:359
 msgid "Failed to verify the firmware"
 msgstr "Не вдалося перевірити мікрокод"
 
 #. TRANSLATORS: boot into the new firmware
-#: ../src/ch-flash.c:376
 msgid "Starting the new firmware…"
 msgstr "Запускаємо нову мікропрограму…"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
-#: ../src/ch-flash.c:419
 msgid "Failed to write the firmware"
 msgstr "Не вдалося записати мікрокод"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
-#: ../src/ch-flash.c:429
 msgid "Verifying new firmware…"
 msgstr "Перевіряємо нову мікропрограму…"
 
 #. TRANSLATORS: now write the new firmware chunks
-#: ../src/ch-flash.c:458
 msgid "Writing new firmware…"
 msgstr "Записуємо нову мікропрограму…"
 
 #. TRANSLATORS: the device failed to come back alive
-#: ../src/ch-flash.c:489
 msgid "Failed to reboot the ColorHug"
 msgstr "Не вдалося перезавантажити ColorHug"
 
 #. TRANSLATORS: we restart the device in bootloader mode
-#: ../src/ch-flash.c:519
 msgid "Failed to reset the ColorHug"
 msgstr "Не вдалося повернути ColorHug у початковий стан"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
-#: ../src/ch-flash.c:550
 msgid "Starting firmware upgrade…"
 msgstr "Розпочинаємо оновлення мікропрограми…"
 
 #. TRANSLATORS: failed to get the firmware file
-#: ../src/ch-flash.c:583
 msgid "Failed to get firmware"
 msgstr "Не вдалося отримати мікропрограму"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:592
 msgid "Firmware has zero size"
 msgstr "Мікропрограма має нульовий розмір"
 
 #. TRANSLATORS: the server gave us an invalid file
-#: ../src/ch-flash.c:604
 msgid "Firmware has incorrect checksum"
 msgstr "Мікропрограма має помилкову контрольну суму"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:692
 msgid "Warnings about this update"
 msgstr "Попередження щодо цього оновлення"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
-#: ../src/ch-flash.c:700
 msgid "Flash anyway"
 msgstr "Записати попри це"
 
 #. TRANSLATORS: this is the button text to abort the flash process
-#: ../src/ch-flash.c:702
 msgid "Do not flash"
 msgstr "Не записувати"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
-#: ../src/ch-flash.c:771
 msgid "Downloading update…"
 msgstr "Отримуємо оновлення…"
 
 #. TRANSLATORS: the user is already running the latest firmware
-#: ../src/ch-flash.c:866
 msgid "There are no updates available."
 msgstr "Оновлень не виявлено."
 
 #. TRANSLATORS: the user is running an old firmware version
-#: ../src/ch-flash.c:886
 msgid "A firmware update is available."
 msgstr "Доступне оновлення мікропрограми."
 
 #. TRANSLATORS: the HTTP request failed
-#: ../src/ch-flash.c:910
 msgid "Failed to get the listing of firmware files"
 msgstr "Не вдалося отримати список файлів мікропрограм"
 
 #. TRANSLATORS: we got an invalid response from the server
-#: ../src/ch-flash.c:919
 msgid "The firmware listing has zero size"
 msgstr "Список мікропрограм має нульовий розмір"
 
 #. TRANSLATORS: the XML file was corrupt
-#: ../src/ch-flash.c:933
 msgid "Failed to parse the update metadata"
 msgstr "Не вдалося обробити метадані оновлення"
 
 #. TRANSLATORS: this is test firmware
-#: ../src/ch-flash.c:960
 msgid "This is a test firmware not intended for general release."
 msgstr "Це тестова версія мікрокоду, яку не призначено для загального використання."
 
 #. TRANSLATORS: all bets are off
-#: ../src/ch-flash.c:962
 msgid "This firmware has not been widely tested and may not work as expected."
 msgstr "Цей мікрокод не було достатньою мірою перевірено, він може працювати не так, як повинен."
 
 #. TRANSLATORS: pre-production hardware
-#: ../src/ch-flash.c:1030
 msgid "Prototype ColorHug Detected"
 msgstr "Виявлено прототип ColorHug"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1034
 msgid "ColorHug Detected"
 msgstr "Виявлено ColorHug"
 
 #. TRANSLATORS: first release hardware
-#: ../src/ch-flash.c:1038
 msgid "ColorHug Spectro Detected"
 msgstr "Виявлено ColorHug Spectro"
 
 #. TRANSLATORS: fake hardware
-#: ../src/ch-flash.c:1042
 msgid "Emulated ColorHug Detected"
 msgstr "Виявлено емулятор ColorHug"
 
 #. TRANSLATORS: new-issue hardware
-#: ../src/ch-flash.c:1046
 #, c-format
 msgid "ColorHug v%i Detected"
 msgstr "Виявлено ColorHug версії %i"
 
 #. TRANSLATORS: the device is in bootloader mode
-#: ../src/ch-flash.c:1057
 msgid "Bootloader version"
 msgstr "Версія завантажувача"
 
 #. TRANSLATORS: the device is in firmware mode
-#: ../src/ch-flash.c:1065
 msgid "Firmware version"
 msgstr "Версія мікропрограми"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
-#: ../src/ch-flash.c:1084
 msgid "Checking for updates…"
 msgstr "Шукаємо оновлення…"
 
 #. TRANSLATORS: we've specified a local file
-#: ../src/ch-flash.c:1092
 msgid "Flashing firmware file…"
 msgstr "Записуємо файл мікропрограми…"
 
 #. TRANSLATORS: request the firmware version from the device
-#: ../src/ch-flash.c:1269
 msgid "Getting firmware version…"
 msgstr "Отримуємо дані щодо версії мікропрограми…"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
-#: ../src/ch-flash.c:1308
 msgid "Update details"
 msgstr "Дані щодо оновлення"
 
 #. TRANSLATORS: show the user some markdown formatted text
-#: ../src/ch-flash.c:1401
 msgid "See details about the update"
 msgstr "Докладніше про оновлення"
 
 #. TRANSLATORS: command line option
-#: ../src/ch-flash.c:1532
 msgid "Flash a specific firmware file"
 msgstr "Записати вказаний файл мікропрограми"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
-#: ../src/ch-flash.c:1545
 msgid "ColorHug Flash Program"
 msgstr "Програма запису мікропрограм ColorHug"
 
 #. Translators: This is %i days
-#: ../src/ch-graph-widget.c:342
 #, c-format
 msgid "%id"
 msgstr "%i д."
 
 #. Translators: This is %i days %02i hours
-#: ../src/ch-graph-widget.c:345
 #, c-format
 msgid "%id%02ih"
 msgstr "%i д. %02i г."
 
 #. Translators: This is %i hours
-#: ../src/ch-graph-widget.c:350
 #, c-format
 msgid "%ih"
 msgstr "%i г."
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/ch-graph-widget.c:353
 #, c-format
 msgid "%ih%02im"
 msgstr "%i г. %02i хв."
 
 #. Translators: This is %2i minutes
-#: ../src/ch-graph-widget.c:358
 #, c-format
 msgid "%2im"
 msgstr "%2i хв."
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/ch-graph-widget.c:361
 #, c-format
 msgid "%2im%02i"
 msgstr "%2i хв. %02i с."
 
 #. Translators: This is %2i seconds
-#: ../src/ch-graph-widget.c:365
 #, c-format
 msgid "%2is"
 msgstr "%2i с."
 
 #. TRANSLATORS: This is %i Percentage
-#: ../src/ch-graph-widget.c:369
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
-#: ../src/ch-graph-widget.c:372
 #, c-format
 msgid "%.1fW"
 msgstr "%.1f Вт"
 
 #. TRANSLATORS: This is %.1f Volts
-#: ../src/ch-graph-widget.c:377
 #, c-format
 msgid "%.1fV"
 msgstr "%.1f В"
 
 #. TRANSLATORS: This is %.1f nanometers
-#: ../src/ch-graph-widget.c:380
 #, c-format
 msgid "%.0f nm"
 msgstr "%.0f нм"
 
 #. TRANSLATORS: this is a command alias
-#: ../src/ch-main.c:90
 #, c-format
 msgid "Alias to %s"
 msgstr "Псевдонім %s"
 
-#: ../src/ch-main.c:168
 msgid "Command not found, valid commands are:"
 msgstr "Такої команди не знайдено. Можливі команди:"
 
 #. TRANSLATORS: wait for user to press the device into a desk…
-#: ../src/ch-main.c:1670
 msgid "Ensure the ColorHug aperture is blocked"
 msgstr "Переконайтеся, що апертуру ColorHug заблоковано"
 
 #. TRANSLATORS: ask before we set these
-#: ../src/ch-main.c:1712
 msgid "Set these values as the dark offsets"
 msgstr "Встановити ці для компенсації темряви"
 
 #. TRANSLATORS: this is the enabled sensor color
-#: ../src/ch-main.c:1862
 msgid "Color"
 msgstr "Колір"
 
 #. TRANSLATORS: this is the sensor scale factor
-#: ../src/ch-main.c:1866 ../src/ch-main.c:1957
 msgid "Multiplier"
 msgstr "Коефіцієнт"
 
 #. TRANSLATORS: this is the measurement mode
-#: ../src/ch-main.c:1870
 msgid "Measure mode"
 msgstr "Режим вимірювання"
 
 #. TRANSLATORS: this is the sensor sample time
-#: ../src/ch-main.c:1874 ../src/ch-main.c:1910 ../src/ch-main.c:1961
 msgid "Integral"
 msgstr "Загалом"
 
 #. TRANSLATORS: this is the number of pulses detected
-#: ../src/ch-main.c:1877
 msgid "Pulses"
 msgstr "Пульсації"
 
-#: ../src/ch-main.c:2082
 msgid "Multiple ColorHug devices are attached"
 msgstr "З комп’ютером з’єднано декілька пристроїв ColorHug"
 
-#: ../src/ch-main.c:2089
 msgid "No ColorHug devices were found"
 msgstr "Не знайдено пристроїв ColorHug"
 
 #. TRANSLATORS: confirmation
-#: ../src/ch-main.c:2291
 msgid "Flash the device?"
 msgstr "Записати на пристрій?"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3060
 msgid "Gets the sensor color filter"
 msgstr "Отримує фільтр кольорів датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3065
 msgid "Sets the sensor color filter"
 msgstr "Встановлює фільтр кольорів датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3070
 msgid "Gets the sensor multiplier"
 msgstr "Отримує множник датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3075
 msgid "Sets the sensor multiplier"
 msgstr "Встановлює множник датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3080
 msgid "Gets the sensor sample read time"
 msgstr "Отримує час читання виміру датчиком"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3085
 msgid "Sets the sensor sample read time"
 msgstr "Встановлює час читання виміру датчиком"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3090
 msgid "Gets the sensor firmware version"
 msgstr "Отримує номер версії мікропрограми"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3095
 msgid "Gets the sensor calibration matrix"
 msgstr "Отримує матрицю калібрування датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3100
 msgid "Sets the sensor calibration matrix"
 msgstr "Встановлює матрицю калібрування датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3105
 msgid "Clear the sensor calibration matrix"
 msgstr "Спорожнює матрицю калібрування датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3110
 msgid "List the sensor calibration matrices"
 msgstr "Показує список матриць калібрування датчиків"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3115
 msgid "Sets the sensor calibration matrix from a CCMX file"
 msgstr "Встановлює матрицю калібрування датчика з файла CCMX"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3120
 msgid "Gets the sensor serial number"
 msgstr "Отримує серійний номер датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3125
 msgid "Sets the sensor serial number"
 msgstr "Встановлює серійний номер датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3130
 msgid "Gets the owner's name"
 msgstr "Отримати ім’я власника"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3135
 msgid "Sets the owner's name"
 msgstr "Встановити ім’я власника"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3140
 msgid "Gets the owner's email address"
 msgstr "Отримати адресу електронної пошти власника"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3145
 msgid "Sets the owner's email address"
 msgstr "Встановити адресу електронної пошти власника"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3150
 msgid "Gets the LED values"
 msgstr "Отримує стан індикаторів"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3155
 msgid "Sets the LEDs"
 msgstr "Встановлює стан індикаторів"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3160
 msgid "Gets the PCB errata"
 msgstr "Отримати помилки PCB"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3165
 msgid "Sets the PCB errata"
 msgstr "Встановити помилки PCB"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3170
 msgid "Gets the remote profile SHA1 hash"
 msgstr "Отримати хеш SHA1 віддаленого профілю"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3175
 msgid "Sets the remote profile SHA1 hash"
 msgstr "Встановити хеш SHA1 віддаленого профілю"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3180
 msgid "Gets the dark offset values"
 msgstr "Отримує значення компенсації темряви"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3185
 msgid "Sets the dark offset values"
 msgstr "Встановлює значення компенсації темряви"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3190
 msgid "Writes the EEPROM with updated values"
 msgstr "Записує до EEPROM оновлені значення"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3195
 msgid "Takes a reading"
 msgstr "Виконує читання"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3200
 msgid "Takes all color readings (to device RGB)"
 msgstr "Виконує читання всіх кольорів (до RGB пристрою)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3205
 msgid "Takes all color readings (to XYZ)"
 msgstr "Виконує читання всіх кольорів (до XYZ)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3210
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
+msgstr "Виконує читання спектральних даних (збереження до SRAM)"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3215
 msgid "Reset the processor back to the bootloader"
 msgstr "Повернути процесор до стану запуску завантажувача"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3220 ../src/ch-main.c:3225
 msgid "Flash firmware into the processor"
 msgstr "Записати мікропрограму до процесора"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3230
 msgid "Read EEPROM at a specified address"
 msgstr "Прочитати EEPROM за вказаною адресою"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3235
 msgid "Erase EEPROM at a specified address"
 msgstr "Витерти EEPROM за вказаною адресою"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3240
 msgid "Write EEPROM at a specified address"
 msgstr "Записати EEPROM за вказаною адресою"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3245
 msgid "Gets the pre scale constant"
 msgstr "Отримує сталу після масштабування"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3250
 msgid "Sets the pre scale constant"
 msgstr "Встановлює сталу до масштабування"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3255
 msgid "Gets the post scale constant"
 msgstr "Отримує сталу після масштабування"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3260
 msgid "Sets the post scale constant"
 msgstr "Встановлює сталу після масштабування"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3265
 msgid "Sets the flash success"
 msgstr "Встановлює результат запису мікропрограми"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3270
 msgid "Boots from the bootloader into the firmware"
 msgstr "Завантажує мікропрограму"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3275
 msgid "Gets the sensor calibration map"
 msgstr "Отримує карту калібрування датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3280
 msgid "Sets the sensor calibration map"
 msgstr "Встановлює карту калібрування датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3285
 msgid "Gets the hardware version"
 msgstr "Отримує дані щодо версії обладнання"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3290
 msgid "Gets an array of raw samples"
 msgstr "Отримує масив необроблених зразків"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3295
 msgid "Downloads a remote profile"
 msgstr "Отримати віддалений профіль"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3300
 msgid "Uploads a remote profile"
 msgstr "Вивантажити віддалений профіль"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3305
 msgid "Uploads a correction matrix"
 msgstr "Вивантажити матрицю виправлення"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3310
 msgid "Does a quick self test on the device"
 msgstr "Виконати швидку самоперевірку пристрою"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3315
 msgid "Gets the sensor measurement mode"
 msgstr "Отримати дані щодо режиму датчика вимірювання"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3320
 msgid "Sets the sensor measurement mode"
 msgstr "Встановити дані щодо режиму датчика вимірювання"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3325
 msgid "Read SRAM at a specified address"
 msgstr "Прочитати дані SRAM за вказаною адресою"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3330
 msgid "Write SRAM at a specified address"
 msgstr "Записати дані SRAM за вказаною адресою"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3335
 msgid "Gets the sensor temperature"
 msgstr "Отримати температуру датчика"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3340
 msgid "Gets the ADC Vref values"
-msgstr ""
+msgstr "Отримує значення Vref ADC"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3345
 msgid "Gets the CCD calibration values"
-msgstr ""
+msgstr "Отримує значення калібрування ПЗЗ"
 
 #. TRANSLATORS: command description
-#: ../src/ch-main.c:3350
 msgid "Sets the CCD calibration values"
-msgstr ""
+msgstr "Встановлює значення калібрування ПЗЗ"
 
 #. TRANSLATORS: program name
-#: ../src/ch-main.c:3363
 msgid "Color Management"
 msgstr "Керування кольорами"
 
 #. TRANSLATORS: no colord available
-#: ../src/ch-main.c:3380
 msgid "No connection to device:"
 msgstr "Немає з’єднання з пристроєм:"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-spectro-util.c:128
 msgid "Failed to get samples from device"
 msgstr "Не вдалося отримати зразки з пристрою"
 
 #. TRANSLATORS: permissions error perhaps?
-#: ../src/ch-spectro-util.c:202
 msgid "Failed to get raw reading"
 msgstr "Не вдалося виконати читання без обробки"
