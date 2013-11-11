@@ -846,8 +846,8 @@ ch_ccmx_get_profile_filename (GtkWindow *window)
 	/* TRANSLATORS: dialog for chosing the correction matrix */
 	dialog = gtk_file_chooser_dialog_new (_("Select correction matrix"), window,
 					      GTK_FILE_CHOOSER_ACTION_OPEN,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					      _("_Cancel"), GTK_RESPONSE_CANCEL,
+					      _("_Open"), GTK_RESPONSE_ACCEPT,
 					      NULL);
 	gtk_file_chooser_set_create_folders (GTK_FILE_CHOOSER(dialog), FALSE);
 
@@ -1921,8 +1921,8 @@ ch_ccmx_gen_done_save_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	dialog = gtk_file_chooser_dialog_new ("Save File",
 					      window,
 					      GTK_FILE_CHOOSER_ACTION_SAVE,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+					      _("_Cancel"), GTK_RESPONSE_CANCEL,
+					      _("_Save"), GTK_RESPONSE_ACCEPT,
 					      NULL);
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
