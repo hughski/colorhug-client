@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2013 Richard Hughes <richard@hughsie.com> -->
+<application>
+  <id type="desktop">colorhug-ccmx.desktop</id>
+  <licence>CC0</licence>
+  <name>ColorHug CCMX Loader</name>
+  <description>
+    <_p>
+      The ColorHug CCMX loader tool automatically downloads and installs
+      user-submitted device correction matrices onto your Hughski ColorHug
+      display colorimeter.
+    </_p>
+    <_p>
+      Selecting a correction matrix maximises the accuracy of the ColorHug but
+      using the default matrix will give most users an acceptable calibration
+      result.
+    </_p>
+  </description>
+  <screenshots>
+    <screenshot type="default">http://www.hughski.com/img/appdata-colorhug-ccmx.png</screenshot>
+  </screenshots>
+  <url type="homepage">http://www.hughski.com/</url>
+  <updatecontact>richard_at_hughsie.com</updatecontact>
+</application>

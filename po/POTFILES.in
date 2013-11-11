@@ -2,6 +2,7 @@
 [type: gettext/glade]data/ch-ccmx.ui
 [type: gettext/glade]data/ch-flash.ui
 [type: gettext/glade]data/ch-spectro-util.ui
+data/colorhug-ccmx.appdata.xml.in
 data/colorhug-ccmx.desktop.in
 data/colorhug-docs.desktop.in
 data/colorhug-flash.appdata.xml.in
