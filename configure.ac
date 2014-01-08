@@ -54,12 +54,10 @@ AC_SUBST(LT_AGE)
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff
 dnl ---------------------------------------------------------------------------
-AM_GNU_GETTEXT_VERSION([0.17])
-AM_GNU_GETTEXT([external])
-
 GETTEXT_PACKAGE=AC_PACKAGE_NAME
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE(GETTEXT_PACKAGE, "AC_PACKAGE_NAME", [foo])
+AM_GLIB_GNU_GETTEXT
 
 dnl ---------------------------------------------------------------------------
 dnl - Use strict options (default enabled for devs, disabled in releases)
