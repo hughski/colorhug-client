@@ -2374,6 +2374,71 @@ out:
 }
 
 /**
+ * ch_util_get_dac_value:
+ **/
+static gboolean
+ch_util_get_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble dac_value = 0.0f;
+
+	/* get from HW */
+	ch_device_queue_get_dac_value (priv->device_queue,
+				       priv->device,
+				       &dac_value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+	g_print ("DAC value: %f\n", dac_value);
+out:
+	return ret;
+}
+
+/**
+ * ch_util_set_dac_value:
+ **/
+static gboolean
+ch_util_set_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	gdouble dac_value;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		ret = FALSE;
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'value'");
+		goto out;
+	}
+	dac_value = g_ascii_strtod (values[0], NULL);
+	if (dac_value < -0x7fff || dac_value > 0x7fff) {
+		ret = FALSE;
+		g_set_error (error, 1, 0,
+			     "invalid dac value %f",
+			     dac_value);
+		goto out;
+	}
+
+	/* set to HW */
+	ch_device_queue_set_dac_value (priv->device_queue,
+				       priv->device,
+				       dac_value);
+	ret = ch_device_queue_process (priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       error);
+	if (!ret)
+		goto out;
+
+out:
+	return ret;
+}
+
+/**
  * ch_util_get_adc_vrefs:
  **/
 static gboolean
@@ -3251,6 +3316,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the pre scale constant"),
 		     ch_util_set_pre_scale);
+	ch_util_add (priv->cmd_array,
+		     "get-dac-value",
+		     /* TRANSLATORS: command description */
+		     _("Gets the DAC value"),
+		     ch_util_get_dac_value);
+	ch_util_add (priv->cmd_array,
+		     "set-dac-value",
+		     /* TRANSLATORS: command description */
+		     _("Sets the DAC value"),
+		     ch_util_set_dac_value);
 	ch_util_add (priv->cmd_array,
 		     "get-post-scale",
 		     /* TRANSLATORS: command description */

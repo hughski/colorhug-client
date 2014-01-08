@@ -89,7 +89,7 @@ dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.31.10 gobject-2.0 gmodule-2.0 gio-2.0 >= 2.25.9)
 PKG_CHECK_MODULES(GUSB, gusb >= 0.1.2)
 PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.12.0)
-PKG_CHECK_MODULES(COLORD, colord >= 0.1.31)
+PKG_CHECK_MODULES(COLORD, colord >= 1.1.6)
 PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
