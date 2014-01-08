@@ -22,6 +22,8 @@ colorhug_spectro_util_SOURCES =				\
 	ch-graph-widget.h				\
 	ch-point-obj.c					\
 	ch-point-obj.h					\
+	ch-spectro-resources.c				\
+	ch-spectro-resources.h				\
 	ch-spectro-util.c
 
 colorhug_spectro_util_LDADD =				\
@@ -140,15 +142,23 @@ ch-ccmx-resources.c: colorhug-ccmx.gresource.xml ../data/ch-ccmx.ui
 ch-ccmx-resources.h: colorhug-ccmx.gresource.xml
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-ccmx.gresource.xml
 
+ch-spectro-resources.c: colorhug-spectro.gresource.xml ../data/ch-spectro-util.ui
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-spectro.gresource.xml
+ch-spectro-resources.h: colorhug-spectro.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-spectro.gresource.xml
+
 BUILT_SOURCES =						\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
 	ch-flash-resources.c				\
-	ch-flash-resources.h
+	ch-flash-resources.h				\
+	ch-spectro-resources.c				\
+	ch-spectro-resources.h
 
 EXTRA_DIST =						\
 	colorhug-ccmx.gresource.xml			\
-	colorhug-flash.gresource.xml
+	colorhug-flash.gresource.xml			\
+	colorhug-spectro.gresource.xml
 
 MAINTAINERCLEANFILES =					\
 	$(srcdir)/libchshared.a
