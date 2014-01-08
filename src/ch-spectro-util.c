@@ -297,8 +297,8 @@ ch_util_add_graphs (ChCcmxPrivate *priv)
 		      NULL);
 	gtk_box_pack_start (box, priv->graph_raw, TRUE, TRUE, 0);
 	gtk_widget_set_margin_top (priv->graph_raw, 6);
-	gtk_widget_set_margin_left (priv->graph_raw, 12);
-	gtk_widget_set_margin_right (priv->graph_raw, 12);
+	gtk_widget_set_margin_start (priv->graph_raw, 12);
+	gtk_widget_set_margin_end (priv->graph_raw, 12);
 	gtk_widget_set_size_request (priv->graph_raw, 800, 450);
 	gtk_widget_show (priv->graph_raw);
 
@@ -316,8 +316,8 @@ ch_util_add_graphs (ChCcmxPrivate *priv)
 		      NULL);
 	gtk_box_pack_start (box, priv->graph_dark_cal, TRUE, TRUE, 0);
 	gtk_widget_set_margin_top (priv->graph_raw, 6);
-	gtk_widget_set_margin_left (priv->graph_dark_cal, 12);
-	gtk_widget_set_margin_right (priv->graph_dark_cal, 12);
+	gtk_widget_set_margin_start (priv->graph_dark_cal, 12);
+	gtk_widget_set_margin_end (priv->graph_dark_cal, 12);
 	gtk_widget_set_size_request (priv->graph_dark_cal, 800, 450);
 	gtk_widget_show (priv->graph_dark_cal);
 
@@ -335,8 +335,8 @@ ch_util_add_graphs (ChCcmxPrivate *priv)
 		      NULL);
 	gtk_box_pack_start (box, priv->graph_cmf, TRUE, TRUE, 0);
 	gtk_widget_set_margin_top (priv->graph_raw, 6);
-	gtk_widget_set_margin_left (priv->graph_cmf, 12);
-	gtk_widget_set_margin_right (priv->graph_cmf, 12);
+	gtk_widget_set_margin_start (priv->graph_cmf, 12);
+	gtk_widget_set_margin_end (priv->graph_cmf, 12);
 	gtk_widget_set_size_request (priv->graph_cmf, 800, 450);
 	gtk_widget_show (priv->graph_cmf);
 
@@ -354,8 +354,8 @@ ch_util_add_graphs (ChCcmxPrivate *priv)
 		      NULL);
 	gtk_box_pack_start (box, priv->graph_temp_comp, TRUE, TRUE, 0);
 	gtk_widget_set_margin_top (priv->graph_raw, 6);
-	gtk_widget_set_margin_left (priv->graph_temp_comp, 12);
-	gtk_widget_set_margin_right (priv->graph_temp_comp, 12);
+	gtk_widget_set_margin_start (priv->graph_temp_comp, 12);
+	gtk_widget_set_margin_end (priv->graph_temp_comp, 12);
 	gtk_widget_set_size_request (priv->graph_temp_comp, 800, 450);
 	gtk_widget_show (priv->graph_temp_comp);
 
@@ -373,8 +373,8 @@ ch_util_add_graphs (ChCcmxPrivate *priv)
 		      NULL);
 	gtk_box_pack_start (box, priv->graph_result, TRUE, TRUE, 0);
 	gtk_widget_set_margin_top (priv->graph_raw, 6);
-	gtk_widget_set_margin_left (priv->graph_result, 12);
-	gtk_widget_set_margin_right (priv->graph_result, 12);
+	gtk_widget_set_margin_start (priv->graph_result, 12);
+	gtk_widget_set_margin_end (priv->graph_result, 12);
 	gtk_widget_set_size_request (priv->graph_result, 800, 450);
 	gtk_widget_show (priv->graph_result);
 }
