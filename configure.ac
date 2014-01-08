@@ -1,13 +1,7 @@
-# Copyright (C) 2011 Richard Hughes <richard@hughsie.com>
+# Copyright (C) 2011-2014 Richard Hughes <richard@hughsie.com>
 AC_PREREQ(2.63)
 
-m4_define([ch_major_version], [0])
-m4_define([ch_minor_version], [2])
-m4_define([ch_micro_version], [2])
-m4_define([ch_version],
-          [ch_major_version.ch_minor_version.ch_micro_version])
-
-AC_INIT([colorhug-client],[ch_version],[http://www.hughsie.com])
+AC_INIT([colorhug-client],[0.2.2],[http://www.hughsie.com])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar])
 AC_CONFIG_HEADERS([config.h])
@@ -26,30 +20,6 @@ IT_PROG_INTLTOOL([0.50.0])
 GLIB_GSETTINGS
 GOBJECT_INTROSPECTION_CHECK([0.9.8])
 YELP_HELP_INIT
-
-# use this in ch-version.h
-CH_MAJOR_VERSION=ch_major_version
-CH_MINOR_VERSION=ch_minor_version
-CH_MICRO_VERSION=ch_micro_version
-AC_SUBST(CH_MAJOR_VERSION)
-AC_SUBST(CH_MINOR_VERSION)
-AC_SUBST(CH_MICRO_VERSION)
-
-# libtool versioning - this applies to libcolorhug
-#
-# See http://sources.redhat.com/autobook/autobook/autobook_91.html#SEC91 for details
-#
-# increment;
-# CURRENT	If the API or ABI interface has changed (reset REVISION to 0)
-# REVISION	If the API and ABI remains the same, but bugs are fixed.
-# AGE		If libzif can be linked into executables which can be
-# 		built with previous versions of this library. Don't use.
-LT_CURRENT=1
-LT_REVISION=3
-LT_AGE=0
-AC_SUBST(LT_CURRENT)
-AC_SUBST(LT_REVISION)
-AC_SUBST(LT_AGE)
 
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff
