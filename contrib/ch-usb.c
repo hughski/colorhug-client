@@ -200,7 +200,7 @@ main (int argc, char *argv[])
 	}
 
 	/* take reading with default matrix for LCD */
-	memset (xyz, 0x00, sizeof (3*4));
+	memset (xyz, 0x00, 3*4);
 	rc = write_command (handle,
 			    0x23,	/* cmd */
 			    (char *) &calibration_index, /* in buffer */
