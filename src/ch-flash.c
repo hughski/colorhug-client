@@ -721,9 +721,9 @@ ch_flash_get_device_download_kind (ChFlashPrivate *priv)
 	case CH_DEVICE_MODE_FIRMWARE:
 		str = "colorhug";
 		break;
-	case CH_DEVICE_MODE_BOOTLOADER_SPECTRO:
-	case CH_DEVICE_MODE_FIRMWARE_SPECTRO:
-		str = "colorhug-spectro";
+	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
+	case CH_DEVICE_MODE_FIRMWARE_PLUS:
+		str = "colorhug-plus";
 		break;
 	default:
 		str = "unknown";
@@ -1035,7 +1035,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 		break;
 	case 0x02:
 		/* TRANSLATORS: first release hardware */
-		str = g_strdup (_("ColorHug Spectro Detected"));
+		str = g_strdup (_("ColorHug+ Detected"));
 		break;
 	case 0xff:
 		/* TRANSLATORS: fake hardware */

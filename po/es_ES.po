@@ -100,7 +100,7 @@ msgstr "Versión de firmware desconocida"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "No desconecte el dispositivo y no apague el ordenador."
 
-msgid "ColorHug Spectro Utility"
+msgid "ColorHug+ Utility"
 msgstr ""
 
 msgid "Auto update:"
@@ -187,7 +187,7 @@ msgstr "Actualización de Firmware"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Actualizar el firmware del colorímetro ColorHug"
 
-msgid "Play with the ColorHug Spectro"
+msgid "Play with the ColorHug+"
 msgstr ""
 
 msgid "Whether we should update to test firmware"
@@ -508,7 +508,7 @@ msgid "ColorHug Detected"
 msgstr "ColorHug detectado"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
+msgid "ColorHug+ Detected"
 msgstr ""
 
 #. TRANSLATORS: fake hardware

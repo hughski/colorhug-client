@@ -99,8 +99,8 @@ msgstr "韌體版本未知"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "請不要拔除裝置，也不要關閉電腦。"
 
-msgid "ColorHug Spectro Utility"
-msgstr "ColorHug Spectro 公用程式"
+msgid "ColorHug+ Utility"
+msgstr "ColorHug+ 公用程式"
 
 msgid "Auto update:"
 msgstr "自動更新："
@@ -186,8 +186,8 @@ msgstr "韌體更新器"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "更新 ColorHug 色度計上的韌體"
 
-msgid "Play with the ColorHug Spectro"
-msgstr "把玩 ColorHug Spectro"
+msgid "Play with the ColorHug+"
+msgstr "把玩 ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "是否應更新至測試用韌體"
@@ -507,8 +507,8 @@ msgid "ColorHug Detected"
 msgstr "偵測到 ColorHug"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
-msgstr "偵測到 ColorHug Spectro"
+msgid "ColorHug+ Detected"
+msgstr "偵測到 ColorHug+"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"

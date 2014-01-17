@@ -100,7 +100,7 @@ msgstr "ファームウェア バージョンを表示出来ませんでした"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "注意！でバイスを抜いたりコンピュタの電源を切ったりするべからず"
 
-msgid "ColorHug Spectro Utility"
+msgid "ColorHug+ Utility"
 msgstr ""
 
 msgid "Auto update:"
@@ -187,7 +187,7 @@ msgstr "ファームウェア最新機能"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "ファームウェア バジョンを最新する"
 
-msgid "Play with the ColorHug Spectro"
+msgid "Play with the ColorHug+"
 msgstr ""
 
 msgid "Whether we should update to test firmware"
@@ -508,7 +508,7 @@ msgid "ColorHug Detected"
 msgstr "ファームウェア一覧の容量は０です"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
+msgid "ColorHug+ Detected"
 msgstr ""
 
 #. TRANSLATORS: fake hardware

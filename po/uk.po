@@ -99,7 +99,7 @@ msgstr "Невідома версія мікропрограми"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Не від’єднуйте пристрій від комп’ютера і не вимикайте комп’ютер."
 
-msgid "ColorHug Spectro Utility"
+msgid "ColorHug+ Utility"
 msgstr "Службова програма Spectro ColorHug"
 
 msgid "Auto update:"
@@ -186,8 +186,8 @@ msgstr "Оновлення мікропрограми"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Оновлює мікропрограму на колориметрі ColorHug"
 
-msgid "Play with the ColorHug Spectro"
-msgstr "Погратися з ColorHug Spectro"
+msgid "Play with the ColorHug+"
+msgstr "Погратися з ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "Чи слід виконувати оновлення для перевірки мікрокоду"
@@ -507,8 +507,8 @@ msgid "ColorHug Detected"
 msgstr "Виявлено ColorHug"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
-msgstr "Виявлено ColorHug Spectro"
+msgid "ColorHug+ Detected"
+msgstr "Виявлено ColorHug+"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"

@@ -1,6 +1,6 @@
 [Desktop Entry]
-_Name=ColorHug Spectro Utility
-_Comment=Play with the ColorHug Spectro
+_Name=ColorHug+ Utility
+_Comment=Play with the ColorHug+
 Icon=colorhug-spectro-util
 Exec=colorhug-spectro-util %F
 Terminal=false

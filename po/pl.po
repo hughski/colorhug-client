@@ -100,7 +100,7 @@ msgstr "Nieznana wersja oprogramowania sprzętowego"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Nie należy odłączać urządzenia ani wyłączać komputera."
 
-msgid "ColorHug Spectro Utility"
+msgid "ColorHug+ Utility"
 msgstr "Narzędzie spektrometrii ColorHug"
 
 msgid "Auto update:"
@@ -187,7 +187,7 @@ msgstr "Aktualizacja oprogramowania sprzętowego"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Aktualizuje oprogramowanie sprzętowe kolorymetru ColorHug"
 
-msgid "Play with the ColorHug Spectro"
+msgid "Play with the ColorHug+"
 msgstr "Zabawa ze spektrometrią ColorHug"
 
 msgid "Whether we should update to test firmware"
@@ -508,7 +508,7 @@ msgid "ColorHug Detected"
 msgstr "Wykryto urządzenie ColorHug"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
+msgid "ColorHug+ Detected"
 msgstr "Wykryto spektrometrię ColorHug"
 
 #. TRANSLATORS: fake hardware

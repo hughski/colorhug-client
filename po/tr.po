@@ -99,8 +99,8 @@ msgstr "Yazılım Sürümü bilinmiyor"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Cihazı çıkarmayın ve bilgisayarı kapatmayınız."
 
-msgid "ColorHug Spectro Utility"
-msgstr "ColorHug Spectro Aracı"
+msgid "ColorHug+ Utility"
+msgstr "ColorHug+ Aracı"
 
 msgid "Auto update:"
 msgstr "Otomatik Güncelleme"
@@ -186,8 +186,8 @@ msgstr "Yazılım Güncelleyici"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "ColorHug Renkmetre yazılımını güncelle"
 
-msgid "Play with the ColorHug Spectro"
-msgstr "ColorHug Spectro ile oynayın"
+msgid "Play with the ColorHug+"
+msgstr "ColorHug+ ile oynayın"
 
 msgid "Whether we should update to test firmware"
 msgstr "Biz test yazılımı güncellemesi varsa günceller yada yoksa güncelleme yapılmaz."
@@ -507,8 +507,8 @@ msgid "ColorHug Detected"
 msgstr "Colorhug tespit Edildi."
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
-msgstr "ColorHug Spectro Algılandı"
+msgid "ColorHug+ Detected"
+msgstr "ColorHug+ Algılandı"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"

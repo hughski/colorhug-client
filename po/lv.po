@@ -99,8 +99,8 @@ msgstr "Programmaparatūras versija nav zināma"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
 
-msgid "ColorHug Spectro Utility"
-msgstr "ColorHug Spectro utilīta"
+msgid "ColorHug+ Utility"
+msgstr "ColorHug+ utilīta"
 
 msgid "Auto update:"
 msgstr "Automātiski atjaunināt:"
@@ -186,8 +186,8 @@ msgstr "Aparātprogrammatūras atjauninātājs"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
-msgid "Play with the ColorHug Spectro"
-msgstr "Spēlēties ar ColorHug Spectro"
+msgid "Play with the ColorHug+"
+msgstr "Spēlēties ar ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "Vai vajadzētu atjaunināt uz testa aparātprogrammatūru"
@@ -507,8 +507,8 @@ msgid "ColorHug Detected"
 msgstr "Atrasts ColorHug"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
-msgstr "Ir atklāts ColorHug Spectro"
+msgid "ColorHug+ Detected"
+msgstr "Ir atklāts ColorHug+"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"

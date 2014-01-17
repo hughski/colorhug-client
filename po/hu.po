@@ -99,8 +99,8 @@ msgstr "Firmware verzió ismeretlen"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne húzza ki és ne kapcsolja ki a számítógépét."
 
-msgid "ColorHug Spectro Utility"
-msgstr "ColorHug Spectro kisalkalmazás"
+msgid "ColorHug+ Utility"
+msgstr "ColorHug+ kisalkalmazás"
 
 msgid "Auto update:"
 msgstr "Automatikus frissítés:"
@@ -186,8 +186,8 @@ msgstr "Firmware Frissítő"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
 
-msgid "Play with the ColorHug Spectro"
-msgstr "játék a ColorHug Spectro-val"
+msgid "Play with the ColorHug+"
+msgstr "játék a ColorHug+-val"
 
 msgid "Whether we should update to test firmware"
 msgstr "Mindenképp frissítenie kell, hogy tesztelni tudja a firmware-t"
@@ -507,8 +507,8 @@ msgid "ColorHug Detected"
 msgstr "ColorHug észlelve"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
-msgstr "ColorHug Spectro észlelve"
+msgid "ColorHug+ Detected"
+msgstr "ColorHug+ észlelve"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"

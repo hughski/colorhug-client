@@ -510,9 +510,9 @@ ch_ccmx_get_device_download_kind (ChCcmxPrivate *priv)
 	case CH_DEVICE_MODE_FIRMWARE:
 		str = "colorhug";
 		break;
-	case CH_DEVICE_MODE_BOOTLOADER_SPECTRO:
-	case CH_DEVICE_MODE_FIRMWARE_SPECTRO:
-		str = "colorhug-spectro";
+	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
+	case CH_DEVICE_MODE_FIRMWARE_PLUS:
+		str = "colorhug-plus";
 		break;
 	default:
 		str = "unknown";

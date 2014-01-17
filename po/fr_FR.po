@@ -101,8 +101,8 @@ msgstr "Version du micrologiciel inconnue"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne pas débrancher l'appareil et ne pas éteindre l'ordinateur."
 
-msgid "ColorHug Spectro Utility"
-msgstr "Outil ColorHug Spectro"
+msgid "ColorHug+ Utility"
+msgstr "Outil ColorHug+"
 
 msgid "Auto update:"
 msgstr "Mise à jour automatique:"
@@ -188,8 +188,8 @@ msgstr "Gestionnaire de mise à jour du micrologiciel"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Mettre à jour le micrologiciel du colorimètre ColorHug"
 
-msgid "Play with the ColorHug Spectro"
-msgstr "Jouer avec ColorHug Spectro"
+msgid "Play with the ColorHug+"
+msgstr "Jouer avec ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "Option de mise à jour vers un micrologiciel de test"
@@ -509,8 +509,8 @@ msgid "ColorHug Detected"
 msgstr "ColorHug détecté"
 
 #. TRANSLATORS: first release hardware
-msgid "ColorHug Spectro Detected"
-msgstr "ColorHug Spectro détecté"
+msgid "ColorHug+ Detected"
+msgstr "ColorHug+ détecté"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
