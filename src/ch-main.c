@@ -2373,6 +2373,7 @@ out:
 	return ret;
 }
 
+#if CD_CHECK_VERSION(1,2,0)
 /**
  * ch_util_get_dac_value:
  **/
@@ -2397,7 +2398,9 @@ ch_util_get_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 out:
 	return ret;
 }
+#endif
 
+#if CD_CHECK_VERSION(1,2,0)
 /**
  * ch_util_set_dac_value:
  **/
@@ -2437,6 +2440,7 @@ ch_util_set_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 out:
 	return ret;
 }
+#endif
 
 /**
  * ch_util_get_adc_vrefs:
@@ -3316,6 +3320,7 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the pre scale constant"),
 		     ch_util_set_pre_scale);
+#if CD_CHECK_VERSION(1,2,0)
 	ch_util_add (priv->cmd_array,
 		     "get-dac-value",
 		     /* TRANSLATORS: command description */
@@ -3326,6 +3331,7 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the DAC value"),
 		     ch_util_set_dac_value);
+#endif
 	ch_util_add (priv->cmd_array,
 		     "get-post-scale",
 		     /* TRANSLATORS: command description */
