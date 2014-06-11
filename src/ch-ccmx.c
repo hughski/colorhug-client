@@ -2142,8 +2142,9 @@ ch_ccmx_gen_update_ui (ChCcmxPrivate *priv)
 static void
 ch_ccmx_check_sensor (ChCcmxPrivate *priv, CdSensor *sensor)
 {
-	/* is ColorHug sensor */
-	if (cd_sensor_get_kind (sensor) == CD_SENSOR_KIND_COLORHUG) {
+	/* is ColorHug colorimeter */
+	if (cd_sensor_get_kind (sensor) == CD_SENSOR_KIND_COLORHUG ||
+	    cd_sensor_get_kind (sensor) == CD_SENSOR_KIND_COLORHUG2) {
 		if (priv->gen_sensor_colorhug != NULL)
 			g_object_unref (priv->gen_sensor_colorhug);
 		priv->gen_sensor_colorhug = g_object_ref (sensor);
@@ -2155,6 +2156,7 @@ ch_ccmx_check_sensor (ChCcmxPrivate *priv, CdSensor *sensor)
 
 	/* is spectral sensor */
 	if (cd_sensor_get_kind (sensor) == CD_SENSOR_KIND_COLOR_MUNKI_PHOTO ||
+	    cd_sensor_get_kind (sensor) == CD_SENSOR_KIND_COLORHUG_PLUS ||
 	    cd_sensor_get_kind (sensor) == CD_SENSOR_KIND_I1_PRO) {
 		if (priv->gen_sensor_spectral != NULL)
 			g_object_unref (priv->gen_sensor_spectral);
