@@ -1687,15 +1687,17 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value_zero);
-	ch_device_queue_set_integral_time (priv->device_queue,
-					   priv->device,
-					   CH_INTEGRAL_TIME_VALUE_MAX);
-	ch_device_queue_set_post_scale (priv->device_queue,
-					priv->device,
-					1);
-	ch_device_queue_set_multiplier (priv->device_queue,
-					priv->device,
-					CH_FREQ_SCALE_100);
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_set_integral_time (priv->device_queue,
+						   priv->device,
+						   CH_INTEGRAL_TIME_VALUE_MAX);
+		ch_device_queue_set_post_scale (priv->device_queue,
+						priv->device,
+						1);
+		ch_device_queue_set_multiplier (priv->device_queue,
+						priv->device,
+						CH_FREQ_SCALE_100);
+	}
 	ch_device_queue_take_readings (priv->device_queue,
 				       priv->device,
 				       &value);
@@ -1890,12 +1892,14 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 integral_time = 0;
 
 	/* get from HW */
-	ch_device_queue_set_multiplier (priv->device_queue,
-					priv->device,
-					CH_FREQ_SCALE_100);
-	ch_device_queue_get_integral_time (priv->device_queue,
-					   priv->device,
-					   &integral_time);
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_set_multiplier (priv->device_queue,
+						priv->device,
+						CH_FREQ_SCALE_100);
+		ch_device_queue_get_integral_time (priv->device_queue,
+						   priv->device,
+						   &integral_time);
+	}
 	ch_device_queue_take_readings (priv->device_queue,
 				       priv->device,
 				       &value);
@@ -1905,10 +1909,10 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 				       error);
 	if (!ret)
 		goto out;
-
-	/* TRANSLATORS: this is the sensor sample time */
-	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
-
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		/* TRANSLATORS: this is the sensor sample time */
+		g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
+	}
 	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 out:
 	return ret;
@@ -1936,12 +1940,14 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* get from HW */
-	ch_device_queue_get_multiplier (priv->device_queue,
-					priv->device,
-					&multiplier);
-	ch_device_queue_get_integral_time (priv->device_queue,
-					   priv->device,
-					   &integral_time);
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_get_multiplier (priv->device_queue,
+						priv->device,
+						&multiplier);
+		ch_device_queue_get_integral_time (priv->device_queue,
+						   priv->device,
+						   &integral_time);
+	}
 	ch_device_queue_take_readings_xyz (priv->device_queue,
 					   priv->device,
 					   calibration_index,
@@ -1953,12 +1959,14 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (!ret)
 		goto out;
 
-	/* TRANSLATORS: this is the sensor scale factor */
-	g_print ("%s:\t%s\n", _("Multiplier"),
-		 ch_multiplier_to_string (multiplier));
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		/* TRANSLATORS: this is the sensor scale factor */
+		g_print ("%s:\t%s\n", _("Multiplier"),
+			 ch_multiplier_to_string (multiplier));
 
-	/* TRANSLATORS: this is the sensor sample time */
-	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
+		/* TRANSLATORS: this is the sensor sample time */
+		g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
+	}
 
 	g_print ("X:%.5f Y:%.5f Z:%.5f\n", value.X, value.Y, value.Z);
 out:
