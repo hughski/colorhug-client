@@ -508,8 +508,11 @@ ch_ccmx_get_device_download_kind (ChCcmxPrivate *priv)
 	case CH_DEVICE_MODE_LEGACY:
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_FIRMWARE:
-	case CH_DEVICE_MODE_FIRMWARE2:
 		str = "colorhug";
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER2:
+	case CH_DEVICE_MODE_FIRMWARE2:
+		str = "colorhug2";
 		break;
 	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
 	case CH_DEVICE_MODE_FIRMWARE_PLUS:

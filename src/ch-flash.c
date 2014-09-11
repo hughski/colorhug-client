@@ -721,6 +721,10 @@ ch_flash_get_device_download_kind (ChFlashPrivate *priv)
 	case CH_DEVICE_MODE_FIRMWARE:
 		str = "colorhug";
 		break;
+	case CH_DEVICE_MODE_BOOTLOADER2:
+	case CH_DEVICE_MODE_FIRMWARE2:
+		str = "colorhug2";
+		break;
 	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
 	case CH_DEVICE_MODE_FIRMWARE_PLUS:
 		str = "colorhug-plus";
@@ -1034,6 +1038,10 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 		str = g_strdup (_("ColorHug Detected"));
 		break;
 	case 0x02:
+		/* TRANSLATORS: second release hardware */
+		str = g_strdup (_("ColorHug2 Detected"));
+		break;
+	case 0x03:
 		/* TRANSLATORS: first release hardware */
 		str = g_strdup (_("ColorHug+ Detected"));
 		break;
