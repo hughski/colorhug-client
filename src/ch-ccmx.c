@@ -508,6 +508,7 @@ ch_ccmx_get_device_download_kind (ChCcmxPrivate *priv)
 	case CH_DEVICE_MODE_LEGACY:
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_FIRMWARE:
+	case CH_DEVICE_MODE_FIRMWARE2:
 		str = "colorhug";
 		break;
 	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
@@ -2577,10 +2578,15 @@ ch_ccmx_device_added_cb (GUsbDeviceList *list,
 	g_debug ("Added: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
-	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE ||
-	    ch_device_get_mode (device) == CH_DEVICE_MODE_LEGACY) {
+	switch (ch_device_get_mode (device)) {
+	case CH_DEVICE_MODE_LEGACY:
+	case CH_DEVICE_MODE_FIRMWARE:
+	case CH_DEVICE_MODE_FIRMWARE2:
 		priv->device = g_object_ref (device);
 		ch_ccmx_got_device (priv);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -2595,11 +2601,16 @@ ch_ccmx_device_removed_cb (GUsbDeviceList *list,
 	g_debug ("Removed: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
-	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE ||
-	    ch_device_get_mode (device) == CH_DEVICE_MODE_LEGACY) {
+	switch (ch_device_get_mode (device)) {
+	case CH_DEVICE_MODE_LEGACY:
+	case CH_DEVICE_MODE_FIRMWARE:
+	case CH_DEVICE_MODE_FIRMWARE2:
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
 		priv->device = NULL;
+		break;
+	default:
+		break;
 	}
 }
 
