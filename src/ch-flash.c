@@ -537,6 +537,23 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 {
 	const gchar *title;
 	GtkWidget *widget;
+	gboolean ret;
+	GError *error = NULL;
+
+	/* check the firmware is designed for this device */
+	ret = ch_device_check_firmware	(priv->device,
+					 priv->firmware_data,
+					 priv->firmware_len,
+					 &error);
+	if (!ret) {
+		/* TRANSLATORS: the user tried to flash a firmware on the wrong
+		 * kind of device, e.g. a ColorHug2 fw on a ColorHug+ */
+		title = _("Wrong kind of firmware!");
+		ch_flash_error_dialog (priv, title, error->message);
+		g_error_free (error);
+		ch_flash_set_flash_success_0 (priv);
+		return;
+	}
 
 	/* we can shortcut as we're already in bootloader mode */
 	if (priv->firmware_version[0] == 0) {

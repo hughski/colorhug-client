@@ -2167,6 +2167,11 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		goto out;
 	}
 
+	/* check the blob contains the right magic string */
+	ret = ch_device_check_firmware (priv->device, data, len, error);
+	if (!ret)
+		goto out;
+
 	/* boot to bootloader */
 	ch_device_queue_reset (priv->device_queue, priv->device);
 	ret = ch_device_queue_process (priv->device_queue,
