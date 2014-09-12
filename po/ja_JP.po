@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/projects/p/colorhug-client/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -436,6 +436,11 @@ msgstr "再起動失敗しました"
 msgid "Failed to reset the ColorHug"
 msgstr "リセット失敗しました"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr ""
@@ -506,6 +511,10 @@ msgstr "原型カラーハッグ発見"
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
 msgstr "ファームウェア一覧の容量は０です"
+
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
@@ -810,6 +819,14 @@ msgstr "尺度前の一定を表示する"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "尺度前の一定をセットする"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

@@ -5,12 +5,13 @@
 # Translators:
 # oleg koptev <koptev.oleg@gmail.com>, 2012
 # oleg koptev <koptev.oleg@gmail.com>, 2012
+# Serge Vylekzhanin <vylekzhanin@mail.ru>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/colorhug-client/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +24,7 @@ msgid "ColorHug CCMX Loader"
 msgstr "Загрузчик ColorHug CCMX"
 
 msgid "Generate CCMX"
-msgstr ""
+msgstr "Генерировать CCMX"
 
 #. Button to import a CCMX file
 msgid "Import file"
@@ -41,7 +42,7 @@ msgstr "Закрыть окно"
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
-msgstr "Использование калибровочных матриц повышает точность ColorHug."
+msgstr "Использование корректировочных матриц повышает точность ColorHug."
 
 #. Only advanced users have to change this...
 msgid ""
@@ -70,31 +71,31 @@ msgid "Please connect your ColorHug"
 msgstr "Подключите ColorHug"
 
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr ""
+msgstr "Выберите экран, который будет использован для создания матрицы калибровки цветов."
 
 msgid "Do not remove the device whilst measurement is in progress"
-msgstr ""
+msgstr "Не отключайте устройство во время процесса измерения"
 
 msgid "Save file"
-msgstr ""
+msgstr "Сохранить файл"
 
 msgid ""
 "Share with\n"
 "the community"
-msgstr ""
+msgstr "Поделиться с\nобществом"
 
 msgid "ColorHug Firmware Updater"
-msgstr "Обновление прошивки ColorHug"
+msgstr "Обновление микропрограммы ColorHug"
 
 #. Button to update to a newer version of the firmware
 msgid "Update!"
 msgstr "Обновить!"
 
 msgid "Flash new firmware to the device"
-msgstr "Записать новую прошивку в устройство"
+msgstr "Прошить новую микропрограмму в устройство"
 
 msgid "Firmware version unknown"
-msgstr "Неизвестная версия прошивки"
+msgstr "Неизвестная версия микропрограммы"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
@@ -104,59 +105,59 @@ msgid "ColorHug+ Utility"
 msgstr ""
 
 msgid "Auto update:"
-msgstr ""
+msgstr "Автообновление:"
 
 msgid "Force Refresh"
-msgstr ""
+msgstr "Принудительное обновление"
 
 msgid "Temperature:"
-msgstr ""
+msgstr "Температура:"
 
 msgid "Interval:"
-msgstr ""
+msgstr "Интервал:"
 
 msgid "This shows the raw sensor reading without calibration"
-msgstr ""
+msgstr "Показывает данные датчика без обработки, считанные без калибровки"
 
 msgid "Raw Sensor"
-msgstr ""
+msgstr "Датчик без обработки"
 
 msgid "This shows the dark calibration at 25 degrees C"
-msgstr ""
+msgstr "Показывает калибровку тёмного при 25°C"
 
 msgid "Dark Calibration"
-msgstr ""
+msgstr "Калибровка тёмного"
 
 msgid ""
 "This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr ""
+msgstr "Показывает функцию соответствия цветов, используемую при внутреннем преобразовании XYZ в устройстве"
 
 msgid "Color Match"
-msgstr ""
+msgstr "Соответствие цветов"
 
 msgid "This shows the temperature calibration factor"
-msgstr ""
+msgstr "Показывает температурный калибровочный коэффициент"
 
 msgid "Temperature Compensation"
-msgstr ""
+msgstr "Компенсация температуры"
 
 msgid "This shows the calibrated spectra result"
-msgstr ""
+msgstr "Показывает калиброванный результат спектра"
 
 msgid "Spectra Result"
-msgstr ""
+msgstr "Результат спектра"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "Загрузочный инструмент ColorHug CCMX автоматически скачивает и устанавливает предоставленные другими пользователями корректировочные матрицы устройства на Ваш дисплейный колориметр Hughski ColorHug."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "Использование корректировочной матрицы увеличивает точность ColorHug, но использование матрицы по умолчанию даст большинству пользователей приемлемый результат калибровки."
 
 msgid "CCMX Loader"
 msgstr "Загрузчик CCMX"
@@ -165,44 +166,44 @@ msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Сохранить калибровочные матрицы в устройстве"
 
 msgid "ColorHug Documentation"
-msgstr ""
+msgstr "Документация ColorHug"
 
 msgid "Documentation for the ColorHug display colorimeter"
-msgstr ""
+msgstr "Документация для дисплейного колориметра ColorHug"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "Инструмент обновления микропрограммы ColorHug автоматически скачивает новые версии микропрограмм на Ваш дисплейный колориметр Hughski ColorHug. Новые выпуски микропрограмм будут добавлять новые свойства, исправить ошибки и улучшать точность."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "Используя аргументы командной строки, этот инструмент также может прошивать пользовательские микропрограммы в устройство."
 
 msgid "Firmware Updater"
-msgstr "Обновление прошивки"
+msgstr "Обновление микропрограммы"
 
 msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Обновить прошивку в колориметре ColorHug"
+msgstr "Обновить микропрограмму в колориметре ColorHug"
 
 msgid "Play with the ColorHug+"
 msgstr ""
 
 msgid "Whether we should update to test firmware"
-msgstr ""
+msgstr "Должны ли мы обновляться на тестовую микропрограмму"
 
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr ""
+msgstr "Должны ли мы показывать тестовые версии микропрограмм и разрешать пользователю обновляться на них."
 
 msgid "The remote location of ColorHug files"
-msgstr ""
+msgstr "Удалённое расположение файлов ColorHug"
 
 msgid ""
 "The location of where firmware updates and calibration files are stored."
-msgstr ""
+msgstr "Место расположения файлов калибровки и обновлений микропрограмм."
 
 msgid "Failed to create directory"
 msgstr "Не удалось создать директорию"
@@ -257,17 +258,17 @@ msgstr "Отмена"
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to get the calibration data"
-msgstr ""
+msgstr "Не удалось получить данные калибровки"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 msgid "Select correction matrix"
 msgstr "Выбрать корректировочную матрицу"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Отменить"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Открыть"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -300,45 +301,45 @@ msgstr "Не удалось открыть устройство"
 
 #. TRANSLATORS: get the calibration matrices from the device
 msgid "Getting calibration from device…"
-msgstr ""
+msgstr "Получение калибровки от устройства…"
 
 msgid "Failed to write file"
 msgstr "Не удалось записать файл"
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of firmware files"
-msgstr "Не удалось получить список файлов с прошивками"
+msgstr "Не удалось получить список файлов с микропрограммами"
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
-msgstr "Список прошивок имеет нулевой размер"
+msgstr "Список микропрограмм имеет нулевой размер"
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the calibrate position and click 'Next'."
-msgstr ""
+msgstr "Установите устройство в положение калибровки и нажмите «Далее»."
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the surface position and click 'Next'."
-msgstr ""
+msgstr "Установите устройство в положение на поверхности и нажмите «Далее»."
 
 msgid "Put the photospectrometer on the screen and click 'Next'."
-msgstr ""
+msgstr "Поместите фотоспектрометр на экран и нажмите «Далее»."
 
 msgid "Now put the ColorHug on the screen and click 'Next' again."
-msgstr ""
+msgstr "Теперь поместите ColorHug на экран и нажмите «Далее» снова."
 
 msgid "Correction matrix failed to be generated!"
-msgstr ""
+msgstr "Не удалось создать корректировочную матрицу!"
 
 msgid "Correction matrix successfully generated!"
-msgstr ""
+msgstr "Корректировочная матрица успешно создана!"
 
 msgid "_Save"
-msgstr ""
+msgstr "_Сохранить"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
-msgstr ""
+msgstr "Получение последних данных из Сети…"
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
@@ -361,10 +362,10 @@ msgid "Failed to parse command line options"
 msgstr "Не удалось разобрать параметры командной строки"
 
 msgid "ColorHug Updater"
-msgstr ""
+msgstr "Обновление ColorHug"
 
 msgid "Calibration Failed"
-msgstr ""
+msgstr "Ошибка калибровки"
 
 #. TRANSLATORS: we broke the device
 msgid "Flashing the device failed but the ColorHug is not damaged."
@@ -383,18 +384,18 @@ msgstr "Подключиться к Интернету для проверки �
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
 msgid "Failed to set the flash success true"
-msgstr "Не удалось установить положительный результат прошивки"
+msgstr "Не удалось установить положительный результат прошивки микропрограммы"
 
 #. TRANSLATORS: we've uploaded new firmware
 msgid "Device successfully updated"
 msgstr "Устройство успешно обновлено"
 
 msgid "Calibration Completed"
-msgstr ""
+msgstr "Калибровка завершена"
 
 #. TRANSLATORS: tell the hardware we succeeded
 msgid "Completing firmware upgrade…"
-msgstr ""
+msgstr "Завершение обновления микропрограммы…"
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
@@ -408,25 +409,25 @@ msgstr "Не удалось загрузить ColorHug"
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Не удалось проверить микропрограмму"
 
 #. TRANSLATORS: boot into the new firmware
 msgid "Starting the new firmware…"
-msgstr ""
+msgstr "Запуск новой микропрограммы…"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Не удалось записать микропрограмму"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
 msgid "Verifying new firmware…"
-msgstr ""
+msgstr "Проверка новой микропрограммы…"
 
 #. TRANSLATORS: now write the new firmware chunks
 msgid "Writing new firmware…"
-msgstr ""
+msgstr "Запись новой микропрограммы…"
 
 #. TRANSLATORS: the device failed to come back alive
 msgid "Failed to reboot the ColorHug"
@@ -436,21 +437,26 @@ msgstr "Не удалось перезагрузить ColorHug"
 msgid "Failed to reset the ColorHug"
 msgstr "Не удалось сбросить ColorHug"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
-msgstr ""
+msgstr "Запуск обновления микропрограммы…"
 
 #. TRANSLATORS: failed to get the firmware file
 msgid "Failed to get firmware"
-msgstr "Не удалось получить прошивку"
+msgstr "Не удалось получить микропрограмму"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has zero size"
-msgstr "Прошивка имеет нулевой размер"
+msgstr "Микропрограмма имеет нулевой размер"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has incorrect checksum"
-msgstr "Прошивка имеет неверную контрольную сумму"
+msgstr "Микропрограмма имеет неверную контрольную сумму"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
@@ -469,7 +475,7 @@ msgstr "Не прошивать"
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
 msgid "Downloading update…"
-msgstr ""
+msgstr "Загрузка обновления…"
 
 #. TRANSLATORS: the user is already running the latest firmware
 msgid "There are no updates available."
@@ -477,15 +483,15 @@ msgstr "Нет доступных обновлений."
 
 #. TRANSLATORS: the user is running an old firmware version
 msgid "A firmware update is available."
-msgstr "Доступно обновление прошивки."
+msgstr "Доступно обновление микропрограммы."
 
 #. TRANSLATORS: the HTTP request failed
 msgid "Failed to get the listing of firmware files"
-msgstr "Не удалось получить список файлов с прошивками"
+msgstr "Не удалось получить список файлов с микропрограммами"
 
 #. TRANSLATORS: we got an invalid response from the server
 msgid "The firmware listing has zero size"
-msgstr "Список прошивок имеет нулевой размер"
+msgstr "Список микропрограмм имеет нулевой размер"
 
 #. TRANSLATORS: the XML file was corrupt
 msgid "Failed to parse the update metadata"
@@ -493,11 +499,11 @@ msgstr "Не удалось проанализировать метаданны�
 
 #. TRANSLATORS: this is test firmware
 msgid "This is a test firmware not intended for general release."
-msgstr ""
+msgstr "Это тестовая микропрограмма, которая не предназначена для общего пользования."
 
 #. TRANSLATORS: all bets are off
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Эта микропрограмма не была испытана как следует и может не работать так, как ожидалось."
 
 #. TRANSLATORS: pre-production hardware
 msgid "Prototype ColorHug Detected"
@@ -506,6 +512,10 @@ msgstr "Обнаружен прототип ColorHug"
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
 msgstr "Обнаружен ColorHug"
+
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
@@ -526,20 +536,20 @@ msgstr "Версия загрузчика"
 
 #. TRANSLATORS: the device is in firmware mode
 msgid "Firmware version"
-msgstr "Версия прошивки"
+msgstr "Версия микропрограммы"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
 msgid "Checking for updates…"
-msgstr ""
+msgstr "Проверка обновлений…"
 
 #. TRANSLATORS: we've specified a local file
 msgid "Flashing firmware file…"
-msgstr ""
+msgstr "Прошивка файла микропрограммы…"
 
 #. TRANSLATORS: request the firmware version from the device
 msgid "Getting firmware version…"
-msgstr ""
+msgstr "Получение версии микропрограммы…"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
@@ -552,7 +562,7 @@ msgstr "Подробности"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
-msgstr ""
+msgstr "Прошить определённый файл микропрограммы"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
 msgid "ColorHug Flash Program"
@@ -561,57 +571,57 @@ msgstr "Программа для прошивки ColorHug"
 #. Translators: This is %i days
 #, c-format
 msgid "%id"
-msgstr ""
+msgstr "%i дн."
 
 #. Translators: This is %i days %02i hours
 #, c-format
 msgid "%id%02ih"
-msgstr ""
+msgstr "%i дн. %02i ч."
 
 #. Translators: This is %i hours
 #, c-format
 msgid "%ih"
-msgstr ""
+msgstr "%i ч."
 
 #. Translators: This is %i hours %02i minutes
 #, c-format
 msgid "%ih%02im"
-msgstr ""
+msgstr "%i ч. %02i мин."
 
 #. Translators: This is %2i minutes
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2i мин."
 
 #. Translators: This is %2i minutes %02i seconds
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2i мин. %02i сек."
 
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2i сек."
 
 #. TRANSLATORS: This is %i Percentage
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
 #, c-format
 msgid "%.1fW"
-msgstr ""
+msgstr "%.1f Вт"
 
 #. TRANSLATORS: This is %.1f Volts
 #, c-format
 msgid "%.1fV"
-msgstr ""
+msgstr "%.1f В"
 
 #. TRANSLATORS: This is %.1f nanometers
 #, c-format
 msgid "%.0f nm"
-msgstr ""
+msgstr "%.0f нм"
 
 #. TRANSLATORS: this is a command alias
 #, c-format
@@ -623,7 +633,7 @@ msgstr "Команда не найдена, допустимые команды:
 
 #. TRANSLATORS: wait for user to press the device into a desk…
 msgid "Ensure the ColorHug aperture is blocked"
-msgstr ""
+msgstr "Закройте отверстие устройства"
 
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
@@ -639,7 +649,7 @@ msgstr "Множитель"
 
 #. TRANSLATORS: this is the measurement mode
 msgid "Measure mode"
-msgstr ""
+msgstr "Режим измерений"
 
 #. TRANSLATORS: this is the sensor sample time
 msgid "Integral"
@@ -650,10 +660,10 @@ msgid "Pulses"
 msgstr "Импульсы"
 
 msgid "Multiple ColorHug devices are attached"
-msgstr ""
+msgstr "Присоединено несколько устройств ColorHug"
 
 msgid "No ColorHug devices were found"
-msgstr ""
+msgstr "Устройства ColorHug не были найдены"
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
@@ -685,7 +695,7 @@ msgstr "Устанавливает время чтения замера с да�
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor firmware version"
-msgstr "Получает версию прошивки датчика"
+msgstr "Получает версию микропрограммы датчика"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration matrix"
@@ -741,19 +751,19 @@ msgstr "Устанавливает значения индикаторов"
 
 #. TRANSLATORS: command description
 msgid "Gets the PCB errata"
-msgstr ""
+msgstr "Получает сведения об ошибках PCB"
 
 #. TRANSLATORS: command description
 msgid "Sets the PCB errata"
-msgstr ""
+msgstr "Устанавливает сведения об ошибках PCB"
 
 #. TRANSLATORS: command description
 msgid "Gets the remote profile SHA1 hash"
-msgstr ""
+msgstr "Получает хэш SHA1 удаленного профиля"
 
 #. TRANSLATORS: command description
 msgid "Sets the remote profile SHA1 hash"
-msgstr ""
+msgstr "Устанавливает хэш SHA1 удаленного профиля"
 
 #. TRANSLATORS: command description
 msgid "Gets the dark offset values"
@@ -781,7 +791,7 @@ msgstr "Выполняет полное чтение цветов (в XYZ)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
+msgstr "Принимает чтение спектральных данных (сохранение в SRAM)"
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
@@ -789,7 +799,7 @@ msgstr "Сбрасывает процессор назад к загрузчик
 
 #. TRANSLATORS: command description
 msgid "Flash firmware into the processor"
-msgstr "Записывает прошивку в процессор"
+msgstr "Прошить микропрограмму в процессор"
 
 #. TRANSLATORS: command description
 msgid "Read EEPROM at a specified address"
@@ -812,6 +822,14 @@ msgid "Sets the pre scale constant"
 msgstr "Устанавливает постоянную до масштабирования"
 
 #. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
 msgid "Gets the post scale constant"
 msgstr "Получает постоянную после масштабирования"
 
@@ -821,11 +839,11 @@ msgstr "Устанавливает постоянную после масшта�
 
 #. TRANSLATORS: command description
 msgid "Sets the flash success"
-msgstr "Устанавливает результат записи прошивки"
+msgstr "Устанавливает результат прошивки микропрограммы"
 
 #. TRANSLATORS: command description
 msgid "Boots from the bootloader into the firmware"
-msgstr "Загружается из загрузчика в прошивку"
+msgstr "Загружает из загрузчика в микропрограмму"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration map"
@@ -841,55 +859,55 @@ msgstr "Получает версию оборудования"
 
 #. TRANSLATORS: command description
 msgid "Gets an array of raw samples"
-msgstr ""
+msgstr "Получает массив необработанных образцов"
 
 #. TRANSLATORS: command description
 msgid "Downloads a remote profile"
-msgstr ""
+msgstr "Загружает удалённый профиль"
 
 #. TRANSLATORS: command description
 msgid "Uploads a remote profile"
-msgstr ""
+msgstr "Выгружает удалённый профиль"
 
 #. TRANSLATORS: command description
 msgid "Uploads a correction matrix"
-msgstr ""
+msgstr "Выгружает корректировочную матрицу"
 
 #. TRANSLATORS: command description
 msgid "Does a quick self test on the device"
-msgstr ""
+msgstr "Выполняет быструю самопроверку устройства"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor measurement mode"
-msgstr ""
+msgstr "Получает режим измерения датчика"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor measurement mode"
-msgstr ""
+msgstr "Устанавливает режим измерения датчика"
 
 #. TRANSLATORS: command description
 msgid "Read SRAM at a specified address"
-msgstr ""
+msgstr "Прочитать данные из SRAM по указанному адресу"
 
 #. TRANSLATORS: command description
 msgid "Write SRAM at a specified address"
-msgstr ""
+msgstr "Записать данные в SRAM по указанному адресу"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor temperature"
-msgstr ""
+msgstr "Получает температуру датчика"
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
-msgstr ""
+msgstr "Получает значения АЦП Vref"
 
 #. TRANSLATORS: command description
 msgid "Gets the CCD calibration values"
-msgstr ""
+msgstr "Получает значения калибровки ПЗС"
 
 #. TRANSLATORS: command description
 msgid "Sets the CCD calibration values"
-msgstr ""
+msgstr "Устанавливает значения калибровки ПЗС"
 
 #. TRANSLATORS: program name
 msgid "Color Management"
@@ -901,8 +919,8 @@ msgstr "Нет подключения к устройству:"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get samples from device"
-msgstr ""
+msgstr "Не удалось получить образцы от устройства"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get raw reading"
-msgstr ""
+msgstr "Не удалось выполнить чтение без обработки"

@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# jui <appukonrad@gmail.com>, 2012
+# Jiří Vírava <appukonrad@gmail.com>, 2012
 # nijel <michal@cihar.com>, 2013
 # nijel <michal@cihar.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/projects/p/colorhug-client/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
@@ -265,10 +265,10 @@ msgid "Select correction matrix"
 msgstr "Vyberte opravnou matici"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Zrušit"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Otevřít"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -335,7 +335,7 @@ msgid "Correction matrix successfully generated!"
 msgstr ""
 
 msgid "_Save"
-msgstr ""
+msgstr "_Uložit"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -437,6 +437,11 @@ msgstr "Nepodařilo se rebootovat ColorHug"
 msgid "Failed to reset the ColorHug"
 msgstr "Nepodařilo se restartovat ColorHug"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr ""
@@ -507,6 +512,10 @@ msgstr "Zjištěn prototyp ColorHug"
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
 msgstr "Zjištěn ColorHug"
+
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
@@ -811,6 +820,14 @@ msgstr "Načte měřítko čtení"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Nastaví měřítko čtení"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

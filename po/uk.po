@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/colorhug-client/language/uk/)\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +100,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Не від’єднуйте пристрій від комп’ютера і не вимикайте комп’ютер."
 
 msgid "ColorHug+ Utility"
-msgstr "Службова програма Spectro ColorHug"
+msgstr ""
 
 msgid "Auto update:"
 msgstr "Автооновлення:"
@@ -149,13 +149,13 @@ msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "Засіб завантаження CCMX ColorHug автоматично отримує і встановлює надані іншими користувачами матриці виправлення вад пристрою на ваш колориметр дисплеїв Hughski ColorHug."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "Використання матриці виправлення максимізує точність ColorHug, але використання типової матриці, переважно, дає прийнятні для більшості користувачів результати калібрування."
 
 msgid "CCMX Loader"
 msgstr "Завантажувач CCMX"
@@ -173,12 +173,12 @@ msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "Засіб оновлення мікропрограми ColorHug автоматично отримує нові версії мікропрограми для вашого колориметра дисплеїв Hughski ColorHug. У нових випусках мікропрограми реалізовано нові можливості, виправлено вади та збільшено точність вимірів."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "За допомогою параметрів командного рядка ви можете наказати цьому інструменту записати на пристрій нетипову мікропрограму."
 
 msgid "Firmware Updater"
 msgstr "Оновлення мікропрограми"
@@ -187,7 +187,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Оновлює мікропрограму на колориметрі ColorHug"
 
 msgid "Play with the ColorHug+"
-msgstr "Погратися з ColorHug+"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Чи слід виконувати оновлення для перевірки мікрокоду"
@@ -263,10 +263,10 @@ msgid "Select correction matrix"
 msgstr "Виберіть матрицю виправлення"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Скасувати"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Відкрити"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -333,7 +333,7 @@ msgid "Correction matrix successfully generated!"
 msgstr "Матрицю виправлення успішно створено!"
 
 msgid "_Save"
-msgstr ""
+msgstr "З_берегти"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -435,6 +435,11 @@ msgstr "Не вдалося перезавантажити ColorHug"
 msgid "Failed to reset the ColorHug"
 msgstr "Не вдалося повернути ColorHug у початковий стан"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr "Розпочинаємо оновлення мікропрограми…"
@@ -506,9 +511,13 @@ msgstr "Виявлено прототип ColorHug"
 msgid "ColorHug Detected"
 msgstr "Виявлено ColorHug"
 
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
+
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "Виявлено ColorHug+"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -809,6 +818,14 @@ msgstr "Отримує сталу після масштабування"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Встановлює сталу до масштабування"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/colorhug-client/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -434,6 +434,11 @@ msgstr ""
 msgid "Failed to reset the ColorHug"
 msgstr ""
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr ""
@@ -503,6 +508,10 @@ msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
+msgstr ""
+
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
 msgstr ""
 
 #. TRANSLATORS: first release hardware
@@ -807,6 +816,14 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
 msgstr ""
 
 #. TRANSLATORS: command description

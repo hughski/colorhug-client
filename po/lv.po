@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2012-2013
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Latvian (http://www.transifex.com/projects/p/colorhug-client/language/lv/)\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +27,7 @@ msgstr "Veidot CCMX"
 
 #. Button to import a CCMX file
 msgid "Import file"
-msgstr "Importēt failu"
+msgstr "Importēt datni"
 
 msgid "Import a local CCMX file"
 msgstr "Importēt lokālo CCMX datni"
@@ -100,7 +101,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
 
 msgid "ColorHug+ Utility"
-msgstr "ColorHug+ utilīta"
+msgstr ""
 
 msgid "Auto update:"
 msgstr "Automātiski atjaunināt:"
@@ -149,13 +150,13 @@ msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "ColorHug CCMX ielādēšanas rīks automātiski lejupielādē un instalē lietotāju iesniegtus ierīču korekcijas matricas jūs Hughski ColorHug displeja krāsu mērītājā."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "Korekciju matricu izvēlē palielina ColorHug precizitāti, bet noklusējuma matricas izmantošana dos pieņemamus kalibrēšanas rezultātus."
 
 msgid "CCMX Loader"
 msgstr "CCMX ielādētājs"
@@ -164,21 +165,21 @@ msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Modificēt kalibrācijas matricas ColorHug ierīcē"
 
 msgid "ColorHug Documentation"
-msgstr ""
+msgstr "ColorHug dokumentācija"
 
 msgid "Documentation for the ColorHug display colorimeter"
-msgstr ""
+msgstr "ColorHug displeja krāsu mērītāja dokumentācija"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "ColorHug zibatmiņas atjaunināšanas rīks automātiski lejupielādē aparātprogrammatūras jaunās versijas uz Hughski ColorHug displeja krāsu mērītāju. Aparātprogrammatūras laidieni pievieno iespējas, kļūdu labojumus un uzlabo precizitāti."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "Izmantojot komandrindas parametrus, šis rīks var arī pārrakstīt pielāgotās zibatmiņas datnes uz ierīces."
 
 msgid "Firmware Updater"
 msgstr "Aparātprogrammatūras atjauninātājs"
@@ -187,7 +188,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
 msgid "Play with the ColorHug+"
-msgstr "Spēlēties ar ColorHug+"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Vai vajadzētu atjaunināt uz testa aparātprogrammatūru"
@@ -263,10 +264,10 @@ msgid "Select correction matrix"
 msgstr "Izvēlieties krāsu matricu"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "At_celt"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Atvērt"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -333,7 +334,7 @@ msgid "Correction matrix successfully generated!"
 msgstr "Labojumu matrica ir veiksmīgi izveidota!"
 
 msgid "_Save"
-msgstr ""
+msgstr "_Saglabāt"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -435,6 +436,11 @@ msgstr "Neizdevās pārlādēt ColorHug"
 msgid "Failed to reset the ColorHug"
 msgstr "Neizdevās atstatīt ColorHug"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr "Sāk aparātprogrammatūras uzlabošanu…"
@@ -506,9 +512,13 @@ msgstr "Atrasts ColorHug prototips"
 msgid "ColorHug Detected"
 msgstr "Atrasts ColorHug"
 
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
+
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "Ir atklāts ColorHug+"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -551,7 +561,7 @@ msgstr "Apskatiet sīkāku informāciju par atjauninājumu"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
-msgstr "Atjaunināt noteiktu aparātprogrammatūras failu"
+msgstr "Atjaunināt noteiktu aparātprogrammatūras datni"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
 msgid "ColorHug Flash Program"
@@ -780,7 +790,7 @@ msgstr "Nolasa visu krāsu mērījumus (uz XYZ)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
+msgstr "Veic īpašu lasījumu (saglabā uz SRAM)"
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
@@ -809,6 +819,14 @@ msgstr "Saņem pirms pārveidošanas skalas konstanti"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Iestata pirms pārveidošanas skalas konstanti"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
@@ -880,15 +898,15 @@ msgstr "Saņem sensora temperatūru"
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
-msgstr ""
+msgstr "Saņem ADC Vref vērtības"
 
 #. TRANSLATORS: command description
 msgid "Gets the CCD calibration values"
-msgstr ""
+msgstr "Saņem CCD kalibrācijas vērtības"
 
 #. TRANSLATORS: command description
 msgid "Sets the CCD calibration values"
-msgstr ""
+msgstr "Iestata CCD kalibrācijas vērtības"
 
 #. TRANSLATORS: program name
 msgid "Color Management"

@@ -5,12 +5,13 @@
 # Translators:
 # Enrico Nicoletto <enrico.BR@gmx.co.uk>, 2013
 # jrbenito <jrbenito@benito.qsl.br>, 2013
+# Rafael Ferreira <rafael.f.f1@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/colorhug-client/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -101,7 +102,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Não remova o dispositivo e não desligue o computador."
 
 msgid "ColorHug+ Utility"
-msgstr "Utilitário ColoHug Spectro"
+msgstr ""
 
 msgid "Auto update:"
 msgstr "Atualização automática:"
@@ -150,13 +151,13 @@ msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "A ferramenta ColorHug CCMX loader carrega e instala automaticamente matrizes de correção submetidas pelos usuários no seu colorímetro Hughski ColorHug."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "Utilizar a matriz padrão trará um resultado de calibragem aceitável para a maioria dos usuários enquanto selecionar uma matriz de correção para um monitor específico irá melhorar a precisão naquele dispositivo."
 
 msgid "CCMX Loader"
 msgstr "Carregador de CCMX"
@@ -174,12 +175,12 @@ msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "A ferramenta ColorHug flash update carrega automaticamente novas versões de firmware no seu colorímetro Hughski ColorHug. As novas versões do firmware irão adicionar funcionalidades, correções de problema e melhorar a precisão."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "Usando argumentos na linha de comando essa ferramenta também pode carregar binários customizados no dispositivo."
 
 msgid "Firmware Updater"
 msgstr "Atualizador de Firmware"
@@ -188,7 +189,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atualizar o firmware no colorímetro do ColorHug"
 
 msgid "Play with the ColorHug+"
-msgstr "Jogar com o ColorHug+"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Quando se deve fazer upgrade para firmware de teste"
@@ -264,10 +265,10 @@ msgid "Select correction matrix"
 msgstr "Selecionar a matriz de correção"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Cancelar"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Abrir"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -334,7 +335,7 @@ msgid "Correction matrix successfully generated!"
 msgstr "Matriz de correção gerada com sucesso!"
 
 msgid "_Save"
-msgstr ""
+msgstr "_Salvar"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -436,6 +437,11 @@ msgstr "Falha ao recarregar o ColorHug no boot"
 msgid "Failed to reset the ColorHug"
 msgstr "Falha ao reiniciar o ColorHug"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr "Inciando atualização de firmware…"
@@ -507,9 +513,13 @@ msgstr "Protótipo ColorHug Detectado"
 msgid "ColorHug Detected"
 msgstr "ColorHug Detectado"
 
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
+
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "Espectro ColorHug detectado"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -810,6 +820,14 @@ msgstr "Lê a constante de pré-escala"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Define a constante de pré-escala"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/colorhug-client/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
@@ -264,10 +264,10 @@ msgid "Select correction matrix"
 msgstr "Seleccionar matriz de corrección"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Cancelar"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Abrir"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -334,7 +334,7 @@ msgid "Correction matrix successfully generated!"
 msgstr "¡Matriz de corrección creada correctamente!"
 
 msgid "_Save"
-msgstr ""
+msgstr "_Guardar"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -436,6 +436,11 @@ msgstr "No se pudo reiniciar el ColorHug"
 msgid "Failed to reset the ColorHug"
 msgstr "No se pudo resetear el ColorHug"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr "Iniciando actualización de firmware..."
@@ -506,6 +511,10 @@ msgstr "Detectado Prototipo de ColorHug"
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
 msgstr "ColorHug detectado"
+
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
@@ -810,6 +819,14 @@ msgstr "Obtiene la constante de preescalado"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Define la constante de preescalado"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

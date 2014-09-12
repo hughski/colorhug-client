@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/colorhug-client/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne pas débrancher l'appareil et ne pas éteindre l'ordinateur."
 
 msgid "ColorHug+ Utility"
-msgstr "Outil ColorHug+"
+msgstr ""
 
 msgid "Auto update:"
 msgstr "Mise à jour automatique:"
@@ -189,7 +189,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Mettre à jour le micrologiciel du colorimètre ColorHug"
 
 msgid "Play with the ColorHug+"
-msgstr "Jouer avec ColorHug+"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Option de mise à jour vers un micrologiciel de test"
@@ -437,6 +437,11 @@ msgstr "Échec lors du redémarrage du ColorHug"
 msgid "Failed to reset the ColorHug"
 msgstr "Échec de réinitialisation du ColorHug"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr ""
@@ -508,9 +513,13 @@ msgstr "Prototype ColorHug détecté"
 msgid "ColorHug Detected"
 msgstr "ColorHug détecté"
 
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
+
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "ColorHug+ détecté"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -811,6 +820,14 @@ msgstr "Obtient la constante pré-échelle"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Définit la constante pré-échelle"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

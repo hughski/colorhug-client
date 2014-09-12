@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Zoltan Hoppár <hopparz@gmail.com>, 2013
+# Zoltan Hoppár <zoltanh721@fedoraproject.org>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/colorhug-client/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +100,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne húzza ki és ne kapcsolja ki a számítógépét."
 
 msgid "ColorHug+ Utility"
-msgstr "ColorHug+ kisalkalmazás"
+msgstr ""
 
 msgid "Auto update:"
 msgstr "Automatikus frissítés:"
@@ -149,13 +149,13 @@ msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "A ColorHug CCMX betöltő eszköz automatikusan letölti és telepíti a felhasználók által beküldött korrekciós mátrixokat a Hughski ColorHug szinkalibrátorra."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "A korrekciós mátrix kiválasztásával maximalizálja a pontosságát a ColorHug-nak, de az alapértelmezett mátrix használatával a legtöbb felhasználó számára megfelelő kalibrációs eredményt biztosít."
 
 msgid "CCMX Loader"
 msgstr "CCMX betöltő"
@@ -164,21 +164,21 @@ msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Módosítsa a kalibrációs mátrixokat a ColorHug eszközön"
 
 msgid "ColorHug Documentation"
-msgstr ""
+msgstr "ColorHug Dokumentáció"
 
 msgid "Documentation for the ColorHug display colorimeter"
-msgstr ""
+msgstr "Dokumentáció a ColorHug coloriméterhez"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "A ColorHug flash frissítő eszköz automatikusan letölti az új firmware verziókat a Hugski ColorHug kalibrátorra. Firmware kiadásokkal új képességeket, hibajavításokat, és jobb precizitást is elérhetünk."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "Parancssori paraméterek használatával, ez az eszköz képes egyéni, saját flash fájlokat írni az eszközre."
 
 msgid "Firmware Updater"
 msgstr "Firmware Frissítő"
@@ -187,7 +187,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
 
 msgid "Play with the ColorHug+"
-msgstr "játék a ColorHug+-val"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Mindenképp frissítenie kell, hogy tesztelni tudja a firmware-t"
@@ -263,10 +263,10 @@ msgid "Select correction matrix"
 msgstr "Válasszon korrekciós mátrixot"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Mégsem"
 
 msgid "_Open"
-msgstr ""
+msgstr "Megnyitás"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -333,7 +333,7 @@ msgid "Correction matrix successfully generated!"
 msgstr "Korrekciós mátrix sikeresen elkészült!"
 
 msgid "_Save"
-msgstr ""
+msgstr "Menté_s"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -435,6 +435,11 @@ msgstr "ColorHug újraindítása sikertelen"
 msgid "Failed to reset the ColorHug"
 msgstr "ColorHug alaphelyzetbe állítása sikertelen"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr "Firmware frissítés elindítása..."
@@ -506,9 +511,13 @@ msgstr "Prototípus ColorHug észlelve"
 msgid "ColorHug Detected"
 msgstr "ColorHug észlelve"
 
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
+
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "ColorHug+ észlelve"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -780,7 +789,7 @@ msgstr "Elindítja az összes olvasást (XYZ-től)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
+msgstr "Elindítja a spektrális olvasást (SRAM-ba menti)"
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
@@ -809,6 +818,14 @@ msgstr "Lekérdezi az előméretező állandót"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Beállítja az előméretező állandót"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
@@ -880,15 +897,15 @@ msgstr "Lekérdezi az érzékelő hőmérsékletét"
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
-msgstr ""
+msgstr "Beolvassa az ADC Vref értékeket"
 
 #. TRANSLATORS: command description
 msgid "Gets the CCD calibration values"
-msgstr ""
+msgstr "Beolvassa a CCD kalibrációs értékeit"
 
 #. TRANSLATORS: command description
 msgid "Sets the CCD calibration values"
-msgstr ""
+msgstr "Beállítja a CCD kalibrációs értékeit"
 
 #. TRANSLATORS: program name
 msgid "Color Management"

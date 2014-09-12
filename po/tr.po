@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-11 16:39+0000\n"
-"PO-Revision-Date: 2013-11-11 16:39+0000\n"
+"POT-Creation-Date: 2014-09-12 16:30+0100\n"
+"PO-Revision-Date: 2014-09-12 15:32+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/projects/p/colorhug-client/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +100,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Cihazı çıkarmayın ve bilgisayarı kapatmayınız."
 
 msgid "ColorHug+ Utility"
-msgstr "ColorHug+ Aracı"
+msgstr ""
 
 msgid "Auto update:"
 msgstr "Otomatik Güncelleme"
@@ -187,7 +187,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "ColorHug Renkmetre yazılımını güncelle"
 
 msgid "Play with the ColorHug+"
-msgstr "ColorHug+ ile oynayın"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Biz test yazılımı güncellemesi varsa günceller yada yoksa güncelleme yapılmaz."
@@ -435,6 +435,11 @@ msgstr "ColorHug yeniden başlaması başarısız"
 msgid "Failed to reset the ColorHug"
 msgstr "ColorHug resetlemesi başarısız"
 
+#. TRANSLATORS: the user tried to flash a firmware on the wrong
+#. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
+msgid "Wrong kind of firmware!"
+msgstr ""
+
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
 msgstr "Yazılım güncellemesi başlıyor..."
@@ -506,9 +511,13 @@ msgstr "Prototip ColorHug tespit edildi."
 msgid "ColorHug Detected"
 msgstr "Colorhug tespit Edildi."
 
+#. TRANSLATORS: second release hardware
+msgid "ColorHug2 Detected"
+msgstr ""
+
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "ColorHug+ Algılandı"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -809,6 +818,14 @@ msgstr "Önceden ölçekli sabitleri al"
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
 msgstr "Önceden ölçekli sabitleri belirle"
+
+#. TRANSLATORS: command description
+msgid "Gets the DAC value"
+msgstr ""
+
+#. TRANSLATORS: command description
+msgid "Sets the DAC value"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
