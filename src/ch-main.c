@@ -1919,6 +1919,34 @@ out:
 }
 
 /**
+ * ch_util_print_color_values:
+ **/
+static void
+ch_util_print_color_values (CdColorXYZ *value)
+{
+	CdMat3x3 xyz_to_srgb;
+	CdVec3 srgb;
+	CdVec3 xyz;
+	CdColorYxy yxy;
+
+	/* raw values */
+	g_print ("X:% .5f\tY:% .5f\tZ:% .5f\n", value->X, value->Y, value->Z);
+
+	/* show Yxy */
+	cd_color_xyz_to_yxy (value, &yxy);
+	g_print ("Y:% .5f\tx:% .5f\ty:% .5f\n", yxy.Y, yxy.x, yxy.y);
+
+	/* convert to sRGB */
+	cd_vec3_init (&xyz, value->X, value->Y, value->Z);
+	cd_mat33_init (&xyz_to_srgb,
+		        3.2404542, -1.5371385, -0.4985314,
+		       -0.9692660,  1.8760108,  0.0415560,
+		        0.0556434, -0.2040259,  1.0572252);
+	cd_mat33_vector_multiply (&xyz_to_srgb, &xyz, &srgb);
+	g_print ("R:% .5f\tG:% .5f\tB:% .5f\n", srgb.v0, srgb.v1, srgb.v2);
+}
+
+/**
  * ch_util_take_readings_xyz:
  **/
 static gboolean
@@ -1967,8 +1995,7 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 		/* TRANSLATORS: this is the sensor sample time */
 		g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 	}
-
-	g_print ("X:%.5f Y:%.5f Z:%.5f\n", value.X, value.Y, value.Z);
+	ch_util_print_color_values (&value);
 out:
 	return ret;
 }
