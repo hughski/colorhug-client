@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2009-2012 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2009-2014 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -230,6 +230,7 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 {
 	CdIt8 *it8 = NULL;
 	const gchar *description;
+	const gchar *tmp;
 	gboolean ret;
 	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
@@ -259,6 +260,29 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 		g_set_error_literal (error, 1, 0,
 				     "CCMX file does not have title");
 		goto out;
+	}
+
+	/* only load CCMXs for the correct device type */
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_LEGACY:
+	case CH_DEVICE_MODE_FIRMWARE:
+		tmp = cd_it8_get_instrument (it8);
+		if (g_strcmp0 (tmp, "Hughski ColorHug") != 0 &&
+		    g_strcmp0 (tmp, "ColorHug") != 0) {
+			g_warning ("ignoring %s as designed for %s", filename, tmp);
+			goto out;
+		}
+		break;
+	case CH_DEVICE_MODE_FIRMWARE2:
+		tmp = cd_it8_get_instrument (it8);
+		if (g_strcmp0 (tmp, "Hughski ColorHug2") != 0 &&
+		    g_strcmp0 (tmp, "ColorHug2") != 0) {
+			g_warning ("ignoring %s as designed for %s", filename, tmp);
+			goto out;
+		}
+		break;
+	default:
+		break;
 	}
 
 	/* does already exist? */
