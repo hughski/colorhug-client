@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2011 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2011-2014 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -1841,15 +1841,17 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_get_color_select (priv->device_queue,
 					  priv->device,
 					  &color_select);
-	ch_device_queue_get_multiplier (priv->device_queue,
-					priv->device,
-					&multiplier);
-	ch_device_queue_get_measure_mode (priv->device_queue,
-					  priv->device,
-					  &measure_mode);
-	ch_device_queue_get_integral_time (priv->device_queue,
-					   priv->device,
-					   &integral_time);
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_get_multiplier (priv->device_queue,
+						priv->device,
+						&multiplier);
+		ch_device_queue_get_measure_mode (priv->device_queue,
+						  priv->device,
+						  &measure_mode);
+		ch_device_queue_get_integral_time (priv->device_queue,
+						   priv->device,
+						   &integral_time);
+	}
 	ch_device_queue_take_reading_raw (priv->device_queue,
 					  priv->device,
 					  &take_reading);
@@ -1860,20 +1862,22 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (!ret)
 		goto out;
 
-	/* TRANSLATORS: this is the enabled sensor color */
-	g_print ("%s:\t\t%s\n", _("Color"),
-		 ch_color_select_to_string (color_select));
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		/* TRANSLATORS: this is the enabled sensor color */
+		g_print ("%s:\t\t%s\n", _("Color"),
+			 ch_color_select_to_string (color_select));
 
-	/* TRANSLATORS: this is the sensor scale factor */
-	g_print ("%s:\t%s\n", _("Multiplier"),
-		 ch_multiplier_to_string (multiplier));
+		/* TRANSLATORS: this is the sensor scale factor */
+		g_print ("%s:\t%s\n", _("Multiplier"),
+			 ch_multiplier_to_string (multiplier));
 
-	/* TRANSLATORS: this is the measurement mode */
-	g_print ("%s:\t%s\n", _("Measure mode"),
-		 ch_measure_mode_to_string (measure_mode));
+		/* TRANSLATORS: this is the measurement mode */
+		g_print ("%s:\t%s\n", _("Measure mode"),
+			 ch_measure_mode_to_string (measure_mode));
 
-	/* TRANSLATORS: this is the sensor sample time */
-	g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
+		/* TRANSLATORS: this is the sensor sample time */
+		g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
+	}
 
 	/* TRANSLATORS: this is the number of pulses detected */
 	g_print ("%s:\t\t%" G_GUINT32_FORMAT "\n", _("Pulses"), take_reading);
