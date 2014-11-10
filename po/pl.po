@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Łukasz Jernaś <deejay1@srem.org>, 2012
-# Piotr Drąg <piotrdrag@gmail.com>, 2012-2013
+# Piotr Drąg <piotrdrag@gmail.com>, 2012-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2014-11-10 10:53+0000\n"
+"PO-Revision-Date: 2014-09-13 23:49+0000\n"
+"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/colorhug-client/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,7 +101,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Nie należy odłączać urządzenia ani wyłączać komputera."
 
 msgid "ColorHug+ Utility"
-msgstr ""
+msgstr "Narzędzie ColorHug+"
 
 msgid "Auto update:"
 msgstr "Automatyczna aktualizacja:"
@@ -188,7 +188,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Aktualizuje oprogramowanie sprzętowe kolorymetru ColorHug"
 
 msgid "Play with the ColorHug+"
-msgstr ""
+msgstr "Zabawa ze spektrometrią ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "Określa, czy aktualizować oprogramowanie sprzętowe"
@@ -439,7 +439,7 @@ msgstr "Przywrócenie urządzenia ColorHug się nie powiodło"
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Błędny rodzaj oprogramowania sprzętowego."
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
@@ -514,11 +514,11 @@ msgstr "Wykryto urządzenie ColorHug"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "Wykryto urządzenie ColorHug2"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "Wykryto urządzenie ColorHug+"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -822,11 +822,11 @@ msgstr "Ustawia stałą skalowania przed procesem"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "Pobiera wartość DAC"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "Ustawia wartość DAC"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"

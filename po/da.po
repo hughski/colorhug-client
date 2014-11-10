@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Joe Hansen <joedalton2@yahoo.dk>, 2014
 # olmissen <olmissen@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2014-11-10 10:53+0000\n"
+"PO-Revision-Date: 2014-11-01 23:20+0000\n"
+"Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/colorhug-client/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,17 +20,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "ColorHug CCMX Loader"
-msgstr "ColorHug CCMX Loader"
+msgstr "ColorHug CCMX-indlæser"
 
 msgid "Generate CCMX"
-msgstr ""
+msgstr "Opret CCMX"
 
 #. Button to import a CCMX file
 msgid "Import file"
 msgstr "Hent fil"
 
 msgid "Import a local CCMX file"
-msgstr "Importér lokal CCMX-fil"
+msgstr "Importer lokal CCMX-fil"
 
 msgid "Refresh the list of matrices from the device"
 msgstr "Genopfrisk listen af matricer fra enheden"
@@ -69,25 +70,25 @@ msgid "Please connect your ColorHug"
 msgstr "Forbind venligst ColorHug"
 
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr ""
+msgstr "Vælg skærmen der skal bruges under oprettelse af farvekalibreringsmatrixen."
 
 msgid "Do not remove the device whilst measurement is in progress"
-msgstr ""
+msgstr "Fjern ikke enheden mens målingen er i gang"
 
 msgid "Save file"
-msgstr ""
+msgstr "Gem fil"
 
 msgid ""
 "Share with\n"
 "the community"
-msgstr ""
+msgstr "Del med\nfællesskabet"
 
 msgid "ColorHug Firmware Updater"
-msgstr "ColorHug Firmware Updater"
+msgstr "ColorHugs firmware-opdateringsprogram"
 
 #. Button to update to a newer version of the firmware
 msgid "Update!"
-msgstr "Updater!"
+msgstr "Opdater!"
 
 msgid "Flash new firmware to the device"
 msgstr "Skriv ny firmware til enheden"
@@ -100,56 +101,56 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Afbryd ikke enheden og sluk ikke computeren"
 
 msgid "ColorHug+ Utility"
-msgstr ""
+msgstr "ColorHug+-redskab"
 
 msgid "Auto update:"
-msgstr ""
+msgstr "Automatisk opdatering:"
 
 msgid "Force Refresh"
-msgstr ""
+msgstr "Fremtving opdatering"
 
 msgid "Temperature:"
-msgstr ""
+msgstr "Temperatur:"
 
 msgid "Interval:"
-msgstr ""
+msgstr "Interval:"
 
 msgid "This shows the raw sensor reading without calibration"
-msgstr ""
+msgstr "Dette viser den rå sensorlæsning uden kalibrering"
 
 msgid "Raw Sensor"
-msgstr ""
+msgstr "Rå sensor"
 
 msgid "This shows the dark calibration at 25 degrees C"
-msgstr ""
+msgstr "Dette viser den mørke kalibrering ved 25 grader C"
 
 msgid "Dark Calibration"
-msgstr ""
+msgstr "Mørk kalibrering"
 
 msgid ""
 "This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr ""
+msgstr "Dette viser farvematch-funktionen brugt for i-enheden XYZ-konvertering"
 
 msgid "Color Match"
-msgstr ""
+msgstr "Farvematch"
 
 msgid "This shows the temperature calibration factor"
-msgstr ""
+msgstr "Dette viser temperaturkalibreringsfaktoren"
 
 msgid "Temperature Compensation"
-msgstr ""
+msgstr "Temperaturkompensation"
 
 msgid "This shows the calibrated spectra result"
-msgstr ""
+msgstr "Dette viser det kalibrerede spektraresultat"
 
 msgid "Spectra Result"
-msgstr ""
+msgstr "Spektraresultat"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "ColorHug CCM-indlæsningsværktøjet henter automatisk og installerer brugerindsendte enhedskorrektionsmatricer til din Hughski ColorHug-skærmcolorimeter."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
@@ -164,7 +165,7 @@ msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Ændrer kalibreringsmatricerne på ColorHug enheden"
 
 msgid "ColorHug Documentation"
-msgstr ""
+msgstr "ColorHug-dokumentation"
 
 msgid "Documentation for the ColorHug display colorimeter"
 msgstr ""
@@ -263,10 +264,10 @@ msgid "Select correction matrix"
 msgstr "Vælg korrektionsmatrix"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Afbryd"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Åbn"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -299,7 +300,7 @@ msgstr "Kunne ikke tilgå enhed"
 
 #. TRANSLATORS: get the calibration matrices from the device
 msgid "Getting calibration from device…"
-msgstr ""
+msgstr "Henter kalibrering fra enhed ..."
 
 msgid "Failed to write file"
 msgstr "Kunne ikke skrive fil"
@@ -333,11 +334,11 @@ msgid "Correction matrix successfully generated!"
 msgstr ""
 
 msgid "_Save"
-msgstr ""
+msgstr "_Gem"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
-msgstr ""
+msgstr "Henter seneste data fra nettet ..."
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
@@ -360,10 +361,10 @@ msgid "Failed to parse command line options"
 msgstr "Kunne ikke parse kommando-linjen"
 
 msgid "ColorHug Updater"
-msgstr ""
+msgstr "ColorHug-opdateringsprogram"
 
 msgid "Calibration Failed"
-msgstr ""
+msgstr "Kalibrering mislykkedes"
 
 #. TRANSLATORS: we broke the device
 msgid "Flashing the device failed but the ColorHug is not damaged."
@@ -389,11 +390,11 @@ msgid "Device successfully updated"
 msgstr "Enheden er nu opdateret"
 
 msgid "Calibration Completed"
-msgstr ""
+msgstr "Kalibrering færdig"
 
 #. TRANSLATORS: tell the hardware we succeeded
 msgid "Completing firmware upgrade…"
-msgstr ""
+msgstr "Færdiggør firmware-opgradering ..."
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
@@ -407,25 +408,25 @@ msgstr "Kunne ikke boote ColorHug"
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Kunne ikke verificere firmawaren"
 
 #. TRANSLATORS: boot into the new firmware
 msgid "Starting the new firmware…"
-msgstr ""
+msgstr "Starter den nye firmware ..."
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Kunne ikke skrive firmwaren"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
 msgid "Verifying new firmware…"
-msgstr ""
+msgstr "Verificerer den nye firmware ..."
 
 #. TRANSLATORS: now write the new firmware chunks
 msgid "Writing new firmware…"
-msgstr ""
+msgstr "Skriver ny firmware ..."
 
 #. TRANSLATORS: the device failed to come back alive
 msgid "Failed to reboot the ColorHug"
@@ -438,11 +439,11 @@ msgstr "Kunne ikke resette ColorHug"
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Forkert slags firmware!"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
-msgstr ""
+msgstr "Starter firmware-opgradering ..."
 
 #. TRANSLATORS: failed to get the firmware file
 msgid "Failed to get firmware"
@@ -473,7 +474,7 @@ msgstr "Flash ikke"
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
 msgid "Downloading update…"
-msgstr ""
+msgstr "Henter opdatering ..."
 
 #. TRANSLATORS: the user is already running the latest firmware
 msgid "There are no updates available."
@@ -493,15 +494,15 @@ msgstr "Firmware-listen indeholder ingen elementer"
 
 #. TRANSLATORS: the XML file was corrupt
 msgid "Failed to parse the update metadata"
-msgstr ""
+msgstr "Kunne ikke fortolke opdateringsmetadataene"
 
 #. TRANSLATORS: this is test firmware
 msgid "This is a test firmware not intended for general release."
-msgstr ""
+msgstr "Dette er en test-firmware, som ikke er beregnet for almen udgivelse."
 
 #. TRANSLATORS: all bets are off
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Denne firmware er ikke blevet ordentlig testet og fungerer måske ikke som forventet."
 
 #. TRANSLATORS: pre-production hardware
 msgid "Prototype ColorHug Detected"
@@ -513,11 +514,11 @@ msgstr "ColorHug Detekteret"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "ColorHug2 detekteret"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "ColorHug+ detekteret"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -539,15 +540,15 @@ msgstr "Firmware version"
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
 msgid "Checking for updates…"
-msgstr ""
+msgstr "Kigger efter opdateringer ..."
 
 #. TRANSLATORS: we've specified a local file
 msgid "Flashing firmware file…"
-msgstr ""
+msgstr "Flasher firmware-fil ..."
 
 #. TRANSLATORS: request the firmware version from the device
 msgid "Getting firmware version…"
-msgstr ""
+msgstr "Henter firmware-version ..."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
@@ -560,7 +561,7 @@ msgstr "See details about the update"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
-msgstr ""
+msgstr "Flash en specifik firmware-fil"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
 msgid "ColorHug Flash Program"
@@ -569,57 +570,57 @@ msgstr "ColorHug Flash Program"
 #. Translators: This is %i days
 #, c-format
 msgid "%id"
-msgstr ""
+msgstr "%id"
 
 #. Translators: This is %i days %02i hours
 #, c-format
 msgid "%id%02ih"
-msgstr ""
+msgstr "%id%02ih"
 
 #. Translators: This is %i hours
 #, c-format
 msgid "%ih"
-msgstr ""
+msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
 #, c-format
 msgid "%ih%02im"
-msgstr ""
+msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2is"
 
 #. TRANSLATORS: This is %i Percentage
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
 #, c-format
 msgid "%.1fW"
-msgstr ""
+msgstr "%.1fW"
 
 #. TRANSLATORS: This is %.1f Volts
 #, c-format
 msgid "%.1fV"
-msgstr ""
+msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
 #, c-format
 msgid "%.0f nm"
-msgstr ""
+msgstr "%.0f nm"
 
 #. TRANSLATORS: this is a command alias
 #, c-format
@@ -661,7 +662,7 @@ msgid "Multiple ColorHug devices are attached"
 msgstr ""
 
 msgid "No ColorHug devices were found"
-msgstr ""
+msgstr "Ingen ColorHug-enheder blev fundet"
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
@@ -821,11 +822,11 @@ msgstr "Stiller \"pre scale\" konstanten"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "Henter DAC-værdien"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "Angiver DAC-værdien"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
@@ -865,11 +866,11 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Uploads a remote profile"
-msgstr ""
+msgstr "Overfører en ekstern profil"
 
 #. TRANSLATORS: command description
 msgid "Uploads a correction matrix"
-msgstr ""
+msgstr "Overfører en korrektionsmatrix"
 
 #. TRANSLATORS: command description
 msgid "Does a quick self test on the device"

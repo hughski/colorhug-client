@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Adrian Perez <aperez@igalia.com>, 2013
+# Adrian Perez <aperez@igalia.com>, 2013-2014
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2014-11-10 10:53+0000\n"
+"PO-Revision-Date: 2014-09-18 12:31+0000\n"
+"Last-Translator: Adrian Perez <aperez@igalia.com>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/colorhug-client/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "ColorHug CCMX Loader"
-msgstr "Cargardor CCMX de ColorHug"
+msgstr "Cargador de CCMX"
 
 msgid "Generate CCMX"
 msgstr "Generar CCMX"
@@ -101,7 +101,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "No desconecte el dispositivo y no apague el ordenador."
 
 msgid "ColorHug+ Utility"
-msgstr ""
+msgstr "Utilidad ColorHug+"
 
 msgid "Auto update:"
 msgstr "Actualización automática:"
@@ -122,7 +122,7 @@ msgid "Raw Sensor"
 msgstr "Sensor en crudo"
 
 msgid "This shows the dark calibration at 25 degrees C"
-msgstr ""
+msgstr "Muestra la calibración de oscuridad a 25 grados centígrados"
 
 msgid "Dark Calibration"
 msgstr "Calibración de oscuridad"
@@ -150,13 +150,13 @@ msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "La herramienta de carga CCMX del ColorHug descarga e instala automáticamente en su colorímetro Hughski ColorHug matrices de correción contribuídas por los usuarios."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "Al escoger una matriz de correción se maximiza la precisión del ColorHug, aunque la\nmatriz por defecto proporciona un resultado de calibración aceptable para la mayoría de los usuarios."
 
 msgid "CCMX Loader"
 msgstr "Cargador de CCMX"
@@ -168,7 +168,7 @@ msgid "ColorHug Documentation"
 msgstr "Documentación del ColorHug"
 
 msgid "Documentation for the ColorHug display colorimeter"
-msgstr ""
+msgstr "Documentación del colorímetro de pantalla ColorHug"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -179,7 +179,7 @@ msgstr ""
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "Esta herramienta también puede flashear imágenes flash personalizadas en el dispositivo."
 
 msgid "Firmware Updater"
 msgstr "Actualización de Firmware"
@@ -188,7 +188,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Actualizar el firmware del colorímetro ColorHug"
 
 msgid "Play with the ColorHug+"
-msgstr ""
+msgstr "Probar el ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "Actualizar a versiones de prueba del firmware"
@@ -439,7 +439,7 @@ msgstr "No se pudo resetear el ColorHug"
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Tipo de firmware incorrecto."
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
@@ -514,11 +514,11 @@ msgstr "ColorHug detectado"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "ColorHug2 Detectado"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "ColorHug+ Detectado"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -922,4 +922,4 @@ msgstr "Fallo al obtener muestras del dispositivo"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get raw reading"
-msgstr ""
+msgstr "No se pudo hacer una lectura raw"

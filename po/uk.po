@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Yuri Chornoivan <yurchor@ukr.net>, 2012-2013
+# Yuri Chornoivan <yurchor@ukr.net>, 2012-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2014-11-10 10:53+0000\n"
+"PO-Revision-Date: 2014-09-13 23:49+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/colorhug-client/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,7 +100,7 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Не від’єднуйте пристрій від комп’ютера і не вимикайте комп’ютер."
 
 msgid "ColorHug+ Utility"
-msgstr ""
+msgstr "Службова програма ColorHug+"
 
 msgid "Auto update:"
 msgstr "Автооновлення:"
@@ -187,7 +187,7 @@ msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Оновлює мікропрограму на колориметрі ColorHug"
 
 msgid "Play with the ColorHug+"
-msgstr ""
+msgstr "Погратися з ColorHug+"
 
 msgid "Whether we should update to test firmware"
 msgstr "Чи слід виконувати оновлення для перевірки мікрокоду"
@@ -438,7 +438,7 @@ msgstr "Не вдалося повернути ColorHug у початковий 
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Помилковий тип мікропрограми!"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
@@ -513,11 +513,11 @@ msgstr "Виявлено ColorHug"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "Виявлено ColorHug2"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "Виявлено ColorHug+"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -821,11 +821,11 @@ msgstr "Встановлює сталу до масштабування"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "Отримує значення DAC"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "Встановлює значення DAC"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
