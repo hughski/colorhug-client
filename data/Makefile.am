@@ -14,7 +14,8 @@ desktop_in_files =					\
 	colorhug-spectro-util.desktop.in		\
 	colorhug-ccmx.desktop.in			\
 	colorhug-docs.desktop.in			\
-	colorhug-flash.desktop.in
+	colorhug-flash.desktop.in			\
+	colorhug-refresh.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @GSETTINGS_RULES@
@@ -30,7 +31,8 @@ appdata_in_files =					\
 UI_FILES =						\
 	ch-spectro-util.ui				\
 	ch-ccmx.ui					\
-	ch-flash.ui
+	ch-flash.ui					\
+	ch-refresh.ui
 
 EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
@@ -51,6 +53,7 @@ DISTCLEANFILES =					\
 	colorhug-spectro-util.desktop			\
 	colorhug-ccmx.desktop				\
 	colorhug-docs.desktop				\
-	colorhug-flash.desktop
+	colorhug-flash.desktop				\
+	colorhug-refresh.desktop
 
 -include $(top_srcdir)/git.mk

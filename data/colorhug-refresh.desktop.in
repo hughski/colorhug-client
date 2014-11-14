@@ -1,0 +1,10 @@
+[Desktop Entry]
+_Name=ColorHug Latency & Refresh
+_Comment=Sample the display over time to observe PWM, input latency and refresh artifacts
+Icon=input-gaming
+Exec=colorhug-refresh
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;System;
+StartupNotify=true
+NoDisplay=false

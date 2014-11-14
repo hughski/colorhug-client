@@ -1,16 +1,19 @@
 [encoding: UTF-8]
 [type: gettext/glade]data/ch-ccmx.ui
 [type: gettext/glade]data/ch-flash.ui
+[type: gettext/glade]data/ch-refresh.ui
 [type: gettext/glade]data/ch-spectro-util.ui
 data/colorhug-ccmx.appdata.xml.in
 data/colorhug-ccmx.desktop.in
 data/colorhug-docs.desktop.in
 data/colorhug-flash.appdata.xml.in
 data/colorhug-flash.desktop.in
+data/colorhug-refresh.desktop.in
 data/colorhug-spectro-util.desktop.in
 data/com.hughski.colorhug-client.gschema.xml
 src/ch-ccmx.c
 src/ch-flash.c
 src/ch-graph-widget.c
 src/ch-main.c
+src/ch-refresh.c
 src/ch-spectro-util.c

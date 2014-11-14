@@ -9,7 +9,7 @@ AM_CPPFLAGS =						\
 	$(SOUP_CFLAGS)					\
 	$(CANBERRA_CFLAGS)				\
 	-DCD_DISABLE_DEPRECATED				\
-	-DG_LOG_DOMAIN=\"Ch\"				\
+	-DG_LOG_DOMAIN=\"ChClient\"			\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
 	-DLOCALEDIR=\""$(localedir)"\"
@@ -65,7 +65,8 @@ libexec_PROGRAMS =					\
 bin_PROGRAMS =						\
 	colorhug-ccmx					\
 	colorhug-cmd					\
-	colorhug-flash
+	colorhug-flash					\
+	colorhug-refresh
 
 colorhug_cmd_SOURCES =					\
 	ch-cleanup.h					\
@@ -136,6 +137,28 @@ colorhug_inhx32_to_bin_LDADD =				\
 colorhug_inhx32_to_bin_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
+colorhug_refresh_SOURCES =				\
+	ch-cleanup.h					\
+	ch-graph-widget.c				\
+	ch-graph-widget.h				\
+	ch-point-obj.c					\
+	ch-point-obj.h					\
+	ch-refresh.c					\
+	ch-refresh-resources.c				\
+	ch-refresh-resources.h
+
+colorhug_refresh_LDADD =				\
+	$(COLORD_LIBS)					\
+	$(COLORD_GTK_LIBS)				\
+	$(GUSB_LIBS)					\
+	$(GLIB_LIBS)					\
+	$(GTK_LIBS)					\
+	$(COLORHUG_LIBS)				\
+	-lm
+
+colorhug_refresh_CFLAGS =				\
+	$(WARNINGFLAGS_C)
+
 ch-flash-resources.c: colorhug-flash.gresource.xml ../data/ch-flash.ui
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-flash.gresource.xml
 ch-flash-resources.h: colorhug-flash.gresource.xml
@@ -151,17 +174,25 @@ ch-spectro-resources.c: colorhug-spectro.gresource.xml ../data/ch-spectro-util.u
 ch-spectro-resources.h: colorhug-spectro.gresource.xml
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-spectro.gresource.xml
 
+ch-refresh-resources.c: colorhug-refresh.gresource.xml ../data/ch-refresh.ui
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-refresh.gresource.xml
+ch-refresh-resources.h: colorhug-refresh.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-refresh.gresource.xml
+
 BUILT_SOURCES =						\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
 	ch-flash-resources.c				\
 	ch-flash-resources.h				\
+	ch-refresh-resources.c				\
+	ch-refresh-resources.h				\
 	ch-spectro-resources.c				\
 	ch-spectro-resources.h
 
 EXTRA_DIST =						\
 	colorhug-ccmx.gresource.xml			\
 	colorhug-flash.gresource.xml			\
+	colorhug-refresh.gresource.xml			\
 	colorhug-spectro.gresource.xml
 
 MAINTAINERCLEANFILES =					\
