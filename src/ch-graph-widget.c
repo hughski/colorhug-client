@@ -360,6 +360,9 @@ ch_get_axis_label (ChGraphWidgetType axis, gdouble value)
 				/*Translators: This is %2i minutes %02i seconds*/
 				text = g_strdup_printf (_("%2im%02i"), minutes, seconds);
 			}
+		} else if (value > 0.f && seconds < 2) {
+			/* TRANSLATORS: This is ms*/
+			text = g_strdup_printf (_("%.0fms"), value * 1000.f);
 		} else {
 			/*Translators: This is %2i seconds*/
 			text = g_strdup_printf (_("%2is"), seconds);
