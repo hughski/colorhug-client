@@ -407,7 +407,7 @@ ch_graph_widget_draw_grid (ChGraphWidget *graph, cairo_t *cr)
 
 	/* do vertical lines */
 	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
-	for (i=1; i<10; i++) {
+	for (i = 1; i < 10; i++) {
 		b = graph->priv->box_x + ((gdouble) i * divwidth);
 		cairo_move_to (cr, (gint)b + 0.5f, graph->priv->box_y);
 		cairo_line_to (cr, (gint)b + 0.5f, graph->priv->box_y + graph->priv->box_height);
@@ -415,7 +415,7 @@ ch_graph_widget_draw_grid (ChGraphWidget *graph, cairo_t *cr)
 	}
 
 	/* do horizontal lines */
-	for (i=1; i<10; i++) {
+	for (i = 1; i < 10; i++) {
 		b = graph->priv->box_y + ((gdouble) i * divheight);
 		cairo_move_to (cr, graph->priv->box_x, (gint)b + 0.5f);
 		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, (int)b + 0.5f);
@@ -617,7 +617,7 @@ ch_graph_widget_draw_line (ChGraphWidget *graph, cairo_t *cr)
 	array = graph->priv->data_list;
 
 	/* do each line */
-	for (j=0; j<array->len; j++) {
+	for (j = 0; j < array->len; j++) {
 		data = g_ptr_array_index (array, j);
 		if (data->len == 0)
 			continue;
@@ -631,7 +631,7 @@ ch_graph_widget_draw_line (ChGraphWidget *graph, cairo_t *cr)
 		if (plot == CH_GRAPH_WIDGET_PLOT_POINTS || plot == CH_GRAPH_WIDGET_PLOT_BOTH)
 			ch_graph_widget_draw_dot (cr, oldx, oldy, point->color);
 
-		for (i=1; i < data->len; i++) {
+		for (i = 1; i < data->len; i++) {
 			point = (ChPointObj *) g_ptr_array_index (data, i);
 
 			ch_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
