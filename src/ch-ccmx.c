@@ -31,6 +31,8 @@
 #include <libsoup/soup.h>
 #include <colorhug.h>
 
+#include "ch-cleanup.h"
+
 typedef enum {
 	CH_CCMX_PAGE_DEVICES,
 	CH_CCMX_PAGE_REFERENCE,
@@ -143,15 +145,11 @@ static void
 ch_ccmx_help_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
 	gboolean ret;
-	GError *error = NULL;
-	ret = gtk_show_uri (NULL,
-			    "help:colorhug-client/load-ccmx",
-			    GDK_CURRENT_TIME,
-			    &error);
-	if (!ret) {
+	_cleanup_error_free_ GError *error = NULL;
+	ret = gtk_show_uri (NULL, "help:colorhug-client/load-ccmx",
+			    GDK_CURRENT_TIME, &error);
+	if (!ret)
 		g_warning ("Failed to load help document: %s", error->message);
-		g_error_free (error);
-	}
 }
 
 /**
@@ -170,26 +168,20 @@ ch_ccmx_gen_close_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 static gboolean
 ch_ccmx_create_user_datadir (ChCcmxPrivate *priv, const gchar *location)
 {
-	gboolean ret;
-	GError *error = NULL;
-	GFile *file = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_object_unref_ GFile *file = NULL;
 
 	/* check if exists */
 	file = g_file_new_for_path (location);
-	ret = g_file_query_exists (file, NULL);
-	if (ret)
-		goto out;
-	ret = g_file_make_directory_with_parents (file, NULL, &error);
-	if (!ret) {
+	if (g_file_query_exists (file, NULL))
+		return TRUE;
+	if (!g_file_make_directory_with_parents (file, NULL, &error)) {
 		ch_ccmx_error_dialog (priv,
 				      _("Failed to create directory"),
 				      error->message);
-		g_error_free (error);
-		goto out;
+		return FALSE;
 	}
-out:
-	g_object_unref (file);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -201,16 +193,15 @@ ch_ccmx_find_by_desc (GtkTreeModel *model,
 		      const gchar *desc)
 {
 	gboolean ret;
-	gchar *desc_tmp = NULL;
 	GtkTreeIter iter;
 
 	ret = gtk_tree_model_get_iter_first (model, &iter);
 	while (ret) {
+		_cleanup_free_ gchar *desc_tmp = NULL;
 		gtk_tree_model_get (model, &iter,
 				    COLUMN_DESCRIPTION, &desc_tmp,
 				    -1);
 		ret = g_strcmp0 (desc_tmp, desc) == 0;
-		g_free (desc_tmp);
 		if (ret) {
 			*iter_found = iter;
 			break;
@@ -228,38 +219,31 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 			const gchar *filename,
 			GError **error)
 {
-	CdIt8 *it8 = NULL;
 	const gchar *description;
 	const gchar *tmp;
 	gboolean ret;
-	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
 	GtkListStore *list_store;
 	GtkTreeIter iter;
 	guint8 types;
+	_cleanup_object_unref_ CdIt8 *it8 = NULL;
+	_cleanup_free_ gchar *ccmx_data = NULL;
 
 	/* load file */
 	g_debug ("opening %s", filename);
-	ret = g_file_get_contents (filename,
-				   &ccmx_data,
-				   &ccmx_size,
-				   error);
-	if (!ret)
-		goto out;
+	if (!g_file_get_contents (filename, &ccmx_data, &ccmx_size, error))
+		return FALSE;
 
 	/* parse */
 	it8 = cd_it8_new ();
-	ret = cd_it8_load_from_data (it8, ccmx_data, ccmx_size, error);
-	if (!ret)
-		goto out;
+	if (!cd_it8_load_from_data (it8, ccmx_data, ccmx_size, error))
+		return FALSE;
 
 	/* get the description from the ccmx file */
 	description = cd_it8_get_title (it8);
 	if (description == NULL) {
-		ret = FALSE;
-		g_set_error_literal (error, 1, 0,
-				     "CCMX file does not have title");
-		goto out;
+		g_set_error_literal (error, 1, 0, "CCMX file does not have title");
+		return FALSE;
 	}
 
 	/* only load CCMXs for the correct device type */
@@ -270,7 +254,7 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 		if (g_strcmp0 (tmp, "Hughski ColorHug") != 0 &&
 		    g_strcmp0 (tmp, "ColorHug") != 0) {
 			g_warning ("ignoring %s as designed for %s", filename, tmp);
-			goto out;
+			return TRUE;
 		}
 		break;
 	case CH_DEVICE_MODE_FIRMWARE2:
@@ -278,7 +262,7 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 		if (g_strcmp0 (tmp, "Hughski ColorHug2") != 0 &&
 		    g_strcmp0 (tmp, "ColorHug2") != 0) {
 			g_warning ("ignoring %s as designed for %s", filename, tmp);
-			goto out;
+			return TRUE;
 		}
 		break;
 	default:
@@ -287,9 +271,8 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 
 	/* does already exist? */
 	if (g_hash_table_lookup (priv->hash, description) != NULL) {
-		ret = TRUE;
 		g_debug ("CCMX '%s' already exists", description);
-		goto out;
+		return TRUE;
 	}
 
 	/* get the supported display types */
@@ -377,12 +360,7 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	}
 
 	/* success */
-	ret = TRUE;
-out:
-	g_free (ccmx_data);
-	if (it8 != NULL)
-		g_object_unref (it8);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -392,11 +370,9 @@ static void
 ch_ccmx_add_local_files (ChCcmxPrivate *priv)
 {
 	const gchar *tmp;
-	gboolean ret;
-	gchar *location;
-	gchar *location_tmp;
 	GDir *dir;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *location = NULL;
 
 	/* open directory */
 	location = g_build_filename (g_get_user_data_dir (),
@@ -405,27 +381,23 @@ ch_ccmx_add_local_files (ChCcmxPrivate *priv)
 	dir = g_dir_open (location, 0, &error);
 	if (dir == NULL) {
 		g_warning ("Failed to get directory: %s", error->message);
-		g_error_free (error);
 		goto out;
 	}
 	while (TRUE) {
+		_cleanup_free_ gchar *location_tmp = NULL;
 		tmp = g_dir_read_name (dir);
 		if (tmp == NULL)
 			break;
 		location_tmp = g_build_filename (location, tmp, NULL);
-		ret = ch_ccmx_add_local_file (priv, location_tmp, &error);
-		if (!ret) {
+		if (!ch_ccmx_add_local_file (priv, location_tmp, &error)) {
 			g_warning ("Failed to add file %s: %s",
 				   location_tmp, error->message);
-			g_error_free (error);
 			goto out;
 		}
-		g_free (location_tmp);
 	}
 out:
 	if (dir != NULL)
 		g_dir_close (dir);
-	g_free (location);
 }
 
 /**
@@ -464,8 +436,8 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
-	gchar *location = NULL;
-	GError *error = NULL;
+	_cleanup_free_ gchar *location = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 	GtkListStore *list_store;
 	SoupURI *uri;
 	guint i;
@@ -476,18 +448,16 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 		location = g_strdup_printf ("%s: %s",
 					    soup_status_get_phrase (msg->status_code),
 					    uri->path);
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to download file"),
+		ch_ccmx_error_dialog (priv, _("Failed to download file"),
 				      location);
-		goto out;
+		return;
 	}
 
 	/* empty file */
 	if (msg->response_body->length == 0) {
-		ch_ccmx_error_dialog (priv,
-				      _("File has zero size"),
+		ch_ccmx_error_dialog (priv, _("File has zero size"),
 				      soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* update UI */
@@ -496,11 +466,8 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 					    (gsize) msg->response_body->length,
 					    &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to load data"),
-				       error->message);
-		g_error_free (error);
-		goto out;
+		ch_ccmx_error_dialog (priv, _("Failed to load data"), error->message);
+		return;
 	}
 
 	/* reset the calibration map too */
@@ -517,8 +484,6 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_projector"));
 	gtk_list_store_clear (list_store);
 	g_hash_table_remove_all (priv->hash);
-out:
-	g_free (location);
 }
 
 /**
@@ -559,21 +524,18 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	const gchar *title;
-	gboolean ret;
-	GError *error = NULL;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
-	gchar *server_uri = NULL;
-	gchar *uri = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *server_uri = NULL;
+	_cleanup_free_ gchar *uri = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		/* TRANSLATORS: the request failed */
 		title = _("Failed to contact ColorHug");
 		ch_ccmx_error_dialog (priv, title, error->message);
-		g_error_free (error);
 		goto out;
 	}
 
@@ -597,8 +559,6 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	soup_session_queue_message (priv->session, msg,
 				    ch_ccmx_got_factory_calibration_cb, priv);
 out:
-	g_free (server_uri);
-	g_free (uri);
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
 }
@@ -796,20 +756,17 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	const gchar *title;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
 	guint i;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		/* TRANSLATORS: the calibration map is an array that
 		 * maps a specific matrix to a display type */
 		title = _("Failed to get the calibration data");
 		ch_ccmx_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* add each item */
@@ -857,8 +814,6 @@ ch_ccmx_get_calibration_cb (GObject *source,
 		/* Force repair only once */
 		priv->force_repair = FALSE;
 	}
-out:
-	return;
 }
 
 /**
@@ -907,19 +862,16 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 {
 	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		/* TRANSLATORS: the calibration map is an array that
 		 * maps a specific matrix to a display type */
 		title = _("Failed to set the calibration map");
 		ch_ccmx_error_dialog (priv, title, error->message);
-		g_error_free (error);
 		goto out;
 	}
 
@@ -940,19 +892,16 @@ ch_ccmx_set_calibration_cb (GObject *source,
 			    gpointer user_data)
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		ch_ccmx_error_dialog (priv,
 				       _("Failed to set the calibration matrix"),
 				       error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* assign it here */
@@ -968,8 +917,6 @@ ch_ccmx_set_calibration_cb (GObject *source,
 				       NULL,
 				       ch_ccmx_set_calibration_map_cb,
 				       priv);
-out:
-	return;
 }
 
 /**
@@ -985,22 +932,19 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	CdIt8 *it8 = NULL;
 	const CdMat3x3 *calibration;
 	const gchar *description;
-	gboolean ret = TRUE;
 	guint8 types = 0;
 
 	/* read ccmx */
 	it8 = cd_it8_new ();
-	ret = cd_it8_load_from_data (it8, (const gchar*) ccmx_data, ccmx_size, error);
-	if (!ret)
-		goto out;
+	if (!cd_it8_load_from_data (it8, (const gchar*) ccmx_data, ccmx_size, error))
+		return FALSE;
 
 	/* get the description from the ccmx file */
 	description = cd_it8_get_title (it8);
 	if (description == NULL) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "CCMX file does not have description");
-		goto out;
+		return FALSE;
 	}
 
 	/* get the supported display types */
@@ -1031,8 +975,7 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 				       NULL,
 				       ch_ccmx_set_calibration_cb,
 				       priv);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1044,26 +987,17 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 			      const gchar *filename,
 			      GError **error)
 {
-	gboolean ret;
-	gchar *ccmx_data = NULL;
 	gsize ccmx_size;
+	_cleanup_free_ gchar *ccmx_data = NULL;
 
 	/* load local file */
-	ret = g_file_get_contents (filename,
-				   &ccmx_data,
-				   &ccmx_size,
-				   error);
-	if (!ret)
-		goto out;
-
-	ret = ch_ccmx_set_calibration_data (priv,
-					    cal_idx,
-					    (guint8 *)ccmx_data,
-					    ccmx_size,
-					    error);
-out:
-	g_free (ccmx_data);
-	return ret;
+	if (!g_file_get_contents (filename, &ccmx_data, &ccmx_size, error))
+		return FALSE;
+	return ch_ccmx_set_calibration_data (priv,
+					     cal_idx,
+					     (guint8 *)ccmx_data,
+					     ccmx_size,
+					     error);
 }
 
 /**
@@ -1072,16 +1006,15 @@ out:
 static void
 ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
-	gboolean ret;
-	gchar *filename;
-	GError *error = NULL;
 	GtkWindow *window;
 	guint i;
+	_cleanup_free_ gchar *filename = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 
 	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_ccmx"));
 	filename = ch_ccmx_get_profile_filename (window);
 	if (filename == NULL)
-		goto out;
+		return;
 
 	/* import the file into a spare slot */
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
@@ -1092,20 +1025,15 @@ ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 		ch_ccmx_error_dialog (priv,
 				      _("No space left on device"),
 				      _("All 64 slots are used up."));
-		goto out;
+		return;
 	}
 
 	/* load this ccmx file as the new calibration */
-	ret = ch_ccmx_set_calibration_file (priv, i, filename, &error);
-	if (!ret) {
+	if (!ch_ccmx_set_calibration_file (priv, i, filename, &error)) {
 		ch_ccmx_error_dialog (priv,
 				       _("Failed to load file"),
 				       error->message);
-		g_error_free (error);
-		goto out;
 	}
-out:
-	g_free (filename);
 }
 
 /**
@@ -1147,21 +1075,18 @@ static void
 ch_ccmx_got_device (ChCcmxPrivate *priv)
 {
 	const gchar *title;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* fake device */
 	if (g_getenv ("COLORHUG_EMULATE") != NULL)
 		goto fake_device;
 
 	/* open device */
-	ret = ch_device_open (priv->device, &error);
-	if (!ret) {
+	if (!ch_device_open (priv->device, &error)) {
 		/* TRANSLATORS: permissions error perhaps? */
 		title = _("Failed to open device");
 		ch_ccmx_error_dialog (priv, title, error->message);
-		g_error_free (error);
 		return;
 	}
 
@@ -1220,23 +1145,21 @@ static void
 ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 {
 	const gchar *title;
-	gboolean ret;
-	gchar *local_filename = NULL;
-	GError *error = NULL;
 	gint idx_tmp;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkWidget *widget;
 	guint cal_index;
 	guint i;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *local_filename = NULL;
 
 	/* not yet setup UI */
 	if (!priv->done_get_cal)
 		return;
 
 	/* change this on the device */
-	ret = gtk_combo_box_get_active_iter (combo, &iter);
-	if (!ret)
+	if (!gtk_combo_box_get_active_iter (combo, &iter))
 		return;
 	model = gtk_combo_box_get_model (combo);
 	gtk_tree_model_get (model, &iter,
@@ -1258,18 +1181,15 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 			title = _("No space left on device");
 			ch_ccmx_error_dialog (priv, title,
 					      _("All 64 slots are used up."));
-			goto out;
+			return;
 		}
 
 		/* load this ccmx file as the new calibration */
-		ret = ch_ccmx_set_calibration_file (priv, i, local_filename, &error);
-		if (!ret) {
+		if (!ch_ccmx_set_calibration_file (priv, i, local_filename, &error)) {
 			gtk_combo_box_set_active (combo, -1);
-			ch_ccmx_error_dialog (priv,
-					       _("Failed to load file"),
+			ch_ccmx_error_dialog (priv, _("Failed to load file"),
 					       error->message);
-			g_error_free (error);
-			goto out;
+			return;
 		}
 
 		/* fix the index */
@@ -1282,7 +1202,7 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 		cal_index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (combo),
 								"colorhug-ccmx-idx"));
 		priv->calibration_map[cal_index] = i;
-		goto out;
+		return;
 	}
 
 	/* update the map */
@@ -1306,8 +1226,6 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 				       NULL,
 				       ch_ccmx_set_calibration_map_cb,
 				       priv);
-out:
-	g_free (local_filename);
 }
 
 /**
@@ -1320,11 +1238,11 @@ ch_ccmx_got_file_cb (SoupSession *session,
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
-	gchar *basename = NULL;
-	gchar *location = NULL;
-	GError *error = NULL;
 	GtkWidget *widget;
 	SoupURI *uri;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *basename = NULL;
+	_cleanup_free_ gchar *location = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -1332,18 +1250,16 @@ ch_ccmx_got_file_cb (SoupSession *session,
 		location = g_strdup_printf ("%s: %s",
 					    soup_status_get_phrase (msg->status_code),
 					    uri->path);
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to download file"),
+		ch_ccmx_error_dialog (priv, _("Failed to download file"),
 				      location);
-		goto out;
+		return;
 	}
 
 	/* empty file */
 	if (msg->response_body->length == 0) {
-		ch_ccmx_error_dialog (priv,
-				      _("File has zero size"),
+		ch_ccmx_error_dialog (priv, _("File has zero size"),
 				      soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* write file */
@@ -1358,11 +1274,8 @@ ch_ccmx_got_file_cb (SoupSession *session,
 				   msg->response_body->length,
 				   &error);
 	if (!ret) {
-		ch_ccmx_error_dialog (priv,
-				      _("Failed to write file"),
-				      error->message);
-		g_error_free (error);
-		goto out;
+		ch_ccmx_error_dialog (priv, _("Failed to write file"), error->message);
+		return;
 	}
 
 	/* update UI */
@@ -1371,10 +1284,6 @@ ch_ccmx_got_file_cb (SoupSession *session,
 		gtk_widget_hide (widget);
 		ch_ccmx_add_local_files (priv);
 	}
-out:
-	g_free (basename);
-	g_free (location);
-	return;
 }
 
 /**
@@ -1415,21 +1324,18 @@ ch_ccmx_got_index_cb (SoupSession *session,
 {
 	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	gchar *filename_tmp;
-	gchar **lines = NULL;
-	gchar *location = NULL;
-	gchar *server_uri = NULL;
-	gchar *uri_tmp;
 	GtkWidget *widget;
 	guint i;
+	_cleanup_free_ gchar *location = NULL;
+	_cleanup_free_ gchar *server_uri = NULL;
+	_cleanup_strv_free_ gchar **lines = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		/* TRANSLATORS: could not download the directory listing */
 		title = _("Failed to get the list of firmware files");
 		ch_ccmx_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* empty file */
@@ -1437,16 +1343,15 @@ ch_ccmx_got_index_cb (SoupSession *session,
 		/* TRANSLATORS: the directory listing returned no results */
 		title = _("Firmware list has zero size");
 		ch_ccmx_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* check cache directory exists */
 	location = g_build_filename (g_get_user_data_dir (),
 				     "colorhug-ccmx",
 				     NULL);
-	ret = ch_ccmx_create_user_datadir (priv, location);
-	if (!ret)
-		goto out;
+	if (!ch_ccmx_create_user_datadir (priv, location))
+		return;
 
 	/* reset the counter */
 	priv->ccmx_idx = 0;
@@ -1455,6 +1360,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	lines = g_strsplit (msg->response_body->data, "\n", -1);
 	for (i = 0; lines[i] != NULL; i++) {
+		_cleanup_free_ gchar *filename_tmp = NULL;
 		if (lines[i][0] == '\0')
 			continue;
 
@@ -1462,8 +1368,8 @@ ch_ccmx_got_index_cb (SoupSession *session,
 		filename_tmp = g_build_filename (location,
 						 lines[i],
 						 NULL);
-		ret = g_file_test (filename_tmp, G_FILE_TEST_EXISTS);
-		if (!ret) {
+		if (!g_file_test (filename_tmp, G_FILE_TEST_EXISTS)) {
+			_cleanup_free_ gchar *uri_tmp = NULL;
 			uri_tmp = g_build_filename (server_uri,
 						    ch_ccmx_get_device_download_kind (priv),
 						    "ccmx",
@@ -1473,9 +1379,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 			g_debug ("download %s to %s",
 				 uri_tmp, filename_tmp);
 			ch_ccmx_download_file (priv, uri_tmp);
-			g_free (uri_tmp);
 		}
-		g_free (filename_tmp);
 	}
 
 	/* nothing to do */
@@ -1483,11 +1387,6 @@ ch_ccmx_got_index_cb (SoupSession *session,
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
 		gtk_widget_hide (widget);
 	}
-out:
-	g_free (server_uri);
-	g_free (location);
-	g_strfreev (lines);
-	return;
 }
 
 static void ch_ccmx_gen_setup_page (ChCcmxPrivate *priv);
@@ -1510,18 +1409,15 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 	CdColorXYZ xyz;
 	CdColorXYZ *xyz_tmp;
 	const gchar *tmp;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
 	guint i;
 	guint len;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* only lock once */
 	if (!cd_sensor_get_locked (priv->gen_sensor_spectral)) {
-		ret = cd_sensor_lock_sync (priv->gen_sensor_spectral, NULL, &error);
-		if (!ret) {
+		if (!cd_sensor_lock_sync (priv->gen_sensor_spectral, NULL, &error)) {
 			g_warning ("failed to lock sensor: %s", error->message);
-			g_error_free (error);
 			goto out;
 		}
 	}
@@ -1558,7 +1454,6 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 				gtk_image_set_from_file (GTK_IMAGE (widget), tmp);
 				gtk_widget_set_visible (widget, TRUE);
 				gtk_widget_set_visible (priv->gen_sample_widget, FALSE);
-				g_error_free (error);
 				goto out;
 			}
 			if (g_error_matches (error,
@@ -1570,7 +1465,6 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
 				/* TRANSLATORS: the user needs to change something on the device */
 				gtk_label_set_markup (GTK_LABEL (widget), _("Set the device to the surface position and click 'Next'."));
-				g_error_free (error);
 				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
 				tmp = cd_sensor_get_metadata_item (priv->gen_sensor_spectral,
 								   CD_SENSOR_METADATA_IMAGE_SCREEN);
@@ -1580,7 +1474,6 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 				goto out;
 			}
 			g_warning ("failed to get sample: %s", error->message);
-			g_error_free (error);
 			goto out;
 		}
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
@@ -1594,10 +1487,8 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 	}
 
 	/* unlock */
-	ret = cd_sensor_unlock_sync (priv->gen_sensor_spectral, NULL, &error);
-	if (!ret) {
+	if (!cd_sensor_unlock_sync (priv->gen_sensor_spectral, NULL, &error)) {
 		g_warning ("failed to unlock sensor: %s", error->message);
-		g_error_free (error);
 		goto out;
 	}
 
@@ -1615,15 +1506,12 @@ ch_ccmx_get_sample_colorhug_cb (GObject *source_object,
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 
 	ret = ch_device_queue_process_finish (CH_DEVICE_QUEUE (source_object),
-					      res,
-					      &error);
-	if (!ret) {
+					      res, &error);
+	if (!ret)
 		g_warning ("failed to get sample: %s", error->message);
-		g_error_free (error);
-	}
 	g_main_loop_quit (priv->gen_loop);
 }
 
@@ -1685,7 +1573,6 @@ static void
 ch_ccmx_gen_window_move (ChCcmxPrivate *priv)
 {
 	const gchar *xrandr_name;
-	gchar *plug_name;
 	GdkRectangle rect;
 	GdkScreen *screen;
 	gint i;
@@ -1701,14 +1588,14 @@ ch_ccmx_gen_window_move (ChCcmxPrivate *priv)
 	xrandr_name = cd_device_get_metadata_item (priv->gen_device,
 						   CD_DEVICE_METADATA_XRANDR_NAME);
 	for (i = 0; i < num_monitors; i++) {
+		_cleanup_free_ gchar *plug_name = NULL;
 		plug_name = gdk_screen_get_monitor_plug_name (screen, i);
 		if (g_strcmp0 (plug_name, xrandr_name) == 0)
 			monitor_num = i;
-		g_free (plug_name);
 	}
 	if (monitor_num == -1) {
 		g_warning ("failed to find output %s", xrandr_name);
-		goto out;
+		return;
 	}
 
 	/* move the window, and set it to the right size */
@@ -1718,8 +1605,6 @@ ch_ccmx_gen_window_move (ChCcmxPrivate *priv)
 	gtk_window_move (window,
 			 rect.x + ((rect.width - win_width) / 2),
 			 rect.y + ((rect.height - win_height) / 2));
-out:
-	return;
 }
 
 /**
@@ -1730,9 +1615,9 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 {
 	GtkNotebook *notebook;
 	GtkWidget *widget;
-	gchar *markup = NULL;
 	gboolean ret;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *markup = NULL;
 
 	notebook = GTK_NOTEBOOK (gtk_builder_get_object (priv->builder, "notebook_gen"));
 	switch (priv->gen_current_page) {
@@ -1805,12 +1690,10 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 
 		/* uninhibit */
 		ret = cd_device_profiling_uninhibit_sync (priv->gen_device,
-							  NULL,
-							  &error);
+							  NULL, &error);
 		if (!ret) {
 			g_warning ("failed to uninhibit device: %s", error->message);
-			g_error_free (error);
-			goto out;
+			return;
 		}
 
 		/* show summary */
@@ -1835,8 +1718,7 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_done_msg"));
 			markup = g_strdup_printf ("<b>%s</b>\n%s", _("Correction matrix failed to be generated!"), error->message);
 			gtk_label_set_markup (GTK_LABEL (widget), markup);
-			g_error_free (error);
-			goto out;
+			return;
 		} else {
 			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_done_msg"));
 			markup = g_strdup_printf ("<b>%s</b>\n", _("Correction matrix successfully generated!"));
@@ -1846,8 +1728,6 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 	default:
 		g_assert_not_reached ();
 	}
-out:
-	g_free (markup);
 }
 
 /**
@@ -1856,8 +1736,8 @@ out:
 static gchar *
 ch_ccmx_gen_default_ccmx_filename (ChCcmxPrivate *priv)
 {
-	gchar *tmp;
 	gchar *filename;
+	_cleanup_free_ gchar *tmp = NULL;
 
 	tmp = g_strdup_printf ("%s-%s-%s.ccmx",
 				cd_sensor_kind_to_string (CD_SENSOR_KIND_COLORHUG),
@@ -1865,7 +1745,6 @@ ch_ccmx_gen_default_ccmx_filename (ChCcmxPrivate *priv)
 				cd_device_get_model (priv->gen_device));
 	g_strdelimit (tmp, " ", '-');
 	filename = g_ascii_strdown (tmp, -1);
-	g_free (tmp);
 	return filename;
 }
 
@@ -1876,21 +1755,18 @@ static void
 ch_ccmx_gen_done_share_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
 	const gchar *uri;
-	gboolean ret = TRUE;
-	gchar *ccmx_filename = NULL;
-	gchar *data = NULL;
-	GError *error = NULL;
 	gsize length;
 	guint status_code;
 	SoupBuffer *buffer = NULL;
-	SoupMessage *msg = NULL;
 	SoupMultipart *multipart = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *ccmx_filename = NULL;
+	_cleanup_free_ gchar *data = NULL;
+	_cleanup_object_unref_ SoupMessage *msg = NULL;
 
 	/* get file data */
-	ret = cd_it8_save_to_data (priv->gen_ccmx, &data, &length, &error);
-	if (!ret) {
+	if (!cd_it8_save_to_data (priv->gen_ccmx, &data, &length, &error)) {
 		g_warning ("failed to save file: %s", error->message);
-		g_error_free (error);
 		goto out;
 	}
 
@@ -1908,9 +1784,7 @@ ch_ccmx_gen_done_share_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	msg = soup_form_request_new_from_multipart (CH_CCMX_CCMX_UPLOAD_SERVER, multipart);
 	status_code = soup_session_send_message (priv->session, msg);
 	if (!SOUP_STATUS_IS_SUCCESSFUL (status_code)) {
-		ret = FALSE;
-		g_warning ("Failed to upload file: %s",
-			   msg->reason_phrase);
+		g_warning ("Failed to upload file: %s", msg->reason_phrase);
 		goto out;
 	}
 	uri = soup_message_headers_get_one (msg->response_headers, "Location");
@@ -1922,12 +1796,8 @@ ch_ccmx_gen_done_share_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 out:
 	if (buffer != NULL)
 		soup_buffer_free (buffer);
-	if (msg != NULL)
-		g_object_unref (msg);
 	if (multipart != NULL)
 		soup_multipart_free (multipart);
-	g_free (ccmx_filename);
-	g_free (data);
 }
 
 /**
@@ -1936,14 +1806,13 @@ out:
 static void
 ch_ccmx_gen_done_save_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
-	gboolean ret;
-	gchar *current_folder;
-	gchar *current_name;
-	gchar *filename = NULL;
-	GError *error = NULL;
-	GFile *file = NULL;
 	GtkWidget *dialog;
 	GtkWindow *window;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *current_folder;
+	_cleanup_free_ gchar *current_name;
+	_cleanup_free_ gchar *filename = NULL;
+	_cleanup_object_unref_ GFile *file = NULL;
 
 	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_gen"));
 	dialog = gtk_file_chooser_dialog_new ("Save File",
@@ -1967,20 +1836,13 @@ ch_ccmx_gen_done_save_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		g_debug ("saving CCMX %s", filename);
 		file = g_file_new_for_path (filename);
-		ret = cd_it8_save_to_file (priv->gen_ccmx, file, &error);
-		if (!ret) {
+		if (!cd_it8_save_to_file (priv->gen_ccmx, file, &error)) {
 			g_warning ("failed to save file: %s", error->message);
-			g_error_free (error);
 			goto out;
 		}
 	}
 out:
-	if (file != NULL)
-		g_object_unref (file);
 	gtk_widget_destroy (dialog);
-	g_free (filename);
-	g_free (current_name);
-	g_free (current_folder);
 }
 
 /**
@@ -2003,7 +1865,7 @@ ch_ccmx_gen_add_device (ChCcmxPrivate *priv, CdDevice *device)
 {
 	GtkListStore *list_store;
 	GtkTreeIter iter;
-	gchar *title;
+	_cleanup_free_ gchar *title = NULL;
 
 	title = g_strdup_printf ("%s - %s",
 				 cd_device_get_vendor (device),
@@ -2014,7 +1876,6 @@ ch_ccmx_gen_add_device (ChCcmxPrivate *priv, CdDevice *device)
 			    0, device,
 			    1, title,
 			    -1);
-	g_free (title);
 }
 
 /**
@@ -2027,32 +1888,25 @@ ch_ccmx_client_get_devices_cb (GObject *object,
 {
 	CdDevice *device_tmp;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GPtrArray *array;
 	guint i;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 
 	array = cd_client_get_devices_finish (CD_CLIENT (object), res, &error);
 	if (array == NULL) {
 		g_warning ("Failed to get display devices: %s", error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 	for (i = 0; i < array->len; i++) {
 		device_tmp = g_ptr_array_index (array, i);
-		ret = cd_device_connect_sync (device_tmp, NULL, &error);
-		if (!ret) {
+		if (!cd_device_connect_sync (device_tmp, NULL, &error)) {
 			g_warning ("Failed to contact device %s: %s",
 				   cd_device_get_object_path (device_tmp),
 				   error->message);
-			g_error_free (error);
-			goto out;
+			return;
 		}
 		ch_ccmx_gen_add_device (priv, device_tmp);
 	}
-out:
-	if (array != NULL)
-		g_ptr_array_unref (array);
 }
 
 /**
@@ -2089,10 +1943,10 @@ static void
 ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 {
 	const gchar *title;
-	gchar *server_uri = NULL;
-	gchar *uri = NULL;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
+	_cleanup_free_ gchar *server_uri = NULL;
+	_cleanup_free_ gchar *uri = NULL;
 
 	/* setup UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
@@ -2126,8 +1980,6 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 out:
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
-	g_free (server_uri);
-	g_free (uri);
 }
 
 /**
@@ -2136,17 +1988,13 @@ out:
 static GUsbDevice *
 ch_ccmx_get_fake_device (ChCcmxPrivate *priv)
 {
-	GPtrArray *array;
-	GUsbDevice *device = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 
 	/* just return the first device */
 	array = g_usb_device_list_get_devices (priv->device_list);
 	if (array->len == 0)
-		goto out;
-	device = g_object_ref (g_ptr_array_index (array, 0));
-out:
-	g_ptr_array_unref (array);
-	return device;
+		return NULL;
+	return g_object_ref (g_ptr_array_index (array, 0));
 }
 
 /**
@@ -2208,35 +2056,28 @@ ch_ccmx_client_get_sensors_cb (GObject *object,
 {
 	CdSensor *sensor_tmp;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
-	GPtrArray *array;
 	guint i;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 
 	/* get all the sensors */
 	array = cd_client_get_sensors_finish (CD_CLIENT (object), res, &error);
 	if (array == NULL) {
 		g_warning ("Failed to get display devices: %s", error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* conect to all the sensors */
 	for (i = 0; i < array->len; i++) {
 		sensor_tmp = g_ptr_array_index (array, i);
-		ret = cd_sensor_connect_sync (sensor_tmp, NULL, &error);
-		if (!ret) {
+		if (!cd_sensor_connect_sync (sensor_tmp, NULL, &error)) {
 			g_warning ("Failed to contact sensor %s: %s",
 				   cd_sensor_get_object_path (sensor_tmp),
 				   error->message);
-			g_error_free (error);
-			goto out;
+			return;
 		}
 		ch_ccmx_check_sensor (priv, sensor_tmp);
 	}
-out:
-	if (array != NULL)
-		g_ptr_array_unref (array);
 }
 
 /**
@@ -2247,15 +2088,12 @@ ch_ccmx_sensor_added_cb (CdClient *gen_client,
 			 CdSensor *sensor,
 			 ChCcmxPrivate *priv)
 {
-	gboolean ret;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 
-	ret = cd_sensor_connect_sync (sensor, NULL, &error);
-	if (!ret) {
+	if (!cd_sensor_connect_sync (sensor, NULL, &error)) {
 		g_warning ("Failed to contact sensor %s: %s",
 			   cd_sensor_get_object_path (sensor),
 			   error->message);
-		g_error_free (error);
 		return;
 	}
 	ch_ccmx_check_sensor (priv, sensor);
@@ -2282,14 +2120,11 @@ ch_ccmx_client_connect_cb (GObject *object,
 			   gpointer user_data)
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 
-	ret = cd_client_connect_finish (CD_CLIENT (object), res, &error);
-	if (!ret) {
+	if (!cd_client_connect_finish (CD_CLIENT (object), res, &error)) {
 		g_warning ("Failed to contact colord: %s", error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* get sensors */
@@ -2303,9 +2138,6 @@ ch_ccmx_client_connect_cb (GObject *object,
 			  G_CALLBACK (ch_ccmx_sensor_added_cb), priv);
 	g_signal_connect (priv->gen_client, "sensor-removed",
 			  G_CALLBACK (ch_ccmx_sensor_removed_cb), priv);
-
-out:
-	return;
 }
 
 /**
@@ -2316,11 +2148,11 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 			      ChCcmxPrivate *priv)
 {
 	gboolean ret;
-	gchar *title_ccmx = NULL;
-	GError *error = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkWidget *widget;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *title_ccmx = NULL;
 
 	if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
 		g_debug ("no row selected");
@@ -2330,12 +2162,10 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 	/* get new selection */
 	if (priv->gen_device != NULL) {
 		ret = cd_device_profiling_uninhibit_sync (priv->gen_device,
-							  NULL,
-							  &error);
+							  NULL, &error);
 		if (!ret) {
 			g_warning ("failed to uninhibit device: %s", error->message);
-			g_error_free (error);
-			goto out;
+			return;
 		}
 		g_object_unref (priv->gen_device);
 	}
@@ -2345,12 +2175,10 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 
 	/* inhibit device */
 	ret = cd_device_profiling_inhibit_sync (priv->gen_device,
-						NULL,
-						&error);
+						NULL, &error);
 	if (!ret) {
 		g_warning ("failed to inhibit device: %s", error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* set default CCMX title */
@@ -2362,8 +2190,6 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 	/* set next button */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
 	gtk_widget_set_sensitive (widget, TRUE);
-out:
-	g_free (title_ccmx);
 }
 
 /**
@@ -2375,8 +2201,6 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	CdColorRGB rgb;
 	CdColorXYZ xyz;
 	const gchar *title;
-	GdkPixbuf *pixbuf;
-	GError *error = NULL;
 	gint retval;
 	GtkCellRenderer *renderer;
 	GtkListStore *list_store;
@@ -2385,6 +2209,8 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	GtkWidget *main_window;
 	GtkWidget *widget;
 	guint i;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
 
 	/* get UI */
 	priv->builder = gtk_builder_new ();
@@ -2392,9 +2218,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 						"/com/hughski/colorhug/ch-ccmx.ui",
 						&error);
 	if (retval == 0) {
-		g_warning ("failed to load ui: %s",
-			   error->message);
-		g_error_free (error);
+		g_warning ("failed to load ui: %s", error->message);
 		goto out;
 	}
 
@@ -2533,7 +2357,6 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 						    -1, 48, TRUE, &error);
 	g_assert (pixbuf != NULL);
 	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf);
-	g_object_unref (pixbuf);
 
 	/* hide all unused widgets until we've connected with the device */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "grid_data"));
@@ -2657,13 +2480,12 @@ int
 main (int argc, char **argv)
 {
 	ChCcmxPrivate *priv;
-	gboolean ret;
 	gboolean verbose = FALSE;
 	gboolean force_repair = FALSE;
 	guint i;
-	GError *error = NULL;
 	GOptionContext *context;
 	int status = 0;
+	_cleanup_error_free_ GError *error = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */
@@ -2687,12 +2509,9 @@ main (int argc, char **argv)
 	context = g_option_context_new (_("ColorHug CCMX loader"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
-	ret = g_option_context_parse (context, &argc, &argv, &error);
-	if (!ret) {
-		g_warning ("%s: %s",
-			   _("Failed to parse command line options"),
+	if (!g_option_context_parse (context, &argc, &argv, &error)) {
+		g_warning ("%s: %s", _("Failed to parse command line options"),
 			   error->message);
-		g_error_free (error);
 	}
 	g_option_context_free (context);
 

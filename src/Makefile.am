@@ -105,6 +105,7 @@ colorhug_flash_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_ccmx_SOURCES =					\
+	ch-cleanup.h					\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
 	ch-ccmx.c
