@@ -636,6 +636,14 @@ ch_graph_widget_draw_line (ChGraphWidget *graph, cairo_t *cr)
 
 			ch_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
 
+			/* ignore anything out of range */
+			if (point->x < graph->priv->start_x || point->x > graph->priv->stop_x) {
+				ch_graph_widget_get_pos_on_graph (graph,
+								  point->x, point->y,
+								  &oldx, &oldy);
+				continue;
+			}
+
 			/* ignore white lines */
 			if (point->color == 0xffffff) {
 				oldx = newx;
