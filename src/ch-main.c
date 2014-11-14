@@ -289,15 +289,17 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble std_dev = 0.0f;
 
 	/* setup HW */
-	ch_device_queue_set_integral_time (priv->device_queue,
-					   priv->device,
-					   CH_INTEGRAL_TIME_VALUE_MAX);
-	ch_device_queue_set_multiplier (priv->device_queue,
-					priv->device,
-					CH_FREQ_SCALE_100);
-	ch_device_queue_set_color_select (priv->device_queue,
-					  priv->device,
-					  CH_COLOR_SELECT_WHITE);
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
+		ch_device_queue_set_integral_time (priv->device_queue,
+						   priv->device,
+						   CH_INTEGRAL_TIME_VALUE_MAX);
+		ch_device_queue_set_multiplier (priv->device_queue,
+						priv->device,
+						CH_FREQ_SCALE_100);
+		ch_device_queue_set_color_select (priv->device_queue,
+						  priv->device,
+						  CH_COLOR_SELECT_WHITE);
+	}
 	ch_device_queue_take_reading_array (priv->device_queue,
 					    priv->device,
 					    reading_array);
