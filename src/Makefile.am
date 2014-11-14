@@ -123,6 +123,7 @@ colorhug_ccmx_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_inhx32_to_bin_SOURCES =			\
+	ch-cleanup.h					\
 	ch-inhx32-to-bin.c
 
 colorhug_inhx32_to_bin_LDADD =				\

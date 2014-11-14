@@ -26,6 +26,8 @@
 #include <colord.h>
 #include <colorhug.h>
 
+#include "ch-cleanup.h"
+
 /**
  * ch_inhx32_to_file:
  **/
@@ -34,29 +36,20 @@ ch_inhx32_to_file (const gchar *hex_fn,
 		   const gchar *bin_fn,
 		   GError **error)
 {
-	gboolean ret;
-	gchar *data = NULL;
 	gsize len = 0;
-	guint8 *out = NULL;
+	_cleanup_free_ gchar *data = NULL;
+	_cleanup_free_ guint8 *out = NULL;
 
 	/* load file */
-	ret = g_file_get_contents (hex_fn, &data, &len, error);
-	if (!ret)
-		goto out;
+	if (!g_file_get_contents (hex_fn, &data, &len, error))
+		return FALSE;
 
 	/* convert */
-	ret = ch_inhx32_to_bin (data, &out, &len, error);
-	if (!ret)
-		goto out;
+	if (!ch_inhx32_to_bin (data, &out, &len, error))
+		return FALSE;
 
 	/* save file */
-	ret = g_file_set_contents (bin_fn, (const gchar *) out, len, error);
-	if (!ret)
-		goto out;
-out:
-	g_free (data);
-	g_free (out);
-	return ret;
+	return g_file_set_contents (bin_fn, (const gchar *) out, len, error);
 }
 
 /**
@@ -65,29 +58,19 @@ out:
 int
 main (int argc, char *argv[])
 {
-	gboolean ret;
-	GError *error = NULL;
-	gint rc = 0;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* check arguments */
 	if (argc == 3 &&
 	    g_str_has_suffix (argv[1], ".hex") &&
 	    g_str_has_suffix (argv[2], ".bin")) {
-		ret = ch_inhx32_to_file (argv[1], argv[2], &error);
+		if (!ch_inhx32_to_file (argv[1], argv[2], &error)) {
+			g_print ("Failed to convert: %s\n", error->message);
+			return 1;
+		}
 	} else {
-		ret = FALSE;
-		g_set_error_literal (&error, 1, 0,
-				     "Invalid arguments, use file.hex file.bin");
+		g_print ("Invalid arguments, use file.hex file.bin\n");
+		return 1;
 	}
-
-	/* we failed */
-	if (!ret) {
-		rc = 1;
-		g_print ("Failed to convert: %s\n",
-			 error->message);
-		g_error_free (error);
-		goto out;
-	}
-out:
-	return rc;
+	return 0;
 }
