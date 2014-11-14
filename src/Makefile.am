@@ -68,6 +68,7 @@ bin_PROGRAMS =						\
 	colorhug-flash
 
 colorhug_cmd_SOURCES =					\
+	ch-cleanup.h					\
 	ch-main.c
 
 colorhug_cmd_LDADD =					\

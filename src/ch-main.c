@@ -30,6 +30,8 @@
 #include <colorhug.h>
 #include <libsoup/soup.h>
 
+#include "ch-cleanup.h"
+
 typedef struct {
 	ChDeviceQueue		*device_queue;
 	GOptionContext		*context;
@@ -59,9 +61,9 @@ ch_util_item_free (ChUtilItem *item)
 	g_free (item);
 }
 
-/*
+/**
  * cd_sort_command_name_cb:
- */
+ **/
 static gint
 cd_sort_command_name_cb (ChUtilItem **item1, ChUtilItem **item2)
 {
@@ -74,9 +76,9 @@ cd_sort_command_name_cb (ChUtilItem **item1, ChUtilItem **item2)
 static void
 ch_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUtilPrivateCb callback)
 {
-	gchar **names;
 	guint i;
 	ChUtilItem *item;
+	_cleanup_strv_free_ gchar **names = NULL;
 
 	/* add each one */
 	names = g_strsplit (name, ",", -1);
@@ -93,7 +95,6 @@ ch_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUt
 		item->callback = callback;
 		g_ptr_array_add (array, item);
 	}
-	g_strfreev (names);
 }
 
 /**
@@ -128,7 +129,7 @@ ch_util_get_descriptions (GPtrArray *array)
 		g_string_append (string, "  ");
 		g_string_append (string, item->name);
 		len = strlen (item->name);
-		for (j=len; j<max_len+3; j++)
+		for (j = len; j < max_len+3; j++)
 			g_string_append_c (string, ' ');
 		g_string_append (string, item->description);
 		g_string_append_c (string, '\n');
@@ -147,33 +148,27 @@ ch_util_get_descriptions (GPtrArray *array)
 static gboolean
 ch_util_run (ChUtilPrivate *priv, const gchar *command, gchar **values, GError **error)
 {
-	gboolean ret = FALSE;
-	guint i;
 	ChUtilItem *item;
-	GString *string;
+	guint i;
+	_cleanup_string_free_ GString *string = NULL;
 
 	/* find command */
 	for (i = 0; i < priv->cmd_array->len; i++) {
 		item = g_ptr_array_index (priv->cmd_array, i);
-		if (g_strcmp0 (item->name, command) == 0) {
-			ret = item->callback (priv, values, error);
-			goto out;
-		}
+		if (g_strcmp0 (item->name, command) == 0)
+			return item->callback (priv, values, error);
 	}
 
 	/* not found */
 	string = g_string_new ("");
 	/* TRANSLATORS: error message */
-	g_string_append_printf (string, "%s\n",
-				_("Command not found, valid commands are:"));
+	g_string_append_printf (string, "%s\n", _("Command not found, valid commands are:"));
 	for (i = 0; i < priv->cmd_array->len; i++) {
 		item = g_ptr_array_index (priv->cmd_array, i);
 		g_string_append_printf (string, " * %s\n", item->name);
 	}
 	g_set_error_literal (error, 1, 0, string->str);
-	g_string_free (string, TRUE);
-out:
-	return ret;
+	return FALSE;
 }
 
 /**
@@ -182,29 +177,18 @@ out:
 static gboolean
 ch_util_get_prompt (const gchar *question, gboolean defaultyes)
 {
-	gboolean ret = FALSE;
 	gchar value;
-
-	g_print ("%s %s ",
-		 question,
-		 defaultyes ? "[Y/n]" : "[N/y]");
+	g_print ("%s %s ", question, defaultyes ? "[Y/n]" : "[N/y]");
 	while (TRUE) {
 		value = getchar ();
-		if (value == 'y' || value == 'Y') {
-			ret = TRUE;
-			goto out;
-		}
-		if (value == 'n' || value == 'N') {
-			ret = FALSE;
-			goto out;
-		}
-		if (value == '\n') {
-			ret = defaultyes;
-			goto out;
-		}
+		if (value == 'y' || value == 'Y')
+			return TRUE;
+		if (value == 'n' || value == 'N')
+			return FALSE;
+		if (value == '\n')
+			return defaultyes;
 	}
-out:
-	return ret;
+	return FALSE;
 }
 
 /**
@@ -225,7 +209,7 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	switch (color_select) {
 	case CH_COLOR_SELECT_BLUE:
@@ -235,13 +219,12 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("%s\n", ch_color_select_to_string (color_select));
 		break;
 	default:
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid color value %i",
 			     color_select);
+		return FALSE;
 	}
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -262,7 +245,7 @@ ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **erro
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	switch (hw_version) {
 	case 0x00:
@@ -271,8 +254,7 @@ ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **erro
 	default:
 		g_print ("Hardware Version %i\n", hw_version);
 	}
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -308,7 +290,7 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	/* show as a bar graph */
 	for (i = 0; i < 30; i++) {
@@ -342,8 +324,7 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 	for (i = 0; i < 30; i++)
 		std_dev += pow (reading_array[i] - ave, 2);
 	g_print ("Standard deviation: %.03lf\n", sqrt (std_dev / 60));
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -354,12 +335,12 @@ ch_util_remote_profile_download (ChUtilPrivate *priv, gchar **values, GError **e
 {
 	ChSha1 remote_hash;
 	gboolean ret;
-	gchar *filename = NULL;
-	gchar *sha1 = NULL;
-	gchar *uri = NULL;
 	guint status_code;
-	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
+	_cleanup_free_ gchar *filename = NULL;
+	_cleanup_free_ gchar *sha1 = NULL;
+	_cleanup_free_ gchar *uri = NULL;
+	_cleanup_object_unref_ SoupMessage *msg = NULL;
 
 	/* get the remote hash from the device */
 	ch_device_queue_get_remote_hash (priv->device_queue,
@@ -415,11 +396,6 @@ ch_util_remote_profile_download (ChUtilPrivate *priv, gchar **values, GError **e
 out:
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
-	if (msg != NULL)
-		g_object_unref (msg);
-	g_free (sha1);
-	g_free (filename);
-	g_free (uri);
 	return ret;
 }
 
@@ -429,17 +405,11 @@ out:
 static gboolean
 ch_util_self_test (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-	ch_device_queue_self_test (priv->device_queue,
-				   priv->device);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-out:
-	return ret;
+	ch_device_queue_self_test (priv->device_queue, priv->device);
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -451,13 +421,13 @@ ch_util_remote_profile_upload (ChUtilPrivate *priv, gchar **values, GError **err
 	ChSha1 remote_hash;
 	const gchar *uri;
 	gboolean ret = TRUE;
-	gchar *data = NULL;
-	gchar *sha1 = NULL;
 	gsize length;
 	guint status_code;
 	SoupBuffer *buffer = NULL;
-	SoupMessage *msg = NULL;
 	SoupMultipart *multipart = NULL;
+	_cleanup_free_ gchar *data = NULL;
+	_cleanup_free_ gchar *sha1 = NULL;
+	_cleanup_object_unref_ SoupMessage *msg = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -521,12 +491,8 @@ ch_util_remote_profile_upload (ChUtilPrivate *priv, gchar **values, GError **err
 out:
 	if (buffer != NULL)
 		soup_buffer_free (buffer);
-	if (msg != NULL)
-		g_object_unref (msg);
 	if (multipart != NULL)
 		soup_multipart_free (multipart);
-	g_free (data);
-	g_free (sha1);
 	return ret;
 }
 
@@ -538,12 +504,12 @@ ch_util_ccmx_upload (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	const gchar *uri;
 	gboolean ret = TRUE;
-	gchar *data = NULL;
 	gsize length;
 	guint status_code;
 	SoupBuffer *buffer = NULL;
-	SoupMessage *msg = NULL;
 	SoupMultipart *multipart = NULL;
+	_cleanup_free_ gchar *data = NULL;
+	_cleanup_object_unref_ SoupMessage *msg = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -586,11 +552,8 @@ ch_util_ccmx_upload (ChUtilPrivate *priv, gchar **values, GError **error)
 out:
 	if (buffer != NULL)
 		soup_buffer_free (buffer);
-	if (msg != NULL)
-		g_object_unref (msg);
 	if (multipart != NULL)
 		soup_multipart_free (multipart);
-	g_free (data);
 	return ret;
 }
 
@@ -600,15 +563,13 @@ out:
 static gboolean
 ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	ChColorSelect color_select;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'color'");
-		goto out;
+		return FALSE;
 	}
 	if (g_strcmp0 (values[0], "red") == 0)
 		color_select = CH_COLOR_SELECT_RED;
@@ -619,26 +580,20 @@ ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 	else if (g_strcmp0 (values[0], "white") == 0)
 		color_select = CH_COLOR_SELECT_WHITE;
 	else {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid input '%s', expect 'red|green|blue|white'",
 			     values[0]);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_set_color_select (priv->device_queue,
 					  priv->device,
 					  color_select);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -651,15 +606,14 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	ChFreqScale multiplier = CH_FREQ_SCALE_0;
 
 	/* get from HW */
-	ch_device_queue_get_multiplier (priv->device_queue,
-					priv->device,
+	ch_device_queue_get_multiplier (priv->device_queue, priv->device,
 					&multiplier);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	switch (multiplier) {
 	case CH_FREQ_SCALE_0:
@@ -671,13 +625,12 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("%s\n", ch_multiplier_to_string (multiplier));
 		break;
 	default:
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid multiplier value %i",
 			     multiplier);
+		return FALSE;
 	}
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -686,15 +639,13 @@ out:
 static gboolean
 ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	ChFreqScale multiplier;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'color'");
-		goto out;
+		return FALSE;
 	}
 	if (g_strcmp0 (values[0], "0") == 0)
 		multiplier = CH_FREQ_SCALE_0;
@@ -705,26 +656,19 @@ ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	else if (g_strcmp0 (values[0], "100") == 0)
 		multiplier = CH_FREQ_SCALE_100;
 	else {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid input '%s', expect '0|2|20|100'",
 			     values[0]);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
-	ch_device_queue_set_multiplier (priv->device_queue,
-					priv->device,
+	ch_device_queue_set_multiplier (priv->device_queue, priv->device,
 					multiplier);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -737,19 +681,17 @@ ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 integral_time = 0;
 
 	/* get from HW */
-	ch_device_queue_get_integral_time (priv->device_queue,
-					   priv->device,
+	ch_device_queue_get_integral_time (priv->device_queue, priv->device,
 					   &integral_time);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("%i\n", integral_time);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -758,31 +700,23 @@ out:
 static gboolean
 ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	guint16 integral_time = 0;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 	integral_time = g_ascii_strtoull (values[0], NULL, 10);
 
 	/* set to HW */
-	ch_device_queue_set_integral_time (priv->device_queue,
-					   priv->device,
+	ch_device_queue_set_integral_time (priv->device_queue, priv->device,
 					   integral_time);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -798,20 +732,18 @@ ch_util_get_calibration_map (ChUtilPrivate *priv,
 	guint i;
 
 	/* get from HW */
-	ch_device_queue_get_calibration_map (priv->device_queue,
-					     priv->device,
+	ch_device_queue_get_calibration_map (priv->device_queue, priv->device,
 					     calibration_map);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	for (i = 0; i < 6; i++)
 		g_print ("%i -> %i\n", i, calibration_map[i]);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -822,16 +754,14 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 			     gchar **values,
 			     GError **error)
 {
-	gboolean ret;
 	guint16 calibration_map[6];
 	guint i;
 
 	/* parse */
 	if (g_strv_length (values) != 6) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect '#lcd' '#crt' '#projector' '#led' '0' '0'");
-		goto out;
+		return FALSE;
 	}
 	for (i = 0; i < 6; i++)
 		calibration_map[i] = g_ascii_strtoull (values[i], NULL, 10);
@@ -840,15 +770,10 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 	ch_device_queue_set_calibration_map (priv->device_queue,
 					     priv->device,
 					     calibration_map);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -873,11 +798,10 @@ ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("%i.%i.%i\n", major, minor, micro);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -888,12 +812,12 @@ ch_util_show_calibration (const CdMat3x3 *calibration)
 {
 	gdouble *calibration_tmp;
 	guint i, j;
+
 	calibration_tmp = cd_mat33_get_data (calibration);
 	for (j = 0; j < 3; j++) {
 		g_print ("( ");
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; i++)
 			g_print ("%.2f\t", calibration_tmp[j*3 + i]);
-		}
 		g_print (")\n");
 	}
 }
@@ -912,10 +836,9 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'calibration_index'");
-		goto out;
+		return FALSE;
 	}
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
@@ -931,7 +854,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("index: %i\n", calibration_index);
 	g_print ("supports LCD: %i\n", (types & CH_CALIBRATION_TYPE_LCD) > 0);
@@ -940,8 +863,7 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	g_print ("supports projector: %i\n", (types & CH_CALIBRATION_TYPE_PROJECTOR) > 0);
 	g_print ("description: %s\n", description);
 	ch_util_show_calibration (&calibration);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -959,10 +881,9 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* parse */
 	if (g_strv_length (values) != 12) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'index' 'types' 'values' 'description'");
-		goto out;
+		return FALSE;
 	}
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
@@ -976,10 +897,9 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	if (g_strstr_len (values[1], -1, "projector") != NULL)
 		types += CH_CALIBRATION_TYPE_PROJECTOR;
 	if (types == 0) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid type, expected 'lcd', 'led', 'crt', 'projector'");
-		goto out;
+		return FALSE;
 	}
 	calibration_tmp = cd_mat33_get_data (&calibration);
 	for (i = 0; i < 9; i++)
@@ -988,20 +908,18 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	/* check is valid */
 	for (i = 0; i < 9; i++) {
 		if (calibration_tmp[i] > 0x7fff || calibration_tmp[i] < -0x7fff) {
-			ret = FALSE;
 			g_set_error_literal (error, 1, 0,
 					     "invalid value, expect -1.0 to +1.0");
-			goto out;
+			return FALSE;
 		}
 	}
 
 	/* check length */
 	if (strlen (values[11]) > CH_CALIBRATION_DESCRIPTION_LEN) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "decription is limited to %i chars",
 			     CH_CALIBRATION_DESCRIPTION_LEN);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
@@ -1016,11 +934,10 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	ch_util_show_calibration (&calibration);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1029,15 +946,13 @@ out:
 static gboolean
 ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	guint16 calibration_index = 0;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'index'");
-		goto out;
+		return FALSE;
 	}
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
@@ -1045,15 +960,10 @@ ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_clear_calibration (priv->device_queue,
 					   priv->device,
 					   calibration_index);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1082,11 +992,10 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gboolean ret;
 	gchar description[CH_CALIBRATION_DESCRIPTION_LEN];
-	gchar *tmp;
 	GError *error_local = NULL;
-	GString *string;
 	guint16 i;
 	guint8 types;
+	_cleanup_string_free_ GString *string = NULL;
 
 	string = g_string_new ("");
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
@@ -1103,10 +1012,10 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					       &error_local);
 		if (ret) {
 			if (description[0] != '\0') {
+				_cleanup_free_ gchar *tmp = NULL;
 				tmp = ch_util_types_to_short_string (types);
 				g_string_append_printf (string, "%i\t%s [%s]\n",
 							i, description, tmp);
-				g_free (tmp);
 			}
 		} else {
 			g_debug ("ignoring error: %s", error_local->message);
@@ -1116,18 +1025,14 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* if no matrices */
 	if (string->len == 0) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "no calibration matrices stored");
-		goto out;
+		return FALSE;
 	}
 
 	/* print */
 	g_print ("Index\tDescription\n%s", string->str);
-	ret = TRUE;
-out:
-	g_string_free (string, FALSE);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1138,15 +1043,14 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 {
 	gboolean ret;
 	guint16 calibration_index;
-	CdIt8 *ccmx = NULL;
-	GFile *file = NULL;
+	_cleanup_ptrarray_unref_ CdIt8 *ccmx = NULL;
+	_cleanup_object_unref_ GFile *file = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'index' 'filename'");
-		goto out;
+		return FALSE;
 	}
 
 	/* load file */
@@ -1155,28 +1059,19 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 	/* set to HW */
 	ccmx = cd_it8_new ();
 	file = g_file_new_for_path (values[1]);
-	ret = cd_it8_load_from_file (ccmx, file, error);
-	if (!ret)
-		goto out;
+	if (!cd_it8_load_from_file (ccmx, file, error))
+		return FALSE;
 	ret = ch_device_queue_set_calibration_ccmx (priv->device_queue,
 						    priv->device,
 						    calibration_index,
 						    ccmx,
 						    error);
 	if (!ret)
-		goto out;
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-out:
-	if (ccmx != NULL)
-		g_object_unref (ccmx);
-	if (file != NULL)
-		g_object_unref (file);
-	return ret;
+		return FALSE;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1197,11 +1092,10 @@ ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("%06i\n", serial_number);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1210,23 +1104,20 @@ out:
 static gboolean
 ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	guint32 serial_number;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value' or 'auto'");
-		goto out;
+		return FALSE;
 	}
 	serial_number = g_ascii_strtoull (values[0], NULL, 10);
 	if (serial_number == 0) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "serial number is invalid: %i",
 			     serial_number);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
@@ -1234,15 +1125,10 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_set_serial_number (priv->device_queue,
 					   priv->device,
 					   serial_number);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1255,19 +1141,17 @@ ch_util_get_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 	gchar name[CH_OWNER_LENGTH_MAX];
 
 	/* get from HW */
-	ch_device_queue_get_owner_name (priv->device_queue,
-					priv->device,
+	ch_device_queue_get_owner_name (priv->device_queue, priv->device,
 					name);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("%s\n", name);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1276,15 +1160,13 @@ out:
 static gboolean
 ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gchar name[CH_OWNER_LENGTH_MAX];
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'name'");
-		goto out;
+		return FALSE;
 	}
 	if(strlen(values[0]) >= CH_OWNER_LENGTH_MAX) {
 		g_print ("truncating name to %d characters\n", CH_OWNER_LENGTH_MAX-1);
@@ -1294,18 +1176,12 @@ ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* set to HW */
 	g_print ("setting name to %s\n", name);
-	ch_device_queue_set_owner_name (priv->device_queue,
-					priv->device,
+	ch_device_queue_set_owner_name (priv->device_queue, priv->device,
 					name);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1318,19 +1194,17 @@ ch_util_get_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 	gchar email[CH_OWNER_LENGTH_MAX];
 
 	/* get from HW */
-	ch_device_queue_get_owner_email (priv->device_queue,
-					priv->device,
+	ch_device_queue_get_owner_email (priv->device_queue, priv->device,
 					email);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("%s\n", email);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1339,15 +1213,13 @@ out:
 static gboolean
 ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gchar email[CH_OWNER_LENGTH_MAX];
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'email'");
-		goto out;
+		return FALSE;
 	}
 	if(strlen(values[0]) >= CH_OWNER_LENGTH_MAX) {
 		g_print ("truncating email to %d characters\n", CH_OWNER_LENGTH_MAX-1);
@@ -1357,18 +1229,12 @@ ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* set to HW */
 	g_print ("setting email to %s\n", email);
-	ch_device_queue_set_owner_email (priv->device_queue,
-					priv->device,
+	ch_device_queue_set_owner_email (priv->device_queue, priv->device,
 					email);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1389,18 +1255,16 @@ ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	if (leds > 3) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid leds value %i",
 			     leds);
-		goto out;
+		return FALSE;
 	}
 	g_print ("LEDs: %i\n", leds);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1422,7 +1286,7 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 				     "invalid input, expect "
 				     "'<red|green|blue|white|off> <repeat> <time_on> <time_off>' or "
 				     "'<leds>'");
-		goto out;
+		return FALSE;
 	}
 
 	/* get the LEDs value */
@@ -1450,7 +1314,7 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect "
 				     "'<red|green|blue|white|off>");
-		goto out;
+		return FALSE;
 	}
 
 	/* get the optional other parameters */
@@ -1467,15 +1331,10 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 				  repeat,
 				  time_on,
 				  time_off);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1488,26 +1347,24 @@ ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 pcb_errata = CH_PCB_ERRATA_NONE;
 
 	/* get from HW */
-	ch_device_queue_get_pcb_errata (priv->device_queue,
-					priv->device,
+	ch_device_queue_get_pcb_errata (priv->device_queue, priv->device,
 					&pcb_errata);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	if (pcb_errata == 0) {
 		g_print ("Errata: none\n");
-		goto out;
+		return FALSE;
 	}
 	if ((pcb_errata & CH_PCB_ERRATA_SWAPPED_LEDS) > 0)
 		g_print ("Errata: swapped-leds\n");
 	if ((pcb_errata & CH_PCB_ERRATA_NO_WELCOME) > 0)
 		g_print ("Errata: no-welcome\n");
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1516,15 +1373,13 @@ out:
 static gboolean
 ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	guint16 pcb_errata = CH_PCB_ERRATA_NONE;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'none|swapped-leds'");
-		goto out;
+		return FALSE;
 	}
 
 	/* swap the green and red LEDs */
@@ -1545,21 +1400,15 @@ ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("Errata: none\n");
 
 	/* set to HW */
-	ch_device_queue_set_pcb_errata (priv->device_queue,
-					priv->device,
+	ch_device_queue_set_pcb_errata (priv->device_queue, priv->device,
 					pcb_errata);
 	ch_device_queue_write_eeprom (priv->device_queue,
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1570,7 +1419,7 @@ ch_util_get_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	ChSha1 remote_hash;
 	gboolean ret;
-	gchar *tmp = NULL;
+	_cleanup_free_ gchar *tmp = NULL;
 
 	/* get from HW */
 	ch_device_queue_get_remote_hash (priv->device_queue,
@@ -1581,14 +1430,12 @@ ch_util_get_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	/* print hash */
 	tmp = ch_sha1_to_string (&remote_hash);
 	g_print ("%s\n", tmp);
-out:
-	g_free (tmp);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1597,21 +1444,18 @@ out:
 static gboolean
 ch_util_set_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	ChSha1 remote_hash;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect sha1");
-		goto out;
+		return FALSE;
 	}
 
 	/* try to parse string */
-	ret = ch_sha1_parse (values[0], &remote_hash, error);
-	if (!ret)
-		goto out;
+	if (!ch_sha1_parse (values[0], &remote_hash, error))
+		return FALSE;
 
 	/* set to HW */
 	ch_device_queue_set_remote_hash (priv->device_queue,
@@ -1620,15 +1464,10 @@ ch_util_set_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_write_eeprom (priv->device_queue,
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1649,11 +1488,10 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1673,7 +1511,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	if (!ret) {
 		g_set_error_literal (error, 1, 0,
 				     "user declined");
-		goto out;
+		return FALSE;
 	}
 
 	/* set dark offsets */
@@ -1683,8 +1521,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 	ch_device_queue_get_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value_old);
-	ch_device_queue_get_post_scale (priv->device_queue,
-					priv->device,
+	ch_device_queue_get_post_scale (priv->device_queue, priv->device,
 					&post_scale_old);
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
@@ -1708,7 +1545,7 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Values: R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
 
@@ -1727,31 +1564,25 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 					       NULL,
 					       error);
 		if (!ret)
-			goto out;
+			return FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "user declined");
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value);
-	ch_device_queue_set_post_scale (priv->device_queue,
-					priv->device,
+	ch_device_queue_set_post_scale (priv->device_queue, priv->device,
 					post_scale_old);
 	ch_device_queue_write_eeprom (priv->device_queue,
 				      priv->device,
 				      CH_WRITE_EEPROM_MAGIC);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1760,21 +1591,17 @@ out:
 static gboolean
 ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	CdColorRGB value;
 
 	/* be interactive */
-	if (g_strv_length (values) == 0) {
-		ret = ch_util_set_dark_offsets_auto (priv, error);
-		goto out;
-	}
+	if (g_strv_length (values) == 0)
+		return ch_util_set_dark_offsets_auto (priv, error);
 
 	/* parse */
 	if (g_strv_length (values) != 3) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 	value.R = g_ascii_strtod (values[0], NULL);
 	value.G = g_ascii_strtod (values[1], NULL);
@@ -1784,15 +1611,10 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 	ch_device_queue_set_dark_offsets (priv->device_queue,
 					  priv->device,
 					  &value);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1801,29 +1623,21 @@ out:
 static gboolean
 ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_write_eeprom (priv->device_queue,
 				      priv->device,
 				      values[0]);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -1862,7 +1676,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
 		/* TRANSLATORS: this is the enabled sensor color */
@@ -1883,8 +1697,7 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* TRANSLATORS: this is the number of pulses detected */
 	g_print ("%s:\t\t%" G_GUINT32_FORMAT "\n", _("Pulses"), take_reading);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1914,14 +1727,13 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
 		/* TRANSLATORS: this is the sensor sample time */
 		g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 	}
 	g_print ("R:%.5f G:%.5f B:%.5f\n", value.R, value.G, value.B);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -1966,10 +1778,9 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'calibration_index'");
-		goto out;
+		return FALSE;
 	}
 	calibration_index = g_ascii_strtoull (values[0], NULL, 10);
 
@@ -1991,7 +1802,7 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE) {
 		/* TRANSLATORS: this is the sensor scale factor */
@@ -2002,8 +1813,7 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("%s:\t0x%04x\n", _("Integral"), integral_time);
 	}
 	ch_util_print_color_values (&value);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2015,11 +1825,11 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 	gboolean ret;
 	gdouble scale;
 	gsize len;
-	guint16 *data = NULL;
 	guint16 largest = 0;
 	guint16 sram_addr = 0x0000;
 	guint i;
 	guint j;
+	_cleanup_free_ guint16 *data = NULL;
 
 	/* get from HW */
 	ch_device_queue_set_integral_time (priv->device_queue,
@@ -2033,7 +1843,7 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	len = CH_CCD_SPECTRAL_RESOLUTION;
 	data = g_new0 (guint16, len);
@@ -2048,7 +1858,7 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	/* find biggest value */
 	for (i = 0; i < len; i++) {
@@ -2063,9 +1873,7 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 			g_print ("#");
 		g_print ("\n");
 	}
-out:
-	g_free (data);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2074,20 +1882,13 @@ out:
 static gboolean
 ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-
 	/* this may return with an error */
 	ch_device_queue_reset (priv->device_queue,
 			       priv->device);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -2096,14 +1897,12 @@ out:
 static GUsbDevice *
 ch_util_get_default_device (GError **error)
 {
-	gboolean ret;
-	GPtrArray *devices;
 	guint i;
-	GUsbContext *usb_ctx;
-	GUsbDevice *device = NULL;
-	GUsbDevice *device_success = NULL;
 	GUsbDevice *device_tmp;
-	GUsbDeviceList *list;
+	_cleanup_object_unref_ GUsbContext *usb_ctx = NULL;
+	_cleanup_object_unref_ GUsbDevice *device = NULL;
+	_cleanup_object_unref_ GUsbDeviceList *list = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *devices = NULL;
 
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -2121,32 +1920,22 @@ ch_util_get_default_device (GError **error)
 		if (device != NULL) {
 			g_set_error_literal (error, 1, 0,
 					     _("Multiple ColorHug devices are attached"));
-			goto out;
+			return NULL;
 		}
 		device = g_object_ref (device_tmp);
 	}
 	if (device == NULL) {
 		g_set_error_literal (error, 1, 0,
 				     _("No ColorHug devices were found"));
-		goto out;
+		return NULL;
 	}
 	g_debug ("Found ColorHug device %s",
 		 g_usb_device_get_platform_id (device));
-	ret = ch_device_open (device, error);
-	if (!ret)
-		goto out;
+	if (!ch_device_open (device, error))
+		return NULL;
 
 	/* success */
-	device_success = g_object_ref (device);
-out:
-	g_object_unref (usb_ctx);
-	if (device != NULL)
-		g_object_unref (device);
-	if (list != NULL)
-		g_object_unref (list);
-	if (devices != NULL)
-		g_ptr_array_unref (devices);
-	return device_success;
+	return g_object_ref (device);
 }
 
 /**
@@ -2169,11 +1958,11 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 				 GError **error)
 {
 	gboolean ret;
-	gchar *data_raw = NULL;
-	guint8 *data = NULL;
 	gsize len = 0;
-	GUsbDevice *device = NULL;
 	GMainLoop *loop = NULL;
+	_cleanup_free_ gchar *data_raw = NULL;
+	_cleanup_free_ guint8 *data = NULL;
+	_cleanup_object_unref_ GUsbDevice *device = NULL;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -2187,10 +1976,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	if (g_str_has_suffix (filename, ".bin")) {
 		data = g_memdup (data_raw, len);
 	} else if (g_str_has_suffix (filename, ".hex")) {
-		ret = ch_inhx32_to_bin (data_raw,
-					&data,
-					&len,
-					error);
+		ret = ch_inhx32_to_bin (data_raw, &data, &len, error);
 		if (!ret)
 			goto out;
 	} else {
@@ -2278,10 +2064,6 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 out:
 	if (loop != NULL)
 		g_main_loop_unref (loop);
-	if (device != NULL)
-		g_object_unref (device);
-	g_free (data);
-	g_free (data_raw);
 	return ret;
 }
 
@@ -2291,27 +2073,20 @@ out:
 static gboolean
 ch_util_flash_firmware_force (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'filename'");
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
-	ret = ch_util_flash_firmware_internal (priv,
-					       values[0],
-					       error);
-	if (!ret)
-		goto out;
+	if (!ch_util_flash_firmware_internal (priv, values[0], error))
+		return FALSE;
 
 	/* print success */
 	g_print ("INFO: Flashing was successful.\n");
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2320,38 +2095,29 @@ out:
 static gboolean
 ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'filename'");
-		goto out;
+		return FALSE;
 	}
 
 	/* print warning */
 	g_print ("WARNING: Do not shutdown the computer or unplug the device.\n");
 
 	/* TRANSLATORS: confirmation */
-	ret = ch_util_get_prompt (_("Flash the device?"), FALSE);
-	if (!ret) {
-		g_set_error_literal (error, 1, 0,
-				     "user declined");
-		goto out;
+	if (!ch_util_get_prompt (_("Flash the device?"), FALSE)) {
+		g_set_error_literal (error, 1, 0, "user declined");
+		return FALSE;
 	}
 
 	/* set to HW */
-	ret = ch_util_flash_firmware_internal (priv,
-					       values[0],
-					       error);
-	if (!ret)
-		goto out;
+	if (!ch_util_flash_firmware_internal (priv, values[0], error))
+		return FALSE;
 
 	/* print success */
 	g_print ("INFO: Flashing was successful.\n");
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2372,11 +2138,10 @@ ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Pre Scale: %f\n", pre_scale);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2385,38 +2150,30 @@ out:
 static gboolean
 ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gdouble pre_scale;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 	pre_scale = g_ascii_strtod (values[0], NULL);
 	if (pre_scale < -0x7fff || pre_scale > 0x7fff) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid post scale value %f",
 			     pre_scale);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_set_pre_scale (priv->device_queue,
 				       priv->device,
 				       pre_scale);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 #if CD_CHECK_VERSION(1,2,0)
@@ -2438,11 +2195,10 @@ ch_util_get_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("DAC value: %f\n", dac_value);
-out:
-	return ret;
+	return TRUE;
 }
 #endif
 
@@ -2453,38 +2209,30 @@ out:
 static gboolean
 ch_util_set_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gdouble dac_value;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 	dac_value = g_ascii_strtod (values[0], NULL);
 	if (dac_value < -0x7fff || dac_value > 0x7fff) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid dac value %f",
 			     dac_value);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_set_dac_value (priv->device_queue,
 				       priv->device,
 				       dac_value);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 #endif
 
@@ -2510,12 +2258,11 @@ ch_util_get_adc_vrefs (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("ADC Vref+: %f Volts\n", vref_pos);
 	g_print ("ADC Vref-: %f Volts\n", vref_neg);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2536,14 +2283,13 @@ ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("CCD Calibration: %i %i %i\n",
 		 ccd_calibration[0],
 		 ccd_calibration[1],
 		 ccd_calibration[2]);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2552,34 +2298,30 @@ out:
 static gboolean
 ch_util_set_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	guint16 ccd_calibration[3] = { 0x0000, 0x0000, 0x0000 };
 	guint16 last = 0;
 	guint i;
 
 	/* parse */
 	if (g_strv_length (values) != 3) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'red', 'green', 'blue'");
-		goto out;
+		return FALSE;
 	}
 	for (i = 0; i < 3; i++) {
 		ccd_calibration[i] = g_ascii_strtoll (values[i], NULL, 10);
 		if (ccd_calibration[i] == 0 ||
 		    ccd_calibration[i] > CH_CCD_SPECTRAL_RESOLUTION) {
-			ret = FALSE;
 			g_set_error (error, 1, 0,
 				     "invalid ccd calibration value %s",
 				     values[i]);
-			goto out;
+			return FALSE;
 		}
 		if (ccd_calibration[i] <= last) {
-			ret = FALSE;
 			g_set_error (error, 1, 0,
 				     "ccd calibration values should increase %s",
 				     values[i]);
-			goto out;
+			return FALSE;
 		}
 		last = ccd_calibration[i];
 	}
@@ -2588,14 +2330,10 @@ ch_util_set_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error
 	ch_device_queue_set_ccd_calibration (priv->device_queue,
 					     priv->device,
 					     ccd_calibration);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -2616,11 +2354,10 @@ ch_util_get_temperature (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Temperature: %f\n", temperature);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2633,19 +2370,17 @@ ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	gdouble post_scale = 0.0f;
 
 	/* get from HW */
-	ch_device_queue_get_post_scale (priv->device_queue,
-					priv->device,
+	ch_device_queue_get_post_scale (priv->device_queue, priv->device,
 					&post_scale);
 	ret = ch_device_queue_process (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Post Scale: %f\n", post_scale);
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2654,38 +2389,29 @@ out:
 static gboolean
 ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gdouble post_scale;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 	post_scale = g_ascii_strtod (values[0], NULL);
 	if (post_scale < -0x7fff || post_scale > 0x7fff) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid post scale value %f",
 			     post_scale);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
-	ch_device_queue_set_post_scale (priv->device_queue,
-					priv->device,
+	ch_device_queue_set_post_scale (priv->device_queue, priv->device,
 					post_scale);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -2694,20 +2420,13 @@ out:
 static gboolean
 ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-
 	/* set to HW */
 	ch_device_queue_boot_flash (priv->device_queue,
 				    priv->device);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -2716,38 +2435,30 @@ out:
 static gboolean
 ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gboolean flash_success;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'value'");
-		goto out;
+		return FALSE;
 	}
 	flash_success = g_ascii_strtoull (values[0], NULL, 10);
 	if (flash_success > 1) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid flash success value %i",
 			     flash_success);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_set_flash_success (priv->device_queue,
 					   priv->device,
 					   flash_success);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -2759,33 +2470,30 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 	gsize len;
 	guint16 address;
-	guint8 *data = NULL;
 	guint i;
+	_cleanup_free_ guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
-		goto out;
+		return FALSE;
 	}
 
 	/* read flash */
 	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address < CH_EEPROM_ADDR_RUNCODE) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
-		goto out;
+		return FALSE;
 	}
 	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1 || len > 60) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
 			     len);
-		goto out;
+		return FALSE;
 	}
 
 	/* just write zeros */
@@ -2800,7 +2508,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	/* flush */
 	ch_device_queue_write_flash (priv->device_queue,
@@ -2813,14 +2521,12 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Wrote:\n");
 	for (i = 0; i < len; i++)
 		g_print ("0x%04x = %02x\n", address + i, data[i]);
-out:
-	g_free (data);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2829,48 +2535,39 @@ out:
 static gboolean
 ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	gsize len;
 	guint16 address;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
-		goto out;
+		return FALSE;
 	}
 
 	/* read flash */
 	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address < CH_EEPROM_ADDR_RUNCODE) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
-		goto out;
+		return FALSE;
 	}
 	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1 || len > 0xffff) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
 			     len);
-		goto out;
+		return FALSE;
 	}
 	ch_device_queue_erase_flash (priv->device_queue,
 				     priv->device,
 				     address,
 				     len);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -2882,33 +2579,30 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 	gsize len;
 	guint16 address;
-	guint8 *data = NULL;
 	guint i;
+	_cleanup_free_ guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
-		goto out;
+		return FALSE;
 	}
 
 	/* read flash */
 	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address < CH_EEPROM_ADDR_RUNCODE) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
-		goto out;
+		return FALSE;
 	}
 	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1 || len > 60) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid length %" G_GSIZE_FORMAT " (1-60)",
 			     len);
-		goto out;
+		return FALSE;
 	}
 	data = g_new0 (guint8, len);
 	ch_device_queue_read_flash (priv->device_queue,
@@ -2921,14 +2615,12 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Read:\n");
 	for (i = 0; i < len; i++)
 		g_print ("0x%04x = %02x\n", address + i, data[i]);
-out:
-	g_free (data);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2949,7 +2641,7 @@ ch_util_get_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	switch (measure_mode) {
 	case CH_MEASURE_MODE_FREQUENCY:
@@ -2957,13 +2649,12 @@ ch_util_get_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 		g_print ("%s\n", ch_measure_mode_to_string (measure_mode));
 		break;
 	default:
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid measure_mode value %i",
 			     measure_mode);
+		return FALSE;
 	}
-out:
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2972,41 +2663,33 @@ out:
 static gboolean
 ch_util_set_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
 	ChMeasureMode measure_mode;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'frequency|duration'");
-		goto out;
+		return FALSE;
 	}
 	if (g_strcmp0 (values[0], "frequency") == 0)
 		measure_mode = CH_MEASURE_MODE_FREQUENCY;
 	else if (g_strcmp0 (values[0], "duration") == 0)
 		measure_mode = CH_MEASURE_MODE_DURATION;
 	else {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid input '%s', expect 'frequency|duration'",
 			     values[0]);
-		goto out;
+		return FALSE;
 	}
 
 	/* set to HW */
 	ch_device_queue_set_measure_mode (priv->device_queue,
 					  priv->device,
 					  measure_mode);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-out:
-	return ret;
+	return ch_device_queue_process (priv->device_queue,
+					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					NULL,
+					error);
 }
 
 /**
@@ -3018,32 +2701,29 @@ ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 	gsize len;
 	guint32 address;
-	guint8 *data = NULL;
 	guint i;
+	_cleanup_free_ guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
-		goto out;
+		return FALSE;
 	}
 
 	/* read sram */
 	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address > 0xffff) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
-		goto out;
+		return FALSE;
 	}
 	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid length");
-		goto out;
+		return FALSE;
 	}
 
 	/* just write zeros */
@@ -3060,14 +2740,12 @@ ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Wrote:\n");
 	for (i = 0; i < len; i++)
 		g_print ("0x%04x = %02x\n", address + i, data[i]);
-out:
-	g_free (data);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -3079,33 +2757,30 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	gboolean ret;
 	gsize len;
 	guint32 address;
-	guint8 *data = NULL;
 	guint i;
+	_cleanup_free_ guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
-		ret = FALSE;
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
-		goto out;
+		return FALSE;
 	}
 
 	/* read sram */
 	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address > 0xffff) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
-		goto out;
+		return FALSE;
 	}
 	len = g_ascii_strtoull (values[1], NULL, 10);
 	if (len < 1) {
-		ret = FALSE;
 		g_set_error (error, 1, 0,
 			     "invalid length %" G_GSIZE_FORMAT,
 			     len);
-		goto out;
+		return FALSE;
 	}
 	data = g_new0 (guint8, len);
 	ch_device_queue_read_sram (priv->device_queue,
@@ -3118,14 +2793,12 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 				       NULL,
 				       error);
 	if (!ret)
-		goto out;
+		return FALSE;
 
 	g_print ("Read:\n");
 	for (i = 0; i < len; i++)
 		g_print ("0x%04x = %02x\n", address + i, data[i]);
-out:
-	g_free (data);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -3144,11 +2817,10 @@ int
 main (int argc, char *argv[])
 {
 	ChUtilPrivate *priv;
-	gboolean ret;
 	gboolean verbose = FALSE;
-	gchar *cmd_descriptions = NULL;
-	GError *error = NULL;
 	guint retval = 1;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *cmd_descriptions = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */
@@ -3506,9 +3178,7 @@ main (int argc, char *argv[])
 	priv->device = ch_util_get_default_device (&error);
 	if (priv->device == NULL) {
 		/* TRANSLATORS: no colord available */
-		g_print ("%s %s\n", _("No connection to device:"),
-			 error->message);
-		g_error_free (error);
+		g_print ("%s %s\n", _("No connection to device:"), error->message);
 		goto out;
 	}
 
@@ -3527,10 +3197,8 @@ main (int argc, char *argv[])
 					  SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
 
 	/* run the specified command */
-	ret = ch_util_run (priv, argv[1], (gchar**) &argv[2], &error);
-	if (!ret) {
+	if (!ch_util_run (priv, argv[1], (gchar**) &argv[2], &error)) {
 		g_print ("%s\n", error->message);
-		g_error_free (error);
 		goto out;
 	}
 
@@ -3549,7 +3217,6 @@ out:
 		g_option_context_free (priv->context);
 		g_free (priv);
 	}
-	g_free (cmd_descriptions);
 	return retval;
 }
 
