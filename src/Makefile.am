@@ -83,6 +83,7 @@ colorhug_cmd_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
 colorhug_flash_SOURCES =				\
+	ch-cleanup.h					\
 	ch-markdown.c					\
 	ch-markdown.h					\
 	ch-flash-resources.c				\

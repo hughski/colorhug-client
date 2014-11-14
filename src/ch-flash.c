@@ -31,6 +31,7 @@
 #include <colorhug.h>
 #include <canberra-gtk.h>
 
+#include "ch-cleanup.h"
 #include "ch-markdown.h"
 #include "ch-flash-md.h"
 
@@ -97,15 +98,13 @@ static void
 ch_flash_help_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 {
 	gboolean ret;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 	ret = gtk_show_uri (NULL,
 			    "help:colorhug-client/update-firmware",
 			    GDK_CURRENT_TIME,
 			    &error);
-	if (!ret) {
+	if (!ret)
 		g_warning ("Failed to load help document: %s", error->message);
-		g_error_free (error);
-	}
 }
 
 /**
@@ -115,8 +114,8 @@ static void
 ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 {
 	const gchar *title;
-	GString *msg = NULL;
 	GtkWidget *widget;
+	_cleanup_string_free_ GString *msg = NULL;
 
 	/* create empty string for long message */
 	msg = g_string_new ("");
@@ -150,7 +149,6 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 	gtk_widget_hide (widget);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	gtk_label_set_markup (GTK_LABEL (widget), msg->str);
-	g_string_free (msg, TRUE);
 }
 
 /**
@@ -217,9 +215,9 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
 	ret = ch_device_queue_process_finish (device_queue, res, &error);
@@ -229,8 +227,7 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 		 * flag when the *new* firmware is running */
 		title = _("Failed to set the flash success true");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* setup UI */
@@ -248,8 +245,6 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 			 CA_PROP_EVENT_ID, "complete",
 			 CA_PROP_APPLICATION_NAME, _("ColorHug Updater"),
 			 CA_PROP_EVENT_DESCRIPTION, _("Calibration Completed"), NULL);
-out:
-	return;
 }
 
 /**
@@ -294,12 +289,11 @@ ch_flash_boot_flash_delay_cb (gpointer user_data)
 		 * new firmware */
 		title = _("Failed to startup the ColorHug");
 		ch_flash_error_dialog (priv, title, NULL);
-		goto out;
+		return FALSE;
 	}
 
 	/* now we can write to flash */
 	ch_flash_set_flash_success_1 (priv);
-out:
 	return FALSE;
 }
 
@@ -314,8 +308,8 @@ ch_flash_boot_flash_cb (GObject *source,
 	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
-	GError *error = NULL;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
 	ret = ch_device_queue_process_finish (device_queue, res, &error);
@@ -324,15 +318,12 @@ ch_flash_boot_flash_cb (GObject *source,
 		/* TRANSLATORS: the new firmware will not load */
 		title = _("Failed to boot the ColorHug");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* wait one second */
 	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
 		       ch_flash_boot_flash_delay_cb, priv);
-out:
-	return;
 }
 
 /**
@@ -346,20 +337,17 @@ ch_flash_verify_firmware_cb (GObject *source,
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: tell the device the firmware is no
 		 * longer known working */
 		title = _("Failed to verify the firmware");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* update the UI */
@@ -391,8 +379,6 @@ ch_flash_verify_firmware_cb (GObject *source,
 				       NULL,
 				       ch_flash_boot_flash_cb,
 				       priv);
-out:
-	return;
 }
 
 /**
@@ -406,20 +392,17 @@ ch_flash_write_firmware_cb (GObject *source,
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
-	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: tell the device the firmware is no
 		 * longer known working */
 		title = _("Failed to write the firmware");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* update UI */
@@ -439,8 +422,6 @@ ch_flash_write_firmware_cb (GObject *source,
 				       NULL,
 				       ch_flash_verify_firmware_cb,
 				       priv);
-out:
-	return;
 }
 
 /**
@@ -488,12 +469,11 @@ ch_flash_reset_delay_cb (gpointer user_data)
 		/* TRANSLATORS: the device failed to come back alive */
 		title = _("Failed to reboot the ColorHug");
 		ch_flash_error_dialog (priv, title, NULL);
-		goto out;
+		return FALSE;
 	}
 
 	/* now we can write to flash */
 	ch_flash_set_flash_success_0 (priv);
-out:
 	return FALSE;
 }
 
@@ -507,26 +487,20 @@ ch_flash_reset_cb (GObject *source,
 {
 	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		ch_flash_error_do_not_panic (priv);
 		/* TRANSLATORS: we restart the device in bootloader mode */
 		title = _("Failed to reset the ColorHug");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* wait one second */
-	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
-		       ch_flash_reset_delay_cb, priv);
-out:
-	return;
+	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT, ch_flash_reset_delay_cb, priv);
 }
 
 /**
@@ -538,7 +512,7 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	const gchar *title;
 	GtkWidget *widget;
 	gboolean ret;
-	GError *error = NULL;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* check the firmware is designed for this device */
 	ret = ch_device_check_firmware	(priv->device,
@@ -550,7 +524,6 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 		 * kind of device, e.g. a ColorHug2 fw on a ColorHug+ */
 		title = _("Wrong kind of firmware!");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
 		ch_flash_set_flash_success_0 (priv);
 		return;
 	}
@@ -590,8 +563,8 @@ ch_flash_got_firmware_cb (SoupSession *session,
 {
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
-	gchar *checksum_tmp = NULL;
-	gchar *message = NULL;
+	_cleanup_free_ gchar *checksum_tmp = NULL;
+	_cleanup_free_ gchar *message = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -599,7 +572,7 @@ ch_flash_got_firmware_cb (SoupSession *session,
 		/* TRANSLATORS: failed to get the firmware file */
 		title = _("Failed to get firmware");
 		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* empty file */
@@ -608,7 +581,7 @@ ch_flash_got_firmware_cb (SoupSession *session,
 		/* TRANSLATORS: the server gave us an invalid file */
 		title = _("Firmware has zero size");
 		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* check checksum */
@@ -622,7 +595,7 @@ ch_flash_got_firmware_cb (SoupSession *session,
 		message = g_strdup_printf ("Expected %s, got %s",
 					   priv->checksum, checksum_tmp);
 		ch_flash_error_dialog (priv, title, message);
-		goto out;
+		return;
 	}
 
 	/* success */
@@ -632,9 +605,6 @@ ch_flash_got_firmware_cb (SoupSession *session,
 		msg->response_body->data,
 		priv->firmware_len);
 	ch_flash_got_firmware_data (priv);
-out:
-	g_free (message);
-	g_free (checksum_tmp);
 }
 
 /**
@@ -657,7 +627,7 @@ ch_flash_firmware_got_chunk_cb (SoupMessage *msg,
 		soup_session_cancel_message (priv->session,
 					     msg,
 					     SOUP_STATUS_CANCELLED);
-		goto out;
+		return;
 	}
 #endif
 
@@ -665,7 +635,7 @@ ch_flash_firmware_got_chunk_cb (SoupMessage *msg,
 	if (msg->status_code != SOUP_STATUS_OK) {
 		g_debug ("ignoring status code %i (%s)",
 			 msg->status_code, msg->reason_phrase);
-		goto out;
+		return;
 	}
 
 	/* get data */
@@ -674,14 +644,12 @@ ch_flash_firmware_got_chunk_cb (SoupMessage *msg,
 
 	/* size is not known */
 	if (header_size < body_length)
-		goto out;
+		return;
 
 	/* update UI */
 	fraction = (gfloat) body_length / (gfloat) header_size;
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_status"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), fraction);
-out:
-	return;
 }
 
 /**
@@ -693,8 +661,8 @@ ch_flash_show_warning_dialog (ChFlashPrivate *priv)
 	const gchar *title;
 	GtkWindow *window;
 	GtkWidget *dialog;
-	gchar *format;
 	GtkResponseType response;
+	_cleanup_free_ gchar *format = NULL;
 
 	/* anything to show? */
 	if (priv->warning_details->len == 0)
@@ -721,7 +689,6 @@ ch_flash_show_warning_dialog (ChFlashPrivate *priv)
 						    format);
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
-	g_free (format);
 	return (response == GTK_RESPONSE_OK);
 }
 
@@ -762,14 +729,12 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	const gchar *title;
 	SoupURI *base_uri = NULL;
 	SoupMessage *msg = NULL;
-	gboolean ret;
-	gchar *server_uri = NULL;
-	gchar *uri = NULL;
+	_cleanup_free_ gchar *server_uri = NULL;
+	_cleanup_free_ gchar *uri = NULL;
 
 	/* show the user any warning dialog */
-	ret = ch_flash_show_warning_dialog (priv);
-	if (!ret)
-		goto out;
+	if (!ch_flash_show_warning_dialog (priv))
+		return;
 
 	/* update UI */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
@@ -824,8 +789,6 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 	soup_session_queue_message (priv->session, msg,
 				    ch_flash_got_firmware_cb, priv);
 out:
-	g_free (server_uri);
-	g_free (uri);
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
 }
@@ -846,14 +809,14 @@ static gboolean
 ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 {
 	gboolean ret = FALSE;
-	gchar **split;
 	guint16 tmp[3];
 	guint i;
+	_cleanup_strv_free_ gchar **split = NULL;
 
 	/* split up the version string */
 	split = g_strsplit (version, ".", -1);
 	if (g_strv_length (split) != 3)
-		goto out;
+		return FALSE;
 	for (i = 0; i < 3; i++)
 		tmp[i] = g_ascii_strtoull (split[i], NULL, 10);
 
@@ -867,8 +830,6 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 		 priv->firmware_version[1],
 		 priv->firmware_version[2],
 		 ret ? "newer" : "older");
-out:
-	g_strfreev (split);
 	return ret;
 }
 
@@ -919,10 +880,10 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	ChFlashUpdate *update;
 	const gchar *title;
-	GError *error = NULL;
-	GPtrArray *updates = NULL;
 	guint i;
 	gboolean enable_test_firmware;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *updates = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -930,7 +891,7 @@ ch_flash_got_metadata_cb (SoupSession *session,
 		/* TRANSLATORS: the HTTP request failed */
 		title = _("Failed to get the listing of firmware files");
 		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* empty file */
@@ -939,7 +900,7 @@ ch_flash_got_metadata_cb (SoupSession *session,
 		/* TRANSLATORS: we got an invalid response from the server */
 		title = _("The firmware listing has zero size");
 		ch_flash_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
-		goto out;
+		return;
 	}
 
 	/* this is a session configurable */
@@ -953,8 +914,7 @@ ch_flash_got_metadata_cb (SoupSession *session,
 		/* TRANSLATORS: the XML file was corrupt */
 		title = _("Failed to parse the update metadata");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 	for (i = 0; i < updates->len; i++) {
 		update = g_ptr_array_index (updates, i);
@@ -997,7 +957,7 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	/* no updates */
 	if (priv->filename == NULL) {
 		ch_flash_no_updates (priv);
-		goto out;
+		return;
 	}
 
 	/* remove trailing space */
@@ -1012,9 +972,6 @@ ch_flash_got_metadata_cb (SoupSession *session,
 
 	/* setup UI */
 	ch_flash_has_updates (priv);
-out:
-	if (updates != NULL)
-		g_ptr_array_unref (updates);
 }
 
 /**
@@ -1025,14 +982,15 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 {
 	const gchar *title;
 	gboolean ret;
-	gchar *server_uri = NULL;
-	gchar *str = NULL;
-	gchar *uri = NULL;
-	gchar *user_agent = NULL;
-	GError *error = NULL;
 	GtkWidget *widget;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *server_uri = NULL;
+	_cleanup_free_ gchar *str = NULL;
+	_cleanup_free_ gchar *str2 = NULL;
+	_cleanup_free_ gchar *uri = NULL;
+	_cleanup_free_ gchar *user_agent = NULL;
 
 	/* set user agent */
 	user_agent = g_strdup_printf ("colorhug-flash-hw%i-fw%i.%i.%i-sn%i",
@@ -1073,14 +1031,13 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 		break;
 	}
 	gtk_label_set_label (GTK_LABEL (widget), str);
-	g_free (str);
 
 	/* update firmware label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_firmware"));
 	if (priv->firmware_version[0] == 0) {
 		/* TRANSLATORS: the device is in bootloader mode */
 		title = _("Bootloader version");
-		str = g_strdup_printf ("%s %i.%i.%i",
+		str2 = g_strdup_printf ("%s %i.%i.%i",
 				       title,
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
@@ -1088,13 +1045,13 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	} else {
 		/* TRANSLATORS: the device is in firmware mode */
 		title = _("Firmware version");
-		str = g_strdup_printf ("%s %i.%i.%i",
+		str2 = g_strdup_printf ("%s %i.%i.%i",
 				       title,
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
 	}
-	gtk_label_set_label (GTK_LABEL (widget), str);
+	gtk_label_set_label (GTK_LABEL (widget), str2);
 
 	/* already done flash, we're just booting into the new firmware */
 	if (priv->planned_replug) {
@@ -1126,7 +1083,6 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 			 * local firmware file */
 			title = _("Failed to load file");
 			ch_flash_error_dialog (priv, title, error->message);
-			g_error_free (error);
 			goto out;
 		}
 		ch_flash_got_firmware_data (priv);
@@ -1159,10 +1115,6 @@ out:
 	priv->planned_replug = FALSE;
 	if (base_uri != NULL)
 		soup_uri_free (base_uri);
-	g_free (user_agent);
-	g_free (str);
-	g_free (server_uri);
-	g_free (uri);
 }
 
 /**
@@ -1175,24 +1127,19 @@ ch_flash_get_serial_number_cb (GObject *source,
 {
 	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
-	ret = ch_device_queue_process_finish (device_queue, res, &error);
-	if (!ret) {
+	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
 		/* TRANSLATORS: the request failed */
 		title = _("Failed to contact ColorHug");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* show device data */
 	ch_flash_got_device_data (priv);
-out:
-	return;
 }
 
 /**
@@ -1203,11 +1150,11 @@ ch_flash_get_firmware_version_cb (GObject *source,
 				  GAsyncResult *res,
 				  gpointer user_data)
 {
-	const gchar *title;
-	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
-	gboolean ret;
-	GError *error = NULL;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
+	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
+	const gchar *title;
+	gboolean ret;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* get data */
 	ret = ch_device_queue_process_finish (device_queue, res, &error);
@@ -1215,14 +1162,13 @@ ch_flash_get_firmware_version_cb (GObject *source,
 		/* TRANSLATORS: the request failed */
 		title = _("Failed to contact ColorHug");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
-		goto out;
+		return;
 	}
 
 	/* bootloader mode has no idea what the serial number is */
 	if (priv->firmware_version[0] == 0) {
 		ch_flash_got_device_data (priv);
-		goto out;
+		return;
 	}
 
 	/* get the serial number */
@@ -1234,8 +1180,6 @@ ch_flash_get_firmware_version_cb (GObject *source,
 				       NULL,
 				       ch_flash_get_serial_number_cb,
 				       priv);
-out:
-	return;
 }
 
 /**
@@ -1244,17 +1188,13 @@ out:
 static GUsbDevice *
 ch_flash_get_fake_device (ChFlashPrivate *priv)
 {
-	GPtrArray *array;
-	GUsbDevice *device = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 
 	/* just return the first device */
 	array = g_usb_device_list_get_devices (priv->device_list);
 	if (array->len == 0)
-		goto out;
-	device = g_object_ref (g_ptr_array_index (array, 0));
-out:
-	g_ptr_array_unref (array);
-	return device;
+		return NULL;
+	return g_object_ref (g_ptr_array_index (array, 0));
 }
 
 /**
@@ -1265,8 +1205,8 @@ ch_flash_got_device (ChFlashPrivate *priv)
 {
 	const gchar *title;
 	gboolean ret;
-	GError *error = NULL;
 	GtkWidget *widget;
+	_cleanup_error_free_ GError *error = NULL;
 
 	/* fake device */
 	if (g_getenv ("COLORHUG_EMULATE") != NULL)
@@ -1278,7 +1218,6 @@ ch_flash_got_device (ChFlashPrivate *priv)
 		/* TRANSLATORS: permissions error perhaps? */
 		title = _("Failed to open device");
 		ch_flash_error_dialog (priv, title, error->message);
-		g_error_free (error);
 		return;
 	}
 
@@ -1322,7 +1261,7 @@ ch_flash_activate_link_cb (GtkLabel *label,
 	const gchar *title;
 	GtkWindow *window;
 	GtkWidget *dialog;
-	gchar *format;
+	_cleanup_free_ gchar *format = NULL;
 
 	/* the update text is markdown formatted */
 	format = ch_markdown_parse (priv->markdown,
@@ -1340,7 +1279,6 @@ ch_flash_activate_link_cb (GtkLabel *label,
 						    format);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
-	g_free (format);
 	return TRUE;
 }
 
@@ -1380,12 +1318,12 @@ static void
 ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 {
 	const gchar *title;
-	GError *error = NULL;
 	gint retval;
 	GtkWidget *main_window;
 	GtkWidget *widget;
-	GdkPixbuf *pixbuf;
-	GString *string;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
+	_cleanup_string_free_ GString *string = NULL;
 
 	/* get UI */
 	string = g_string_new ("");
@@ -1394,10 +1332,8 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 						"/com/hughski/colorhug/ch-flash.ui",
 						&error);
 	if (retval == 0) {
-		g_warning ("failed to load ui: %s",
-			   error->message);
-		g_error_free (error);
-		goto out;
+		g_warning ("failed to load ui: %s", error->message);
+		return;
 	}
 
 	/* add application specific icons to search path */
@@ -1443,7 +1379,6 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 						    -1, 48, TRUE, &error);
 	g_assert (pixbuf != NULL);
 	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf);
-	g_object_unref (pixbuf);
 
 	/* hide all unused widgets until we've connected with the device */
 	ch_flash_please_attach_device (priv);
@@ -1457,9 +1392,8 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 							    NULL);
 	if (priv->session == NULL) {
 		/* TRANSLATORS: internal error when setting up HTTP */
-		title = _("Failed to setup networking");
-		ch_flash_error_dialog (priv, title, NULL);
-		goto out;
+		ch_flash_error_dialog (priv, _("Failed to setup networking"), NULL);
+		return;
 	}
 
 	/* automatically use the correct proxies */
@@ -1474,8 +1408,6 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 
 	/* show main UI */
 	gtk_widget_show (main_window);
-out:
-	g_string_free (string, TRUE);
 }
 
 /**
@@ -1545,9 +1477,9 @@ main (int argc, char **argv)
 	gboolean ret;
 	gboolean verbose = FALSE;
 	gchar *filename = NULL;
-	GError *error = NULL;
 	GOptionContext *context;
 	int status = 0;
+	_cleanup_error_free_ GError *error = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */
@@ -1575,7 +1507,6 @@ main (int argc, char **argv)
 		g_warning ("%s: %s",
 			   _("Failed to parse command line options"),
 			   error->message);
-		g_error_free (error);
 	}
 	g_option_context_free (context);
 
