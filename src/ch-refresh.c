@@ -32,6 +32,7 @@
 
 #include "ch-cleanup.h"
 #include "ch-graph-widget.h"
+#include "ch-refresh-utils.h"
 
 typedef struct {
 	ChDeviceQueue		*device_queue;
@@ -45,13 +46,10 @@ typedef struct {
 	GUsbDevice		*device;
 	GUsbDeviceList		*device_list;
 	GTimer			*measured;
-	gdouble			 usb_latency;		/* ms */
-	gdouble			 time_per_idx;		/* ms */
+	gdouble			 usb_latency;		/* s */
+	gdouble			 sample_duration;	/* s */
+	CdIt8			*samples;
 } ChRefreshPrivate;
-
-#define NR_DATA_POINTS	1365
-#define NR_PULSES	5
-#define NR_PULSE_GAP	400	/* ms */
 
 /**
  * ch_refresh_error_dialog:
@@ -183,7 +181,7 @@ ch_refresh_get_usb_speed (ChRefreshPrivate *priv,
 					       error);
 		if (!ret)
 			return FALSE;
-		elapsed[i] = g_timer_elapsed (timer, NULL) * 1000;
+		elapsed[i] = g_timer_elapsed (timer, NULL);
 	}
 
 	/* calculate average and jitter */
@@ -195,43 +193,19 @@ ch_refresh_get_usb_speed (ChRefreshPrivate *priv,
 }
 
 /**
- * ch_refresh_update_ui:
+ * ch_refresh_get_data_from_sram:
  **/
 static void
-ch_refresh_update_ui (ChRefreshPrivate *priv)
+ch_refresh_get_data_from_sram (ChRefreshPrivate *priv)
 {
-	ChPointObj *point;
+	CdSpectrum *sp;
+	const gchar *ids[] = { "X", "Y", "Z", NULL };
 	const gchar *title;
 	gboolean ret;
-	gboolean zoom;
-	gdouble data[NR_DATA_POINTS][3];
-	gdouble pulse_data[NR_PULSES];
-	gdouble tmp;
-	GtkWidget *w;
 	guint16 buffer[4096];
-	guint cnt = 0;
 	guint i;
-	guint idx_start = 0;
 	guint j;
 	_cleanup_error_free_ GError *error = NULL;
-
-	/* set the graph x scale */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
-	zoom = gtk_switch_get_active (GTK_SWITCH (w));
-	tmp = zoom ? NR_DATA_POINTS * priv->time_per_idx / 5000 :
-		     NR_DATA_POINTS * priv->time_per_idx / 1000;
-	tmp = ceilf (tmp * 10.f) / 10.f;
-	if (zoom) {
-		g_object_set (priv->graph,
-			      "start-x", tmp * 2,
-			      "stop-x", tmp * 3,
-			      NULL);
-	} else {
-		g_object_set (priv->graph,
-			      "start-x", 0.f,
-			      "stop-x", tmp,
-			      NULL);
-	}
 
 	/* get 3694 samples from the sram */
 	ch_device_queue_read_sram (priv->device_queue,
@@ -252,112 +226,52 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 
 	/* extract data */
 	for (j = 0; j < 3; j++) {
+		sp = cd_spectrum_new ();
+		cd_spectrum_set_id (sp, ids[j]);
+		cd_spectrum_set_start (sp, 0.f);
+		cd_spectrum_set_end (sp, priv->sample_duration);
 		for (i = 0; i < NR_DATA_POINTS; i++)
-			data[i][j] = buffer[i * 3 + j];
+			cd_spectrum_add_value (sp, buffer[i * 3 + j]);
+		cd_spectrum_normalize_max (sp, 1.f);
+		cd_it8_add_spectrum (priv->samples, sp);
+		cd_spectrum_free (sp);
 	}
 
-	/* autoscale vertical */
-	tmp = 0.f;
+}
+
+/**
+ * ch_refresh_update_graph:
+ **/
+static void
+ch_refresh_update_graph (ChRefreshPrivate *priv)
+{
+	CdSpectrum *sp_graph[3] = { NULL, NULL, NULL };
+	CdSpectrum *sp_tmp;
+	ChPointObj *point;
+	GtkWidget *w;
+	const gchar *ids[] = { "X", "Y", "Z", NULL };
+	const gchar *title;
+	gboolean filter_pwm;
+	gdouble tmp;
+	guint i;
+	guint j;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* optionally remove pwm */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_pwm"));
+	filter_pwm = gtk_switch_get_active (GTK_SWITCH (w));
 	for (j = 0; j < 3; j++) {
-		for (i = 0; i < NR_DATA_POINTS; i++) {
-			if (data[i][j] > tmp)
-				tmp = data[i][j];
+		sp_tmp = cd_it8_get_spectrum_by_id (priv->samples, ids[j]);
+		sp_graph[j] = cd_spectrum_dup (sp_tmp);
+		if (filter_pwm && !ch_refresh_remove_pwm (sp_graph[j], &error)) {
+			/* TRANSLATORS: PWM is pulse-width-modulation? */
+			title = _("Failed to remove PWM");
+			ch_refresh_error_dialog (priv, title, error->message);
+			return;
 		}
-	}
-	for (j = 0; j < 3; j++) {
-		for (i = 0; i < NR_DATA_POINTS; i++)
-			data[i][j] /= tmp;
-	}
-
-	/* find rise time (10% -> 90% transition) */
-	for (i = 0; i < NR_DATA_POINTS; i++) {
-		if (data[i][1] < 0.1) {
-			idx_start = 0;
-			continue;
-		}
-		if (data[i][1] > 0.1 && data[i][1] < 0.9 && idx_start == 0) {
-			idx_start = i;
-			continue;
-		}
-		if (data[i][1] > 0.9 && idx_start > 0) {
-			if (cnt < NR_PULSES)
-				pulse_data[cnt] = (i - idx_start) * priv->time_per_idx;
-			idx_start = 0;
-			cnt++;
-			continue;
-		}
-	}
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_rise"));
-	if (cnt == NR_PULSES) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("%.0fms ±%.1fms",
-				       ch_refresh_calc_average (pulse_data, NR_PULSES),
-				       ch_refresh_calc_jitter (pulse_data, NR_PULSES));
-		gtk_label_set_label (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), "n/a (PWM?)");
+		cd_spectrum_normalize_max (sp_graph[j], 1.f);
 	}
 
-	/* find fall time (90% -> 10% transition) */
-	cnt = 0;
-	for (i = 0; i < NR_DATA_POINTS; i++) {
-		if (data[i][1] > 0.9) {
-			idx_start = i;
-			continue;
-		}
-		if (data[i][1] < 0.1 && idx_start > 0) {
-			if (cnt < NR_PULSES)
-				pulse_data[cnt] = (i - idx_start) * priv->time_per_idx;
-			idx_start = 0;
-			cnt++;
-			continue;
-		}
-	}
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_fall"));
-	if (cnt == NR_PULSES) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("%.0fms ±%.1fms",
-				       ch_refresh_calc_average (pulse_data, NR_PULSES),
-				       ch_refresh_calc_jitter (pulse_data, NR_PULSES));
-		gtk_label_set_label (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), "n/a (PWM?)");
-	}
-
-	/* find display latency */
-	cnt = 0;
-	idx_start = 0;
-	for (i = 0; i < NR_DATA_POINTS; i++) {
-		if (data[i][1] < 0.1 && idx_start > 0) {
-			idx_start = 0;
-			continue;
-		}
-		if (data[i][1] > 0.1 && idx_start == 0) {
-			idx_start = i;
-			if (cnt < NR_PULSES) {
-				pulse_data[cnt] = (gdouble) i * priv->time_per_idx;
-				g_debug ("peak at %i = %f", i, pulse_data[cnt]);
-			}
-			cnt++;
-			continue;
-		}
-	}
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_display_latency"));
-	if (cnt == 5) {
-		_cleanup_free_ gchar *str = NULL;
-		for (i = 0; i < NR_PULSES; i++) {
-			pulse_data[i] = pulse_data[i] - (NR_PULSE_GAP * i);
-			g_debug ("peak %i difference is %f", i, pulse_data[i]);
-		}
-		str = g_strdup_printf ("%.0fms ±%.1fms",
-				       ch_refresh_calc_average (pulse_data + 2, 3),
-				       ch_refresh_calc_jitter (pulse_data + 2, 3));
-		gtk_label_set_label (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), "n/a");
-	}
-
-	/* render BW/RGB graphs */
 	ch_graph_widget_clear (CH_GRAPH_WIDGET (priv->graph));
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_channels"));
 	if (gtk_switch_get_active (GTK_SWITCH (w))) {
@@ -366,8 +280,8 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 			for (i = 0; i < NR_DATA_POINTS; i++) {
 				point = ch_point_obj_new ();
-				point->x = ((gdouble) i) * priv->time_per_idx / 1000.f;
-				point->y = data[i][j];
+				point->x = ((gdouble) i) * cd_spectrum_get_resolution (sp_graph[j]);
+				point->y = cd_spectrum_get_value (sp_graph[j], i);
 				point->color = 0x0000df << (j * 8);
 				g_ptr_array_add (array, point);
 			}
@@ -379,9 +293,16 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 		_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 		for (i = 0; i < NR_DATA_POINTS; i++) {
+			/* get maximum value */
+			gdouble max = 0.f;
+			for (j = 0; j < 3; j++) {
+				tmp = cd_spectrum_get_value (sp_graph[j], i);
+				if (tmp > max)
+					max = tmp;
+			}
 			point = ch_point_obj_new ();
-			point->x = ((gdouble) i) * priv->time_per_idx / 1000.f;
-			point->y = ch_refresh_calc_average (data[i], 3);
+			point->x = ((gdouble) i) * cd_spectrum_get_resolution (sp_graph[1]);
+			point->y = max;
 			point->color = 0x000000;
 			g_ptr_array_add (array, point);
 		}
@@ -391,7 +312,8 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	}
 
 	/* add trigger lines */
-	if (!zoom) {
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
+	if (!gtk_switch_get_active (GTK_SWITCH (w))) {
 		for (j = 0; j < NR_PULSES; j++) {
 			_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
@@ -414,6 +336,92 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 						 array);
 		}
 	}
+
+	/* free spectra */
+	for (j = 0; j < 3; j++) {
+		if (sp_graph[j] == NULL)
+			continue;
+		cd_spectrum_free (sp_graph[j]);
+	}
+}
+
+/**
+ * ch_refresh_update_ui:
+ **/
+static void
+ch_refresh_update_ui (ChRefreshPrivate *priv)
+{
+	CdSpectrum *sp_tmp;
+	gboolean ret;
+	gboolean zoom;
+	gdouble jitter;
+	gdouble tmp;
+	gdouble value;
+	gdouble duration;
+	GtkWidget *w;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* use Y for all measurements */
+	sp_tmp = cd_it8_get_spectrum_by_id (priv->samples, "Y");
+	if (sp_tmp == NULL)
+		return;
+
+	/* set the graph x scale */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
+	zoom = gtk_switch_get_active (GTK_SWITCH (w));
+	duration = cd_spectrum_get_resolution (sp_tmp) * (gdouble) NR_DATA_POINTS;
+	tmp = zoom ? duration / 5 : duration;
+	tmp = ceilf (tmp * 10.f) / 10.f;
+	if (zoom) {
+		g_object_set (priv->graph,
+			      "start-x", tmp * 2,
+			      "stop-x", tmp * 3,
+			      NULL);
+	} else {
+		g_object_set (priv->graph,
+			      "start-x", 0.f,
+			      "stop-x", tmp,
+			      NULL);
+	}
+
+	/* find rise time (10% -> 90% transition) */
+	ret = ch_refresh_get_rise (sp_tmp, &value, &jitter, &error);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_rise"));
+	if (ret) {
+		_cleanup_free_ gchar *str = NULL;
+		str = g_strdup_printf ("%.0fms ±%.1fms", value * 1000.f, jitter * 1000.f);
+		gtk_label_set_label (GTK_LABEL (w), str);
+	} else {
+		gtk_label_set_label (GTK_LABEL (w), error->message);
+		g_clear_error (&error);
+	}
+
+	/* find rise time (10% -> 90% transition) */
+	ret = ch_refresh_get_fall (sp_tmp, &value, &jitter, &error);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_fall"));
+	if (ret) {
+		_cleanup_free_ gchar *str = NULL;
+		str = g_strdup_printf ("%.0fms ±%.1fms", value * 1000.f, jitter * 1000.f);
+		gtk_label_set_label (GTK_LABEL (w), str);
+	} else {
+		gtk_label_set_label (GTK_LABEL (w), error->message);
+		g_clear_error (&error);
+	}
+
+	/* find display latency */
+	ret = ch_refresh_get_input_latency (sp_tmp, &value, &jitter, &error);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_display_latency"));
+	if (ret) {
+		_cleanup_free_ gchar *str = NULL;
+		str = g_strdup_printf ("%.0fms ±%.1fms", value * 1000.f, jitter * 1000.f);
+		gtk_label_set_label (GTK_LABEL (w), str);
+	} else {
+		gtk_label_set_label (GTK_LABEL (w), error->message);
+		g_clear_error (&error);
+	}
+
+	/* render BW/RGB graphs */
+	ch_refresh_update_graph (priv);
 }
 
 /**
@@ -424,7 +432,6 @@ ch_refresh_get_readings_cb (GObject *source, GAsyncResult *res, gpointer data)
 {
 	ChRefreshPrivate *priv = (ChRefreshPrivate *) data;
 	const gchar *title;
-	gdouble tmp;
 	_cleanup_error_free_ GError *error = NULL;
 
 	/* check success */
@@ -436,10 +443,10 @@ ch_refresh_get_readings_cb (GObject *source, GAsyncResult *res, gpointer data)
 	}
 
 	/* calculate how long each sample took */
-	tmp = g_timer_elapsed (priv->measured, NULL) * 1000.f;
-	g_debug ("taking sample took %.2fms", tmp);
-	priv->time_per_idx = (tmp - priv->usb_latency) / (gdouble) NR_DATA_POINTS;
-	g_debug ("each sample took %.2fms", priv->time_per_idx);
+	priv->sample_duration = g_timer_elapsed (priv->measured, NULL) - priv->usb_latency;
+	g_debug ("taking sample took %.2fs", priv->sample_duration);
+	g_debug ("each sample took %.2fms", (priv->sample_duration / (gdouble) NR_DATA_POINTS) * 1000);
+	ch_refresh_get_data_from_sram (priv);
 	ch_refresh_update_ui (priv);
 }
 
@@ -468,7 +475,9 @@ ch_refresh_get_readings (ChRefreshPrivate *priv)
 
 	/* update USB labels */
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_usb_latency"));
-	usb_latency_str = g_strdup_printf ("%.1fms ±%.1fms", priv->usb_latency, usb_jitter);
+	usb_latency_str = g_strdup_printf ("%.1fms ±%.1fms",
+					   priv->usb_latency * 1000,
+					   usb_jitter * 1000);
 	gtk_label_set_label (GTK_LABEL (w), usb_latency_str);
 
 	/* do NR_PULSES white flashes, 350ms apart */
@@ -496,6 +505,100 @@ ch_refresh_refresh_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 {
 	/* get the latest from the device */
 	ch_refresh_get_readings (priv);
+}
+
+/**
+ * ch_refresh_save_button_cb:
+ **/
+static void
+ch_refresh_save_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+{
+	GtkFileFilter *filter = NULL;
+	GtkWidget *d;
+	GtkWidget *w;
+	const gchar *title;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_object_unref_ GFile *file = NULL;
+
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
+	d = gtk_file_chooser_dialog_new (_("Export data file"),
+					 GTK_WINDOW (w),
+					 GTK_FILE_CHOOSER_ACTION_SAVE,
+					 _("Cancel"), GTK_RESPONSE_CANCEL,
+					 _("Export"), GTK_RESPONSE_ACCEPT,
+					 NULL);
+	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (d), TRUE);
+	gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (d), "export.ccss");
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, "CCSS files");
+	gtk_file_filter_add_pattern (filter, "*.ccss");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (d), filter);
+	if (gtk_dialog_run (GTK_DIALOG (d)) == GTK_RESPONSE_ACCEPT) {
+		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (d));
+		if (!cd_it8_save_to_file (priv->samples, file, &error)) {
+			/* TRANSLATORS: permissions error perhaps? */
+			title = _("Failed to get save file");
+			ch_refresh_error_dialog (priv, title, error->message);
+		}
+	}
+	gtk_widget_destroy (d);
+}
+
+/**
+ * ch_refresh_normalize_channels:
+ **/
+static void
+ch_refresh_normalize_channels (ChRefreshPrivate *priv)
+{
+	CdSpectrum *sp;
+	const gchar *ids[] = { "X", "Y", "Z", NULL };
+	guint j;
+
+	/* normalize all channels */
+	for (j = 0; j < 3; j++) {
+		sp = cd_it8_get_spectrum_by_id (priv->samples, ids[j]);
+		cd_spectrum_normalize_max (sp, 1.f);
+	}
+}
+
+/**
+ * ch_refresh_open_button_cb:
+ **/
+static void
+ch_refresh_open_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+{
+	GtkFileFilter *filter = NULL;
+	GtkWidget *d;
+	GtkWidget *w;
+	const gchar *title;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_object_unref_ GFile *file = NULL;
+
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
+	d = gtk_file_chooser_dialog_new (_("Import data file"),
+					 GTK_WINDOW (w),
+					 GTK_FILE_CHOOSER_ACTION_SAVE,
+					 _("Cancel"), GTK_RESPONSE_CANCEL,
+					 _("Import"), GTK_RESPONSE_ACCEPT,
+					 NULL);
+	filter = gtk_file_filter_new ();
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, "CCSS files");
+	gtk_file_filter_add_pattern (filter, "*.ccss");
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (d), TESTDATADIR);
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (d), filter);
+	if (gtk_dialog_run (GTK_DIALOG (d)) == GTK_RESPONSE_ACCEPT) {
+		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (d));
+		if (!cd_it8_load_from_file (priv->samples, file, &error)) {
+			/* TRANSLATORS: permissions error perhaps? */
+			title = _("Failed to get import file");
+			ch_refresh_error_dialog (priv, title, error->message);
+		} else {
+			ch_refresh_normalize_channels (priv);
+			ch_refresh_update_ui (priv);
+		}
+	}
+	gtk_widget_destroy (d);
 }
 
 /**
@@ -578,10 +681,19 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_refresh_refresh_button_cb), priv);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_save"));
+	g_signal_connect (w, "clicked",
+			  G_CALLBACK (ch_refresh_save_button_cb), priv);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_open"));
+	g_signal_connect (w, "clicked",
+			  G_CALLBACK (ch_refresh_open_button_cb), priv);
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
 	g_signal_connect (w, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_channels"));
+	g_signal_connect (w, "notify::active",
+			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_pwm"));
 	g_signal_connect (w, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
 
@@ -719,6 +831,12 @@ main (int argc, char **argv)
 			  G_CALLBACK (ch_refresh_device_added_cb), priv);
 	g_signal_connect (priv->device_list, "device-removed",
 			  G_CALLBACK (ch_refresh_device_removed_cb), priv);
+
+	/* keep the data loaded in memory */
+	priv->samples = cd_it8_new_with_kind (CD_IT8_KIND_CCSS);
+	cd_it8_set_originator (priv->samples, "cd-refresh");
+	cd_it8_set_title (priv->samples, "Sample Data");
+	cd_it8_set_instrument (priv->samples, "ColorHug2");
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("com.hughski.ColorHug.Util", 0);

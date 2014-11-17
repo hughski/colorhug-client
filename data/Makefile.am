@@ -1,5 +1,6 @@
 SUBDIRS = 						\
-	icons
+	icons						\
+	tests
 
 bashcompletiondir = ${SYSCONFDIR}/bash_completion.d
 dist_bashcompletion_DATA = colorhug-cmd-completion.bash

@@ -9,6 +9,7 @@ AM_CPPFLAGS =						\
 	$(SOUP_CFLAGS)					\
 	$(CANBERRA_CFLAGS)				\
 	-DCD_DISABLE_DEPRECATED				\
+	-DTESTDATADIR=\""$(top_srcdir)/data/tests"\"	\
 	-DG_LOG_DOMAIN=\"ChClient\"			\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DCH_DATA=\"$(pkgdatadir)\"			\
@@ -145,7 +146,9 @@ colorhug_refresh_SOURCES =				\
 	ch-point-obj.h					\
 	ch-refresh.c					\
 	ch-refresh-resources.c				\
-	ch-refresh-resources.h
+	ch-refresh-resources.h				\
+	ch-refresh-utils.c				\
+	ch-refresh-utils.h
 
 colorhug_refresh_LDADD =				\
 	$(COLORD_LIBS)					\
@@ -201,5 +204,30 @@ MAINTAINERCLEANFILES =					\
 install-data-hook:
 	mkdir -p $(DESTDIR)$(libexecdir);
 	ln -fs $(bindir)/colorhug-cmd $(DESTDIR)$(libexecdir)/colorhug;
+
+TESTS_ENVIRONMENT =						\
+	libtool --mode=execute valgrind				\
+	--quiet							\
+	--leak-check=full					\
+	--show-possibly-lost=no
+
+check_PROGRAMS =						\
+	ch-self-test
+
+ch_self_test_SOURCES =						\
+	ch-self-test.c						\
+	ch-refresh-utils.c					\
+	ch-refresh-utils.h
+
+ch_self_test_LDADD =						\
+	$(COLORHUG_LIBS)					\
+	$(GLIB_LIBS)						\
+	$(GUSB_LIBS)
+
+ch_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
+
+TESTS = ch-self-test
+
+CLEANFILES = *.log *.trs
 
 -include $(top_srcdir)/git.mk
