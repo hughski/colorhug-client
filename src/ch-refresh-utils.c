@@ -307,15 +307,16 @@ ch_refresh_remove_pwm (CdSpectrum *sp, GError **error)
 		}
 
 		/* for each point inside the pulse, if the point is less than
-		 * previous point, then copy previous point value to this one */
+		 * previous point, then copy 95% of the previous point value
+		 * to this one */
 		g_debug ("removing PWM from %i to %i", pulse_start, pulse_end);
 		for (i = pulse_start; i < pulse_end; i++) {
 			tmp = cd_spectrum_get_value (sp, i);
-			if (tmp < old_value) {
+			if (tmp < old_value * 0.95f) {
 				cd_spectrum_set_value (sp, i, old_value);
 				continue;
 			}
-			old_value = tmp;
+			old_value = tmp * 0.99f;
 		}
 	}
 
