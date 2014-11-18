@@ -57,6 +57,30 @@ ch_refresh_calc_jitter (const gdouble *data, guint data_len)
 	}
 	return jitter;
 }
+/**
+ * ch_refresh_sort:
+ **/
+static void
+ch_refresh_sort (gdouble *data, guint data_len)
+{
+	gboolean sorted;
+	gdouble tmp;
+	guint i;
+
+	/* simple bubble sort */
+	do {
+		sorted = TRUE;
+		for (i = 0; i < data_len - 1; i++) {
+			if (data[i] > data[i + 1]) {
+				tmp = data[i];
+				data[i] = data[i + 1];
+				data[i + 1] = tmp;
+				sorted = FALSE;
+				break;
+			}
+		}
+	} while (!sorted);
+}
 
 /**
  * ch_refresh_get_rise:
@@ -253,10 +277,11 @@ ch_refresh_get_input_latency (CdSpectrum *sp, gdouble *value, gdouble *jitter, G
 		g_debug ("peak %i: %f", i + 1, pulse_data[i]);
 
 	/* success */
+	ch_refresh_sort (pulse_data, NR_PULSES);
 	if (value != NULL)
-		*value = ch_refresh_calc_average (pulse_data, NR_PULSES);
+		*value = ch_refresh_calc_average (pulse_data + 1, NR_PULSES - 2);
 	if (jitter != NULL)
-		*jitter = ch_refresh_calc_jitter (pulse_data, NR_PULSES);
+		*jitter = ch_refresh_calc_jitter (pulse_data + 1, NR_PULSES - 2);
 	return TRUE;
 }
 
