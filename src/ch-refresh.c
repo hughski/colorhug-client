@@ -346,6 +346,33 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 }
 
 /**
+ * ch_refresh_refresh_rate:
+ **/
+static void
+ch_refresh_refresh_rate (ChRefreshPrivate *priv)
+{
+	GdkFrameClock *frame_clock;
+	GtkWidget *w;
+	gdouble refresh_rate;
+	gint64 refresh_interval = 0;
+
+	/* query the refresh rate from the frame clock */
+	frame_clock = gtk_widget_get_frame_clock (priv->sample_widget);
+	gdk_frame_clock_get_refresh_info (frame_clock, 0, &refresh_interval, NULL);
+	refresh_rate = (gdouble) G_USEC_PER_SEC / (gdouble) refresh_interval;
+
+	/* update the UI */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_refresh"));
+	if (refresh_rate > 1.f) {
+		_cleanup_free_ gchar *str = NULL;
+		str = g_strdup_printf ("%.0f Hz", refresh_rate);
+		gtk_label_set_label (GTK_LABEL (w), str);
+	} else {
+		gtk_label_set_label (GTK_LABEL (w), _("Unknown"));
+	}
+}
+
+/**
  * ch_refresh_update_ui:
  **/
 static void
@@ -360,6 +387,9 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	gdouble duration;
 	GtkWidget *w;
 	_cleanup_error_free_ GError *error = NULL;
+
+	/* update display refresh rate */
+	ch_refresh_refresh_rate (priv);
 
 	/* use Y for all measurements */
 	sp_tmp = cd_it8_get_spectrum_by_id (priv->samples, "Y");
@@ -770,6 +800,7 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	/* show main UI */
 	gtk_widget_show (main_window);
 
+	ch_refresh_refresh_rate (priv);
 	ch_refresh_update_title (priv, NULL);
 }
 
