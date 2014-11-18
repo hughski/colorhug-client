@@ -1,5 +1,5 @@
 [Desktop Entry]
-_Name=ColorHug Latency & Refresh
+_Name=ColorHug Display Analysis
 _Comment=Sample the display over time to observe PWM, input latency and refresh artifacts
 Icon=input-gaming
 Exec=colorhug-refresh

@@ -5,7 +5,6 @@
   <object class="GtkApplicationWindow" id="dialog_refresh">
     <property name="can_focus">False</property>
     <property name="border_width">18</property>
-    <property name="title" translatable="yes">ColorHug Latency &amp; Refresh</property>
     <property name="icon_name">input-gaming</property>
     <child>
       <object class="GtkNotebook" id="notebook_refresh">

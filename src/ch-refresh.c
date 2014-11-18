@@ -508,6 +508,26 @@ ch_refresh_refresh_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 }
 
 /**
+ * ch_refresh_update_title:
+ **/
+static void
+ch_refresh_update_title (ChRefreshPrivate *priv, GFile *file)
+{
+	GtkWidget *w;
+	_cleanup_free_ gchar *title = NULL;
+
+	if (file == NULL) {
+		title = g_strdup ("ColorHug Display Analysis");
+	} else {
+		_cleanup_free_ gchar *basename = NULL;
+		basename = g_file_get_basename (file);
+		title = g_strdup_printf ("ColorHug Display Analysis — %s", basename);
+	}
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
+	gtk_window_set_title (GTK_WINDOW (w), title);
+}
+
+/**
  * ch_refresh_save_button_cb:
  **/
 static void
@@ -539,6 +559,8 @@ ch_refresh_save_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 			/* TRANSLATORS: permissions error perhaps? */
 			title = _("Failed to get save file");
 			ch_refresh_error_dialog (priv, title, error->message);
+		} else {
+			ch_refresh_update_title (priv, file);
 		}
 	}
 	gtk_widget_destroy (d);
@@ -594,6 +616,7 @@ ch_refresh_open_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 			title = _("Failed to get import file");
 			ch_refresh_error_dialog (priv, title, error->message);
 		} else {
+			ch_refresh_update_title (priv, file);
 			ch_refresh_normalize_channels (priv);
 			ch_refresh_update_ui (priv);
 		}
@@ -746,6 +769,8 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 
 	/* show main UI */
 	gtk_widget_show (main_window);
+
+	ch_refresh_update_title (priv, NULL);
 }
 
 /**
@@ -812,7 +837,7 @@ main (int argc, char **argv)
 
 	/* TRANSLATORS: A program to load on CCMX correction matrices
 	 * onto the hardware */
-	context = g_option_context_new (_("ColorHug Refresh"));
+	context = g_option_context_new (_("ColorHug Display Analysis"));
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
@@ -839,7 +864,7 @@ main (int argc, char **argv)
 	cd_it8_set_instrument (priv->samples, "ColorHug2");
 
 	/* ensure single instance */
-	priv->application = gtk_application_new ("com.hughski.ColorHug.Util", 0);
+	priv->application = gtk_application_new ("com.hughski.ColorHug.DisplayAnalysis", 0);
 	g_signal_connect (priv->application, "startup",
 			  G_CALLBACK (ch_refresh_startup_cb), priv);
 	g_signal_connect (priv->application, "activate",
