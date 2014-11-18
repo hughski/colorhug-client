@@ -973,7 +973,7 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 
 	priv = g_new0 (ChRefreshPrivate, 1);
-	priv->settings = g_settings_new ("com.hughski.colorhug-client");
+	priv->settings = g_settings_new ("com.hughski.ColorHug.DisplayAnalysis");
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->measured = g_timer_new ();
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
@@ -993,6 +993,15 @@ main (int argc, char **argv)
 	priv->switch_zoom = gtk_switch_new ();
 	priv->switch_channels = gtk_switch_new ();
 	priv->switch_pwm = gtk_switch_new ();
+	g_settings_bind (priv->settings, "graph-zoom-enable",
+			 priv->switch_zoom, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (priv->settings, "graph-show-channels",
+			 priv->switch_channels, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind (priv->settings, "graph-pwm-fixup",
+			 priv->switch_pwm, "active",
+			 G_SETTINGS_BIND_DEFAULT);
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("com.hughski.ColorHug.DisplayAnalysis", 0);
