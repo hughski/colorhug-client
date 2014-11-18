@@ -309,6 +309,7 @@ ch_refresh_remove_pwm (CdSpectrum *sp, GError **error)
 	for (j = 0; j < NR_PULSES; j++) {
 		guint pulse_start = 0;
 		guint pulse_end = 0;
+		gboolean fix_idx = 0;
 		gdouble old_value = -1.f;
 
 		for (i = j * size; i < (j + 1) * size; i++) {
@@ -336,9 +337,17 @@ ch_refresh_remove_pwm (CdSpectrum *sp, GError **error)
 		 * to this one */
 		g_debug ("removing PWM from %i to %i", pulse_start, pulse_end);
 		for (i = pulse_start; i < pulse_end; i++) {
+			/* if we got 90% the way through without fixing up a
+			 * data point then don't bother now */
+			tmp = pulse_start + ((gdouble) (pulse_end - pulse_start) * 0.9f);
+			if (fix_idx == 0 && i > tmp) {
+				g_debug ("no PWM fixup after %i, ignoring", i);
+				break;
+			}
 			tmp = cd_spectrum_get_value (sp, i);
 			if (tmp < old_value * 0.95f) {
 				cd_spectrum_set_value (sp, i, old_value);
+				fix_idx = i;
 				continue;
 			}
 			old_value = tmp * 0.99f;
