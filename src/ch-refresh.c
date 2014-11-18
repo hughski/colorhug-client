@@ -281,7 +281,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 			for (i = 0; i < NR_DATA_POINTS; i++) {
 				point = ch_point_obj_new ();
 				point->x = ((gdouble) i) * cd_spectrum_get_resolution (sp_graph[j]);
-				point->y = cd_spectrum_get_value (sp_graph[j], i);
+				point->y = cd_spectrum_get_value (sp_graph[j], i) * 100.f;
 				point->color = 0x0000df << (j * 8);
 				g_ptr_array_add (array, point);
 			}
@@ -302,7 +302,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 			}
 			point = ch_point_obj_new ();
 			point->x = ((gdouble) i) * cd_spectrum_get_resolution (sp_graph[1]);
-			point->y = max;
+			point->y = max * 100.f;
 			point->color = 0x000000;
 			g_ptr_array_add (array, point);
 		}
@@ -328,8 +328,8 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 			/* top */
 			point = ch_point_obj_new ();
 			point->x = ((gdouble) j) * (gdouble) NR_PULSE_GAP / 1000.f;
-			point->y = 1.0;
-			point->color = 0xfff000;
+			point->y = 100.f;
+			point->color = 0xffb000;
 			g_ptr_array_add (array, point);
 			ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
 						 CH_GRAPH_WIDGET_PLOT_LINE,
@@ -738,11 +738,11 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	priv->graph = ch_graph_widget_new ();
 	g_object_set (priv->graph,
 		      "type-x", CH_GRAPH_WIDGET_TYPE_TIME,
-		      "type-y", CH_GRAPH_WIDGET_TYPE_FACTOR,
+		      "type-y", CH_GRAPH_WIDGET_TYPE_PERCENTAGE,
 		      "start-x", 0.f,
 		      "stop-x", 2.f,
 		      "start-y", 0.f,
-		      "stop-y", 1.f,
+		      "stop-y", 100.f,
 		      "use-grid", TRUE,
 		      NULL);
 	gtk_box_pack_start (box, priv->graph, TRUE, TRUE, 0);
