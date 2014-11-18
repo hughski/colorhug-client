@@ -17,4 +17,5 @@ src/ch-flash.c
 src/ch-graph-widget.c
 src/ch-main.c
 src/ch-refresh.c
+src/ch-refresh-utils.c
 src/ch-spectro-util.c

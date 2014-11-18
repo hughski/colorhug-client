@@ -1,284 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.18.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkApplicationWindow" id="dialog_refresh">
     <property name="can_focus">False</property>
-    <property name="border_width">18</property>
     <property name="icon_name">input-gaming</property>
     <child>
-      <object class="GtkNotebook" id="notebook_refresh">
+      <object class="GtkStack" id="stack_refresh">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="show_tabs">False</property>
-        <property name="show_border">False</property>
+        <property name="can_focus">False</property>
+        <property name="transition_duration">400</property>
+        <property name="transition_type">crossfade</property>
         <child>
-          <object class="GtkBox" id="box_main">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkBox" id="box_sidebar">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">18</property>
-                <child>
-                  <object class="GtkGrid" id="grid_sidebar">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label_display_latency_title">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Display Latency</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_display_latency">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">0ms</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_usb_latency_title">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">USB Latency</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_usb_latency">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">0ms</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_rise_title">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Black to White</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_rise">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">0ms</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_fall_title">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">White to Black</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_fall">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">0ms</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_refresh_title">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Refresh Rate</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_refresh">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Unknown</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkButton" id="button_refresh">
-                        <property name="label" context="Starts the capture process">Start Capture</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="image_position">right</property>
-                        <style>
-                          <class name="suggested-action"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box_graph">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">3</property>
-                <child>
-                  <object class="GtkButton" id="button_graph_settings">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">end</property>
-                    <child>
-                      <object class="GtkImage" id="image_graph_settings">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="pixel_size">22</property>
-                        <property name="icon_name">emblem-system-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel" id="label_tab_main">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label">main</property>
-          </object>
-          <packing>
-            <property name="tab_fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box_connect">
+          <object class="GtkBox" id="box_measure">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="border_width">30</property>
+            <property name="spacing">24</property>
             <child>
               <object class="GtkImage" id="image_usb">
+                <property name="width_request">175</property>
+                <property name="height_request">175</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="ypad">12</property>
@@ -287,39 +31,479 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label_connect">
+              <object class="GtkLabel" id="label_intro">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Please connect your ColorHug2</property>
+                <property name="label">Place your ColorHug in the spot on the left and click the blue button to start measuring your display system latencies.
+Don't disturb the device while working!</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="max_width_chars">40</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="1.2"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="name">measure</property>
+            <property name="title" translatable="yes">page0</property>
           </packing>
         </child>
-        <child type="tab">
-          <object class="GtkLabel" id="label_tab_connect">
+        <child>
+          <object class="GtkBox" id="box_results">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">connect</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="label_results">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">21</property>
+                <property name="label" translatable="yes">Your Score</property>
+                <attributes>
+                  <attribute name="scale" value="1.2"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_display_title">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">15</property>
+                <property name="label">HP Laptop internal LCD</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid_results">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="margin_top">42</property>
+                <property name="margin_bottom">18</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="label_display_latency_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Display</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_display_latency">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0ms</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_usb_latency_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">USB</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_usb_latency">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0ms</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_rise_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Black-to-White</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_rise">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0ms</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_fall_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">White-to-Black</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_fall">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0ms</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_refresh_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Refresh Rate</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_refresh">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">Unknown</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_cct_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Color Temperature</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_cct">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">OK</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_lux_white_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">White Luminance</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_lux_black_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Black Luminance</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_lux_white">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0 cd/m²</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_lux_black">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0 cd/m²</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_coverage_srgb_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">sRGB Coverage</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_coverage_adobergb_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">AdobeRGB Coverage</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_coverage_srgb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0%</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_coverage_adobergb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0%</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_gamma_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Native Gamma</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_gamma">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">0</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">10</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <style>
+              <class name="view"/>
+            </style>
           </object>
           <packing>
+            <property name="name">results</property>
+            <property name="title" translatable="yes">page1</property>
             <property name="position">1</property>
-            <property name="tab_fill">False</property>
           </packing>
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show_close_button">True</property>
+        <child>
+          <object class="GtkButton" id="button_back">
+            <property name="label">Start Again</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="destructive-action"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_refresh">
+            <property name="label" context="Starts the capture process">Start Measuring</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">center</property>
+            <property name="image_position">right</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_cancel">
+            <property name="label">gtk-cancel</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_stock">True</property>
+            <style>
+              <class name="destructive-action"/>
+            </style>
+          </object>
+        </child>
+        <child type="title">
+          <object class="GtkLabel" id="label_csd_title">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label">ColorHug Display Analysis</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_graph_settings">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">end</property>
+            <child>
+              <object class="GtkImage" id="image_graph_settings">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixel_size">22</property>
+                <property name="icon_name">emblem-system-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup_header_buttons">
+    <widgets>
+      <widget name="button_refresh"/>
+      <widget name="button_cancel"/>
+      <widget name="button_back"/>
+    </widgets>
   </object>
 </interface>

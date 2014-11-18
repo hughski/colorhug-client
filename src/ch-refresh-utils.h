@@ -23,6 +23,7 @@
 #define __CH_REFRESH_UTILS_H__
 
 #include <colord.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,25 @@ gboolean	 ch_refresh_get_input_latency	(CdSpectrum		*sp,
 						 GError			**error);
 gboolean	 ch_refresh_remove_pwm		(CdSpectrum		*sp,
 						 GError			**error);
+gdouble		 ch_refresh_calc_average	(const gdouble		*data,
+						 guint			 data_len);
+gdouble		 ch_refresh_calc_jitter		(const gdouble		*data,
+						 guint			 data_len);
+
+void		 ch_refresh_ui_update_cct	(GtkBuilder		*builder,
+						 gdouble		 value);
+void		 ch_refresh_ui_update_lux_white	(GtkBuilder		*builder,
+						 gdouble		 value);
+void		 ch_refresh_ui_update_lux_black	(GtkBuilder		*builder,
+						 gdouble		 value);
+void		 ch_refresh_ui_update_srgb	(GtkBuilder		*builder,
+						 gdouble		 value);
+void		 ch_refresh_ui_update_adobergb	(GtkBuilder		*builder,
+						 gdouble		 value);
+void		 ch_refresh_ui_update_refresh	(GtkBuilder		*builder,
+						 gdouble		 value);
+void		 ch_refresh_ui_update_gamma	(GtkBuilder		*builder,
+						 gdouble		 value);
 
 G_END_DECLS
 

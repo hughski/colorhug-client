@@ -35,24 +35,37 @@
 #include "ch-refresh-utils.h"
 
 typedef struct {
+	CdClient		*client;
+	CdIt8			*it8_ti1;
+	CdIt8			*samples;
 	ChDeviceQueue		*device_queue;
 	GSettings		*settings;
 	GtkApplication		*application;
 	GtkBuilder		*builder;
 	GtkWidget		*graph;
 	GtkWidget		*sample_widget;
-	guint			 timer_id;
+	GtkWidget		*switch_channels;
+	GtkWidget		*switch_pwm;
+	GtkWidget		*switch_zoom;
 	GUsbContext		*usb_ctx;
 	GUsbDevice		*device;
 	GUsbDeviceList		*device_list;
-	GTimer			*measured;
-	gdouble			 usb_latency;		/* s */
-	gdouble			 sample_duration;	/* s */
-	CdIt8			*samples;
-	GtkWidget		*switch_zoom;
-	GtkWidget		*switch_channels;
-	GtkWidget		*switch_pwm;
 } ChRefreshPrivate;
+
+typedef struct {
+	CdColorXYZ		*values;
+	CdDevice		*device;
+	CdIt8			*it8_ti3;
+	ChRefreshPrivate	*priv;
+	GCancellable		*cancellable;
+	GTimer			*measured;
+	gchar			*title;
+	gchar			*xrandr_id;
+	gdouble			 sample_duration;	/* s */
+	gdouble			 usb_latency;		/* s */
+	guint8			*reading_array;		/* not used (SRAM) */
+	guint			 sample_idx;
+} ChRefreshMeasureHelper;
 
 /**
  * ch_refresh_error_dialog:
@@ -94,14 +107,14 @@ ch_refresh_activate_cb (GApplication *application, ChRefreshPrivate *priv)
 static gboolean
 ch_refresh_sample_set_black_cb (gpointer user_data)
 {
-	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
 	CdColorRGB source;
 
 	/* set to black */
 	cd_color_rgb_set (&source, 0.f, 0.f, 0.f);
-	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
+	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (helper->priv->sample_widget), &source);
 	g_debug ("hiding patch at %fms",
-		 g_timer_elapsed (priv->measured, NULL) * 1000.f);
+		 g_timer_elapsed (helper->measured, NULL) * 1000.f);
 	return FALSE;
 }
 
@@ -111,50 +124,18 @@ ch_refresh_sample_set_black_cb (gpointer user_data)
 static gboolean
 ch_refresh_sample_set_white_cb (gpointer user_data)
 {
-	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
 	CdColorRGB source;
 
 	/* set white */
 	cd_color_rgb_set (&source, 1.f, 1.f, 1.f);
-	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
+	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (helper->priv->sample_widget), &source);
 	g_debug ("showing patch at %fms",
-		 g_timer_elapsed (priv->measured, NULL) * 1000.f);
+		 g_timer_elapsed (helper->measured, NULL) * 1000.f);
 
 	/* set a timeout set the patch black again */
-	g_timeout_add (100, ch_refresh_sample_set_black_cb, priv);
+	g_timeout_add (100, ch_refresh_sample_set_black_cb, helper);
 	return FALSE;
-}
-
-/**
- * ch_refresh_calc_average:
- **/
-static gdouble
-ch_refresh_calc_average (const gdouble *data, guint data_len)
-{
-	gdouble tmp = 0.f;
-	guint i;
-	for (i = 0; i < data_len; i++)
-		tmp += data[i];
-	return tmp / (gdouble) data_len;
-}
-
-/**
- * ch_refresh_calc_jitter:
- **/
-static gdouble
-ch_refresh_calc_jitter (const gdouble *data, guint data_len)
-{
-	gdouble ave;
-	gdouble jitter = 0.f;
-	gdouble tmp;
-	guint i;
-	ave = ch_refresh_calc_average (data, data_len);
-	for (i = 0; i < data_len; i ++) {
-		tmp = ABS (data[i] - ave);
-		if (tmp > jitter)
-			jitter = tmp;
-	}
-	return jitter;
 }
 
 /**
@@ -199,7 +180,7 @@ ch_refresh_get_usb_speed (ChRefreshPrivate *priv,
  * ch_refresh_get_data_from_sram:
  **/
 static void
-ch_refresh_get_data_from_sram (ChRefreshPrivate *priv)
+ch_refresh_get_data_from_sram (ChRefreshMeasureHelper *helper)
 {
 	CdSpectrum *sp;
 	const gchar *ids[] = { "X", "Y", "Z", NULL };
@@ -211,19 +192,19 @@ ch_refresh_get_data_from_sram (ChRefreshPrivate *priv)
 	_cleanup_error_free_ GError *error = NULL;
 
 	/* get 3694 samples from the sram */
-	ch_device_queue_read_sram (priv->device_queue,
-				   priv->device,
+	ch_device_queue_read_sram (helper->priv->device_queue,
+				   helper->priv->device,
 				   0x0000,
 				   (guint8 *) buffer,
 				   sizeof(buffer));
-	ret = ch_device_queue_process (priv->device_queue,
+	ret = ch_device_queue_process (helper->priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
 				       NULL,
 				       &error);
 	if (!ret) {
 		/* TRANSLATORS: permissions error perhaps? */
 		title = _("Failed to get samples from device");
-		ch_refresh_error_dialog (priv, title, error->message);
+		ch_refresh_error_dialog (helper->priv, title, error->message);
 		return;
 	}
 
@@ -232,14 +213,27 @@ ch_refresh_get_data_from_sram (ChRefreshPrivate *priv)
 		sp = cd_spectrum_new ();
 		cd_spectrum_set_id (sp, ids[j]);
 		cd_spectrum_set_start (sp, 0.f);
-		cd_spectrum_set_end (sp, priv->sample_duration);
+		cd_spectrum_set_end (sp, helper->sample_duration);
 		for (i = 0; i < NR_DATA_POINTS; i++)
 			cd_spectrum_add_value (sp, buffer[i * 3 + j]);
 		cd_spectrum_normalize_max (sp, 1.f);
-		cd_it8_add_spectrum (priv->samples, sp);
+		cd_it8_add_spectrum (helper->priv->samples, sp);
 		cd_spectrum_free (sp);
 	}
 
+}
+
+/**
+ * ch_refresh_update_cancel_buttons:
+ **/
+static void
+ch_refresh_update_cancel_buttons (ChRefreshPrivate *priv, gboolean in_progress)
+{
+	GtkWidget *w;
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_cancel"));
+	gtk_widget_set_visible (w, in_progress);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	gtk_widget_set_visible (w, !in_progress && priv->device != NULL);
 }
 
 /**
@@ -286,8 +280,8 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 				g_ptr_array_add (array, point);
 			}
 			ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-						 CH_GRAPH_WIDGET_PLOT_LINE,
-						 array);
+						CH_GRAPH_WIDGET_PLOT_LINE,
+						array);
 		}
 	} else {
 		_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
@@ -307,8 +301,8 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 			g_ptr_array_add (array, point);
 		}
 		ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-					 CH_GRAPH_WIDGET_PLOT_LINE,
-					 array);
+					CH_GRAPH_WIDGET_PLOT_LINE,
+					array);
 	}
 
 	/* add trigger lines */
@@ -345,13 +339,12 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 }
 
 /**
- * ch_refresh_refresh_rate:
+ * ch_refresh_update_refresh_rate:
  **/
 static void
-ch_refresh_refresh_rate (ChRefreshPrivate *priv)
+ch_refresh_update_refresh_rate (ChRefreshPrivate *priv)
 {
 	GdkFrameClock *frame_clock;
-	GtkWidget *w;
 	gdouble refresh_rate;
 	gint64 refresh_interval = 0;
 
@@ -359,16 +352,7 @@ ch_refresh_refresh_rate (ChRefreshPrivate *priv)
 	frame_clock = gtk_widget_get_frame_clock (priv->sample_widget);
 	gdk_frame_clock_get_refresh_info (frame_clock, 0, &refresh_interval, NULL);
 	refresh_rate = (gdouble) G_USEC_PER_SEC / (gdouble) refresh_interval;
-
-	/* update the UI */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_refresh"));
-	if (refresh_rate > 1.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("%.0f Hz", refresh_rate);
-		gtk_label_set_label (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Unknown"));
-	}
+	ch_refresh_ui_update_refresh (priv->builder, refresh_rate);
 }
 
 /**
@@ -388,12 +372,16 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	_cleanup_error_free_ GError *error = NULL;
 
 	/* update display refresh rate */
-	ch_refresh_refresh_rate (priv);
+	ch_refresh_update_refresh_rate (priv);
 
 	/* use Y for all measurements */
 	sp_tmp = cd_it8_get_spectrum_by_id (priv->samples, "Y");
 	if (sp_tmp == NULL)
 		return;
+
+	/* show results box */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_results"));
+	gtk_widget_set_visible (w, TRUE);
 
 	/* set the graph x scale */
 	zoom = gtk_switch_get_active (GTK_SWITCH (priv->switch_zoom));
@@ -402,8 +390,8 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	tmp = ceilf (tmp * 10.f) / 10.f;
 	if (zoom) {
 		g_object_set (priv->graph,
-			      "start-x", tmp * 2,
-			      "stop-x", tmp * 3,
+			      "start-x", tmp,
+			      "stop-x", tmp + 0.3f,
 			      NULL);
 	} else {
 		g_object_set (priv->graph,
@@ -417,8 +405,9 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_rise"));
 	if (ret) {
 		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("%.0fms ±%.1fms", value * 1000.f, jitter * 1000.f);
-		gtk_label_set_label (GTK_LABEL (w), str);
+		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
+				       value * 1000.f, jitter * 1000.f);
+		gtk_label_set_markup (GTK_LABEL (w), str);
 	} else {
 		gtk_label_set_label (GTK_LABEL (w), error->message);
 		g_clear_error (&error);
@@ -429,8 +418,9 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_fall"));
 	if (ret) {
 		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("%.0fms ±%.1fms", value * 1000.f, jitter * 1000.f);
-		gtk_label_set_label (GTK_LABEL (w), str);
+		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
+				       value * 1000.f, jitter * 1000.f);
+		gtk_label_set_markup (GTK_LABEL (w), str);
 	} else {
 		gtk_label_set_label (GTK_LABEL (w), error->message);
 		g_clear_error (&error);
@@ -441,8 +431,9 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_display_latency"));
 	if (ret) {
 		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("%.0fms ±%.1fms", value * 1000.f, jitter * 1000.f);
-		gtk_label_set_label (GTK_LABEL (w), str);
+		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
+				       value * 1000.f, jitter * 1000.f);
+		gtk_label_set_markup (GTK_LABEL (w), str);
 	} else {
 		gtk_label_set_label (GTK_LABEL (w), error->message);
 		g_clear_error (&error);
@@ -453,76 +444,325 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 }
 
 /**
- * ch_refresh_get_readings:
+ * ch_refresh_update_page:
  **/
 static void
-ch_refresh_get_readings_cb (GObject *source, GAsyncResult *res, gpointer data)
+ch_refresh_update_page (ChRefreshPrivate *priv, gboolean is_results)
 {
-	ChRefreshPrivate *priv = (ChRefreshPrivate *) data;
+	CdColorRGB source;
+	GtkWidget *w;
+
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_refresh"));
+	gtk_stack_set_visible_child_name (GTK_STACK (w), is_results ? "results" : "measure");
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_back"));
+	gtk_widget_set_visible (w, is_results);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_graph_settings"));
+	gtk_widget_set_visible (w, is_results);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_back"));
+	gtk_widget_set_visible (w, is_results);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	gtk_widget_set_visible (w, !is_results && priv->device != NULL);
+	gtk_widget_set_visible (priv->graph, is_results);
+
+	/* make the window as small as possible */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
+	gtk_window_resize (GTK_WINDOW (w), 100, 100);
+
+	/* set to initial color */
+	cd_color_rgb_set (&source, 0.5f, 0.5f, 0.5f);
+	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
+}
+
+/**
+ * ch_refresh_measure_helper_free:
+ **/
+static void
+ch_refresh_measure_helper_free (ChRefreshMeasureHelper *helper)
+{
+	GtkWidget *w;
+
+	/* set the title */
+	w = GTK_WIDGET (gtk_builder_get_object (helper->priv->builder, "label_display_title"));
+	gtk_widget_set_visible (w, helper->title != NULL);
+	gtk_label_set_label (GTK_LABEL (w), helper->title);
+
+	/* free the helper */
+	if (helper->device != NULL)
+		g_object_unref (helper->device);
+	g_object_unref (helper->cancellable);
+	g_object_unref (helper->it8_ti3);
+	g_timer_destroy (helper->measured);
+	g_free (helper->reading_array);
+	g_free (helper->title);
+	g_free (helper->values);
+	g_free (helper->xrandr_id);
+	g_free (helper);
+}
+
+static void ch_refresh_ti3_show_patch (ChRefreshMeasureHelper *helper);
+
+/**
+ * ch_refresh_update_coverage:
+ **/
+static void
+ch_refresh_update_coverage (ChRefreshMeasureHelper *helper)
+{
+	CdColorXYZ *tmp;
+	CdColorYxy blue;
+	CdColorYxy green;
+	CdColorYxy red;
+	CdColorYxy white;
+	gboolean ret;
+	gdouble coverage_adobergb = -1.f;
+	gdouble coverage_srgb = -1.f;
+	gdouble gamma_y;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_object_unref_ CdIcc *icc_adobergb = NULL;
+	_cleanup_object_unref_ CdIcc *icc = NULL;
+	_cleanup_object_unref_ CdIcc *icc_srgb = NULL;
+	_cleanup_object_unref_ GFile *file_adobergb = NULL;
+	_cleanup_object_unref_ GFile *file_srgb = NULL;
+
+	/* convert to Yxy */
+	tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 1.f, 0.f, 0.f, 0.01f);
+	cd_color_xyz_to_yxy (tmp, &red);
+	tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 0.f, 1.f, 0.f, 0.01f);
+	cd_color_xyz_to_yxy (tmp, &green);
+	tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 0.f, 0.f, 1.f, 0.01f);
+	cd_color_xyz_to_yxy (tmp, &blue);
+	tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 1.f, 1.f, 1.f, 0.01f);
+	cd_color_xyz_to_yxy (tmp, &white);
+
+	/* estimate gamma */
+	ret = cd_it8_utils_calculate_gamma (helper->it8_ti3, &gamma_y, &error);
+	if (!ret) {
+		g_warning ("failed to calculate gamma: %s", error->message);
+		goto out;
+	}
+	ch_refresh_ui_update_gamma (helper->priv->builder, gamma_y);
+
+	/* create virtual profile */
+	icc = cd_icc_new ();
+	ret = cd_icc_create_from_edid (icc, gamma_y, &red, &green, &blue, &white, &error);
+	if (!ret) {
+		g_warning ("failed to create virtual profile: %s", error->message);
+		goto out;
+	}
+
+	/* load sRGB */
+	icc_srgb = cd_icc_new ();
+	file_srgb = g_file_new_for_path ("/usr/share/color/icc/colord/sRGB.icc");
+	ret = cd_icc_load_file (icc_srgb, file_srgb,
+				CD_ICC_LOAD_FLAGS_NONE, NULL, &error);
+	if (!ret) {
+		g_warning ("failed to sRGB: %s", error->message);
+		goto out;
+	}
+
+	/* load AdobeRGB */
+	icc_adobergb = cd_icc_new ();
+	file_adobergb = g_file_new_for_path ("/usr/share/color/icc/colord/AdobeRGB1998.icc");
+	ret = cd_icc_load_file (icc_adobergb, file_adobergb,
+				CD_ICC_LOAD_FLAGS_NONE, NULL, &error);
+	if (!ret) {
+		g_warning ("failed to load AdobeRGB: %s", error->message);
+		goto out;
+	}
+
+	/* calculate coverage */
+	ret = cd_icc_utils_get_coverage (icc_srgb, icc,
+					 &coverage_srgb, &error);
+	if (!ret) {
+		g_warning ("failed to calc sRGB coverage: %s", error->message);
+		goto out;
+	}
+	ret = cd_icc_utils_get_coverage (icc_adobergb, icc,
+					 &coverage_adobergb, &error);
+	if (!ret) {
+		g_warning ("failed to calc AdobeRGB coverage: %s", error->message);
+		goto out;
+	}
+out:
+	ch_refresh_ui_update_srgb (helper->priv->builder, coverage_srgb);
+	ch_refresh_ui_update_adobergb (helper->priv->builder, coverage_adobergb);
+}
+
+/**
+ * ch_refresh_ti3_take_readings_cb:
+ **/
+static void
+ch_refresh_ti3_take_readings_cb (GObject *source, GAsyncResult *res, gpointer user_data)
+{
+	CdColorRGB rgb;
+	CdColorXYZ *tmp;
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
+	ChRefreshPrivate *priv = helper->priv;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* get result */
+	if (!ch_device_queue_process_finish (CH_DEVICE_QUEUE (source), res, &error)) {
+		g_warning ("failed to get measurement: %s", error->message);
+		ch_refresh_measure_helper_free (helper);
+		return;
+	}
+
+	/* copy to ti3 file */
+	cd_it8_get_data_item (helper->priv->it8_ti1, helper->sample_idx, &rgb, NULL);
+	cd_it8_add_data (helper->it8_ti3, &rgb, &helper->values[helper->sample_idx]);
+
+	/* last patch */
+	if (++helper->sample_idx >= cd_it8_get_data_size (priv->it8_ti1)) {
+		/* calculate the native cct using the white patch */
+		tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 1.f, 1.f, 1.f, 0.01f);
+		ch_refresh_ui_update_cct (priv->builder, cd_color_xyz_to_cct (tmp));
+		ch_refresh_ui_update_lux_white (priv->builder, tmp->Y);
+		tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 0.f, 0.f, 0.f, 0.01f);
+		ch_refresh_ui_update_lux_black (priv->builder, tmp->Y);
+		ch_refresh_update_coverage (helper);
+		ch_refresh_get_data_from_sram (helper);
+		ch_refresh_update_ui (priv);
+		ch_refresh_update_cancel_buttons (priv, FALSE);
+		ch_refresh_update_page (priv, TRUE);
+		ch_refresh_measure_helper_free (helper);
+		return;
+	}
+
+	/* show another patch */
+	ch_refresh_ti3_show_patch (helper);
+}
+
+/**
+ * ch_refresh_ti3_wait_for_patch_cb:
+ **/
+static gboolean
+ch_refresh_ti3_wait_for_patch_cb (gpointer user_data)
+{
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
+
+	/* take a reading */
+	ch_device_queue_take_readings_xyz (helper->priv->device_queue,
+					   helper->priv->device,
+					   0,
+					   &helper->values[helper->sample_idx]);
+	ch_device_queue_process_async (helper->priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       ch_refresh_ti3_take_readings_cb,
+				       helper);
+	return FALSE;
+}
+
+/**
+ * ch_refresh_ti3_show_patch:
+ **/
+static void
+ch_refresh_ti3_show_patch (ChRefreshMeasureHelper *helper)
+{
+	CdColorRGB rgb;
+	CdSampleWidget *w;
+
+	cd_it8_get_data_item (helper->priv->it8_ti1, helper->sample_idx, &rgb, NULL);
+	w = CD_SAMPLE_WIDGET (helper->priv->sample_widget);
+	cd_sample_widget_set_color (w, &rgb);
+	g_timeout_add (200, ch_refresh_ti3_wait_for_patch_cb, helper);
+}
+
+/**
+ * ch_refresh_take_reading_array_cb:
+ **/
+static void
+ch_refresh_take_reading_array_cb (GObject *source, GAsyncResult *res, gpointer data)
+{
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) data;
 	const gchar *title;
 	_cleanup_error_free_ GError *error = NULL;
 
 	/* check success */
-	if (!ch_device_queue_process_finish (priv->device_queue, res, &error)) {
+	if (!ch_device_queue_process_finish (helper->priv->device_queue, res, &error)) {
 		/* TRANSLATORS: permissions error perhaps? */
 		title = _("Failed to get samples from device");
-		ch_refresh_error_dialog (priv, title, error->message);
+		ch_refresh_error_dialog (helper->priv, title, error->message);
 		return;
 	}
 
 	/* calculate how long each sample took */
-	priv->sample_duration = g_timer_elapsed (priv->measured, NULL) - priv->usb_latency;
-	g_debug ("taking sample took %.2fs", priv->sample_duration);
-	g_debug ("each sample took %.2fms", (priv->sample_duration / (gdouble) NR_DATA_POINTS) * 1000);
-	ch_refresh_get_data_from_sram (priv);
-	ch_refresh_update_ui (priv);
+	helper->sample_duration = g_timer_elapsed (helper->measured, NULL) - helper->usb_latency;
+	g_debug ("taking sample took %.2fs", helper->sample_duration);
+	g_debug ("each sample took %.2fms", (helper->sample_duration / (gdouble) NR_DATA_POINTS) * 1000);
+
+	/* measure the color performance of the display */
+	ch_refresh_ti3_show_patch (helper);
+}
+
+/**
+ * ch_refresh_update_usb_latency:
+ **/
+static void
+ch_refresh_update_usb_latency (ChRefreshMeasureHelper *helper)
+{
+	GtkWidget *w;
+	const gchar *title;
+	gdouble usb_jitter = 0.f;
+	_cleanup_error_free_ GError *error = NULL;
+	_cleanup_free_ gchar *usb_jitter_str = NULL;
+	_cleanup_free_ gchar *usb_latency_str = NULL;
+
+	/* measure new USB values */
+	if (!ch_refresh_get_usb_speed (helper->priv, &helper->usb_latency, &usb_jitter, &error)) {
+		/* TRANSLATORS: permissions error perhaps? */
+		title = _("Failed to calculate USB latency");
+		ch_refresh_error_dialog (helper->priv, title, error->message);
+		return;
+	}
+
+	/* update USB labels */
+	w = GTK_WIDGET (gtk_builder_get_object (helper->priv->builder, "label_usb_latency"));
+	usb_latency_str = g_strdup_printf ("<b>%.1fms</b> ±%.1fms",
+					   helper->usb_latency * 1000,
+					   usb_jitter * 1000);
+	gtk_label_set_markup (GTK_LABEL (w), usb_latency_str);
+}
+
+/**
+ * ch_refresh_get_readings_cb:
+ **/
+static gboolean
+ch_refresh_get_readings_cb (gpointer user_data)
+{
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
+	guint i;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* do NR_PULSES white flashes, 350ms apart */
+	g_idle_add (ch_refresh_sample_set_white_cb, helper);
+	for (i = 1; i < NR_PULSES; i++)
+		g_timeout_add (NR_PULSE_GAP * i, ch_refresh_sample_set_white_cb, helper);
+
+	/* start taking a reading */
+	g_timer_reset (helper->measured);
+	ch_device_queue_take_reading_array (helper->priv->device_queue,
+					    helper->priv->device,
+					    helper->reading_array);
+	ch_device_queue_process_async (helper->priv->device_queue,
+				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+				       NULL,
+				       ch_refresh_take_reading_array_cb,
+				       helper);
+	return FALSE;
 }
 
 /**
  * ch_refresh_get_readings:
  **/
 static void
-ch_refresh_get_readings (ChRefreshPrivate *priv)
+ch_refresh_get_readings (ChRefreshMeasureHelper *helper)
 {
-	GtkWidget *w;
-	const gchar *title;
-	gdouble usb_jitter = 0.f;
-	guint8 reading_array[30];
-	guint i;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *usb_jitter_str = NULL;
-	_cleanup_free_ gchar *usb_latency_str = NULL;
+	CdColorRGB source;
 
-	/* measure new USB values */
-	if (!ch_refresh_get_usb_speed (priv, &priv->usb_latency, &usb_jitter, &error)) {
-		/* TRANSLATORS: permissions error perhaps? */
-		title = _("Failed to calculate USB latency");
-		ch_refresh_error_dialog (priv, title, error->message);
-		return;
-	}
-
-	/* update USB labels */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_usb_latency"));
-	usb_latency_str = g_strdup_printf ("%.1fms ±%.1fms",
-					   priv->usb_latency * 1000,
-					   usb_jitter * 1000);
-	gtk_label_set_label (GTK_LABEL (w), usb_latency_str);
-
-	/* do NR_PULSES white flashes, 350ms apart */
-	g_idle_add (ch_refresh_sample_set_white_cb, priv);
-	for (i = 1; i < NR_PULSES; i++)
-		g_timeout_add (NR_PULSE_GAP * i, ch_refresh_sample_set_white_cb, priv);
-
-	/* start taking a reading */
-	g_timer_reset (priv->measured);
-	ch_device_queue_take_reading_array (priv->device_queue,
-					    priv->device,
-					    reading_array);
-	ch_device_queue_process_async (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       ch_refresh_get_readings_cb,
-				       priv);
+	/* set to black then start readings */
+	cd_color_rgb_set (&source, 0.f, 0.f, 0.f);
+	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (helper->priv->sample_widget), &source);
+	g_timeout_add (200, ch_refresh_get_readings_cb, helper);
 }
 
 /**
@@ -569,13 +809,132 @@ ch_refresh_graph_settings_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 }
 
 /**
+ * ch_refresh_button_back_cb:
+ **/
+static void
+ch_refresh_button_back_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+{
+	ch_refresh_update_page (priv, FALSE);
+}
+
+/**
+ * ch_refresh_cancel_cb:
+ **/
+static void
+ch_refresh_cancel_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+{
+	g_warning ("cancelling");
+	ch_refresh_update_cancel_buttons (priv, FALSE);
+}
+
+/**
+ * ch_refresh_find_xrandr_id:
+ **/
+static gchar *
+ch_refresh_find_xrandr_id (GdkWindow *window)
+{
+	GdkScreen *screen;
+	gint monitor_num;
+
+	screen = gdk_window_get_screen (window);
+	monitor_num = gdk_screen_get_monitor_at_window (screen, window);
+	return gdk_screen_get_monitor_plug_name (screen, monitor_num);
+}
+
+/**
+ * ch_refresh_device_profiling_inhibit_cb:
+ **/
+static void
+ch_refresh_device_profiling_inhibit_cb (GObject *source, GAsyncResult *res, gpointer user_data)
+{
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* get result, but it's no huge problem if it fails */
+	if (!cd_device_profiling_inhibit_finish (CD_DEVICE (source), res, &error))
+		g_debug ("Failed to inhibit device: %s", error->message);
+
+	/* hurrah! we can start measuring */
+	ch_refresh_get_readings (helper);
+}
+
+/**
+ * ch_refresh_device_connect_cb:
+ **/
+static void
+ch_refresh_device_connect_cb (GObject *source, GAsyncResult *res, gpointer user_data)
+{
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* get result */
+	if (!cd_device_connect_finish (CD_DEVICE (source), res, &error)) {
+		g_warning ("Failed to connect to device: %s", error->message);
+		/* not fatal */
+		ch_refresh_get_readings (helper);
+		return;
+	}
+	helper->title = g_strdup_printf ("%s %s",
+					 cd_device_get_vendor (helper->device),
+					 cd_device_get_model (helper->device));
+	cd_device_profiling_inhibit (helper->device,
+				     helper->cancellable,
+				     ch_refresh_device_profiling_inhibit_cb,
+				     helper);
+}
+
+/**
+ * ch_refresh_colord_find_device_cb:
+ **/
+static void
+ch_refresh_colord_find_device_cb (GObject *source, GAsyncResult *res, gpointer user_data)
+{
+	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* get result */
+	helper->device = cd_client_find_device_by_property_finish (CD_CLIENT (source), res, &error);
+	if (helper->device == NULL) {
+		/* not fatal */
+		g_warning ("Failed to find device %s: %s",
+			   helper->xrandr_id, error->message);
+		ch_refresh_get_readings (helper);
+		return;
+	}
+	cd_device_connect (helper->device, helper->cancellable,
+			   ch_refresh_device_connect_cb, helper);
+}
+
+/**
  * ch_refresh_refresh_button_cb:
  **/
 static void
 ch_refresh_refresh_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 {
+	ChRefreshMeasureHelper *helper;
+
+	/* get the display name for the current window */
+	helper = g_new0 (ChRefreshMeasureHelper, 1);
+	helper->cancellable = g_cancellable_new ();
+	helper->measured = g_timer_new ();
+	helper->priv = priv;
+	helper->sample_idx = 0;
+	helper->reading_array = g_new0 (guint8, 30);
+	helper->it8_ti3 = cd_it8_new_with_kind (CD_IT8_KIND_TI3);
+	helper->values = g_new0 (CdColorXYZ, cd_it8_get_data_size (helper->priv->it8_ti1));
+	helper->xrandr_id = ch_refresh_find_xrandr_id (gtk_widget_get_window (widget));
+	if (cd_client_get_connected (priv->client)) {
+		cd_client_find_device_by_property (priv->client,
+						   "XRANDR_name", helper->xrandr_id,
+						   helper->cancellable,
+						   ch_refresh_colord_find_device_cb, helper);
+	} else {
+		ch_refresh_get_readings (helper);
+	}
+
 	/* get the latest from the device */
-	ch_refresh_get_readings (priv);
+	ch_refresh_update_cancel_buttons (priv, TRUE);
+	ch_refresh_update_usb_latency (helper);
 }
 
 /**
@@ -596,6 +955,8 @@ ch_refresh_update_title (ChRefreshPrivate *priv, GFile *file)
 	}
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
 	gtk_window_set_title (GTK_WINDOW (w), title);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_csd_title"));
+	gtk_label_set_label (GTK_LABEL (w), title);
 }
 
 /**
@@ -708,14 +1069,34 @@ ch_refresh_zoom_changed_cb (GObject *object, GParamSpec *pspec, ChRefreshPrivate
 }
 
 /**
- * ch_refresh_device_close:
+ * ch_refresh_update_ui_for_device:
  **/
 static void
-ch_refresh_device_close (ChRefreshPrivate *priv)
+ch_refresh_update_ui_for_device (ChRefreshPrivate *priv)
 {
 	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "notebook_refresh"));
-	gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 1);
+	gboolean present = priv->device != NULL;
+	_cleanup_string_free_ GString *msg = NULL;
+
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
+	gtk_widget_set_visible (w, !present);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	gtk_widget_set_visible (w, present);
+	gtk_widget_set_visible (priv->sample_widget, present);
+
+	msg = g_string_new ("");
+	if (present) {
+		g_string_append_printf (msg, "%s\n",
+			_("Place your ColorHug in the spot on the left and click "
+			  "the blue button to start analysing your display."));
+		g_string_append_printf (msg, "%s",
+			_("Don't disturb the device while working!"));
+	} else {
+		g_string_append_printf (msg, "%s\n\n",
+			_("Insert your ColorHug2 into a free USB port on your computer."));
+	}
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_intro"));
+	gtk_label_set_label (GTK_LABEL (w), msg->str);
 }
 
 /**
@@ -724,7 +1105,6 @@ ch_refresh_device_close (ChRefreshPrivate *priv)
 static void
 ch_refresh_device_open (ChRefreshPrivate *priv)
 {
-	GtkWidget *w;
 	const gchar *title;
 	_cleanup_error_free_ GError *error = NULL;
 
@@ -735,8 +1115,9 @@ ch_refresh_device_open (ChRefreshPrivate *priv)
 		ch_refresh_error_dialog (priv, title, error->message);
 		return;
 	}
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "notebook_refresh"));
-	gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 0);
+
+	/* measurement possible */
+	ch_refresh_update_ui_for_device (priv);
 }
 
 /**
@@ -792,6 +1173,21 @@ static GActionEntry actions[] = {
 };
 
 /**
+ * ch_refresh_colord_connect_cb:
+ **/
+static void
+ch_refresh_colord_connect_cb (GObject *source, GAsyncResult *res, gpointer user_data)
+{
+	_cleanup_error_free_ GError *error = NULL;
+
+	/* get result */
+	if (!cd_client_connect_finish (CD_CLIENT (source), res, &error)) {
+		g_warning ("Failed to connect to colord: %s", error->message);
+		return;
+	}
+}
+
+/**
  * ch_refresh_startup_cb:
  **/
 static void
@@ -822,7 +1218,7 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 
 	main_window = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
 	gtk_application_add_window (priv->application, GTK_WINDOW (main_window));
-	gtk_widget_set_size_request (main_window, 400, 100);
+	gtk_widget_set_size_request (main_window, 760, 350);
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
@@ -834,6 +1230,12 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_refresh_refresh_button_cb), priv);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_back"));
+	g_signal_connect (w, "clicked",
+			  G_CALLBACK (ch_refresh_button_back_cb), priv);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_cancel"));
+	g_signal_connect (w, "clicked",
+			  G_CALLBACK (ch_refresh_cancel_cb), priv);
 	g_signal_connect (priv->switch_zoom, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
 	g_signal_connect (priv->switch_channels, "notify::active",
@@ -841,13 +1243,12 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	g_signal_connect (priv->switch_pwm, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
 
-	/* set connect device page */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "notebook_refresh"));
-	gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 1);
+	/* optionally connect to colord */
+	cd_client_connect (priv->client, NULL, ch_refresh_colord_connect_cb, priv);
 
 	/* setup USB image */
 	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/DisplayAnalysis/usb.svg",
-							-1, 48, TRUE, &error);
+							200, -1, TRUE, &error);
 	if (pixbuf == NULL) {
 		g_warning ("failed to load usb.svg: %s", error->message);
 		return;
@@ -856,7 +1257,7 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	gtk_image_set_from_pixbuf (GTK_IMAGE (w), pixbuf);
 
 	/* add graph */
-	box = GTK_BOX (gtk_builder_get_object (priv->builder, "box_graph"));
+	box = GTK_BOX (gtk_builder_get_object (priv->builder, "box_results"));
 	priv->graph = ch_graph_widget_new ();
 	g_object_set (priv->graph,
 		      "type-x", CH_GRAPH_WIDGET_TYPE_TIME,
@@ -868,22 +1269,22 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 		      "use-grid", TRUE,
 		      NULL);
 	gtk_box_pack_start (box, priv->graph, TRUE, TRUE, 0);
-	gtk_widget_set_margin_top (priv->graph, 6);
-	gtk_widget_set_margin_start (priv->graph, 12);
-	gtk_widget_set_margin_end (priv->graph, 12);
-	gtk_widget_set_size_request (priv->graph, 800, 450);
+	gtk_widget_set_size_request (priv->graph, 600, 250);
+	gtk_widget_set_margin_start (priv->graph, 18);
+	gtk_widget_set_margin_end (priv->graph, 18);
 	gtk_widget_show (priv->graph);
 
 	/* add sample widget */
-	box = GTK_BOX (gtk_builder_get_object (priv->builder, "box_sidebar"));
+	box = GTK_BOX (gtk_builder_get_object (priv->builder, "box_measure"));
 	priv->sample_widget = cd_sample_widget_new ();
-	gtk_box_pack_start (box, priv->sample_widget, TRUE, TRUE, 0);
+	gtk_box_pack_start (box, priv->sample_widget, FALSE, FALSE, 0);
 	gtk_widget_show (priv->sample_widget);
+	gtk_widget_set_size_request (priv->sample_widget, 200, 300);
 
-	/* set black */
-	source.R = 0.0f;
-	source.G = 0.0f;
-	source.B = 0.0f;
+	/* set grey */
+	source.R = 0.7f;
+	source.G = 0.7f;
+	source.B = 0.7f;
 	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
 
 	/* is the colorhug already plugged in? */
@@ -892,7 +1293,10 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	/* show main UI */
 	gtk_widget_show (main_window);
 
-	ch_refresh_refresh_rate (priv);
+	ch_refresh_update_cancel_buttons (priv, FALSE);
+	ch_refresh_update_page (priv, FALSE);
+	ch_refresh_update_ui_for_device (priv);
+	ch_refresh_update_refresh_rate (priv);
 	ch_refresh_update_title (priv, NULL);
 }
 
@@ -928,7 +1332,7 @@ ch_refresh_device_removed_cb (GUsbDeviceList *list,
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
 		priv->device = NULL;
-		ch_refresh_device_close (priv);
+		ch_refresh_update_ui_for_device (priv);
 	}
 }
 
@@ -938,9 +1342,11 @@ ch_refresh_device_removed_cb (GUsbDeviceList *list,
 int
 main (int argc, char **argv)
 {
+	CdColorRGB rgb;
 	ChRefreshPrivate *priv;
 	gboolean verbose = FALSE;
 	GOptionContext *context;
+	guint i;
 	int status = 0;
 	_cleanup_error_free_ GError *error = NULL;
 	const GOptionEntry options[] = {
@@ -972,7 +1378,7 @@ main (int argc, char **argv)
 	priv = g_new0 (ChRefreshPrivate, 1);
 	priv->settings = g_settings_new ("com.hughski.ColorHug.DisplayAnalysis");
 	priv->usb_ctx = g_usb_context_new (NULL);
-	priv->measured = g_timer_new ();
+	priv->client = cd_client_new ();
 	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
 	priv->device_queue = ch_device_queue_new ();
 	g_signal_connect (priv->device_list, "device-added",
@@ -985,6 +1391,20 @@ main (int argc, char **argv)
 	cd_it8_set_originator (priv->samples, "cd-refresh");
 	cd_it8_set_title (priv->samples, "Sample Data");
 	cd_it8_set_instrument (priv->samples, "ColorHug2");
+
+	/* red, green, blue, black->white */
+	priv->it8_ti1 = cd_it8_new_with_kind (CD_IT8_KIND_TI1);
+	cd_color_rgb_set (&rgb, 1.f, 0.f, 0.f);
+	cd_it8_add_data (priv->it8_ti1, &rgb, NULL);
+	cd_color_rgb_set (&rgb, 0.f, 1.f, 0.f);
+	cd_it8_add_data (priv->it8_ti1, &rgb, NULL);
+	cd_color_rgb_set (&rgb, 0.f, 0.f, 1.f);
+	cd_it8_add_data (priv->it8_ti1, &rgb, NULL);
+	for (i = 0; i <= 10; i++) {
+		gdouble frac = 0.1f * (gdouble) i;
+		cd_color_rgb_set (&rgb, frac, frac, frac);
+		cd_it8_add_data (priv->it8_ti1, &rgb, NULL);
+	}
 
 	/* keep these local as they get reparented to the popover */
 	priv->switch_zoom = gtk_switch_new ();
@@ -1020,12 +1440,13 @@ main (int argc, char **argv)
 		g_object_unref (priv->device_queue);
 	if (priv->usb_ctx != NULL)
 		g_object_unref (priv->usb_ctx);
+	if (priv->client != NULL)
+		g_object_unref (priv->client);
 	if (priv->builder != NULL)
 		g_object_unref (priv->builder);
 	if (priv->settings != NULL)
 		g_object_unref (priv->settings);
-	if (priv->measured != NULL)
-		g_timer_destroy (priv->measured);
+	g_object_unref (priv->it8_ti1);
 	g_free (priv);
 	return status;
 }

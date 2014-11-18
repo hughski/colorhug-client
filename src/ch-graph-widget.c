@@ -392,24 +392,22 @@ ch_get_axis_label (ChGraphWidgetType axis, gdouble value)
  * @graph: This class instance
  * @cr: Cairo drawing context
  *
- * Draw the 10x10 dotted grid onto the graph.
+ * Draw the 10x10 grid onto the graph.
  **/
 static void
 ch_graph_widget_draw_grid (ChGraphWidget *graph, cairo_t *cr)
 {
 	guint i;
 	gdouble b;
-	gdouble dotted[] = {1., 2.};
 	gdouble divwidth  = (gdouble)graph->priv->box_width / 10.0f;
 	gdouble divheight = (gdouble)graph->priv->box_height / 10.0f;
 
 	cairo_save (cr);
 
 	cairo_set_line_width (cr, 1);
-	cairo_set_dash (cr, dotted, 2, 0.0);
 
 	/* do vertical lines */
-	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+	cairo_set_source_rgb (cr, 0.9f, 0.9f, 0.9f);
 	for (i = 1; i < 10; i++) {
 		b = graph->priv->box_x + ((gdouble) i * divwidth);
 		cairo_move_to (cr, (gint)b + 0.5f, graph->priv->box_y);
@@ -453,7 +451,7 @@ ch_graph_widget_draw_labels (ChGraphWidget *graph, cairo_t *cr)
 	cairo_save (cr);
 
 	/* do x text */
-	cairo_set_source_rgb (cr, 0, 0, 0);
+	cairo_set_source_rgb (cr, 0.2f, 0.2f, 0.2f);
 	for (i = 0; i < 11; i++) {
 		b = graph->priv->box_x + ((gdouble) i * divwidth);
 		value = ((length_x / 10.0f) * (gdouble) i) + (gdouble) graph->priv->start_x;
@@ -677,28 +675,6 @@ ch_graph_widget_draw_line (ChGraphWidget *graph, cairo_t *cr)
 }
 
 /**
- * ch_graph_widget_draw_bounding_box:
- * @cr: Cairo drawing context
- * @x: The X-coordinate for the top-left
- * @y: The Y-coordinate for the top-left
- * @width: The item width
- * @height: The item height
- **/
-static void
-ch_graph_widget_draw_bounding_box (cairo_t *cr, gint x, gint y, gint width, gint height)
-{
-	/* background */
-	cairo_rectangle (cr, x, y, width, height);
-	cairo_set_source_rgb (cr, 1, 1, 1);
-	cairo_fill (cr);
-	/* solid outline box */
-	cairo_rectangle (cr, x + 0.5f, y + 0.5f, width - 1, height - 1);
-	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
-	cairo_set_line_width (cr, 1);
-	cairo_stroke (cr);
-}
-
-/**
  * ch_graph_widget_draw:
  * @graph: This class instance
  * @event: The expose event
@@ -727,10 +703,21 @@ ch_graph_widget_draw (GtkWidget *widget, cairo_t *cr)
 				 (3 + graph->priv->box_x);
 
 	/* graph background */
-	ch_graph_widget_draw_bounding_box (cr, graph->priv->box_x, graph->priv->box_y,
-				     graph->priv->box_width, graph->priv->box_height);
+	cairo_rectangle (cr, graph->priv->box_x, graph->priv->box_y,
+			 graph->priv->box_width, graph->priv->box_height);
+	cairo_set_source_rgb (cr, 1, 1, 1);
+	cairo_fill (cr);
+
+	/* grid */
 	if (graph->priv->use_grid)
 		ch_graph_widget_draw_grid (graph, cr);
+
+	/* solid outline box */
+	cairo_rectangle (cr, graph->priv->box_x + 0.5f, graph->priv->box_y + 0.5f,
+			 graph->priv->box_width - 1, graph->priv->box_height - 1);
+	cairo_set_source_rgb (cr, 0.6f, 0.6f, 0.6f);
+	cairo_set_line_width (cr, 1);
+	cairo_stroke (cr);
 
 	/* -3 is so we can keep the lines inside the box at both extremes */
 	data_x = graph->priv->stop_x - graph->priv->start_x;
