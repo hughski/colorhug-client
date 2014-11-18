@@ -49,6 +49,9 @@ typedef struct {
 	gdouble			 usb_latency;		/* s */
 	gdouble			 sample_duration;	/* s */
 	CdIt8			*samples;
+	GtkWidget		*switch_zoom;
+	GtkWidget		*switch_channels;
+	GtkWidget		*switch_pwm;
 } ChRefreshPrivate;
 
 /**
@@ -248,7 +251,6 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	CdSpectrum *sp_graph[3] = { NULL, NULL, NULL };
 	CdSpectrum *sp_tmp;
 	ChPointObj *point;
-	GtkWidget *w;
 	const gchar *ids[] = { "X", "Y", "Z", NULL };
 	const gchar *title;
 	gboolean filter_pwm;
@@ -258,8 +260,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	_cleanup_error_free_ GError *error = NULL;
 
 	/* optionally remove pwm */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_pwm"));
-	filter_pwm = gtk_switch_get_active (GTK_SWITCH (w));
+	filter_pwm = gtk_switch_get_active (GTK_SWITCH (priv->switch_pwm));
 	for (j = 0; j < 3; j++) {
 		sp_tmp = cd_it8_get_spectrum_by_id (priv->samples, ids[j]);
 		sp_graph[j] = cd_spectrum_dup (sp_tmp);
@@ -273,8 +274,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	}
 
 	ch_graph_widget_clear (CH_GRAPH_WIDGET (priv->graph));
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_channels"));
-	if (gtk_switch_get_active (GTK_SWITCH (w))) {
+	if (gtk_switch_get_active (GTK_SWITCH (priv->switch_channels))) {
 		for (j = 0; j < 3; j++) {
 			_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
@@ -312,8 +312,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	}
 
 	/* add trigger lines */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
-	if (!gtk_switch_get_active (GTK_SWITCH (w))) {
+	if (!gtk_switch_get_active (GTK_SWITCH (priv->switch_zoom))) {
 		for (j = 1; j < NR_PULSES; j++) {
 			_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
@@ -397,8 +396,7 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 		return;
 
 	/* set the graph x scale */
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
-	zoom = gtk_switch_get_active (GTK_SWITCH (w));
+	zoom = gtk_switch_get_active (GTK_SWITCH (priv->switch_zoom));
 	duration = cd_spectrum_get_resolution (sp_tmp) * (gdouble) NR_DATA_POINTS;
 	tmp = zoom ? duration / 5 : duration;
 	tmp = ceilf (tmp * 10.f) / 10.f;
@@ -525,6 +523,49 @@ ch_refresh_get_readings (ChRefreshPrivate *priv)
 				       NULL,
 				       ch_refresh_get_readings_cb,
 				       priv);
+}
+
+/**
+ * ch_refresh_graph_settings_cb:
+ **/
+static void
+ch_refresh_graph_settings_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+{
+	GtkWidget *pop;
+	GtkWidget *box;
+
+	/* reclaim */
+	if (gtk_widget_get_parent (priv->switch_zoom) != NULL)
+		g_object_ref (priv->switch_zoom);
+	gtk_widget_unparent (priv->switch_zoom);
+	if (gtk_widget_get_parent (priv->switch_channels) != NULL)
+		g_object_ref (priv->switch_channels);
+	gtk_widget_unparent (priv->switch_channels);
+	if (gtk_widget_get_parent (priv->switch_pwm) != NULL)
+		g_object_ref (priv->switch_pwm);
+	gtk_widget_unparent (priv->switch_pwm);
+
+	/* show settings */
+	pop = gtk_popover_new (widget);
+	gtk_popover_set_position (GTK_POPOVER (pop), GTK_POS_BOTTOM);
+	gtk_container_set_border_width (GTK_CONTAINER (pop), 18);
+	box = gtk_grid_new ();
+	gtk_grid_set_row_spacing (GTK_GRID (box), 6);
+	gtk_grid_set_column_spacing (GTK_GRID (box), 12);
+	gtk_grid_attach (GTK_GRID (box),
+			 gtk_label_new (_("Show single pulse")),
+			 0, 0, 1, 1);
+	gtk_grid_attach (GTK_GRID (box), priv->switch_zoom, 1, 0, 1, 1);
+	gtk_grid_attach (GTK_GRID (box),
+			 gtk_label_new (_("Show channels")),
+			 0, 1, 1, 1);
+	gtk_grid_attach (GTK_GRID (box), priv->switch_channels, 1, 1, 1, 1);
+	gtk_grid_attach (GTK_GRID (box),
+			 gtk_label_new (_("Filter backlight")),
+			 0, 2, 1, 1);
+	gtk_grid_attach (GTK_GRID (box), priv->switch_pwm, 1, 2, 1, 1);
+	gtk_container_add (GTK_CONTAINER (pop), box);
+	gtk_widget_show_all (pop);
 }
 
 /**
@@ -731,6 +772,9 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	gtk_widget_hide (main_window);
 
 	/* buttons */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_graph_settings"));
+	g_signal_connect (w, "clicked",
+			  G_CALLBACK (ch_refresh_graph_settings_cb), priv);
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_refresh_refresh_button_cb), priv);
@@ -740,14 +784,11 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_open"));
 	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_refresh_open_button_cb), priv);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
-	g_signal_connect (w, "notify::active",
+	g_signal_connect (priv->switch_zoom, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_channels"));
-	g_signal_connect (w, "notify::active",
+	g_signal_connect (priv->switch_channels, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_pwm"));
-	g_signal_connect (w, "notify::active",
+	g_signal_connect (priv->switch_pwm, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
 
 	/* set connect device page */
@@ -893,6 +934,11 @@ main (int argc, char **argv)
 	cd_it8_set_originator (priv->samples, "cd-refresh");
 	cd_it8_set_title (priv->samples, "Sample Data");
 	cd_it8_set_instrument (priv->samples, "ColorHug2");
+
+	/* keep these local as they get reparented to the popover */
+	priv->switch_zoom = gtk_switch_new ();
+	priv->switch_channels = gtk_switch_new ();
+	priv->switch_pwm = gtk_switch_new ();
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("com.hughski.ColorHug.DisplayAnalysis", 0);
