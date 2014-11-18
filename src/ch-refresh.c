@@ -314,7 +314,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	/* add trigger lines */
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "switch_zoom"));
 	if (!gtk_switch_get_active (GTK_SWITCH (w))) {
-		for (j = 0; j < NR_PULSES; j++) {
+		for (j = 1; j < NR_PULSES; j++) {
 			_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 
