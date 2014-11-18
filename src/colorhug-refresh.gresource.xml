@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
- <gresource prefix="/com/hughski/colorhug">
- <file compressed="true">ch-refresh.ui</file>
+ <gresource prefix="/com/hughski/ColorHug/DisplayAnalysis">
+  <file preprocess="xml-stripblanks">ch-refresh.ui</file>
+  <file preprocess="xml-stripblanks" alias="gtk/menus.ui">ch-refresh-menus.ui</file>
  </gresource>
 </gresources>

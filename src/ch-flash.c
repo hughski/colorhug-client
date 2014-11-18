@@ -1529,7 +1529,7 @@ main (int argc, char **argv)
 			  G_CALLBACK (ch_flash_device_removed_cb), priv);
 
 	/* ensure single instance */
-	priv->application = gtk_application_new ("com.hughski.ColorHug.Flash", 0);
+	priv->application = gtk_application_new ("com.hughski.ColorHug.FlashLoader", 0);
 	g_signal_connect (priv->application, "startup",
 			  G_CALLBACK (ch_flash_startup_cb), priv);
 	g_signal_connect (priv->application, "activate",

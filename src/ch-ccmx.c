@@ -2537,7 +2537,7 @@ main (int argc, char **argv)
 	}
 
 	/* ensure single instance */
-	priv->application = gtk_application_new ("com.hughski.ColorHug.Ccmx", 0);
+	priv->application = gtk_application_new ("com.hughski.ColorHug.CcmxLoader", 0);
 	g_signal_connect (priv->application, "startup",
 			  G_CALLBACK (ch_ccmx_startup_cb), priv);
 	g_signal_connect (priv->application, "activate",

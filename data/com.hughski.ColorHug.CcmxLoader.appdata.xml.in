@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2013 Richard Hughes <richard@hughsie.com> -->
 <application>
-  <id type="desktop">colorhug-ccmx.desktop</id>
+  <id type="desktop">com.hughski.ColorHug.CcmxLoader.desktop</id>
   <licence>CC0</licence>
   <name>ColorHug CCMX Loader</name>
   <description>

@@ -177,7 +177,7 @@ ch-spectro-resources.c: colorhug-spectro.gresource.xml ../data/ch-spectro-util.u
 ch-spectro-resources.h: colorhug-spectro.gresource.xml
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-spectro.gresource.xml
 
-ch-refresh-resources.c: colorhug-refresh.gresource.xml ../data/ch-refresh.ui
+ch-refresh-resources.c: colorhug-refresh.gresource.xml ../data/ch-refresh.ui ../data/ch-refresh-menus.ui
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-refresh.gresource.xml
 ch-refresh-resources.h: colorhug-refresh.gresource.xml
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-refresh.gresource.xml

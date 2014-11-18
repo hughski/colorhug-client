@@ -12,11 +12,11 @@ pkgdata_DATA = $(pkgdata_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files =					\
-	colorhug-spectro-util.desktop.in		\
-	colorhug-ccmx.desktop.in			\
 	colorhug-docs.desktop.in			\
-	colorhug-flash.desktop.in			\
-	colorhug-refresh.desktop.in
+	com.hughski.ColorHug.CcmxLoader.desktop.in	\
+	com.hughski.ColorHug.DisplayAnalysis.desktop.in	\
+	com.hughski.ColorHug.FlashLoader.desktop.in	\
+	com.hughski.ColorHug.SpectroUtil.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @GSETTINGS_RULES@
@@ -26,13 +26,14 @@ gsettings_SCHEMAS = com.hughski.colorhug-client.gschema.xml
 appdatadir = $(datadir)/appdata
 appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 appdata_in_files =					\
-	colorhug-ccmx.appdata.xml.in			\
-	colorhug-flash.appdata.xml.in
+	com.hughski.ColorHug.CcmxLoader.appdata.xml.in	\
+	com.hughski.ColorHug.FlashLoader.appdata.xml.in
 
 UI_FILES =						\
 	ch-spectro-util.ui				\
 	ch-ccmx.ui					\
 	ch-flash.ui					\
+	ch-refresh-menus.ui				\
 	ch-refresh.ui
 
 EXTRA_DIST =						\
@@ -46,15 +47,15 @@ clean-local :
 	rm -f *~
 
 CLEANFILES =						\
-	colorhug-ccmx.appdata.xml			\
-	colorhug-flash.appdata.xml
+	com.hughski.ColorHug.CcmxLoader.appdata.xml	\
+	com.hughski.ColorHug.FlashLoader.appdata.xml
 
 DISTCLEANFILES =					\
-	com.hughski.colorhug-client.gschema.xml		\
-	colorhug-spectro-util.desktop			\
-	colorhug-ccmx.desktop				\
 	colorhug-docs.desktop				\
-	colorhug-flash.desktop				\
-	colorhug-refresh.desktop
+	com.hughski.ColorHug.CcmxLoader.desktop		\
+	com.hughski.ColorHug.DisplayAnalysis.desktop	\
+	com.hughski.ColorHug.FlashLoader.desktop	\
+	com.hughski.ColorHug.SpectroUtil.desktop	\
+	com.hughski.colorhug-client.gschema.xml
 
 -include $(top_srcdir)/git.mk

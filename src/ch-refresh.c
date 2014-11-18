@@ -599,11 +599,12 @@ ch_refresh_update_title (ChRefreshPrivate *priv, GFile *file)
 }
 
 /**
- * ch_refresh_save_button_cb:
+ * ch_refresh_export_activated_cb:
  **/
 static void
-ch_refresh_save_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+ch_refresh_export_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
+	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
 	GtkFileFilter *filter = NULL;
 	GtkWidget *d;
 	GtkWidget *w;
@@ -654,12 +655,14 @@ ch_refresh_normalize_channels (ChRefreshPrivate *priv)
 	}
 }
 
+
 /**
- * ch_refresh_open_button_cb:
+ * ch_refresh_import_activated_cb:
  **/
 static void
-ch_refresh_open_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
+ch_refresh_import_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
+	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
 	GtkFileFilter *filter = NULL;
 	GtkWidget *d;
 	GtkWidget *w;
@@ -737,6 +740,58 @@ ch_refresh_device_open (ChRefreshPrivate *priv)
 }
 
 /**
+ * ch_refresh_about_activated_cb:
+ **/
+static void
+ch_refresh_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
+	GList *windows;
+	GtkIconTheme *icon_theme;
+	GtkWindow *parent = NULL;
+	const gchar *authors[] = { "Richard Hughes", NULL };
+	const gchar *copyright = "Copyright \xc2\xa9 2014 Richard Hughes";
+	_cleanup_object_unref_ GdkPixbuf *logo = NULL;
+
+	windows = gtk_application_get_windows (GTK_APPLICATION (priv->application));
+	if (windows)
+		parent = windows->data;
+
+	icon_theme = gtk_icon_theme_get_default ();
+	logo = gtk_icon_theme_load_icon (icon_theme, "input-gaming", 256, 0, NULL);
+	gtk_show_about_dialog (parent,
+			       /* TRANSLATORS: this is the title of the about window */
+			       "title", _("About ColorHug Display Analysis"),
+			       /* TRANSLATORS: this is the application name */
+			       "program-name", _("ColorHug Display Analysis"),
+			       "authors", authors,
+			       "comments", _("Sample the display over time to observe PWM, input latency and refresh artifacts."),
+			       "copyright", copyright,
+			       "license-type", GTK_LICENSE_GPL_2_0,
+			       "logo", logo,
+			       "translator-credits", _("translator-credits"),
+			       "version", VERSION,
+			       NULL);
+}
+
+/**
+ * ch_refresh_quit_activated_cb:
+ **/
+static void
+ch_refresh_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
+	g_application_quit (G_APPLICATION (priv->application));
+}
+
+static GActionEntry actions[] = {
+	{ "about", ch_refresh_about_activated_cb, NULL, NULL, NULL },
+	{ "import", ch_refresh_import_activated_cb, NULL, NULL, NULL },
+	{ "export", ch_refresh_export_activated_cb, NULL, NULL, NULL },
+	{ "quit", ch_refresh_quit_activated_cb, NULL, NULL, NULL },
+};
+
+/**
  * ch_refresh_startup_cb:
  **/
 static void
@@ -750,10 +805,15 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
 
+	/* add application menu items */
+	g_action_map_add_action_entries (G_ACTION_MAP (application),
+					 actions, G_N_ELEMENTS (actions),
+					 priv);
+
 	/* get UI */
 	priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_resource (priv->builder,
-						"/com/hughski/colorhug/ch-refresh.ui",
+						"/com/hughski/ColorHug/DisplayAnalysis/ch-refresh.ui",
 						&error);
 	if (retval == 0) {
 		g_warning ("failed to load ui: %s", error->message);
@@ -778,12 +838,6 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
 	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_refresh_refresh_button_cb), priv);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_save"));
-	g_signal_connect (w, "clicked",
-			  G_CALLBACK (ch_refresh_save_button_cb), priv);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_open"));
-	g_signal_connect (w, "clicked",
-			  G_CALLBACK (ch_refresh_open_button_cb), priv);
 	g_signal_connect (priv->switch_zoom, "notify::active",
 			  G_CALLBACK (ch_refresh_zoom_changed_cb), priv);
 	g_signal_connect (priv->switch_channels, "notify::active",
