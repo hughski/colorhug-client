@@ -286,6 +286,9 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image_position">right</property>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
