@@ -29,7 +29,10 @@
 #include <gusb.h>
 #include <libsoup/soup.h>
 #include <colorhug.h>
+
+#ifdef HAVE_CANBERRA
 #include <canberra-gtk.h>
+#endif
 
 #include "ch-cleanup.h"
 #include "ch-markdown.h"
@@ -67,12 +70,13 @@ ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *me
 	GtkWidget *widget;
 	GtkWidget *dialog;
 
+#ifdef HAVE_CANBERRA
 	/* play sound */
 	ca_context_play (ca_gtk_context_get (), 0,
 			 CA_PROP_EVENT_ID, "dialog-warning",
 			 CA_PROP_APPLICATION_NAME, _("ColorHug Updater"),
 			 CA_PROP_EVENT_DESCRIPTION, _("Calibration Failed"), NULL);
-
+#endif
 	window = GTK_WINDOW(gtk_builder_get_object (priv->builder, "dialog_flash"));
 	dialog = gtk_message_dialog_new (window,
 					 GTK_DIALOG_MODAL,
@@ -240,11 +244,13 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_flash"));
 	gtk_widget_hide (widget);
 
+#ifdef HAVE_CANBERRA
 	/* play sound */
 	ca_context_play (ca_gtk_context_get (), 0,
 			 CA_PROP_EVENT_ID, "complete",
 			 CA_PROP_APPLICATION_NAME, _("ColorHug Updater"),
 			 CA_PROP_EVENT_DESCRIPTION, _("Calibration Completed"), NULL);
+#endif
 }
 
 /**

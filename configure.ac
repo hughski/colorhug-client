@@ -92,8 +92,17 @@ PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.11.2)
 PKG_CHECK_MODULES(COLORD, colord >= 1.2.6)
 PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
-PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
 PKG_CHECK_MODULES(COLORHUG, colorhug >= 1.2.3)
+
+dnl ---------------------------------------------------------------------------
+dnl - Build sound support
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(sound, AS_HELP_STRING([--enable-sound],[Enable sound]),
+	      enable_sound=$enableval, enable_sound=yes)
+if test x$enable_sound != xno; then
+	PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
+	AC_DEFINE(HAVE_CANBERRA,1,[whether libcanberra-gtk3 is available])
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl - Build debugging tools
