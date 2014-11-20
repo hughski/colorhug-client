@@ -2211,6 +2211,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	guint i;
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
+	_cleanup_object_unref_ GdkPixbuf *pixbuf2 = NULL;
 
 	/* get UI */
 	priv->builder = gtk_builder_new ();
@@ -2255,10 +2256,6 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	g_signal_connect (selection, "changed",
 			  G_CALLBACK (gpk_ccmx_treeview_clicked_cb), priv);
 
-	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   CH_DATA G_DIR_SEPARATOR_S "icons");
-
 	main_window = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_ccmx"));
 	gtk_application_add_window (priv->application, GTK_WINDOW (main_window));
 	gtk_widget_set_size_request (main_window, 400, 100);
@@ -2296,10 +2293,14 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 			  G_CALLBACK (ch_ccmx_gen_done_share_button_cb), priv);
 
 	/* setup logo image */
+	pixbuf2 = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/colorhug/colorhug-gray.svg",
+							 -1, 48, TRUE, &error);
+	if (pixbuf2 == NULL) {
+		g_warning ("failed to load colorhug-gray.svg: %s", error->message);
+		return;
+	}
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_logo"));
-	gtk_image_set_from_icon_name (GTK_IMAGE (widget),
-				      "colorhug-gray",
-				      GTK_ICON_SIZE_DIALOG);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf2);
 
 	/* setup list stores */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
@@ -2351,11 +2352,12 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 
 	/* setup USB image */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
-	pixbuf = gdk_pixbuf_new_from_file_at_scale (CH_DATA
-						    G_DIR_SEPARATOR_S "icons"
-						    G_DIR_SEPARATOR_S "usb.svg",
-						    -1, 48, TRUE, &error);
-	g_assert (pixbuf != NULL);
+	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/colorhug/usb.svg",
+							-1, 48, TRUE, &error);
+	if (pixbuf == NULL) {
+		g_warning ("failed to load usb.svg: %s", error->message);
+		return;
+	}
 	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf);
 
 	/* hide all unused widgets until we've connected with the device */

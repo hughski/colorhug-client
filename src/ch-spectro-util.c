@@ -403,10 +403,6 @@ ch_util_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 		goto out;
 	}
 
-	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   CH_DATA G_DIR_SEPARATOR_S "icons");
-
 	main_window = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_util"));
 	gtk_application_add_window (priv->application, GTK_WINDOW (main_window));
 	gtk_widget_set_size_request (main_window, 400, 100);

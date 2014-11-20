@@ -2,5 +2,7 @@
 <gresources>
  <gresource prefix="/com/hughski/colorhug">
  <file compressed="true">ch-ccmx.ui</file>
+ <file compressed="true">colorhug-gray.svg</file>
+ <file compressed="true">usb.svg</file>
  </gresource>
 </gresources>

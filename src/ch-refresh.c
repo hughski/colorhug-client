@@ -820,10 +820,6 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 		return;
 	}
 
-	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   CH_DATA G_DIR_SEPARATOR_S "icons");
-
 	main_window = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
 	gtk_application_add_window (priv->application, GTK_WINDOW (main_window));
 	gtk_widget_set_size_request (main_window, 400, 100);
@@ -850,12 +846,13 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 1);
 
 	/* setup USB image */
+	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/DisplayAnalysis/usb.svg",
+							-1, 48, TRUE, &error);
+	if (pixbuf == NULL) {
+		g_warning ("failed to load usb.svg: %s", error->message);
+		return;
+	}
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
-	pixbuf = gdk_pixbuf_new_from_file_at_scale (CH_DATA
-						    G_DIR_SEPARATOR_S "icons"
-						    G_DIR_SEPARATOR_S "usb.svg",
-						    -1, 48, TRUE, &error);
-	g_assert (pixbuf != NULL);
 	gtk_image_set_from_pixbuf (GTK_IMAGE (w), pixbuf);
 
 	/* add graph */

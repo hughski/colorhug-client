@@ -12,7 +12,6 @@ AM_CPPFLAGS =						\
 	-DTESTDATADIR=\""$(top_srcdir)/data/tests"\"	\
 	-DG_LOG_DOMAIN=\"ChClient\"			\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
-	-DCH_DATA=\"$(pkgdatadir)\"			\
 	-DLOCALEDIR=\""$(localedir)"\"
 
 noinst_PROGRAMS =					\

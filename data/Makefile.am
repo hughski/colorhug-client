@@ -36,11 +36,16 @@ UI_FILES =						\
 	ch-refresh-menus.ui				\
 	ch-refresh.ui
 
+SVG_FILES =						\
+	colorhug-gray.svg				\
+	usb.svg
+
 EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
 	$(desktop_in_files)				\
 	$(pkgdata_DATA)					\
 	$(appdata_in_files)				\
+	$(SVG_FILES)					\
 	$(UI_FILES)
 
 clean-local :
