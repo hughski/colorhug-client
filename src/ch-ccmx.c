@@ -1809,8 +1809,8 @@ ch_ccmx_gen_done_save_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	GtkWidget *dialog;
 	GtkWindow *window;
 	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *current_folder;
-	_cleanup_free_ gchar *current_name;
+	_cleanup_free_ gchar *current_folder = NULL;
+	_cleanup_free_ gchar *current_name = NULL;
 	_cleanup_free_ gchar *filename = NULL;
 	_cleanup_object_unref_ GFile *file = NULL;
 
