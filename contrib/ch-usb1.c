@@ -138,7 +138,7 @@ write_command (libusb_device_handle *handle,
 		printf ("Failed to write, got %s\n", libusb_error_name (rc));
 		goto out;
 	}
-	if (actual_length != 64) {
+	if (actual_length < 64) {
 		printf ("Failed to write stream, only wrote %i\n", actual_length);
 		goto out;
 	}

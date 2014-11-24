@@ -112,10 +112,10 @@ write_command (GUsbDevice *device,
 	ret = g_usb_device_interrupt_transfer (device, 0x01, buffer, 64, &actual_length, 5000, NULL, error);
 	if (!ret)
 		goto out;
-	if (actual_length != 64) {
+	if (actual_length < 64) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
-			     "Failed to write stream, only wrote %li\n",
+			     "Failed to write stream, only wrote %" G_GSIZE_FORMAT "\n",
 			     actual_length);
 		goto out;
 	}
@@ -127,7 +127,7 @@ write_command (GUsbDevice *device,
 	if (actual_length != 2 + out_size && actual_length != 64) {
 		ret = FALSE;
 		g_set_error (error, 1, 0,
-			     "Failed to read, got %li bytes\n",
+			     "Failed to read, got %" G_GSIZE_FORMAT " bytes\n",
 			     actual_length);
 		goto out;
 	}

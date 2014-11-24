@@ -83,7 +83,7 @@ write_command (usb_dev_handle *handle,
 		printf ("Failed to write, got %s\n", usb_strerror ());
 		goto out;
 	}
-	if (rc != 64) {
+	if (rc < 64) {
 		printf ("Failed to write stream, only wrote %i\n", rc);
 		goto out;
 	}
