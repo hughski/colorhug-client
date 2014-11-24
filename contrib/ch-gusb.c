@@ -27,9 +27,16 @@
 #include <string.h>
 #include <unistd.h>
 
+/* ColorHug */
 #define	CH_USB_VID				0x273f
 #define	CH_USB_PID_FIRMWARE			0x1001
 #define	CH_USB_PID_BOOTLOADER			0x1000
+
+/* ColorHug2 */
+#define	CH_USB_PID_FIRMWARE2			0x1004
+#define	CH_USB_PID_BOOTLOADER2			0x1005
+
+/* ColorHug old firmware versions */
 #define	CH_USB_VID_LEGACY			0x04d8
 #define	CH_USB_PID_LEGACY			0xf8da
 
@@ -56,6 +63,18 @@ connect_device (GUsbDeviceList *list, GUsbDevice **device_out, GError **error)
 		device = g_usb_device_list_find_by_vid_pid (list,
 							    CH_USB_VID,
 							    CH_USB_PID_FIRMWARE,
+							    NULL);
+	}
+	if (device == NULL) {
+		device = g_usb_device_list_find_by_vid_pid (list,
+							    CH_USB_VID,
+							    CH_USB_PID_BOOTLOADER2,
+							    NULL);
+	}
+	if (device == NULL) {
+		device = g_usb_device_list_find_by_vid_pid (list,
+							    CH_USB_VID,
+							    CH_USB_PID_FIRMWARE2,
 							    error);
 	}
 	if (device == NULL) {
@@ -254,16 +273,17 @@ main (int argc, char *argv[])
 		retval = 1;
 		goto out;
 	}
+#endif
 
 	/* turn on LEDs */
 	g_warning ("Turning on LEDs\n");
 	ret = write_command (device,
-			    0x0e,	/* cmd */
-			    (char *) &led, /* in buffer */
-			    1,		/* in buffer size */
-			    NULL,	/* out buffer */
-			    0,
-			    &error);		/* out buffer size */
+			    0x0e,		/* cmd */
+			    (char *) &led,	/* in buffer */
+			    1,			/* in buffer size */
+			    NULL,		/* out buffer */
+			    0,			/* out buffer size */
+			    &error);
 	if (!ret) {
 		g_warning ("Failed to turn on LEDs : %s", error->message);
 		g_error_free (error);

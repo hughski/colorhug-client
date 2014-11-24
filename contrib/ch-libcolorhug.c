@@ -52,6 +52,18 @@ connect_device (GUsbDeviceList *list, GUsbDevice **device_out, GError **error)
 							    error);
 	}
 	if (device == NULL) {
+		device = g_usb_device_list_find_by_vid_pid (list,
+							    CH_USB_VID,
+							    CH_USB_PID_BOOTLOADER2,
+							    NULL);
+	}
+	if (device == NULL) {
+		device = g_usb_device_list_find_by_vid_pid (list,
+							    CH_USB_VID,
+							    CH_USB_PID_FIRMWARE2,
+							    error);
+	}
+	if (device == NULL) {
 		ret = FALSE;
 		goto out;
 	}

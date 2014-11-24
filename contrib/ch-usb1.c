@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2012 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2012-2014 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -26,9 +26,16 @@
 #include <string.h>
 #include <unistd.h>
 
+/* ColorHug */
 #define	CH_USB_VID				0x273f
 #define	CH_USB_PID_FIRMWARE			0x1001
 #define	CH_USB_PID_BOOTLOADER			0x1000
+
+/* ColorHug2 */
+#define	CH_USB_PID_FIRMWARE2			0x1004
+#define	CH_USB_PID_BOOTLOADER2			0x1005
+
+/* ColorHug old firmware versions */
 #define	CH_USB_VID_LEGACY			0x04d8
 #define	CH_USB_PID_LEGACY			0xf8da
 
@@ -37,24 +44,32 @@ find_colorhug_device (libusb_device **dev_list)
 {
 	int i;
 	int rc;
-	libusb_device *found = NULL;
 	struct libusb_device_descriptor desc;
 
 	for (i = 0; dev_list && dev_list[i]; i++) {
 		rc = libusb_get_device_descriptor (dev_list[i], &desc);
 		if (rc != LIBUSB_SUCCESS)
 			printf ("Failed to get USB descriptor for device: %i", rc);
-		if ((desc.idVendor == CH_USB_VID &&
-		     (desc.idProduct == CH_USB_PID_FIRMWARE ||
-		      desc.idProduct == CH_USB_PID_BOOTLOADER)) ||
-		    (desc.idVendor == CH_USB_VID_LEGACY &&
-		     desc.idProduct == CH_USB_PID_LEGACY)) {
-			found = dev_list[i];
-			goto out;
-		}
+		if (desc.idVendor == CH_USB_VID &&
+		    desc.idProduct == CH_USB_PID_FIRMWARE)
+			return dev_list[i];
+		if (desc.idVendor == CH_USB_VID &&
+		    desc.idProduct == CH_USB_PID_FIRMWARE2)
+			return dev_list[i];
+		if (desc.idVendor == CH_USB_VID &&
+		    desc.idProduct == CH_USB_PID_BOOTLOADER)
+			return dev_list[i];
+		if (desc.idVendor == CH_USB_VID &&
+		    desc.idProduct == CH_USB_PID_BOOTLOADER2)
+			return dev_list[i];
+		if (desc.idVendor == CH_USB_VID &&
+		    desc.idProduct == CH_USB_PID_FIRMWARE)
+			return dev_list[i];
+		if (desc.idVendor == CH_USB_VID_LEGACY &&
+		    desc.idProduct == CH_USB_PID_LEGACY)
+			return dev_list[i];
 	}
-out:
-	return found;
+	return NULL;
 }
 
 static int

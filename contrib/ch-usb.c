@@ -26,11 +26,16 @@
 #include <string.h>
 #include <unistd.h>
 
+/* ColorHug */
 #define	CH_USB_VID				0x273f
 #define	CH_USB_PID_FIRMWARE			0x1001
 
-#define	CH_USB_VID2				0x04d8
-#define	CH_USB_PID2_FIRMWARE			0xf8da
+/* ColorHug2 */
+#define	CH_USB_PID_FIRMWARE2			0x1004
+
+/* ColorHug old firmware versions */
+#define	CH_USB_VID_LEGACY			0x04d8
+#define	CH_USB_PID_LEGACY			0xf8da
 
 static struct usb_device *
 find_colorhug_device (void)
@@ -48,7 +53,12 @@ find_colorhug_device (void)
 				found = dev;
 				goto out;
 			}
-			if (dev->descriptor.idVendor == CH_USB_VID2 &&
+			if (dev->descriptor.idVendor == CH_USB_VID &&
+			    dev->descriptor.idProduct == CH_USB_PID_FIRMWARE2) {
+				found = dev;
+				goto out;
+			}
+			if (dev->descriptor.idVendor == CH_USB_VID_LEGACY &&
 			    dev->descriptor.idProduct == CH_USB_PID2_FIRMWARE) {
 				found = dev;
 				goto out;
