@@ -20,6 +20,7 @@
  */
 
 // compile with: gcc -Wall -o ch-gusb ch-gusb.c `pkg-config --libs --cflags gusb`
+// compile with: i686-w64-mingw32-gcc -Wall -o ch-gusb.exe ch-gusb.c `mingw32-pkg-config --libs --cflags gusb`
 
 #define G_USB_API_IS_SUBJECT_TO_CHANGE
 #include <gusb.h>

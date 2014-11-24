@@ -20,6 +20,7 @@
  */
 
 // compile with: gcc -Wall -o ch-usb1 ch-usb1.c -lusb-1.0
+// compile with: i686-w64-mingw32-gcc -Wall -o ch-usb1.exe ch-usb1.c -lusb-1.0
 
 #include <libusb-1.0/libusb.h>
 #include <stdio.h>
