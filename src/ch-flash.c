@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2009-2012 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2009-2014 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -53,7 +53,6 @@ typedef struct {
 	gboolean	 planned_replug;
 	GUsbContext	*usb_ctx;
 	GUsbDevice	*device;
-	GUsbDeviceList	*device_list;
 	SoupSession	*session;
 	ChMarkdown	*markdown;
 	ChDeviceQueue	*device_queue;
@@ -1197,7 +1196,7 @@ ch_flash_get_fake_device (ChFlashPrivate *priv)
 	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 
 	/* just return the first device */
-	array = g_usb_device_list_get_devices (priv->device_list);
+	array = g_usb_context_get_devices (priv->usb_ctx);
 	if (array->len == 0)
 		return NULL;
 	return g_object_ref (g_ptr_array_index (array, 0));
@@ -1392,7 +1391,7 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	ch_flash_please_attach_device (priv);
 
 	/* is the colorhug already plugged in? */
-	g_usb_device_list_coldplug (priv->device_list);
+	g_usb_context_enumerate (priv->usb_ctx);
 
 	/* setup the session */
 	priv->session = soup_session_sync_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug-flash",
@@ -1422,7 +1421,7 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
  * ch_flash_device_added_cb:
  **/
 static void
-ch_flash_device_added_cb (GUsbDeviceList *list,
+ch_flash_device_added_cb (GUsbContext *context,
 			  GUsbDevice *device,
 			  ChFlashPrivate *priv)
 {
@@ -1439,7 +1438,7 @@ ch_flash_device_added_cb (GUsbDeviceList *list,
  * ch_flash_device_removed_cb:
  **/
 static void
-ch_flash_device_removed_cb (GUsbDeviceList *list,
+ch_flash_device_removed_cb (GUsbContext *context,
 			    GUsbDevice *device,
 			    ChFlashPrivate *priv)
 {
@@ -1530,10 +1529,9 @@ main (int argc, char **argv)
 			  G_CALLBACK (ch_flash_device_queue_progress_changed_cb),
 			  priv);
 	priv->usb_ctx = g_usb_context_new (NULL);
-	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
-	g_signal_connect (priv->device_list, "device-added",
+	g_signal_connect (priv->usb_ctx, "device-added",
 			  G_CALLBACK (ch_flash_device_added_cb), priv);
-	g_signal_connect (priv->device_list, "device-removed",
+	g_signal_connect (priv->usb_ctx, "device-removed",
 			  G_CALLBACK (ch_flash_device_removed_cb), priv);
 
 	/* ensure single instance */
@@ -1559,8 +1557,6 @@ main (int argc, char **argv)
 		g_string_free (priv->update_details, TRUE);
 	if (priv->warning_details != NULL)
 		g_string_free (priv->warning_details, TRUE);
-	if (priv->device_list != NULL)
-		g_object_unref (priv->device_list);
 	if (priv->device_queue != NULL)
 		g_object_unref (priv->device_queue);
 	if (priv->usb_ctx != NULL)

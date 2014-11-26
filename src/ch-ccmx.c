@@ -48,7 +48,6 @@ typedef struct {
 	gboolean	 done_get_cal;
 	GUsbContext	*usb_ctx;
 	GUsbDevice	*device;
-	GUsbDeviceList	*device_list;
 	SoupSession	*session;
 	guint16		 calibration_map[CH_CALIBRATION_MAX];
 	guint		 ccmx_idx;
@@ -1991,7 +1990,7 @@ ch_ccmx_get_fake_device (ChCcmxPrivate *priv)
 	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
 
 	/* just return the first device */
-	array = g_usb_device_list_get_devices (priv->device_list);
+	array = g_usb_context_get_devices (priv->usb_ctx);
 	if (array->len == 0)
 		return NULL;
 	return g_object_ref (g_ptr_array_index (array, 0));
@@ -2383,7 +2382,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 				     CH_CCMX_SAMPLE_SQUARE_SIZE);
 
 	/* is the colorhug already plugged in? */
-	g_usb_device_list_coldplug (priv->device_list);
+	g_usb_context_enumerate (priv->usb_ctx);
 
 	/* setup the session */
 	priv->session = soup_session_sync_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug-ccmx",
@@ -2423,7 +2422,7 @@ out:
  * ch_ccmx_device_added_cb:
  **/
 static void
-ch_ccmx_device_added_cb (GUsbDeviceList *list,
+ch_ccmx_device_added_cb (GUsbContext *context,
 			 GUsbDevice *device,
 			 ChCcmxPrivate *priv)
 {
@@ -2446,9 +2445,9 @@ ch_ccmx_device_added_cb (GUsbDeviceList *list,
  * ch_ccmx_device_removed_cb:
  **/
 static void
-ch_ccmx_device_removed_cb (GUsbDeviceList *list,
-			    GUsbDevice *device,
-			    ChCcmxPrivate *priv)
+ch_ccmx_device_removed_cb (GUsbContext *context,
+			   GUsbDevice *device,
+			   ChCcmxPrivate *priv)
 {
 	g_debug ("Removed: %i:%i",
 		 g_usb_device_get_vid (device),
@@ -2523,13 +2522,12 @@ main (int argc, char **argv)
 	priv->force_repair = force_repair;
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
 	priv->device_queue = ch_device_queue_new ();
 	priv->gen_current_page = CH_CCMX_PAGE_DEVICES;
 	priv->gen_loop = g_main_loop_new (NULL, FALSE);
-	g_signal_connect (priv->device_list, "device-added",
+	g_signal_connect (priv->usb_ctx, "device-added",
 			  G_CALLBACK (ch_ccmx_device_added_cb), priv);
-	g_signal_connect (priv->device_list, "device-removed",
+	g_signal_connect (priv->usb_ctx, "device-removed",
 			  G_CALLBACK (ch_ccmx_device_removed_cb), priv);
 
 	/* clear initial calibration table */
@@ -2558,8 +2556,6 @@ main (int argc, char **argv)
 	g_object_unref (priv->application);
 	if (priv->hash != NULL)
 		g_hash_table_destroy (priv->hash);
-	if (priv->device_list != NULL)
-		g_object_unref (priv->device_list);
 	if (priv->device_queue != NULL)
 		g_object_unref (priv->device_queue);
 	if (priv->usb_ctx != NULL)

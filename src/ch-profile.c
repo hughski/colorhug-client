@@ -51,17 +51,15 @@ ch_util_get_default_device (GError **error)
 	GUsbDevice *device = NULL;
 	GUsbDevice *device_success = NULL;
 	GUsbDevice *device_tmp;
-	GUsbDeviceList *list;
 
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	/* try to find the ColorHug device */
 	usb_ctx = g_usb_context_new (NULL);
-	list = g_usb_device_list_new (usb_ctx);
-	g_usb_device_list_coldplug (list);
+	g_usb_context_enumerate (usb_ctx);
 
 	/* ensure we only find one device */
-	devices = g_usb_device_list_get_devices (list);
+	devices = g_usb_context_get_devices (list);
 	for (i = 0; i < devices->len; i++) {
 		device_tmp = g_ptr_array_index (devices, i);
 		if (!ch_device_is_colorhug (device_tmp))
@@ -90,8 +88,6 @@ out:
 	g_object_unref (usb_ctx);
 	if (device != NULL)
 		g_object_unref (device);
-	if (list != NULL)
-		g_object_unref (list);
 	if (devices != NULL)
 		g_ptr_array_unref (devices);
 	return device_success;

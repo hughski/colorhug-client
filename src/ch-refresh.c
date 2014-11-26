@@ -49,7 +49,6 @@ typedef struct {
 	GtkWidget		*switch_zoom;
 	GUsbContext		*usb_ctx;
 	GUsbDevice		*device;
-	GUsbDeviceList		*device_list;
 } ChRefreshPrivate;
 
 typedef struct {
@@ -1287,9 +1286,6 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	source.B = 0.7f;
 	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
 
-	/* is the colorhug already plugged in? */
-	g_usb_device_list_coldplug (priv->device_list);
-
 	/* show main UI */
 	gtk_widget_show (main_window);
 
@@ -1304,9 +1300,9 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
  * ch_refresh_device_added_cb:
  **/
 static void
-ch_refresh_device_added_cb (GUsbDeviceList *list,
-			 GUsbDevice *device,
-			 ChRefreshPrivate *priv)
+ch_refresh_device_added_cb (GUsbContext *context,
+			    GUsbDevice *device,
+			    ChRefreshPrivate *priv)
 {
 	g_debug ("Added: %i:%i",
 		 g_usb_device_get_vid (device),
@@ -1321,9 +1317,9 @@ ch_refresh_device_added_cb (GUsbDeviceList *list,
  * ch_refresh_device_removed_cb:
  **/
 static void
-ch_refresh_device_removed_cb (GUsbDeviceList *list,
-			    GUsbDevice *device,
-			    ChRefreshPrivate *priv)
+ch_refresh_device_removed_cb (GUsbContext *context,
+			      GUsbDevice *device,
+			      ChRefreshPrivate *priv)
 {
 	g_debug ("Removed: %i:%i",
 		 g_usb_device_get_vid (device),
@@ -1379,11 +1375,10 @@ main (int argc, char **argv)
 	priv->settings = g_settings_new ("com.hughski.ColorHug.DisplayAnalysis");
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->client = cd_client_new ();
-	priv->device_list = g_usb_device_list_new (priv->usb_ctx);
 	priv->device_queue = ch_device_queue_new ();
-	g_signal_connect (priv->device_list, "device-added",
+	g_signal_connect (priv->usb_ctx, "device-added",
 			  G_CALLBACK (ch_refresh_device_added_cb), priv);
-	g_signal_connect (priv->device_list, "device-removed",
+	g_signal_connect (priv->usb_ctx, "device-removed",
 			  G_CALLBACK (ch_refresh_device_removed_cb), priv);
 
 	/* keep the data loaded in memory */
@@ -1434,8 +1429,6 @@ main (int argc, char **argv)
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);
 
 	g_object_unref (priv->application);
-	if (priv->device_list != NULL)
-		g_object_unref (priv->device_list);
 	if (priv->device_queue != NULL)
 		g_object_unref (priv->device_queue);
 	if (priv->usb_ctx != NULL)
