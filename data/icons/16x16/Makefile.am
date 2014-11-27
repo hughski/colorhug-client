@@ -8,6 +8,7 @@ icons_DATA = 				\
 	colorimeter-colorhug-inactive.png \
 	colorhug-ccmx.png		\
 	colorhug-flash.png		\
+	colorhug-refresh.png		\
 	colorhug.png
 
 install-data-hook:

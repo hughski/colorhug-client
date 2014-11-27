@@ -1170,7 +1170,7 @@ ch_refresh_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpoin
 		parent = windows->data;
 
 	icon_theme = gtk_icon_theme_get_default ();
-	logo = gtk_icon_theme_load_icon (icon_theme, "input-gaming", 256, 0, NULL);
+	logo = gtk_icon_theme_load_icon (icon_theme, "colorhug-refresh", 256, 0, NULL);
 	gtk_show_about_dialog (parent,
 			       /* TRANSLATORS: this is the title of the about window */
 			       "title", _("About ColorHug Display Analysis"),
