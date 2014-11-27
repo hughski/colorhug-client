@@ -1286,6 +1286,9 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	source.B = 0.7f;
 	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
 
+	/* is the colorhug already plugged in? */
+	g_usb_context_enumerate (priv->usb_ctx);
+
 	/* show main UI */
 	gtk_widget_show (main_window);
 
