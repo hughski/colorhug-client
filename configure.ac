@@ -105,13 +105,6 @@ if test x$enable_sound != xno; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl - Build debugging tools
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(debugging, AS_HELP_STRING([--enable-debugging],[enable debugging tools]),
-	      enable_debugging=$enableval,enable_debugging=no)
-AM_CONDITIONAL(CD_BUILD_DEBUGGING, test x$enable_debugging = xyes)
-
-dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files
 dnl ---------------------------------------------------------------------------
 AC_SUBST(SYSCONFDIR, $sysconfdir)

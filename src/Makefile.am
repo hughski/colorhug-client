@@ -38,27 +38,6 @@ colorhug_spectro_util_LDADD =				\
 colorhug_spectro_util_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
-if CD_BUILD_DEBUGGING
-noinst_PROGRAMS +=					\
-	colorhug-profile
-
-colorhug_profile_SOURCES =				\
-	ch-profile.c
-
-colorhug_profile_LDADD =				\
-	$(COLORD_LIBS)					\
-	$(COLORD_GTK_LIBS)				\
-	$(COLORHUG_LIBS)				\
-	$(GUSB_LIBS)					\
-	$(GLIB_LIBS)					\
-	$(SOUP_LIBS)					\
-	$(COLORHUG_LIBS)				\
-	-lm
-
-colorhug_profile_CFLAGS =				\
-	$(WARNINGFLAGS_C)
-endif
-
 libexec_PROGRAMS =					\
 	colorhug-inhx32-to-bin
 
