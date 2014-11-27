@@ -61,6 +61,6 @@ DISTCLEANFILES =					\
 	com.hughski.ColorHug.DisplayAnalysis.desktop	\
 	com.hughski.ColorHug.FlashLoader.desktop	\
 	com.hughski.ColorHug.SpectroUtil.desktop	\
-	com.hughski.colorhug-client.gschema.xml
+	com.hughski.colorhug-client.gschema.xml.valid
 
 -include $(top_srcdir)/git.mk
