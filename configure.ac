@@ -119,6 +119,17 @@ fi
 AM_CONDITIONAL(HAVE_DOCBOOK2MAN, [test "$DOCBOOK2MAN" != "no"])
 
 dnl ---------------------------------------------------------------------------
+dnl - Is windres available?
+dnl ---------------------------------------------------------------------------
+AC_CHECK_TOOL([WINDRES], [windres], [no])
+if test "$WINDRES" != "no" ; then
+	AC_CHECK_TOOL([ICOTOOL], [icotool], [no])
+else
+	ICOTOOL=no
+fi
+AM_CONDITIONAL([HAS_WINDOWS_ICON], [test "$ICOTOOL" != "no"])
+
+dnl ---------------------------------------------------------------------------
 dnl - Makefiles, etc.
 dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
@@ -151,4 +162,6 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         cppflags:                  ${CPPFLAGS}
+        windres:                   ${WINDRES}
+        icotool:                   ${ICOTOOL}
 "
