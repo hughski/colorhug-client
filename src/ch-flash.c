@@ -768,11 +768,12 @@ ch_flash_flash_button_cb (GtkWidget *widget, ChFlashPrivate *priv)
 
 	/* download file */
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
-	uri = g_build_filename (server_uri,
-				ch_flash_get_device_download_kind (priv),
-				"firmware",
-				priv->filename,
-				NULL);
+	uri = g_build_path ("/",
+			    server_uri,
+			    ch_flash_get_device_download_kind (priv),
+			    "firmware",
+			    priv->filename,
+			    NULL);
 	g_debug ("Downloading %s", uri);
 	base_uri = soup_uri_new (uri);
 
@@ -1096,11 +1097,12 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 
 	/* get the latest manifest file */
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
-	uri = g_build_filename (server_uri,
-				ch_flash_get_device_download_kind (priv),
-				"firmware",
-				"metadata.xml",
-				NULL);
+	uri = g_build_path ("/",
+			    server_uri,
+			    ch_flash_get_device_download_kind (priv),
+			    "firmware",
+			    "metadata.xml",
+			    NULL);
 	base_uri = soup_uri_new (uri);
 
 	/* GET file */

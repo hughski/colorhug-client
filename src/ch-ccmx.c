@@ -1264,10 +1264,11 @@ ch_ccmx_got_file_cb (SoupSession *session,
 	/* write file */
 	uri = soup_message_get_uri (msg);
 	basename = g_path_get_basename (soup_uri_get_path (uri));
-	location = g_build_filename (g_get_user_data_dir (),
-				     "colorhug-ccmx",
-				     basename,
-				     NULL);
+	location = g_build_path ("/",
+				 g_get_user_data_dir (),
+				 "colorhug-ccmx",
+				 basename,
+				 NULL);
 	ret = g_file_set_contents (location,
 				   msg->response_body->data,
 				   msg->response_body->length,
@@ -1364,16 +1365,15 @@ ch_ccmx_got_index_cb (SoupSession *session,
 			continue;
 
 		/* check if file already exists, otherwise download */
-		filename_tmp = g_build_filename (location,
-						 lines[i],
-						 NULL);
+		filename_tmp = g_build_filename (location, lines[i], NULL);
 		if (!g_file_test (filename_tmp, G_FILE_TEST_EXISTS)) {
 			_cleanup_free_ gchar *uri_tmp = NULL;
-			uri_tmp = g_build_filename (server_uri,
-						    ch_ccmx_get_device_download_kind (priv),
-						    "ccmx",
-						    lines[i],
-						    NULL);
+			uri_tmp = g_build_path ("/",
+						server_uri,
+						ch_ccmx_get_device_download_kind (priv),
+						"ccmx",
+						lines[i],
+						NULL);
 			priv->ccmx_idx++;
 			g_debug ("download %s to %s",
 				 uri_tmp, filename_tmp);
@@ -1957,11 +1957,12 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 
 	/* get the latest INDEX file */
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
-	uri = g_build_filename (server_uri,
-				ch_ccmx_get_device_download_kind (priv),
-				"ccmx",
-				"INDEX",
-				NULL);
+	uri = g_build_path ("/",
+			    server_uri,
+			    ch_ccmx_get_device_download_kind (priv),
+			    "ccmx",
+			    "INDEX",
+			    NULL);
 	base_uri = soup_uri_new (uri);
 
 	/* GET file */
