@@ -501,6 +501,30 @@ ch_refresh_measure_helper_free (ChRefreshMeasureHelper *helper)
 static void ch_refresh_ti3_show_patch (ChRefreshMeasureHelper *helper);
 
 /**
+ * ch_refresh_find_colord_icc_profile:
+ **/
+static GFile *
+ch_refresh_find_colord_icc_profile (const gchar *filename)
+{
+	const gchar * const *dirs;
+	guint i;
+
+	dirs = g_get_system_data_dirs ();
+	for (i = 0; dirs[i] != NULL; i++) {
+		_cleanup_free_ gchar *tmp = NULL;
+		tmp = g_build_filename (dirs[i],
+					"color",
+					"icc",
+					"colord",
+					filename,
+					NULL);
+		if (g_file_test (tmp, G_FILE_TEST_EXISTS))
+			return g_file_new_for_path (tmp);
+	}
+	return NULL;
+}
+
+/**
  * ch_refresh_update_coverage:
  **/
 static void
@@ -550,17 +574,25 @@ ch_refresh_update_coverage (ChRefreshMeasureHelper *helper)
 
 	/* load sRGB */
 	icc_srgb = cd_icc_new ();
-	file_srgb = g_file_new_for_path ("/usr/share/color/icc/colord/sRGB.icc");
+	file_srgb = ch_refresh_find_colord_icc_profile ("sRGB.icc");
+	if (file_srgb == NULL) {
+		g_warning ("failed to find sRGB");
+		goto out;
+	}
 	ret = cd_icc_load_file (icc_srgb, file_srgb,
 				CD_ICC_LOAD_FLAGS_NONE, NULL, &error);
 	if (!ret) {
-		g_warning ("failed to sRGB: %s", error->message);
+		g_warning ("failed to load sRGB: %s", error->message);
 		goto out;
 	}
 
 	/* load AdobeRGB */
 	icc_adobergb = cd_icc_new ();
-	file_adobergb = g_file_new_for_path ("/usr/share/color/icc/colord/AdobeRGB1998.icc");
+	file_adobergb = ch_refresh_find_colord_icc_profile ("AdobeRGB1998.icc");
+	if (file_adobergb == NULL) {
+		g_warning ("failed to find AdobeRGB");
+		goto out;
+	}
 	ret = cd_icc_load_file (icc_adobergb, file_adobergb,
 				CD_ICC_LOAD_FLAGS_NONE, NULL, &error);
 	if (!ret) {
