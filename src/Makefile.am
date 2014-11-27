@@ -200,6 +200,7 @@ ch_self_test_SOURCES =						\
 ch_self_test_LDADD =						\
 	$(COLORHUG_LIBS)					\
 	$(GLIB_LIBS)						\
+	$(GTK_LIBS)						\
 	$(GUSB_LIBS)
 
 ch_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS_C)
