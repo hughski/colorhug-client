@@ -14,6 +14,7 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 AS_ALL_LINGUAS
 AC_PROG_CC
 AC_PROG_INSTALL
+AC_OBJEXT
 LT_INIT
 AM_PROG_CC_C_O
 IT_PROG_INTLTOOL([0.50.0])
@@ -130,10 +131,21 @@ fi
 AM_CONDITIONAL([HAS_WINDOWS_ICON], [test "$ICOTOOL" != "no"])
 
 dnl ---------------------------------------------------------------------------
+dnl - Build windows release build (no debugging window)
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(release, AS_HELP_STRING([--enable-release],[Enable Windows release build]),
+	      enable_release=$enableval,enable_release=no)
+AM_CONDITIONAL(HAVE_WIN32_RELEASE, test x$enable_release = xyes)
+
+dnl ---------------------------------------------------------------------------
 dnl - Makefiles, etc.
 dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
 Makefile
+data/ch-ccmx.rc
+data/ch-flash.rc
+data/ch-main.rc
+data/ch-refresh.rc
 data/Makefile
 data/icons/Makefile
 data/icons/16x16/Makefile

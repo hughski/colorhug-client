@@ -40,12 +40,19 @@ SVG_FILES =						\
 	colorhug-gray.svg				\
 	usb.svg
 
+RC_FILES =						\
+	ch-ccmx.rc.in					\
+	ch-flash.rc.in					\
+	ch-main.rc.in					\
+	ch-refresh.rc.in
+
 EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
 	$(desktop_in_files)				\
 	$(pkgdata_DATA)					\
 	$(appdata_in_files)				\
 	$(SVG_FILES)					\
+	$(RC_FILES)					\
 	$(UI_FILES)
 
 clean-local :

@@ -1,0 +1,27 @@
+#include <winver.h>
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Hughski Limited"
+      VALUE "FileDescription", "ColorHug Firmware Upgrade"
+      VALUE "FileVersion", "@VERSION@"
+      VALUE "InternalName", "colorhug-flash"
+      VALUE "LegalCopyright", "Richard Hughes 2014"
+      VALUE "OriginalFilename", "colorhug-flash.exe"
+      VALUE "ProductName", "ColorHug Client Tools"
+      VALUE "ProductVersion", "@VERSION@"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
+
+1 ICON "../data/icons/colorhug-flash.ico"

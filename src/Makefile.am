@@ -62,6 +62,16 @@ colorhug_cmd_LDADD =					\
 colorhug_cmd_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
+if HAS_WINDOWS_ICON
+ch-main-rc.$(OBJEXT) : $(top_builddir)/data/ch-main.rc
+	$(AM_V_GEN)					\
+	$(WINDRES)					\
+	--input-format rc --input $<			\
+	--output-format coff --output $@
+colorhug_cmd_LDADD += ch-main-rc.$(OBJEXT)
+colorhug_cmd_DEPENDENCIES = ch-main-rc.$(OBJEXT)
+endif
+
 colorhug_flash_SOURCES =				\
 	ch-cleanup.h					\
 	ch-markdown.c					\
@@ -85,6 +95,21 @@ colorhug_flash_LDADD =					\
 colorhug_flash_CFLAGS =					\
 	$(WARNINGFLAGS_C)
 
+if HAVE_WIN32_RELEASE
+colorhug_flash_LDFLAGS =				\
+	-mwindows
+endif
+
+if HAS_WINDOWS_ICON
+ch-flash-rc.$(OBJEXT) : $(top_builddir)/data/ch-flash.rc
+	$(AM_V_GEN)					\
+	$(WINDRES)					\
+	--input-format rc --input $<			\
+	--output-format coff --output $@
+colorhug_flash_LDADD += ch-flash-rc.$(OBJEXT)
+colorhug_flash_DEPENDENCIES = ch-flash-rc.$(OBJEXT)
+endif
+
 colorhug_ccmx_SOURCES =					\
 	ch-cleanup.h					\
 	ch-ccmx-resources.c				\
@@ -103,6 +128,21 @@ colorhug_ccmx_LDADD =					\
 
 colorhug_ccmx_CFLAGS =					\
 	$(WARNINGFLAGS_C)
+
+if HAVE_WIN32_RELEASE
+colorhug_ccmx_LDFLAGS =					\
+	-mwindows
+endif
+
+if HAS_WINDOWS_ICON
+ch-ccmx-rc.$(OBJEXT) : $(top_builddir)/data/ch-ccmx.rc
+	$(AM_V_GEN)					\
+	$(WINDRES)					\
+	--input-format rc --input $<			\
+	--output-format coff --output $@
+colorhug_ccmx_LDADD += ch-ccmx-rc.$(OBJEXT)
+colorhug_ccmx_DEPENDENCIES = ch-ccmx-rc.$(OBJEXT)
+endif
 
 colorhug_inhx32_to_bin_SOURCES =			\
 	ch-cleanup.h					\
@@ -128,6 +168,11 @@ colorhug_refresh_SOURCES =				\
 	ch-refresh-utils.c				\
 	ch-refresh-utils.h
 
+if HAVE_WIN32_RELEASE
+colorhug_refresh_LDFLAGS =				\
+	-mwindows
+endif
+
 colorhug_refresh_LDADD =				\
 	$(COLORD_LIBS)					\
 	$(COLORD_GTK_LIBS)				\
@@ -139,6 +184,16 @@ colorhug_refresh_LDADD =				\
 
 colorhug_refresh_CFLAGS =				\
 	$(WARNINGFLAGS_C)
+
+if HAS_WINDOWS_ICON
+ch-refresh-rc.$(OBJEXT) : $(top_builddir)/data/ch-refresh.rc
+	$(AM_V_GEN)					\
+	$(WINDRES) \
+	--input-format rc --input $< \
+	--output-format coff --output $@
+colorhug_refresh_LDADD += ch-refresh-rc.$(OBJEXT)
+colorhug_refresh_DEPENDENCIES = ch-refresh-rc.$(OBJEXT)
+endif
 
 ch-flash-resources.c: colorhug-flash.gresource.xml ../data/ch-flash.ui
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-flash.gresource.xml
