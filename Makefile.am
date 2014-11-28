@@ -37,6 +37,9 @@ MAINTAINERCLEANFILES =					\
 	$(srcdir)/colorhug-*.tar.*			\
 	`find "$(srcdir)" -type f -name Makefile.in -print`
 
+setup-win32:
+	makensis setup-win32.nsi
+
 distclean-local:
 	if test $(srdcir) = .; then :; else \
 		rm -f ChangeLog; \

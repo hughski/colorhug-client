@@ -158,6 +158,7 @@ data/icons/256x256/Makefile
 data/icons/scalable/Makefile
 data/tests/Makefile
 help/Makefile
+setup-win32.nsi
 src/Makefile
 man/Makefile
 po/Makefile.in

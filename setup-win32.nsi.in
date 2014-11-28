@@ -1,0 +1,290 @@
+#!Nsis Installer Command Script
+#
+# To build an installer from the script you would normally do:
+#
+#   makensis setup-win32.nsi
+
+Name "ColorHug Client Tools"
+OutFile "ColorHug-Client-@VERSION@-Win32.exe"
+InstallDir "$ProgramFiles\ColorHug-Client-Tools"
+InstallDirRegKey HKLM SOFTWARE\ColorHug-Client-Tools "Install_Dir"
+
+ShowInstDetails hide
+ShowUninstDetails hide
+
+# Uncomment this to enable BZip2 compression, which results in
+# slightly smaller files but uses more memory at install time.
+#SetCompressor bzip2
+
+XPStyle on
+
+Page components
+Page directory
+Page instfiles
+
+ComponentText "Select which optional components you want to install."
+
+DirText "Please select the installation folder."
+
+Section "ColorHug Client Tools"
+  SectionIn RO
+
+  SetOutPath "$INSTDIR\bin\"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//iconv.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libatk-1.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libbz2-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcairo-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcairo-gobject-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcolord-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcolord-gtk-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcolordprivate-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcolorhug-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libcroco-0.6-3.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libexpat-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libffi-6.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libfontconfig-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libfreetype-6.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgcc_s_sjlj-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgdk-3-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgdk_pixbuf-2.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgio-2.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libglib-2.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgmodule-2.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgmp-10.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgnutls-28.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgobject-2.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgtk-3-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libgusb-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libharfbuzz-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libhogweed-2-5.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libintl-8.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libjpeg-62.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//liblcms2-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libnettle-4-7.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libp11-kit-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libpango-1.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libpangocairo-1.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libpangoft2-1.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libpangowin32-1.0-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libpixman-1-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libpng16-16.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libsoup-2.4-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libsqlite3-0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libtasn1-6.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libusb-1.0.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libwinpthread-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//libxml2-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin//zlib1.dll"
+
+  SetOutPath "$INSTDIR\bin"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-ccmx.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-cmd.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-flash.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-refresh.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/gdk-pixbuf-query-loaders.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/gio-querymodules.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/glib-compile-schemas.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/gtk-update-icon-cache.exe"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/libjasper-1.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/librsvg-2-2.dll"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/pango-querymodules.exe"
+
+  SetOutPath "$INSTDIR\etc"
+  File /r "/usr/i686-w64-mingw32/sys-root/mingw/etc/fonts"
+  File /r "/usr/i686-w64-mingw32/sys-root/mingw/etc/gtk-3.0"
+  CreateDirectory "$INSTDIR\etc\pango"
+
+  SetOutPath "$INSTDIR\lib"
+  File /r "/usr/i686-w64-mingw32/sys-root/mingw/lib/gdk-pixbuf-2.0"
+
+  SetOutPath "$INSTDIR\lib\gio\modules"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/lib/gio/modules/libgiognutls.dll"
+
+  SetOutPath "$INSTDIR\lib"
+  File /r "/usr/i686-w64-mingw32/sys-root/mingw/lib/gtk-3.0"
+  File /r "/usr/i686-w64-mingw32/sys-root/mingw/lib/pango"
+
+  SetOutPath "$INSTDIR\lib\pango\1.8.0\modules"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/lib/pango/1.8.0/modules/pango-basic-fc.dll"
+
+  SetOutPath "$INSTDIR\share\color\icc\colord"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/color/icc/colord/AdobeRGB1998.icc"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/color/icc/colord/sRGB.icc"
+
+  SetOutPath "$INSTDIR\share\glib-2.0\schemas"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/glib-2.0/schemas/com.hughski.colorhug-client.gschema.xml"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/glib-2.0/schemas/org.gtk.Settings.Debug.gschema.xml"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\16x16\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/16x16/status/image-missing.png"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\22x22\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/22x22/status/image-missing.png"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\24x24\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/24x24/status/image-missing.png"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\256x256\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/256x256/status/image-missing.png"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\32x32\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/32x32/status/image-missing.png"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\48x48\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/48x48/status/image-missing.png"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/index.theme"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\scalable-up-to-32\status"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable-up-to-32/status/process-working-symbolic.svg"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\scalable\actions"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/actions/pan-down-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/actions/process-stop-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/actions/window-close-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/actions/window-maximize-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/actions/window-minimize-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/actions/window-restore-symbolic.svg"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\scalable\devices"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/devices/drive-harddisk-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/devices/drive-removable-media-symbolic.svg"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\scalable\emblems"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/emblems/emblem-system-symbolic.svg"
+
+  SetOutPath "$INSTDIR\share\icons\Adwaita\scalable\places"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-documents-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-download-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-music-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-pictures-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-publicshare-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-remote-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-saved-search-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-templates-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/folder-videos-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/network-server-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/network-workgroup-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/start-here-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/user-bookmarks-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/user-desktop-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/user-home-symbolic.svg"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/Adwaita/scalable/places/user-trash-symbolic.svg"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\16x16\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorimeter-colorhug-inactive.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\16x16\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\22x22\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorimeter-colorhug-inactive.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\22x22\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\24x24\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorimeter-colorhug-inactive.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\24x24\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\256x256\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\256x256\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\32x32\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorimeter-colorhug-inactive.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\32x32\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\48x48\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorimeter-colorhug-inactive.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\48x48\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\64x64\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug-ccmx.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug-flash.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug-refresh.png"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\64x64\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/mimetypes/application-x-ccmx.png"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\scalable\apps"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/scalable/apps/colorhug.svg"
+
+  SetOutPath "$INSTDIR\share\icons\hicolor\scalable\mimetypes"
+  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/scalable/mimetypes/application-x-ccmx.svg"
+
+  ReadEnvStr $0 COMSPEC
+  SetOutPath "$INSTDIR"
+  nsExec::ExecToLog '$0 /C bin\pango-querymodules.exe > etc\pango\pango.modules'
+  nsExec::ExecToLog '$0 /C bin\gdk-pixbuf-query-loaders.exe > lib\gdk-pixbuf-2.0\2.10.0\loaders.cache'
+  nsExec::ExecToLog '$0 /C bin\glib-compile-schemas.exe share\glib-2.0\schemas'
+  nsExec::ExecToLog '$0 /C bin\gtk-update-icon-cache.exe share\icons\Adwaita'
+  nsExec::ExecToLog '$0 /C bin\gio-querymodules.exe lib\gio\modules'
+SectionEnd
+
+Section "Start Menu Shortcuts"
+  SetOutPath "$INSTDIR\bin"
+  CreateDirectory "$SMPROGRAMS\ColorHug Client Tools"
+  CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\Uninstall ColorHug Client Tools.lnk" "$INSTDIR\Uninstall ColorHug Client Tools.exe" "" "$INSTDIR\Uninstall ColorHug Client Tools.exe" 0
+  CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\ColorHug CCMX Loader.lnk" "$INSTDIR\bin\colorhug-ccmx.exe" "" "$INSTDIR\bin\colorhug-ccmx.exe" 0
+  CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\ColorHug Firmware Updater.lnk" "$INSTDIR\bin\colorhug-flash.exe" "" "$INSTDIR\bin\colorhug-flash.exe" 0
+  CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\ColorHug Display Analysis.lnk" "$INSTDIR\bin\colorhug-refresh.exe" "" "$INSTDIR\bin\colorhug-refresh.exe" 0
+SectionEnd
+
+Section "Desktop Icons"
+  SetOutPath "$INSTDIR\bin"
+  CreateShortCut "$DESKTOP\ColorHug CCMX Loader.lnk" "$INSTDIR\bin\colorhug-ccmx.exe" "" "$INSTDIR\bin\colorhug-ccmx.exe" 0
+  CreateShortCut "$DESKTOP\ColorHug Firmware Updater.lnk" "$INSTDIR\bin\colorhug-flash.exe" "" "$INSTDIR\bin\colorhug-flash.exe" 0
+  CreateShortCut "$DESKTOP\ColorHug Display Analysis.lnk" "$INSTDIR\bin\colorhug-refresh.exe" "" "$INSTDIR\bin\colorhug-refresh.exe" 0
+SectionEnd
+
+Section "Uninstall"
+  Delete /rebootok "$DESKTOP\ColorHug Display Analysis.lnk"
+  Delete /rebootok "$DESKTOP\ColorHug Firmware Updater.lnk"
+  Delete /rebootok "$DESKTOP\ColorHug CCMX Loader.lnk"
+  RMDir /rebootok /r "$SMPROGRAMS\ColorHug Client Tools"
+  RMDir /rebootok /r "$INSTDIR\bin"
+  RMDir /rebootok /r "$INSTDIR\etc"
+  RMDir /rebootok /r "$INSTDIR\lib"
+  RMDir /rebootok /r "$INSTDIR\share"
+  RMDir /rebootok "$INSTDIR"
+SectionEnd
+
+Section -post
+  WriteUninstaller "$INSTDIR\Uninstall ColorHug Client Tools.exe"
+SectionEnd
