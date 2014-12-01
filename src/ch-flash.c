@@ -529,14 +529,18 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 		 * kind of device, e.g. a ColorHug2 fw on a ColorHug+ */
 		title = _("Wrong kind of firmware!");
 		ch_flash_error_dialog (priv, title, error->message);
-		ch_flash_set_flash_success_0 (priv);
 		return;
 	}
 
 	/* we can shortcut as we're already in bootloader mode */
-	if (priv->firmware_version[0] == 0) {
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_BOOTLOADER:
+	case CH_DEVICE_MODE_BOOTLOADER2:
 		ch_flash_set_flash_success_0 (priv);
 		return;
+		break;
+	default:
+		break;
 	}
 
 	/* update UI */
@@ -549,8 +553,7 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	priv->planned_replug = TRUE;
 
 	/* need to boot into bootloader */
-	ch_device_queue_reset (priv->device_queue,
-			       priv->device);
+	ch_device_queue_reset (priv->device_queue, priv->device);
 	ch_device_queue_process_async (priv->device_queue,
 				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONFATAL_ERRORS,
 				       NULL,
@@ -821,8 +824,10 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 
 	/* split up the version string */
 	split = g_strsplit (version, ".", -1);
-	if (g_strv_length (split) != 3)
+	if (g_strv_length (split) != 3) {
+		g_warning ("version invalid: %s", version);
 		return FALSE;
+	}
 	for (i = 0; i < 3; i++)
 		tmp[i] = g_ascii_strtoull (split[i], NULL, 10);
 
@@ -830,7 +835,7 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 	if (ch_flash_get_packed_version (tmp) >
 	    ch_flash_get_packed_version (priv->firmware_version))
 		ret = TRUE;
-	g_debug ("%i.%i.%i compared to %i.%i.%i = %s",
+	g_print ("%i.%i.%i compared to %i.%i.%i = %s\n",
 		 tmp[0], tmp[1], tmp[2],
 		 priv->firmware_version[0],
 		 priv->firmware_version[1],
@@ -1040,7 +1045,9 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 
 	/* update firmware label */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_firmware"));
-	if (priv->firmware_version[0] == 0) {
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_BOOTLOADER:
+	case CH_DEVICE_MODE_BOOTLOADER2:
 		/* TRANSLATORS: the device is in bootloader mode */
 		title = _("Bootloader version");
 		str2 = g_strdup_printf ("%s %i.%i.%i",
@@ -1048,7 +1055,8 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
-	} else {
+		break;
+	default:
 		/* TRANSLATORS: the device is in firmware mode */
 		title = _("Firmware version");
 		str2 = g_strdup_printf ("%s %i.%i.%i",
@@ -1056,6 +1064,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 				       priv->firmware_version[0],
 				       priv->firmware_version[1],
 				       priv->firmware_version[2]);
+		break;
 	}
 	gtk_label_set_label (GTK_LABEL (widget), str2);
 
@@ -1173,20 +1182,22 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	}
 
 	/* bootloader mode has no idea what the serial number is */
-	if (priv->firmware_version[0] == 0) {
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_BOOTLOADER:
+	case CH_DEVICE_MODE_BOOTLOADER2:
 		ch_flash_got_device_data (priv);
-		return;
+		break;
+	default:
+		ch_device_queue_get_serial_number (priv->device_queue,
+						   priv->device,
+						   &priv->serial_number);
+		ch_device_queue_process_async (priv->device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       ch_flash_get_serial_number_cb,
+					       priv);
+		break;
 	}
-
-	/* get the serial number */
-	ch_device_queue_get_serial_number (priv->device_queue,
-					   priv->device,
-					   &priv->serial_number);
-	ch_device_queue_process_async (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       ch_flash_get_serial_number_cb,
-				       priv);
 }
 
 /**
