@@ -1105,29 +1105,61 @@ ch_refresh_zoom_changed_cb (GObject *object, GParamSpec *pspec, ChRefreshPrivate
 static void
 ch_refresh_update_ui_for_device (ChRefreshPrivate *priv)
 {
+	ChDeviceMode mode = CH_DEVICE_MODE_UNKNOWN;
 	GtkWidget *w;
-	gboolean present = priv->device != NULL;
-	_cleanup_string_free_ GString *msg = NULL;
+	_cleanup_string_free_ GString *msg = g_string_new ("");
 
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
-	gtk_widget_set_visible (w, !present);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
-	gtk_widget_set_visible (w, present);
-	gtk_widget_set_visible (priv->sample_widget, present);
+	/* get actual device mode */
+	if (priv->device != NULL)
+		mode = ch_device_get_mode (priv->device);
 
-	msg = g_string_new ("");
-	if (present) {
+	/* update UI */
+	switch (mode) {
+	case CH_DEVICE_MODE_UNKNOWN:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_results"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
+		gtk_widget_set_visible (w, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+		gtk_widget_set_visible (w, FALSE);
+		gtk_widget_set_visible (priv->sample_widget, FALSE);
+		g_string_append (msg, _("Please connect your ColorHug2"));
+		break;
+	case CH_DEVICE_MODE_FIRMWARE2:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_results"));
+		gtk_widget_set_visible (w, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+		gtk_widget_set_visible (w, TRUE);
+		gtk_widget_set_visible (priv->sample_widget, TRUE);
 		g_string_append_printf (msg, "%s\n",
 			_("Place your ColorHug in the spot on the left and click "
 			  "the blue button to start analysing your display."));
 		g_string_append_printf (msg, "%s",
 			_("Don't disturb the device while working!"));
-	} else {
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER2:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_results"));
+		gtk_widget_set_visible (w, FALSE);
 		g_string_append_printf (msg, "%s\n\n",
-			_("Insert your ColorHug2 into a free USB port on your computer."));
+			_("Please update the firmware on your ColorHug before "
+			  "using this application."));
+		break;
+	default:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_results"));
+		gtk_widget_set_visible (w, FALSE);
+		g_string_append_printf (msg, "%s\n\%s\n",
+			_("Device unsupported."),
+			_("Please connect your ColorHug2."));
+		break;
 	}
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_intro"));
 	gtk_label_set_label (GTK_LABEL (w), msg->str);
+
+	/* make the window as small as possible */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
+	gtk_window_resize (GTK_WINDOW (w), 100, 100);
 }
 
 /**
@@ -1249,7 +1281,7 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 
 	main_window = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
 	gtk_application_add_window (priv->application, GTK_WINDOW (main_window));
-	gtk_widget_set_size_request (main_window, 760, 350);
+	gtk_widget_set_size_request (main_window, 760, 250);
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
