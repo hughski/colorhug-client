@@ -49,6 +49,7 @@ typedef struct {
 	GtkWidget		*switch_zoom;
 	GUsbContext		*usb_ctx;
 	GUsbDevice		*device;
+	GHashTable		*results;
 } ChRefreshPrivate;
 
 typedef struct {
@@ -351,7 +352,7 @@ ch_refresh_update_refresh_rate (ChRefreshPrivate *priv)
 	frame_clock = gtk_widget_get_frame_clock (priv->sample_widget);
 	gdk_frame_clock_get_refresh_info (frame_clock, 0, &refresh_interval, NULL);
 	refresh_rate = (gdouble) G_USEC_PER_SEC / (gdouble) refresh_interval;
-	ch_refresh_ui_update_refresh (priv->builder, refresh_rate);
+	ch_refresh_result_set_refresh (priv->results, refresh_rate);
 }
 
 /**
@@ -401,40 +402,37 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 
 	/* find rise time (10% -> 90% transition) */
 	ret = ch_refresh_get_rise (sp_tmp, &value, &jitter, &error);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_rise"));
 	if (ret) {
 		_cleanup_free_ gchar *str = NULL;
 		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
 				       value * 1000.f, jitter * 1000.f);
-		gtk_label_set_markup (GTK_LABEL (w), str);
+		ch_refresh_result_add (priv->results, "label_rise", str);
 	} else {
-		gtk_label_set_label (GTK_LABEL (w), error->message);
+		ch_refresh_result_add (priv->results, "label_rise", error->message);
 		g_clear_error (&error);
 	}
 
 	/* find rise time (10% -> 90% transition) */
 	ret = ch_refresh_get_fall (sp_tmp, &value, &jitter, &error);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_fall"));
 	if (ret) {
 		_cleanup_free_ gchar *str = NULL;
 		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
 				       value * 1000.f, jitter * 1000.f);
-		gtk_label_set_markup (GTK_LABEL (w), str);
+		ch_refresh_result_add (priv->results, "label_fall", str);
 	} else {
-		gtk_label_set_label (GTK_LABEL (w), error->message);
+		ch_refresh_result_add (priv->results, "label_fall", error->message);
 		g_clear_error (&error);
 	}
 
 	/* find display latency */
 	ret = ch_refresh_get_input_latency (sp_tmp, &value, &jitter, &error);
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_display_latency"));
 	if (ret) {
 		_cleanup_free_ gchar *str = NULL;
 		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
 				       value * 1000.f, jitter * 1000.f);
-		gtk_label_set_markup (GTK_LABEL (w), str);
+		ch_refresh_result_add (priv->results, "label_display_latency", str);
 	} else {
-		gtk_label_set_label (GTK_LABEL (w), error->message);
+		ch_refresh_result_add (priv->results, "label_display_latency", error->message);
 		g_clear_error (&error);
 	}
 
@@ -562,7 +560,7 @@ ch_refresh_update_coverage (ChRefreshMeasureHelper *helper)
 		g_warning ("failed to calculate gamma: %s", error->message);
 		goto out;
 	}
-	ch_refresh_ui_update_gamma (helper->priv->builder, gamma_y);
+	ch_refresh_result_set_gamma (helper->priv->results, gamma_y);
 
 	/* create virtual profile */
 	icc = cd_icc_new ();
@@ -614,8 +612,31 @@ ch_refresh_update_coverage (ChRefreshMeasureHelper *helper)
 		goto out;
 	}
 out:
-	ch_refresh_ui_update_srgb (helper->priv->builder, coverage_srgb);
-	ch_refresh_ui_update_adobergb (helper->priv->builder, coverage_adobergb);
+	ch_refresh_result_set_srgb (helper->priv->results, coverage_srgb);
+	ch_refresh_result_set_adobergb (helper->priv->results, coverage_adobergb);
+}
+
+/**
+ * ch_refresh_update_labels_from_results:
+ **/
+static void
+ch_refresh_update_labels_from_results (GtkBuilder *builder, GHashTable *results)
+{
+	GList *l;
+	GtkWidget *w;
+	const gchar *key;
+	const gchar *value;
+	_cleanup_list_free_ GList *keys = NULL;
+
+	keys = g_hash_table_get_keys (results);
+	for (l = keys; l != NULL; l = l->next) {
+		key = l->data;
+		if (!g_str_has_prefix (key, "label_"))
+			continue;
+		w = GTK_WIDGET (gtk_builder_get_object (builder, key));
+		value = g_hash_table_lookup (results, key);
+		gtk_label_set_markup (GTK_LABEL (w), value != NULL ? value : _("Unknown"));
+	}
 }
 
 /**
@@ -645,13 +666,14 @@ ch_refresh_ti3_take_readings_cb (GObject *source, GAsyncResult *res, gpointer us
 	if (++helper->sample_idx >= cd_it8_get_data_size (priv->it8_ti1)) {
 		/* calculate the native cct using the white patch */
 		tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 1.f, 1.f, 1.f, 0.01f);
-		ch_refresh_ui_update_cct (priv->builder, cd_color_xyz_to_cct (tmp));
-		ch_refresh_ui_update_lux_white (priv->builder, tmp->Y);
+		ch_refresh_result_set_cct (priv->results, cd_color_xyz_to_cct (tmp));
+		ch_refresh_result_set_lux_white (priv->results, tmp->Y);
 		tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 0.f, 0.f, 0.f, 0.01f);
-		ch_refresh_ui_update_lux_black (priv->builder, tmp->Y);
+		ch_refresh_result_set_lux_black (priv->results, tmp->Y);
 		ch_refresh_update_coverage (helper);
 		ch_refresh_get_data_from_sram (helper);
 		ch_refresh_update_ui (priv);
+		ch_refresh_update_labels_from_results (priv->builder, priv->results);
 		ch_refresh_update_cancel_buttons (priv, FALSE);
 		ch_refresh_update_page (priv, TRUE);
 		ch_refresh_measure_helper_free (helper);
@@ -752,6 +774,10 @@ ch_refresh_update_usb_latency (ChRefreshMeasureHelper *helper)
 					   helper->usb_latency * 1000,
 					   usb_jitter * 1000);
 	gtk_label_set_markup (GTK_LABEL (w), usb_latency_str);
+
+	/* update results */
+	ch_refresh_result_add (helper->priv->results,
+			       "label_usb_latency", usb_latency_str);
 }
 
 /**
@@ -912,6 +938,9 @@ ch_refresh_device_connect_cb (GObject *source, GAsyncResult *res, gpointer user_
 				     helper->cancellable,
 				     ch_refresh_device_profiling_inhibit_cb,
 				     helper);
+
+	/* save results */
+	ch_refresh_result_add (helper->priv->results, "title", helper->title);
 }
 
 /**
@@ -972,22 +1001,117 @@ ch_refresh_refresh_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
  * ch_refresh_update_title:
  **/
 static void
-ch_refresh_update_title (ChRefreshPrivate *priv, GFile *file)
+ch_refresh_update_title (ChRefreshPrivate *priv, const gchar *filename)
 {
 	GtkWidget *w;
 	_cleanup_free_ gchar *title = NULL;
 
-	if (file == NULL) {
+	if (filename == NULL) {
 		title = g_strdup ("ColorHug Display Analysis");
 	} else {
 		_cleanup_free_ gchar *basename = NULL;
-		basename = g_file_get_basename (file);
+		basename = g_path_get_basename (filename);
 		title = g_strdup_printf ("ColorHug Display Analysis — %s", basename);
 	}
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
 	gtk_window_set_title (GTK_WINDOW (w), title);
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_csd_title"));
 	gtk_label_set_label (GTK_LABEL (w), title);
+}
+
+/**
+ * ch_refresh_export_html_file:
+ **/
+static gboolean
+ch_refresh_export_html_file (ChRefreshPrivate *priv, const gchar *filename, GError **error)
+{
+	GString *html;
+	GtkAllocation size;
+	guint i;
+	const gchar *tmp;
+	_cleanup_free_ gchar *svg_data = NULL;
+	const gchar *keys[] = { "label_display_latency",	_("Display"),
+				"label_rise",			_("Black-to-White"),
+				"label_fall",			_("White-to-Black"),
+				"label_usb_latency",		_("USB"),
+				"label_refresh",		_("Refresh Rate"),
+				"label_cct",			_("Color Temperature"),
+				"label_lux_white",		_("White Luminance"),
+				"label_lux_black",		_("Black Luminance"),
+				"label_coverage_srgb",		_("sRGB Coverage"),
+				"label_coverage_adobergb",	_("AdobeRGB Coverage"),
+				"label_gamma",			_("Native Gamma"),
+				NULL };
+
+	/* write header */
+	html = g_string_new ("");
+	g_string_append (html, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 "
+			       "Transitional//EN\" "
+			       "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n");
+	g_string_append (html, "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n");
+	g_string_append (html, "<head>\n");
+	g_string_append (html, "<meta http-equiv=\"Content-Type\" content=\"text/html; "
+			       "charset=UTF-8\" />\n");
+	tmp = g_hash_table_lookup (priv->results, "title");
+	if (tmp == NULL)
+		tmp = filename;
+	g_string_append_printf (html, "<title>%s</title>\n", tmp);
+
+	/* write CSS */
+	g_string_append (html, "<style>\n");
+	g_string_append (html, "#results {\n");
+	g_string_append (html, "    width: 800px;\n");
+	g_string_append (html, "    margin: 0 auto; \n");
+	g_string_append (html, "}\n");
+	g_string_append (html, "td.key {\n");
+	g_string_append (html, "    text-align: right;\n");
+	g_string_append (html, "    color: #777777;\n");
+	g_string_append (html, "}\n");
+	g_string_append (html, "td {\n");
+	g_string_append (html, "    padding: 5px;\n");
+	g_string_append (html, "}\n");
+	g_string_append (html, "body {\n");
+	g_string_append (html, "    margin-left: 5%;\n");
+	g_string_append (html, "    margin-right: 5%;\n");
+	g_string_append (html, "    font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;\n");
+	g_string_append (html, "}\n");
+	g_string_append (html, "</style>\n");
+	g_string_append (html, "</head>\n");
+	g_string_append (html, "<body>\n");
+
+	/* write results */
+	g_string_append (html, "<div id=\"results\">\n");
+	g_string_append (html, "<h1>Your Score<h1>\n");
+	tmp = g_hash_table_lookup (priv->results, "title");
+	if (tmp != NULL)
+		g_string_append_printf (html, "<h2>%s<h2>\n", tmp);
+	g_string_append (html, "</div>\n");
+	g_string_append (html, "<div id=\"graph\">\n");
+	gtk_widget_get_allocation (priv->graph, &size);
+	svg_data = ch_graph_widget_export_to_svg (CH_GRAPH_WIDGET (priv->graph),
+						  size.width, size.height);
+	g_string_append (html, svg_data);
+	g_string_append (html, "</div\n");
+	g_string_append (html, "<div id=\"results\">\n");
+	g_string_append (html, "<table>\n");
+	for (i = 0; keys[i] != NULL; i += 2) {
+		tmp = g_hash_table_lookup (priv->results, keys[i]);
+		if (tmp == NULL)
+			continue;
+		g_string_append_printf (html,
+					"<tr>"
+					"<td class=\"key\">%s</td>"
+					"<td class=\"value\">%s</td>"
+					"</tr>\n",
+					keys[i + 1], tmp);
+	}
+	g_string_append (html, "</table>\n");
+	g_string_append (html, "</div>\n");
+
+	/* write footer */
+	g_string_append (html, "</body>\n");
+	g_string_append (html, "</html>\n");
+	return g_file_set_contents (filename, html->str, -1, NULL);
 }
 
 /**
@@ -1002,89 +1126,29 @@ ch_refresh_export_activated_cb (GSimpleAction *action, GVariant *parameter, gpoi
 	GtkWidget *w;
 	const gchar *title;
 	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_object_unref_ GFile *file = NULL;
+	_cleanup_free_ gchar *filename = NULL;
 
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
-	d = gtk_file_chooser_dialog_new (_("Export data file"),
+	d = gtk_file_chooser_dialog_new (_("Export results"),
 					 GTK_WINDOW (w),
 					 GTK_FILE_CHOOSER_ACTION_SAVE,
 					 _("Cancel"), GTK_RESPONSE_CANCEL,
 					 _("Export"), GTK_RESPONSE_ACCEPT,
 					 NULL);
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (d), TRUE);
-	gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (d), "export.ccss");
+	gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (d), "export.html");
 	filter = gtk_file_filter_new ();
-	gtk_file_filter_set_name (filter, "CCSS files");
-	gtk_file_filter_add_pattern (filter, "*.ccss");
+	gtk_file_filter_set_name (filter, "HTML files");
+	gtk_file_filter_add_pattern (filter, "*.html");
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (d), filter);
 	if (gtk_dialog_run (GTK_DIALOG (d)) == GTK_RESPONSE_ACCEPT) {
-		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (d));
-		if (!cd_it8_save_to_file (priv->samples, file, &error)) {
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (d));
+		if (!ch_refresh_export_html_file (priv, filename, &error)) {
 			/* TRANSLATORS: permissions error perhaps? */
 			title = _("Failed to get save file");
 			ch_refresh_error_dialog (priv, title, error->message);
 		} else {
-			ch_refresh_update_title (priv, file);
-		}
-	}
-	gtk_widget_destroy (d);
-}
-
-/**
- * ch_refresh_normalize_channels:
- **/
-static void
-ch_refresh_normalize_channels (ChRefreshPrivate *priv)
-{
-	CdSpectrum *sp;
-	const gchar *ids[] = { "X", "Y", "Z", NULL };
-	guint j;
-
-	/* normalize all channels */
-	for (j = 0; j < 3; j++) {
-		sp = cd_it8_get_spectrum_by_id (priv->samples, ids[j]);
-		cd_spectrum_normalize_max (sp, 1.f);
-	}
-}
-
-
-/**
- * ch_refresh_import_activated_cb:
- **/
-static void
-ch_refresh_import_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
-{
-	ChRefreshPrivate *priv = (ChRefreshPrivate *) user_data;
-	GtkFileFilter *filter = NULL;
-	GtkWidget *d;
-	GtkWidget *w;
-	const gchar *title;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_object_unref_ GFile *file = NULL;
-
-	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
-	d = gtk_file_chooser_dialog_new (_("Import data file"),
-					 GTK_WINDOW (w),
-					 GTK_FILE_CHOOSER_ACTION_SAVE,
-					 _("Cancel"), GTK_RESPONSE_CANCEL,
-					 _("Import"), GTK_RESPONSE_ACCEPT,
-					 NULL);
-	filter = gtk_file_filter_new ();
-	filter = gtk_file_filter_new ();
-	gtk_file_filter_set_name (filter, "CCSS files");
-	gtk_file_filter_add_pattern (filter, "*.ccss");
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (d), TESTDATADIR);
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (d), filter);
-	if (gtk_dialog_run (GTK_DIALOG (d)) == GTK_RESPONSE_ACCEPT) {
-		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (d));
-		if (!cd_it8_load_from_file (priv->samples, file, &error)) {
-			/* TRANSLATORS: permissions error perhaps? */
-			title = _("Failed to get import file");
-			ch_refresh_error_dialog (priv, title, error->message);
-		} else {
-			ch_refresh_update_title (priv, file);
-			ch_refresh_normalize_channels (priv);
-			ch_refresh_update_ui (priv);
+			ch_refresh_update_title (priv, filename);
 		}
 	}
 	gtk_widget_destroy (d);
@@ -1230,7 +1294,6 @@ ch_refresh_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpoint
 
 static GActionEntry actions[] = {
 	{ "about", ch_refresh_about_activated_cb, NULL, NULL, NULL },
-	{ "import", ch_refresh_import_activated_cb, NULL, NULL, NULL },
 	{ "export", ch_refresh_export_activated_cb, NULL, NULL, NULL },
 	{ "quit", ch_refresh_quit_activated_cb, NULL, NULL, NULL },
 };
@@ -1442,6 +1505,7 @@ main (int argc, char **argv)
 	priv->settings = g_settings_new ("com.hughski.ColorHug.DisplayAnalysis");
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->client = cd_client_new ();
+	priv->results = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 	priv->device_queue = ch_device_queue_new ();
 	g_signal_connect (priv->usb_ctx, "device-added",
 			  G_CALLBACK (ch_refresh_device_added_cb), priv);
@@ -1507,6 +1571,7 @@ main (int argc, char **argv)
 	if (priv->settings != NULL)
 		g_object_unref (priv->settings);
 	g_object_unref (priv->it8_ti1);
+	g_hash_table_unref (priv->results);
 	g_free (priv);
 	return status;
 }

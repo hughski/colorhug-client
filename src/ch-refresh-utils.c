@@ -358,122 +358,116 @@ ch_refresh_remove_pwm (CdSpectrum *sp, GError **error)
 	return TRUE;
 }
 
-
 /**
- * ch_refresh_ui_update_cct:
+ * ch_refresh_result_add:
  **/
 void
-ch_refresh_ui_update_cct (GtkBuilder *builder, gdouble value)
+ch_refresh_result_add (GHashTable *results, const gchar *key, const gchar *value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_cct"));
-	if (value > 0.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%uK</b>", (((guint) value) / 100) * 100);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Invalid"));
-	}
+	g_hash_table_insert (results, g_strdup (key), g_strdup (value));
 }
 
 /**
- * ch_refresh_ui_update_lux_white:
+ * ch_refresh_result_set_cct:
  **/
 void
-ch_refresh_ui_update_lux_white (GtkBuilder *builder, gdouble value)
+ch_refresh_result_set_cct (GHashTable *results, gdouble value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_lux_white"));
-	if (value > 0.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%.1f cd/m²</b>", value);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Invalid"));
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_cct");
+		return;
 	}
+	str = g_strdup_printf ("<b>%uK</b>", (((guint) value) / 100) * 100);
+	ch_refresh_result_add (results, "label_cct", str);
 }
 
 /**
- * ch_refresh_ui_update_lux_black:
+ * ch_refresh_result_set_lux_white:
  **/
 void
-ch_refresh_ui_update_lux_black (GtkBuilder *builder, gdouble value)
+ch_refresh_result_set_lux_white (GHashTable *results, gdouble value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_lux_black"));
-	if (value > 0.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%.1f cd/m²</b>", value);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Invalid"));
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_lux_white");
+		return;
 	}
+	str = g_strdup_printf ("<b>%.1f cd/m²</b>", value);
+	ch_refresh_result_add (results, "label_lux_white", str);
 }
 
 /**
- * ch_refresh_ui_update_srgb:
+ * ch_refresh_result_set_lux_black:
  **/
 void
-ch_refresh_ui_update_srgb (GtkBuilder *builder, gdouble value)
+ch_refresh_result_set_lux_black (GHashTable *results, gdouble value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_coverage_srgb"));
-	if (value > 0.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%.0f%%</b>", value * 100.f);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Invalid"));
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_lux_black");
+		return;
 	}
+	str = g_strdup_printf ("<b>%.1f cd/m²</b>", value);
+	ch_refresh_result_add (results, "label_lux_black", str);
 }
 
 /**
- * ch_refresh_ui_update_adobergb:
+ * ch_refresh_result_set_srgb:
  **/
 void
-ch_refresh_ui_update_adobergb (GtkBuilder *builder, gdouble value)
+ch_refresh_result_set_srgb (GHashTable *results, gdouble value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_coverage_adobergb"));
-	if (value > 0.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%.0f%%</b>", value * 100.f);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Invalid"));
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_coverage_srgb");
+		return;
 	}
+	str = g_strdup_printf ("<b>%.0f%%</b>", value * 100.f);
+	ch_refresh_result_add (results, "label_coverage_srgb", str);
 }
 
 /**
- * ch_refresh_ui_update_refresh:
+ * ch_refresh_result_set_adobergb:
  **/
 void
-ch_refresh_ui_update_refresh (GtkBuilder *builder, gdouble value)
+ch_refresh_result_set_adobergb (GHashTable *results, gdouble value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_refresh"));
-	if (value > 1.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%.0f Hz</b>", value);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Unknown"));
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_coverage_adobergb");
+		return;
 	}
+	str = g_strdup_printf ("<b>%.0f%%</b>", value * 100.f);
+	ch_refresh_result_add (results, "label_coverage_adobergb", str);
 }
 
 /**
- * ch_refresh_ui_update_gamma:
+ * ch_refresh_result_set_refresh:
  **/
 void
-ch_refresh_ui_update_gamma (GtkBuilder *builder, gdouble value)
+ch_refresh_result_set_refresh (GHashTable *results, gdouble value)
 {
-	GtkWidget *w;
-	w = GTK_WIDGET (gtk_builder_get_object (builder, "label_gamma"));
-	if (value > 1.f) {
-		_cleanup_free_ gchar *str = NULL;
-		str = g_strdup_printf ("<b>%.2f</b>", value);
-		gtk_label_set_markup (GTK_LABEL (w), str);
-	} else {
-		gtk_label_set_label (GTK_LABEL (w), _("Unknown"));
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_refresh");
+		return;
 	}
+	str = g_strdup_printf ("<b>%.0f Hz</b>", value);
+	ch_refresh_result_add (results, "label_refresh", str);
+}
+
+/**
+ * ch_refresh_result_set_gamma:
+ **/
+void
+ch_refresh_result_set_gamma (GHashTable *results, gdouble value)
+{
+	_cleanup_free_ gchar *str = NULL;
+	if (value <= 0.f) {
+		g_hash_table_remove (results, "label_gamma");
+		return;
+	}
+	str = g_strdup_printf ("<b>%.2f</b>", value);
+	ch_refresh_result_add (results, "label_gamma", str);
 }

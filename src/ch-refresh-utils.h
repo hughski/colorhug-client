@@ -50,19 +50,22 @@ gdouble		 ch_refresh_calc_average	(const gdouble		*data,
 gdouble		 ch_refresh_calc_jitter		(const gdouble		*data,
 						 guint			 data_len);
 
-void		 ch_refresh_ui_update_cct	(GtkBuilder		*builder,
+void		 ch_refresh_result_add		(GHashTable		*results,
+						 const gchar		*key,
+						 const gchar		*value);
+void		 ch_refresh_result_set_cct	(GHashTable		*results,
 						 gdouble		 value);
-void		 ch_refresh_ui_update_lux_white	(GtkBuilder		*builder,
+void		 ch_refresh_result_set_lux_white(GHashTable		*results,
 						 gdouble		 value);
-void		 ch_refresh_ui_update_lux_black	(GtkBuilder		*builder,
+void		 ch_refresh_result_set_lux_black(GHashTable		*results,
 						 gdouble		 value);
-void		 ch_refresh_ui_update_srgb	(GtkBuilder		*builder,
+void		 ch_refresh_result_set_srgb	(GHashTable		*results,
 						 gdouble		 value);
-void		 ch_refresh_ui_update_adobergb	(GtkBuilder		*builder,
+void		 ch_refresh_result_set_adobergb	(GHashTable		*results,
 						 gdouble		 value);
-void		 ch_refresh_ui_update_refresh	(GtkBuilder		*builder,
+void		 ch_refresh_result_set_refresh	(GHashTable		*results,
 						 gdouble		 value);
-void		 ch_refresh_ui_update_gamma	(GtkBuilder		*builder,
+void		 ch_refresh_result_set_gamma	(GHashTable		*results,
 						 gdouble		 value);
 
 G_END_DECLS

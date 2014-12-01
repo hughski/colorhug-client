@@ -25,7 +25,9 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cairo-svg.h>
 
+#include "ch-cleanup.h"
 #include "ch-point-obj.h"
 #include "ch-graph-widget.h"
 
@@ -730,6 +732,43 @@ ch_graph_widget_draw (GtkWidget *widget, cairo_t *cr)
 
 	cairo_restore (cr);
 	return FALSE;
+}
+
+/**
+ * ch_graph_widget_export_to_svg_cb:
+ **/
+static cairo_status_t
+ch_graph_widget_export_to_svg_cb (void *user_data, const unsigned char *data, unsigned int length)
+{
+	GString *str = (GString *) user_data;
+	_cleanup_free_ gchar *tmp = NULL;
+
+	tmp = g_strndup ((const gchar *) data, length);
+	g_string_append (str, tmp);
+	return CAIRO_STATUS_SUCCESS;
+}
+
+/**
+ * ch_graph_widget_export_to_svg:
+ **/
+gchar *
+ch_graph_widget_export_to_svg (ChGraphWidget *graph, guint width, guint height)
+{
+	GString *str;
+	cairo_surface_t *surface;
+	cairo_t *ctx;
+
+	g_return_val_if_fail (CH_IS_GRAPH_WIDGET (graph), FALSE);
+
+	/* write the SVG data to a string */
+	str = g_string_new ("");
+	surface = cairo_svg_surface_create_for_stream (ch_graph_widget_export_to_svg_cb,
+						       str, width, height);
+	ctx = cairo_create (surface);
+	ch_graph_widget_draw (GTK_WIDGET (graph), ctx);
+	cairo_surface_destroy (surface);
+	cairo_destroy (ctx);
+	return g_string_free (str, FALSE);
 }
 
 /**

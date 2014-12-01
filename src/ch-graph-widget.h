@@ -72,6 +72,9 @@ struct ChGraphWidgetClass
 GType		 ch_graph_widget_get_type		(void);
 GtkWidget	*ch_graph_widget_new			(void);
 
+gchar		*ch_graph_widget_export_to_svg		(ChGraphWidget		*graph,
+							 guint			 width,
+							 guint			 height);
 gboolean	 ch_graph_widget_clear			(ChGraphWidget		*graph);
 gboolean	 ch_graph_widget_assign			(ChGraphWidget		*graph,
 							 ChGraphWidgetPlot	 plot,

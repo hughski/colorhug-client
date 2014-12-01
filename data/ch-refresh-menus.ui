@@ -4,10 +4,6 @@
   <menu id="app-menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">_Import results…</attribute>
-        <attribute name="action">app.import</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">_Export results…</attribute>
         <attribute name="action">app.export</attribute>
       </item>
