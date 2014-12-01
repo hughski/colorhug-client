@@ -1333,7 +1333,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		/* TRANSLATORS: could not download the directory listing */
-		title = _("Failed to get the list of firmware files");
+		title = _("Failed to get the list of CCMX files");
 		ch_ccmx_error_dialog (priv, title, soup_status_get_phrase (msg->status_code));
 		return;
 	}
