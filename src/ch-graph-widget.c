@@ -603,12 +603,11 @@ ch_graph_widget_draw_dot (cairo_t *cr, gdouble x, gdouble y, guint32 color)
 static void
 ch_graph_widget_draw_line (ChGraphWidget *graph, cairo_t *cr)
 {
-	gdouble oldx, oldy;
-	gdouble newx, newy;
 	GPtrArray *data;
 	GPtrArray *array;
 	ChGraphWidgetPlot plot;
 	ChPointObj *point;
+	gdouble x, y;
 	guint i, j;
 
 	if (graph->priv->data_list->len == 0) {
@@ -628,48 +627,61 @@ ch_graph_widget_draw_line (ChGraphWidget *graph, cairo_t *cr)
 
 		/* get the very first point so we can work out the old */
 		point = (ChPointObj *) g_ptr_array_index (data, 0);
-		oldx = 0;
-		oldy = 0;
-		ch_graph_widget_get_pos_on_graph (graph, point->x, point->y, &oldx, &oldy);
-		if (plot == CH_GRAPH_WIDGET_PLOT_POINTS || plot == CH_GRAPH_WIDGET_PLOT_BOTH)
-			ch_graph_widget_draw_dot (cr, oldx, oldy, point->color);
+		x = 0;
+		y = 0;
+		ch_graph_widget_get_pos_on_graph (graph, point->x, point->y, &x, &y);
 
-		for (i = 1; i < data->len; i++) {
-			point = (ChPointObj *) g_ptr_array_index (data, i);
+		/* plot points */
+		if (plot == CH_GRAPH_WIDGET_PLOT_POINTS || plot == CH_GRAPH_WIDGET_PLOT_BOTH) {
+			ch_graph_widget_draw_dot (cr, x, y, point->color);
+			for (i = 1; i < data->len; i++) {
+				point = (ChPointObj *) g_ptr_array_index (data, i);
+				ch_graph_widget_get_pos_on_graph (graph, point->x, point->y, &x, &y);
+				ch_graph_widget_draw_dot (cr, x, y, point->color);
+			}
+		}
 
-			ch_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
+		/* plot lines */
+		if (plot == CH_GRAPH_WIDGET_PLOT_LINE || plot == CH_GRAPH_WIDGET_PLOT_BOTH) {
 
-			/* ignore anything out of range */
-			if (point->x < graph->priv->start_x || point->x > graph->priv->stop_x) {
+			guint32 old_color = 0xffffff;
+			cairo_set_line_width (cr, 1.5);
+
+			for (i = 1; i < data->len; i++) {
+				point = (ChPointObj *) g_ptr_array_index (data, i);
+
+				/* ignore anything out of range */
+				if (point->x < graph->priv->start_x ||
+				    point->x > graph->priv->stop_x) {
+					continue;
+				}
+
+				/* ignore white lines */
+				if (point->color == 0xffffff)
+					continue;
+
+				/* is graph color the same */
 				ch_graph_widget_get_pos_on_graph (graph,
-								  point->x, point->y,
-								  &oldx, &oldy);
-				continue;
-			}
+								  point->x,
+								  point->y,
+								  &x, &y);
+				if (point->color == old_color) {
+					cairo_line_to (cr, x, y);
+					continue;
+				}
 
-			/* ignore white lines */
-			if (point->color == 0xffffff) {
-				oldx = newx;
-				oldy = newy;
-				continue;
-			}
+				/* finish previous line */
+				if (i != 1)
+					cairo_stroke (cr);
 
-			/* draw line */
-			if (plot == CH_GRAPH_WIDGET_PLOT_LINE || plot == CH_GRAPH_WIDGET_PLOT_BOTH) {
-				cairo_move_to (cr, oldx, oldy);
-				cairo_line_to (cr, newx, newy);
-				cairo_set_line_width (cr, 1.5);
+				/* start new color line */
+				old_color = point->color;
+				cairo_move_to (cr, x, y);
 				ch_graph_widget_set_color (cr, point->color);
-				cairo_stroke (cr);
 			}
 
-			/* draw data dot */
-			if (plot == CH_GRAPH_WIDGET_PLOT_POINTS || plot == CH_GRAPH_WIDGET_PLOT_BOTH)
-				ch_graph_widget_draw_dot (cr, newx, newy, point->color);
-
-			/* save old */
-			oldx = newx;
-			oldy = newy;
+			/* finish current line */
+			cairo_stroke (cr);
 		}
 	}
 
