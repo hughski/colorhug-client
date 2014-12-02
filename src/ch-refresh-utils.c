@@ -408,7 +408,7 @@ ch_refresh_result_set_lux_black (GHashTable *results, gdouble value)
 		g_hash_table_remove (results, "label_lux_black");
 		return;
 	}
-	str = g_strdup_printf ("<b>%.1f cd/m²</b>", value);
+	str = g_strdup_printf ("<b>%.2f cd/m²</b>", value);
 	ch_refresh_result_add (results, "label_lux_black", str);
 }
 
