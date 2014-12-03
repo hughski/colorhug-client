@@ -180,6 +180,10 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         cppflags:                  ${CPPFLAGS}
-        windres:                   ${WINDRES}
-        icotool:                   ${ICOTOOL}
 "
+if test x$enable_unix = xno; then
+	echo "
+		windres:                   ${WINDRES}
+		icotool:                   ${ICOTOOL}
+	"
+fi

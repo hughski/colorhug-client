@@ -141,20 +141,6 @@ colorhug_ccmx_LDADD += ch-ccmx-rc.$(OBJEXT)
 colorhug_ccmx_DEPENDENCIES = ch-ccmx-rc.$(OBJEXT)
 endif
 
-if HAVE_UNIX
-libexec_PROGRAMS =					\
-	colorhug-inhx32-to-bin
-colorhug_inhx32_to_bin_SOURCES =			\
-	ch-cleanup.h					\
-	ch-inhx32-to-bin.c
-colorhug_inhx32_to_bin_LDADD =				\
-	$(GLIB_LIBS)					\
-	$(COLORHUG_LIBS)				\
-	-lm
-colorhug_inhx32_to_bin_CFLAGS =				\
-	$(WARNINGFLAGS_C)
-endif
-
 colorhug_refresh_SOURCES =				\
 	ch-cleanup.h					\
 	ch-graph-widget.c				\

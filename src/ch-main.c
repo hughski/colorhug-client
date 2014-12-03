@@ -2290,6 +2290,37 @@ ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error
 }
 
 /**
+ * ch_util_inhx32_to_bin:
+ **/
+static gboolean
+ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gsize len = 0;
+	_cleanup_free_ gchar *data = NULL;
+	_cleanup_free_ guint8 *out = NULL;
+
+	/* parse */
+	if (g_strv_length (values) != 2 ||
+	    !g_str_has_suffix (values[0], ".hex") ||
+	    !g_str_has_suffix (values[1], ".bin")) {
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'foo.hex', 'bar.bin'");
+		return FALSE;
+	}
+
+	/* load file */
+	if (!g_file_get_contents (values[0], &data, &len, error))
+		return FALSE;
+
+	/* convert */
+	if (!ch_inhx32_to_bin (data, &out, &len, error))
+		return FALSE;
+
+	/* save file */
+	return g_file_set_contents (values[1], (const gchar *) out, len, error);
+}
+
+/**
  * ch_util_set_ccd_calibration:
  **/
 static gboolean
@@ -3147,6 +3178,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the CCD calibration values"),
 		     ch_util_set_ccd_calibration);
+	ch_util_add (priv->cmd_array,
+		     "inhx32-to-bin",
+		     /* TRANSLATORS: command description */
+		     _("Converts Intel HEX to BIN"),
+		     ch_util_inhx32_to_bin);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
