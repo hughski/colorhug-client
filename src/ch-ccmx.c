@@ -486,13 +486,20 @@ ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 }
 
 /**
- * ch_ccmx_get_device_download_kind:
+ * _ch_device_get_download_id:
+ * @device: the #GUsbDevice
+ *
+ * Returns the string identifier to use for the device type.
+ *
+ * Return value: string, e.g. "colorhug2"
+ *
+ * Since: x.x.x
  **/
 static const gchar *
-ch_ccmx_get_device_download_kind (ChCcmxPrivate *priv)
+_ch_device_get_download_id (GUsbDevice *device)
 {
 	const char *str = NULL;
-	switch (ch_device_get_mode (priv->device)) {
+	switch (ch_device_get_mode (device)) {
 	case CH_DEVICE_MODE_LEGACY:
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_FIRMWARE:
@@ -507,7 +514,6 @@ ch_ccmx_get_device_download_kind (ChCcmxPrivate *priv)
 		str = "colorhug-plus";
 		break;
 	default:
-		str = "unknown";
 		break;
 	}
 	return str;
@@ -542,7 +548,7 @@ ch_ccmx_get_serial_number_cb (GObject *source,
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	uri = g_strdup_printf ("%s/%s/%s/calibration-%06i.ccmx",
 			       server_uri,
-			       ch_ccmx_get_device_download_kind (priv),
+			       _ch_device_get_download_id (priv->device),
 			       "archive",
 			       priv->serial_number);
 	base_uri = soup_uri_new (uri);
@@ -1370,7 +1376,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 			_cleanup_free_ gchar *uri_tmp = NULL;
 			uri_tmp = g_build_path ("/",
 						server_uri,
-						ch_ccmx_get_device_download_kind (priv),
+						_ch_device_get_download_id (priv->device),
 						"ccmx",
 						lines[i],
 						NULL);
@@ -1959,7 +1965,7 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
 	uri = g_build_path ("/",
 			    server_uri,
-			    ch_ccmx_get_device_download_kind (priv),
+			    _ch_device_get_download_id (priv->device),
 			    "ccmx",
 			    "INDEX",
 			    NULL);
