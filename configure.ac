@@ -96,14 +96,19 @@ PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(COLORHUG, colorhug >= 1.2.3)
 
 dnl ---------------------------------------------------------------------------
-dnl - Build sound support
+dnl - Sound effects using libcanberra are optional
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(sound, AS_HELP_STRING([--enable-sound],[Enable sound]),
-	      enable_sound=$enableval, enable_sound=yes)
-if test x$enable_sound != xno; then
-	PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
+PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10,
+		  have_canberra=yes, have_canberra=no)
+if test x$have_canberra = xyes; then
 	AC_DEFINE(HAVE_CANBERRA,1,[whether libcanberra-gtk3 is available])
 fi
+
+dnl ---------------------------------------------------------------------------
+dnl - Check Linux-specific dependencies
+dnl ---------------------------------------------------------------------------
+AC_CHECK_DEFINE([__unix__], enable_unix="yes", enable_unix="no")
+AM_CONDITIONAL(HAVE_UNIX, test x$enable_unix = xyes)
 
 dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files

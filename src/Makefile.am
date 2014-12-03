@@ -38,9 +38,6 @@ colorhug_spectro_util_LDADD =				\
 colorhug_spectro_util_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
-libexec_PROGRAMS =					\
-	colorhug-inhx32-to-bin
-
 bin_PROGRAMS =						\
 	colorhug-ccmx					\
 	colorhug-cmd					\
@@ -144,17 +141,19 @@ colorhug_ccmx_LDADD += ch-ccmx-rc.$(OBJEXT)
 colorhug_ccmx_DEPENDENCIES = ch-ccmx-rc.$(OBJEXT)
 endif
 
+if HAVE_UNIX
+libexec_PROGRAMS =					\
+	colorhug-inhx32-to-bin
 colorhug_inhx32_to_bin_SOURCES =			\
 	ch-cleanup.h					\
 	ch-inhx32-to-bin.c
-
 colorhug_inhx32_to_bin_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(COLORHUG_LIBS)				\
 	-lm
-
 colorhug_inhx32_to_bin_CFLAGS =				\
 	$(WARNINGFLAGS_C)
+endif
 
 colorhug_refresh_SOURCES =				\
 	ch-cleanup.h					\
@@ -234,9 +233,11 @@ EXTRA_DIST =						\
 MAINTAINERCLEANFILES =					\
 	$(srcdir)/libchshared.a
 
+if HAVE_UNIX
 install-data-hook:
 	mkdir -p $(DESTDIR)$(libexecdir);
 	ln -fs $(bindir)/colorhug-cmd $(DESTDIR)$(libexecdir)/colorhug;
+endif
 
 TESTS_ENVIRONMENT =						\
 	libtool --mode=execute valgrind				\

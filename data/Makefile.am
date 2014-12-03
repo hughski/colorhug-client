@@ -2,6 +2,7 @@ SUBDIRS = 						\
 	icons						\
 	tests
 
+if HAVE_UNIX
 bashcompletiondir = ${SYSCONFDIR}/bash_completion.d
 dist_bashcompletion_DATA = colorhug-cmd-completion.bash
 
@@ -18,16 +19,19 @@ desktop_in_files =					\
 	com.hughski.ColorHug.FlashLoader.desktop.in	\
 	com.hughski.ColorHug.SpectroUtil.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+endif
 
 @GSETTINGS_RULES@
 gsettings_SCHEMAS = com.hughski.colorhug-client.gschema.xml
 
+if HAVE_UNIX
 @INTLTOOL_XML_RULE@
 appdatadir = $(datadir)/appdata
 appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 appdata_in_files =					\
 	com.hughski.ColorHug.CcmxLoader.appdata.xml.in	\
 	com.hughski.ColorHug.FlashLoader.appdata.xml.in
+endif
 
 UI_FILES =						\
 	ch-spectro-util.ui				\

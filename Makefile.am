@@ -2,7 +2,11 @@ AUTOMAKE_OPTIONS = 1.7
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = po man data help
+SUBDIRS = po data
+
+if HAVE_UNIX
+SUBDIRS += man help
+endif
 
 SUBDIRS += src
 
