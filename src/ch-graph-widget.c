@@ -78,6 +78,7 @@ enum
 	PROP_START_Y,
 	PROP_STOP_X,
 	PROP_STOP_Y,
+	PROP_LAST
 };
 
 /**
@@ -770,7 +771,7 @@ ch_graph_widget_export_to_svg (ChGraphWidget *graph, guint width, guint height)
 	cairo_surface_t *surface;
 	cairo_t *ctx;
 
-	g_return_val_if_fail (CH_IS_GRAPH_WIDGET (graph), FALSE);
+	g_return_val_if_fail (CH_IS_GRAPH_WIDGET (graph), NULL);
 
 	/* write the SVG data to a string */
 	str = g_string_new ("");

@@ -1903,7 +1903,7 @@ ch_util_get_default_device (GError **error)
 	_cleanup_object_unref_ GUsbDevice *device = NULL;
 	_cleanup_ptrarray_unref_ GPtrArray *devices = NULL;
 
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	/* try to find the ColorHug device */
 	usb_ctx = g_usb_context_new (NULL);

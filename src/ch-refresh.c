@@ -1295,7 +1295,7 @@ ch_refresh_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpoint
 static GActionEntry actions[] = {
 	{ "about", ch_refresh_about_activated_cb, NULL, NULL, NULL },
 	{ "export", ch_refresh_export_activated_cb, NULL, NULL, NULL },
-	{ "quit", ch_refresh_quit_activated_cb, NULL, NULL, NULL },
+	{ "quit", ch_refresh_quit_activated_cb, NULL, NULL, NULL }
 };
 
 /**

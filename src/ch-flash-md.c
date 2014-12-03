@@ -36,6 +36,7 @@ typedef enum {
 	CH_FLASH_MD_POS_CHANGELOG,
 	CH_FLASH_MD_POS_INFO,
 	CH_FLASH_MD_POS_WARNING,
+	CH_FLASH_MD_POS_LAST
 } ChFlashMdPos;
 
 typedef struct {
