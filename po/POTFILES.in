@@ -3,14 +3,12 @@
 [type: gettext/glade]data/ch-flash.ui
 [type: gettext/glade]data/ch-refresh.ui
 [type: gettext/glade]data/ch-refresh-menus.ui
-[type: gettext/glade]data/ch-spectro-util.ui
 data/colorhug-docs.desktop.in
 data/com.hughski.ColorHug.CcmxLoader.appdata.xml.in
 data/com.hughski.ColorHug.CcmxLoader.desktop.in
 data/com.hughski.ColorHug.DisplayAnalysis.desktop.in
 data/com.hughski.ColorHug.FlashLoader.appdata.xml.in
 data/com.hughski.ColorHug.FlashLoader.desktop.in
-data/com.hughski.ColorHug.SpectroUtil.desktop.in
 data/com.hughski.colorhug-client.gschema.xml
 src/ch-ccmx.c
 src/ch-flash.c
@@ -18,4 +16,3 @@ src/ch-graph-widget.c
 src/ch-main.c
 src/ch-refresh.c
 src/ch-refresh-utils.c
-src/ch-spectro-util.c

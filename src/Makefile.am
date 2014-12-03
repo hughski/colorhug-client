@@ -14,30 +14,6 @@ AM_CPPFLAGS =						\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DLOCALEDIR=\""$(localedir)"\"
 
-noinst_PROGRAMS =					\
-	colorhug-spectro-util
-
-colorhug_spectro_util_SOURCES =				\
-	ch-graph-widget.c				\
-	ch-graph-widget.h				\
-	ch-point-obj.c					\
-	ch-point-obj.h					\
-	ch-spectro-resources.c				\
-	ch-spectro-resources.h				\
-	ch-spectro-util.c
-
-colorhug_spectro_util_LDADD =				\
-	$(COLORD_LIBS)					\
-	$(COLORD_GTK_LIBS)				\
-	$(GUSB_LIBS)					\
-	$(GLIB_LIBS)					\
-	$(GTK_LIBS)					\
-	$(COLORHUG_LIBS)				\
-	-lm
-
-colorhug_spectro_util_CFLAGS =				\
-	$(WARNINGFLAGS_C)
-
 bin_PROGRAMS =						\
 	colorhug-ccmx					\
 	colorhug-cmd					\
@@ -190,11 +166,6 @@ ch-ccmx-resources.c: colorhug-ccmx.gresource.xml ../data/ch-ccmx.ui
 ch-ccmx-resources.h: colorhug-ccmx.gresource.xml
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-ccmx.gresource.xml
 
-ch-spectro-resources.c: colorhug-spectro.gresource.xml ../data/ch-spectro-util.ui
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-spectro.gresource.xml
-ch-spectro-resources.h: colorhug-spectro.gresource.xml
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-spectro.gresource.xml
-
 ch-refresh-resources.c: colorhug-refresh.gresource.xml ../data/ch-refresh.ui ../data/ch-refresh-menus.ui
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-refresh.gresource.xml
 ch-refresh-resources.h: colorhug-refresh.gresource.xml
@@ -206,15 +177,12 @@ BUILT_SOURCES =						\
 	ch-flash-resources.c				\
 	ch-flash-resources.h				\
 	ch-refresh-resources.c				\
-	ch-refresh-resources.h				\
-	ch-spectro-resources.c				\
-	ch-spectro-resources.h
+	ch-refresh-resources.h
 
 EXTRA_DIST =						\
 	colorhug-ccmx.gresource.xml			\
 	colorhug-flash.gresource.xml			\
-	colorhug-refresh.gresource.xml			\
-	colorhug-spectro.gresource.xml
+	colorhug-refresh.gresource.xml
 
 MAINTAINERCLEANFILES =					\
 	$(srcdir)/libchshared.a
