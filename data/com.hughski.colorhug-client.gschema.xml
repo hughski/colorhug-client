@@ -24,7 +24,7 @@
     </key>
     <key name="graph-pwm-fixup" type="b">
       <default>true</default>
-      <summary>Hide blacklight flicker on the graph</summary>
+      <summary>Hide backlight flicker on the graph</summary>
       <description>Whether the backlight PWM should be removed.</description>
     </key>
   </schema>
