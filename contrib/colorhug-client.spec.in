@@ -13,7 +13,7 @@ BuildRequires: glib2-devel
 BuildRequires: gtk3-devel
 BuildRequires: intltool
 BuildRequires: libgusb-devel >= 0.1.4
-BuildRequires: colord-devel >= 0.1.31
+BuildRequires: colord-devel >= 1.2.3
 BuildRequires: colord-gtk-devel >= 0.1.24
 BuildRequires: libsoup-devel
 BuildRequires: libtool
@@ -21,6 +21,7 @@ BuildRequires: docbook-utils
 BuildRequires: libcanberra-devel >= 0.10
 BuildRequires: gobject-introspection-devel
 BuildRequires: gnome-doc-utils
+BuildRequires: yelp-tools
 BuildRequires: itstool
 
 Requires: yelp
@@ -39,12 +40,12 @@ scripts.
 %build
 %configure --disable-static
 
-make %{?_smp_mflags}
+make %{?_smp_mflags} V=1
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/libcolorhug*.la
+find %{buildroot} -type f -name "*.la" -delete
 
 %find_lang %{name}
 
@@ -63,7 +64,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f %{name}.lang
-%defattr(-,root,root,-)
 %doc README AUTHORS NEWS COPYING
 %dir %{_datadir}/colorhug-client
 %{_datadir}/colorhug-client
