@@ -7,7 +7,7 @@ git shortlog COLORHUG_CLIENT_0_2_3.. | grep -i -v trivial | uniq | grep -v Merge
 --------------------------------------------------------------------------------
 Version 0.2.4
 ~~~~~~~~~~~~~
-Released: 2013-xx-xx
+Released: 2014-xx-xx
 
 Notes:
 
@@ -49,7 +49,7 @@ git push
 8. Send an email to colorhug-users
 
 =================================================
-colorhug-client 0.2.3 released!
+colorhug-client 0.2.4 released!
 
 This package includes the client tools which allows the user to upgrade
 the firmware on the sensor or to access the sensor from command line

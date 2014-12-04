@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
+"POT-Creation-Date: 2014-12-04 16:28+0000\n"
+"PO-Revision-Date: 2014-12-04 16:28+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: English (United States) (http://www.transifex.com/projects/p/colorhug-client/language/en_US/)\n"
 "MIME-Version: 1.0\n"
@@ -98,51 +98,62 @@ msgstr "Firmware version unknown"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Do not unplug the device and do not turn off the computer."
 
-msgid "ColorHug+ Utility"
-msgstr "ColorHug+ Utility"
+msgid "page0"
+msgstr "page0"
 
-msgid "Auto update:"
-msgstr "Auto update:"
+msgid "Your Score"
+msgstr "Your Score"
 
-msgid "Force Refresh"
-msgstr "Force Refresh"
+msgid "Display"
+msgstr "Display"
 
-msgid "Temperature:"
-msgstr "Temperature:"
+msgid "USB"
+msgstr "USB"
 
-msgid "Interval:"
-msgstr "Interval:"
+msgid "Black-to-White"
+msgstr "Black-to-White"
 
-msgid "This shows the raw sensor reading without calibration"
-msgstr "This shows the raw sensor reading without calibration"
+msgid "White-to-Black"
+msgstr "White-to-Black"
 
-msgid "Raw Sensor"
-msgstr "Raw Sensor"
+msgid "Refresh Rate"
+msgstr "Refresh Rate"
 
-msgid "This shows the dark calibration at 25 degrees C"
-msgstr "This shows the dark calibration at 25 degrees C"
+msgid "Color Temperature"
+msgstr "Color Temperature"
 
-msgid "Dark Calibration"
-msgstr "Dark Calibration"
+msgid "White Luminance"
+msgstr "White Luminance"
 
-msgid ""
-"This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr "This shows the Color Match Function used for the in-device XYZ conversion"
+msgid "Black Luminance"
+msgstr "Black Luminance"
 
-msgid "Color Match"
-msgstr "Color Match"
+msgid "sRGB Coverage"
+msgstr "sRGB Coverage"
 
-msgid "This shows the temperature calibration factor"
-msgstr "This shows the temperature calibration factor"
+msgid "AdobeRGB Coverage"
+msgstr "AdobeRGB Coverage"
 
-msgid "Temperature Compensation"
-msgstr "Temperature Compensation"
+msgid "Native Gamma"
+msgstr "Native Gamma"
 
-msgid "This shows the calibrated spectra result"
-msgstr "This shows the calibrated spectra result"
+msgid "page1"
+msgstr "page1"
 
-msgid "Spectra Result"
-msgstr "Spectra Result"
+msgid "_Export results…"
+msgstr "_Export results…"
+
+msgid "_About"
+msgstr "_About"
+
+msgid "_Quit"
+msgstr "_Quit"
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug Documentation"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "Documentation for the ColorHug display colorimeter"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -162,11 +173,16 @@ msgstr "CCMX Loader"
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Modify the calibration matrices on the ColorHug device"
 
-msgid "ColorHug Documentation"
-msgstr "ColorHug Documentation"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Display Analysis"
+msgstr "ColorHug Display Analysis"
 
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "Documentation for the ColorHug display colorimeter"
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts"
+msgstr "Sample the display over time to observe PWM, input latency and refresh artifacts"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -185,9 +201,6 @@ msgstr "Firmware Updater"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Update the firmware on the ColorHug colorimeter"
 
-msgid "Play with the ColorHug+"
-msgstr "Play with the ColorHug+"
-
 msgid "Whether we should update to test firmware"
 msgstr "Whether we should update to test firmware"
 
@@ -201,6 +214,24 @@ msgstr "The remote location of ColorHug files"
 msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr "The location of where firmware updates and calibration files are stored."
+
+msgid "Zoom in the graph to show only one pulse"
+msgstr "Zoom in the graph to show only one pulse"
+
+msgid "Whether the refresh graph should be zoomed to show one pulse only."
+msgstr "Whether the refresh graph should be zoomed to show one pulse only."
+
+msgid "Show all RGB channels on the graph"
+msgstr "Show all RGB channels on the graph"
+
+msgid "Whether all captured channels should be shown."
+msgstr "Whether all captured channels should be shown."
+
+msgid "Hide blacklight flicker on the graph"
+msgstr "Hide blacklight flicker on the graph"
+
+msgid "Whether the backlight PWM should be removed."
+msgstr "Whether the backlight PWM should be removed."
 
 msgid "Failed to create directory"
 msgstr "Failed to create directory"
@@ -304,8 +335,8 @@ msgid "Failed to write file"
 msgstr "Failed to write file"
 
 #. TRANSLATORS: could not download the directory listing
-msgid "Failed to get the list of firmware files"
-msgstr "Failed to get the list of firmware files"
+msgid "Failed to get the list of CCMX files"
+msgstr "Failed to get the list of CCMX files"
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -595,6 +626,11 @@ msgstr "%2im"
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
+#. TRANSLATORS: This is ms
+#, c-format
+msgid "%.0fms"
+msgstr "%.0fms"
+
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
@@ -625,6 +661,7 @@ msgstr "%.0f nm"
 msgid "Alias to %s"
 msgstr "Alias to %s"
 
+#. TRANSLATORS: error message
 msgid "Command not found, valid commands are:"
 msgstr "Command not found, valid commands are:"
 
@@ -906,6 +943,10 @@ msgstr "Gets the CCD calibration values"
 msgid "Sets the CCD calibration values"
 msgstr "Sets the CCD calibration values"
 
+#. TRANSLATORS: command description
+msgid "Converts Intel HEX to BIN"
+msgstr "Converts Intel HEX to BIN"
+
 #. TRANSLATORS: program name
 msgid "Color Management"
 msgstr "Color Management"
@@ -918,6 +959,65 @@ msgstr "No connection to device:"
 msgid "Failed to get samples from device"
 msgstr "Failed to get samples from device"
 
+#. TRANSLATORS: PWM is pulse-width-modulation?
+msgid "Failed to remove PWM"
+msgstr "Failed to remove PWM"
+
+msgid "Unknown"
+msgstr "Unknown"
+
 #. TRANSLATORS: permissions error perhaps?
-msgid "Failed to get raw reading"
-msgstr "Failed to get raw reading"
+msgid "Failed to calculate USB latency"
+msgstr "Failed to calculate USB latency"
+
+msgid "Show single pulse"
+msgstr "Show single pulse"
+
+msgid "Show channels"
+msgstr "Show channels"
+
+msgid "Filter backlight"
+msgstr "Filter backlight"
+
+msgid "Export results"
+msgstr "Export results"
+
+msgid "Export"
+msgstr "Export"
+
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to get save file"
+msgstr "Failed to get save file"
+
+msgid "Please connect your ColorHug2"
+msgstr "Please connect your ColorHug2"
+
+msgid ""
+"Place your ColorHug in the spot on the left and click the blue button to "
+"start analysing your display."
+msgstr "Place your ColorHug in the spot on the left and click the blue button to start analysing your display."
+
+msgid "Don't disturb the device while working!"
+msgstr "Don't disturb the device while working!"
+
+msgid ""
+"Please update the firmware on your ColorHug before using this application."
+msgstr "Please update the firmware on your ColorHug before using this application."
+
+msgid "Device unsupported."
+msgstr "Device unsupported."
+
+msgid "Please connect your ColorHug2."
+msgstr "Please connect your ColorHug2."
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Display Analysis"
+msgstr "About ColorHug Display Analysis"
+
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts."
+msgstr "Sample the display over time to observe PWM, input latency and refresh artifacts."
+
+msgid "translator-credits"
+msgstr "translator-credits"

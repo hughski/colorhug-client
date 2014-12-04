@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
+"POT-Creation-Date: 2014-12-04 16:28+0000\n"
+"PO-Revision-Date: 2014-12-04 16:28+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/colorhug-client/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -99,51 +99,62 @@ msgstr "Firmware verzió ismeretlen"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne húzza ki és ne kapcsolja ki a számítógépét."
 
-msgid "ColorHug+ Utility"
+msgid "page0"
 msgstr ""
 
-msgid "Auto update:"
-msgstr "Automatikus frissítés:"
+msgid "Your Score"
+msgstr ""
 
-msgid "Force Refresh"
-msgstr "Frissítés eröltetése"
+msgid "Display"
+msgstr ""
 
-msgid "Temperature:"
-msgstr "Hőmérséklet:"
+msgid "USB"
+msgstr ""
 
-msgid "Interval:"
-msgstr "Tartomány:"
+msgid "Black-to-White"
+msgstr ""
 
-msgid "This shows the raw sensor reading without calibration"
-msgstr "Ez mutatja a puszta szenzor érzékelési adatait kalibráció nélkül"
+msgid "White-to-Black"
+msgstr ""
 
-msgid "Raw Sensor"
-msgstr "Puszta szenzor"
+msgid "Refresh Rate"
+msgstr ""
 
-msgid "This shows the dark calibration at 25 degrees C"
-msgstr "Ezt mutatja a sötét kalibrációkor 25 celsiuson"
+msgid "Color Temperature"
+msgstr ""
 
-msgid "Dark Calibration"
-msgstr "Sötét kalibráció"
+msgid "White Luminance"
+msgstr ""
 
-msgid ""
-"This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr "Ez mutatja a felhasznált Színhűség funkciót az eszközön belüli XYZ konverzióhoz"
+msgid "Black Luminance"
+msgstr ""
 
-msgid "Color Match"
-msgstr "Színhűség"
+msgid "sRGB Coverage"
+msgstr ""
 
-msgid "This shows the temperature calibration factor"
-msgstr "Ez mutatja a szín kalibrációs faktort"
+msgid "AdobeRGB Coverage"
+msgstr ""
 
-msgid "Temperature Compensation"
-msgstr "Hőmérséklet kompenzáció"
+msgid "Native Gamma"
+msgstr ""
 
-msgid "This shows the calibrated spectra result"
-msgstr "Ez mutatja a kalibrált spektra eredményeit"
+msgid "page1"
+msgstr ""
 
-msgid "Spectra Result"
-msgstr "Spektra eredmények"
+msgid "_Export results…"
+msgstr ""
+
+msgid "_About"
+msgstr ""
+
+msgid "_Quit"
+msgstr ""
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug Dokumentáció"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "Dokumentáció a ColorHug coloriméterhez"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -163,11 +174,16 @@ msgstr "CCMX betöltő"
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Módosítsa a kalibrációs mátrixokat a ColorHug eszközön"
 
-msgid "ColorHug Documentation"
-msgstr "ColorHug Dokumentáció"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Display Analysis"
+msgstr ""
 
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "Dokumentáció a ColorHug coloriméterhez"
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts"
+msgstr ""
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -186,9 +202,6 @@ msgstr "Firmware Frissítő"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
 
-msgid "Play with the ColorHug+"
-msgstr ""
-
 msgid "Whether we should update to test firmware"
 msgstr "Mindenképp frissítenie kell, hogy tesztelni tudja a firmware-t"
 
@@ -202,6 +215,24 @@ msgstr "A távoli helye a ColorHug fájloknak"
 msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr "A firmware frissítések és kalibrációs fájlok tárolásának helye."
+
+msgid "Zoom in the graph to show only one pulse"
+msgstr ""
+
+msgid "Whether the refresh graph should be zoomed to show one pulse only."
+msgstr ""
+
+msgid "Show all RGB channels on the graph"
+msgstr ""
+
+msgid "Whether all captured channels should be shown."
+msgstr ""
+
+msgid "Hide blacklight flicker on the graph"
+msgstr ""
+
+msgid "Whether the backlight PWM should be removed."
+msgstr ""
 
 msgid "Failed to create directory"
 msgstr "Nem sikerült a mappa elkészítése"
@@ -305,8 +336,8 @@ msgid "Failed to write file"
 msgstr "Sikertelen a fájlba mentés"
 
 #. TRANSLATORS: could not download the directory listing
-msgid "Failed to get the list of firmware files"
-msgstr "Nem sikerült a firmware lista letöltése"
+msgid "Failed to get the list of CCMX files"
+msgstr ""
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -596,6 +627,11 @@ msgstr "%2im"
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
+#. TRANSLATORS: This is ms
+#, c-format
+msgid "%.0fms"
+msgstr ""
+
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
@@ -626,6 +662,7 @@ msgstr "%.0f nm"
 msgid "Alias to %s"
 msgstr "Elnevezés ehhez: %s"
 
+#. TRANSLATORS: error message
 msgid "Command not found, valid commands are:"
 msgstr "Parancs nem található, elérhető parancsok:"
 
@@ -907,6 +944,10 @@ msgstr "Beolvassa a CCD kalibrációs értékeit"
 msgid "Sets the CCD calibration values"
 msgstr "Beállítja a CCD kalibrációs értékeit"
 
+#. TRANSLATORS: command description
+msgid "Converts Intel HEX to BIN"
+msgstr ""
+
 #. TRANSLATORS: program name
 msgid "Color Management"
 msgstr "Színkezelés"
@@ -919,6 +960,65 @@ msgstr "Nincs kapcsolat az eszközhöz:"
 msgid "Failed to get samples from device"
 msgstr "Minták lekérdezése nem sikerült"
 
+#. TRANSLATORS: PWM is pulse-width-modulation?
+msgid "Failed to remove PWM"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
 #. TRANSLATORS: permissions error perhaps?
-msgid "Failed to get raw reading"
-msgstr "A raw olvasás nem sikerült"
+msgid "Failed to calculate USB latency"
+msgstr ""
+
+msgid "Show single pulse"
+msgstr ""
+
+msgid "Show channels"
+msgstr ""
+
+msgid "Filter backlight"
+msgstr ""
+
+msgid "Export results"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to get save file"
+msgstr ""
+
+msgid "Please connect your ColorHug2"
+msgstr ""
+
+msgid ""
+"Place your ColorHug in the spot on the left and click the blue button to "
+"start analysing your display."
+msgstr ""
+
+msgid "Don't disturb the device while working!"
+msgstr ""
+
+msgid ""
+"Please update the firmware on your ColorHug before using this application."
+msgstr ""
+
+msgid "Device unsupported."
+msgstr ""
+
+msgid "Please connect your ColorHug2."
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Display Analysis"
+msgstr ""
+
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts."
+msgstr ""
+
+msgid "translator-credits"
+msgstr ""

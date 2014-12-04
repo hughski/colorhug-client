@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-10 10:53+0000\n"
-"PO-Revision-Date: 2014-10-27 12:21+0000\n"
-"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
+"POT-Creation-Date: 2014-12-04 16:28+0000\n"
+"PO-Revision-Date: 2014-12-04 16:28+0000\n"
+"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Latvian (http://www.transifex.com/projects/p/colorhug-client/language/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,51 +100,62 @@ msgstr "Programmaparatūras versija nav zināma"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
 
-msgid "ColorHug+ Utility"
-msgstr "ColorHug+ utilīta"
+msgid "page0"
+msgstr ""
 
-msgid "Auto update:"
-msgstr "Automātiski atjaunināt:"
+msgid "Your Score"
+msgstr ""
 
-msgid "Force Refresh"
-msgstr "Uzspiest atjaunināšanu"
+msgid "Display"
+msgstr ""
 
-msgid "Temperature:"
-msgstr "Temperatūra:"
+msgid "USB"
+msgstr ""
 
-msgid "Interval:"
-msgstr "Intervāls:"
+msgid "Black-to-White"
+msgstr ""
 
-msgid "This shows the raw sensor reading without calibration"
-msgstr "Tas parāda jēlos sensora mērījumus bez kalibrācijas"
+msgid "White-to-Black"
+msgstr ""
 
-msgid "Raw Sensor"
-msgstr "Jēls sensors"
+msgid "Refresh Rate"
+msgstr ""
 
-msgid "This shows the dark calibration at 25 degrees C"
-msgstr "Tas rāda tumšo kalibrāciju pie 25 grādiem pēc Celsija"
+msgid "Color Temperature"
+msgstr ""
 
-msgid "Dark Calibration"
-msgstr "Tumšā kalibrācija"
+msgid "White Luminance"
+msgstr ""
 
-msgid ""
-"This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr "Tas attēlo krāsu atbilstības funkciju, ko izmanto XYZ pārveidošanai ierīcē"
+msgid "Black Luminance"
+msgstr ""
 
-msgid "Color Match"
-msgstr "Krāsu atbilstība"
+msgid "sRGB Coverage"
+msgstr ""
 
-msgid "This shows the temperature calibration factor"
-msgstr "Rāda temperatūras kalibrācijas koeficientu"
+msgid "AdobeRGB Coverage"
+msgstr ""
 
-msgid "Temperature Compensation"
-msgstr "Temperatūras kompensācija"
+msgid "Native Gamma"
+msgstr ""
 
-msgid "This shows the calibrated spectra result"
-msgstr "Tas rāda kalibrētā spektra rezultātu"
+msgid "page1"
+msgstr ""
 
-msgid "Spectra Result"
-msgstr "Spektra rezultāts"
+msgid "_Export results…"
+msgstr ""
+
+msgid "_About"
+msgstr ""
+
+msgid "_Quit"
+msgstr ""
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug dokumentācija"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "ColorHug displeja krāsu mērītāja dokumentācija"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -164,11 +175,16 @@ msgstr "CCMX ielādētājs"
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Modificēt kalibrācijas matricas ColorHug ierīcē"
 
-msgid "ColorHug Documentation"
-msgstr "ColorHug dokumentācija"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Display Analysis"
+msgstr ""
 
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "ColorHug displeja krāsu mērītāja dokumentācija"
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts"
+msgstr ""
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -187,9 +203,6 @@ msgstr "Aparātprogrammatūras atjauninātājs"
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
-msgid "Play with the ColorHug+"
-msgstr "Spēlēties ar ColorHug+"
-
 msgid "Whether we should update to test firmware"
 msgstr "Vai vajadzētu atjaunināt uz testa aparātprogrammatūru"
 
@@ -203,6 +216,24 @@ msgstr "ColorHug datņu attālinātā atrašanās vieta"
 msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr "Vieta, kurā atrodas aparātprogrammatūras atjauninājumi un kalibrācijas datnes."
+
+msgid "Zoom in the graph to show only one pulse"
+msgstr ""
+
+msgid "Whether the refresh graph should be zoomed to show one pulse only."
+msgstr ""
+
+msgid "Show all RGB channels on the graph"
+msgstr ""
+
+msgid "Whether all captured channels should be shown."
+msgstr ""
+
+msgid "Hide blacklight flicker on the graph"
+msgstr ""
+
+msgid "Whether the backlight PWM should be removed."
+msgstr ""
 
 msgid "Failed to create directory"
 msgstr "Neizdevās izveidot direktoriju"
@@ -306,8 +337,8 @@ msgid "Failed to write file"
 msgstr "Neizdevās ierakstīt datni"
 
 #. TRANSLATORS: could not download the directory listing
-msgid "Failed to get the list of firmware files"
-msgstr "Neizdevās iegūt sarakstu ar aparātprogrammatūru datnēm"
+msgid "Failed to get the list of CCMX files"
+msgstr ""
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -597,6 +628,11 @@ msgstr "%2im"
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
+#. TRANSLATORS: This is ms
+#, c-format
+msgid "%.0fms"
+msgstr ""
+
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
@@ -627,6 +663,7 @@ msgstr "%.0f nm"
 msgid "Alias to %s"
 msgstr "%s alias"
 
+#. TRANSLATORS: error message
 msgid "Command not found, valid commands are:"
 msgstr "Komanda nav atrasta, derīgās komandas ir:"
 
@@ -908,6 +945,10 @@ msgstr "Saņem CCD kalibrācijas vērtības"
 msgid "Sets the CCD calibration values"
 msgstr "Iestata CCD kalibrācijas vērtības"
 
+#. TRANSLATORS: command description
+msgid "Converts Intel HEX to BIN"
+msgstr ""
+
 #. TRANSLATORS: program name
 msgid "Color Management"
 msgstr "Krāsu pārvaldība"
@@ -920,6 +961,65 @@ msgstr "Nav savienojuma ar ierīci:"
 msgid "Failed to get samples from device"
 msgstr "Neizdevās no ierīces saņemt paraugus"
 
+#. TRANSLATORS: PWM is pulse-width-modulation?
+msgid "Failed to remove PWM"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
 #. TRANSLATORS: permissions error perhaps?
-msgid "Failed to get raw reading"
-msgstr "Neizdevās saņemt jēlos nolasījumus"
+msgid "Failed to calculate USB latency"
+msgstr ""
+
+msgid "Show single pulse"
+msgstr ""
+
+msgid "Show channels"
+msgstr ""
+
+msgid "Filter backlight"
+msgstr ""
+
+msgid "Export results"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to get save file"
+msgstr ""
+
+msgid "Please connect your ColorHug2"
+msgstr ""
+
+msgid ""
+"Place your ColorHug in the spot on the left and click the blue button to "
+"start analysing your display."
+msgstr ""
+
+msgid "Don't disturb the device while working!"
+msgstr ""
+
+msgid ""
+"Please update the firmware on your ColorHug before using this application."
+msgstr ""
+
+msgid "Device unsupported."
+msgstr ""
+
+msgid "Please connect your ColorHug2."
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Display Analysis"
+msgstr ""
+
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts."
+msgstr ""
+
+msgid "translator-credits"
+msgstr ""

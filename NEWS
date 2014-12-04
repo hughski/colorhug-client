@@ -1,3 +1,22 @@
+Version 0.2.4
+~~~~~~~~~~~~~
+Released: 2014-12-04
+
+Notes:
+ - This is the first release with experimental Windows support.
+
+New Features:
+ - Add a NSI script to build the Windows installer (Richard Hughes)
+ - Add colorhug-refresh for measuring display latency and refresh rates (Richard Hughes)
+ - Add windows resource files for all executables (Richard Hughes)
+
+Bugfixes:
+ - Do not use deprecated libgusb API (Richard Hughes)
+ - Don't install Linux-only content when compiling with MinGW (Richard Hughes)
+ - Make libcanberra-gtk3 optional (Richard Hughes)
+ - Remove colorhug-inhx32-to-bin and move functionality into colorhug-cmd (Richard Hughes)
+ - Support the ColorHug2 in the example code (Richard Hughes)
+
 Version 0.2.3
 ~~~~~~~~~~~~~
 Released: 2013-11-10

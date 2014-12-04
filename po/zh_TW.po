@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 16:30+0100\n"
-"PO-Revision-Date: 2014-09-12 15:32+0000\n"
+"POT-Creation-Date: 2014-12-04 16:28+0000\n"
+"PO-Revision-Date: 2014-12-04 16:28+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/colorhug-client/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -99,63 +99,74 @@ msgstr "韌體版本未知"
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "請不要拔除裝置，也不要關閉電腦。"
 
-msgid "ColorHug+ Utility"
+msgid "page0"
 msgstr ""
 
-msgid "Auto update:"
-msgstr "自動更新："
+msgid "Your Score"
+msgstr ""
 
-msgid "Force Refresh"
-msgstr "強制重新整理"
+msgid "Display"
+msgstr ""
 
-msgid "Temperature:"
-msgstr "溫度："
+msgid "USB"
+msgstr ""
 
-msgid "Interval:"
-msgstr "間隔："
+msgid "Black-to-White"
+msgstr ""
 
-msgid "This shows the raw sensor reading without calibration"
-msgstr "這會顯示未經校準的 raw 感測器讀取內容"
+msgid "White-to-Black"
+msgstr ""
 
-msgid "Raw Sensor"
-msgstr "Raw 感測器"
+msgid "Refresh Rate"
+msgstr ""
 
-msgid "This shows the dark calibration at 25 degrees C"
-msgstr "這會以 25℃ 顯示暗校準"
+msgid "Color Temperature"
+msgstr ""
 
-msgid "Dark Calibration"
-msgstr "暗校準"
+msgid "White Luminance"
+msgstr ""
 
-msgid ""
-"This shows the Color Match Function used for the in-device XYZ conversion"
-msgstr "這會顯示裝置內 XYZ 轉換使用的 Color Match Function"
+msgid "Black Luminance"
+msgstr ""
 
-msgid "Color Match"
-msgstr "Color Match"
+msgid "sRGB Coverage"
+msgstr ""
 
-msgid "This shows the temperature calibration factor"
-msgstr "這會顯示溫度校準係數"
+msgid "AdobeRGB Coverage"
+msgstr ""
 
-msgid "Temperature Compensation"
-msgstr "溫度補償"
+msgid "Native Gamma"
+msgstr ""
 
-msgid "This shows the calibrated spectra result"
-msgstr "這會顯示校準的光譜結果"
+msgid "page1"
+msgstr ""
 
-msgid "Spectra Result"
-msgstr "光譜結果"
+msgid "_Export results…"
+msgstr ""
+
+msgid "_About"
+msgstr ""
+
+msgid "_Quit"
+msgstr ""
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug 文件"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "ColorHug 顯示器色度計的文件"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "ColorHug CCMX 載入器工具會自動下載使用者提交的裝置校正矩陣，並安裝至您的 Hughski ColorHug 顯示器色度計上。"
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "選取校正矩陣最能提昇 ColorHug 的精確度，而使用預設矩陣可使大多數使用者取得可接受的校正成果。"
 
 msgid "CCMX Loader"
 msgstr "CCMX 載入器"
@@ -163,31 +174,33 @@ msgstr "CCMX 載入器"
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "修改 ColorHug 裝置上的校準矩陣"
 
-msgid "ColorHug Documentation"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Display Analysis"
 msgstr ""
 
-msgid "Documentation for the ColorHug display colorimeter"
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts"
 msgstr ""
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "ColorHug 快閃記憶更新工具可自動將新版韌體下載至您的 Hughski ColorHug 顯示器色度計上。新發行的韌體可增添新功能、修正臭蟲、改善精準度。"
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "使用指令列引數，此工具也可以將自訂的快閃用檔案刷寫至裝置中。"
 
 msgid "Firmware Updater"
 msgstr "韌體更新器"
 
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "更新 ColorHug 色度計上的韌體"
-
-msgid "Play with the ColorHug+"
-msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "是否應更新至測試用韌體"
@@ -202,6 +215,24 @@ msgstr "ColorHug 檔案的遠端位置"
 msgid ""
 "The location of where firmware updates and calibration files are stored."
 msgstr "韌體的更新與校準用檔案儲存之處。"
+
+msgid "Zoom in the graph to show only one pulse"
+msgstr ""
+
+msgid "Whether the refresh graph should be zoomed to show one pulse only."
+msgstr ""
+
+msgid "Show all RGB channels on the graph"
+msgstr ""
+
+msgid "Whether all captured channels should be shown."
+msgstr ""
+
+msgid "Hide blacklight flicker on the graph"
+msgstr ""
+
+msgid "Whether the backlight PWM should be removed."
+msgstr ""
 
 msgid "Failed to create directory"
 msgstr "無法建立目錄"
@@ -263,10 +294,10 @@ msgid "Select correction matrix"
 msgstr "選取校準矩陣"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "取消(_C)"
 
 msgid "_Open"
-msgstr ""
+msgstr "開啟(_O)"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
@@ -305,8 +336,8 @@ msgid "Failed to write file"
 msgstr "無法寫入檔案"
 
 #. TRANSLATORS: could not download the directory listing
-msgid "Failed to get the list of firmware files"
-msgstr "無法取得韌體檔案的清單"
+msgid "Failed to get the list of CCMX files"
+msgstr ""
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -333,7 +364,7 @@ msgid "Correction matrix successfully generated!"
 msgstr "校準矩陣製作成功！"
 
 msgid "_Save"
-msgstr ""
+msgstr "儲存(_S)"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
@@ -393,7 +424,7 @@ msgstr "校準完成"
 
 #. TRANSLATORS: tell the hardware we succeeded
 msgid "Completing firmware upgrade…"
-msgstr ""
+msgstr "正在完成韌體升級…"
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
@@ -438,11 +469,11 @@ msgstr "ColorHug 重設失敗"
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "錯誤的韌體類型！"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
-msgstr ""
+msgstr "正在起始韌體升級…"
 
 #. TRANSLATORS: failed to get the firmware file
 msgid "Failed to get firmware"
@@ -513,11 +544,11 @@ msgstr "偵測到 ColorHug"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "偵測到 ColorHug2"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "偵測到 ColorHug+"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -596,6 +627,11 @@ msgstr "%2i分鐘"
 msgid "%2im%02i"
 msgstr "%2i分鐘%02i秒"
 
+#. TRANSLATORS: This is ms
+#, c-format
+msgid "%.0fms"
+msgstr ""
+
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
@@ -626,6 +662,7 @@ msgstr "%.0f nm"
 msgid "Alias to %s"
 msgstr "%s 的別名"
 
+#. TRANSLATORS: error message
 msgid "Command not found, valid commands are:"
 msgstr "找不到指令，有效的指令有："
 
@@ -789,7 +826,7 @@ msgstr "取得所有色彩讀取內容 (到 XYZ)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
+msgstr "取得光譜讀取 (儲存至 SRAM)"
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
@@ -821,11 +858,11 @@ msgstr "設定預尺度常數"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "取得 DAC 值"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "設定 DAC 值"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
@@ -897,14 +934,18 @@ msgstr "取得感測器溫度"
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
-msgstr ""
+msgstr "取得 ADC Vref 值"
 
 #. TRANSLATORS: command description
 msgid "Gets the CCD calibration values"
-msgstr ""
+msgstr "取得 CCD 校準值"
 
 #. TRANSLATORS: command description
 msgid "Sets the CCD calibration values"
+msgstr "設定 CCD 校準值"
+
+#. TRANSLATORS: command description
+msgid "Converts Intel HEX to BIN"
 msgstr ""
 
 #. TRANSLATORS: program name
@@ -919,6 +960,65 @@ msgstr "未連接裝置："
 msgid "Failed to get samples from device"
 msgstr "無法從裝置取得樣本"
 
+#. TRANSLATORS: PWM is pulse-width-modulation?
+msgid "Failed to remove PWM"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
 #. TRANSLATORS: permissions error perhaps?
-msgid "Failed to get raw reading"
-msgstr "無法取得 raw 讀取內容"
+msgid "Failed to calculate USB latency"
+msgstr ""
+
+msgid "Show single pulse"
+msgstr ""
+
+msgid "Show channels"
+msgstr ""
+
+msgid "Filter backlight"
+msgstr ""
+
+msgid "Export results"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to get save file"
+msgstr ""
+
+msgid "Please connect your ColorHug2"
+msgstr ""
+
+msgid ""
+"Place your ColorHug in the spot on the left and click the blue button to "
+"start analysing your display."
+msgstr ""
+
+msgid "Don't disturb the device while working!"
+msgstr ""
+
+msgid ""
+"Please update the firmware on your ColorHug before using this application."
+msgstr ""
+
+msgid "Device unsupported."
+msgstr ""
+
+msgid "Please connect your ColorHug2."
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Display Analysis"
+msgstr ""
+
+msgid ""
+"Sample the display over time to observe PWM, input latency and refresh "
+"artifacts."
+msgstr ""
+
+msgid "translator-credits"
+msgstr ""
