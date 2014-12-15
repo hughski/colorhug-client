@@ -16,8 +16,8 @@
     </_p>
   </description>
   <screenshots>
-    <screenshot type="default">http://www.hughski.com/img/appdata-colorhug-flash1.png</screenshot>
-    <screenshot>http://www.hughski.com/img/appdata-colorhug-flash2.png</screenshot>
+    <screenshot type="default">https://raw.githubusercontent.com/hughski/colorhug-client/master/data/screenshots/colorhug-flash1.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/hughski/colorhug-client/master/data/screenshots/colorhug-flash2.png</screenshot>
   </screenshots>
   <url type="homepage">http://www.hughski.com/</url>
   <updatecontact>richard_at_hughsie.com</updatecontact>
