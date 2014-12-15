@@ -1199,7 +1199,7 @@ ch_refresh_update_ui_for_device (ChRefreshPrivate *priv)
 		gtk_widget_set_visible (priv->sample_widget, TRUE);
 		g_string_append_printf (msg, "%s\n",
 			_("Place your ColorHug in the spot on the left and click "
-			  "the blue button to start analysing your display."));
+			  "the blue button to start analyzing your display."));
 		g_string_append_printf (msg, "%s",
 			_("Don't disturb the device while working!"));
 		break;
