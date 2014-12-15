@@ -24,7 +24,10 @@ BuildRequires: gnome-doc-utils
 BuildRequires: yelp-tools
 BuildRequires: itstool
 
-Requires: yelp
+# require all the subpackages to deal with upgrades
+Requires: colorhug-client-ccmx%{?_isa} = %{version}-%{release}
+Requires: colorhug-client-flash%{?_isa} = %{version}-%{release}
+Requires: colorhug-client-refresh%{?_isa} = %{version}-%{release}
 
 %description
 The Hughski ColorHug colorimeter is a low cost open-source hardware
@@ -33,6 +36,36 @@ sensor used to calibrate screens.
 This package includes the client tools which allows the user to upgrade
 the firmware on the sensor or to access the sensor from command line
 scripts.
+
+%package ccmx
+Summary: ColorHug CCMX Utility
+Requires: yelp
+Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
+
+%description ccmx
+GUI for adding and changing CCMX calibration matrices.
+
+%package flash
+Summary: ColorHug Firmare Flash Utility
+Requires: yelp
+Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
+
+%description flash
+GUI for updating the device firmware.
+
+%package refresh
+Summary: ColorHug Display Analysis Utility
+Requires: yelp
+Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
+
+%description refresh
+GUI for analyzing a display.
+
+%package common
+Summary: ColorHug Client Common files
+
+%description common
+Common files used in the other subpackages.
 
 %prep
 %setup -q
@@ -49,11 +82,11 @@ find %{buildroot} -type f -name "*.la" -delete
 
 %find_lang %{name}
 
-%post
+%post common
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
-%postun
+%postun common
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
@@ -63,21 +96,47 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
-%files -f %{name}.lang
-%doc README AUTHORS NEWS COPYING
-%dir %{_datadir}/colorhug-client
-%{_datadir}/colorhug-client
-%{_libexecdir}/colorhug*
-%{_bindir}/colorhug*
-%{_datadir}/appdata/*.appdata.xml
-%{_datadir}/applications/*.desktop
-%{_datadir}/glib-2.0/schemas/*.gschema.xml
-%{_datadir}/icons/hicolor/*/apps/*colorhug*.png
+%files
+%doc COPYING
+
+%files ccmx
+%doc COPYING
+%{_bindir}/colorhug-ccmx
+%{_datadir}/appdata/com.hughski.ColorHug.CcmxLoader.appdata.xml
+%{_datadir}/applications/com.hughski.ColorHug.CcmxLoader.desktop
 %{_datadir}/icons/hicolor/*/mimetypes/application-x-ccmx.*
-%{_datadir}/icons/hicolor/scalable/apps/colorhug.svg
-%{_mandir}/man1/*.1.gz
-%{_sysconfdir}/bash_completion.d/*-completion.bash
+%{_datadir}/icons/hicolor/*/apps/colorhug-ccmx.png
+%{_mandir}/man1/colorhug-ccmx.1.gz
+
+%files flash
+%doc COPYING
+%{_bindir}/colorhug-flash
+%{_datadir}/appdata/com.hughski.ColorHug.FlashLoader.appdata.xml
+%{_datadir}/applications/com.hughski.ColorHug.FlashLoader.desktop
+%{_datadir}/icons/hicolor/*/apps/colorhug-flash.png
+%{_mandir}/man1/colorhug-flash.1.gz
+
+%files refresh
+%doc COPYING
+%{_bindir}/colorhug-refresh
+%{_datadir}/appdata/com.hughski.ColorHug.DisplayAnalysis.appdata.xml
+%{_datadir}/applications/com.hughski.ColorHug.DisplayAnalysis.desktop
+%{_datadir}/icons/hicolor/*/apps/colorhug-refresh.png
+%{_mandir}/man1/colorhug-refresh.1.gz
+
+%files common -f %{name}.lang
+%doc README AUTHORS NEWS COPYING
+%{_bindir}/colorhug-cmd
+%{_datadir}/applications/colorhug-docs.desktop
+%{_datadir}/colorhug-client
+%{_datadir}/glib-2.0/schemas/com.hughski.colorhug-client.gschema.xml
 %{_datadir}/help/*/colorhug-client
+%{_datadir}/icons/hicolor/*/apps/colorhug.*
+%{_datadir}/icons/hicolor/*/apps/colorimeter-colorhug-inactive.png
+%dir %{_datadir}/colorhug-client
+%{_libexecdir}/colorhug*
+%{_mandir}/man1/colorhug-cmd.1.gz
+%{_sysconfdir}/bash_completion.d/colorhug-cmd-completion.bash
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
