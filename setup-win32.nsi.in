@@ -2,6 +2,7 @@
 #
 # To build an installer from the script you would normally do:
 #
+#   dnf install mingw-colorhug-client mingw32-nsis
 #   makensis setup-win32.nsi
 
 Name "ColorHug Client Tools"
