@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2013 Richard Hughes <richard@hughsie.com> -->
+<component type="desktop">
+  <id>com.hughski.ColorHug.FlashLoader.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <_name>ColorHug Firmware Updater</_name>
+  <_summary>Update the firmware on the ColorHug colorimeter</_summary>
+  <description>
+    <_p>
+      The ColorHug flash update tool automatically downloads new versions of
+      the firmware on to your Hughski ColorHug display colorimeter.
+      Firmware releases will add features, fix bugs and improve accuracy.
+    </_p>
+    <_p>
+      Using command line arguments, this tool can also flash custom flash files
+      to the device.
+    </_p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/hughski/colorhug-client/master/data/appdata/colorhug-flash1.png</image>
+      <_caption>Application window showing new firmware detected</_caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/hughski/colorhug-client/master/data/appdata/colorhug-flash2.png</image>
+      <_caption>Applying updated firmware to the ColorHug device</_caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">http://www.hughski.com/</url>
+  <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
+  <developer_name>Hughski Limited</developer_name>
+  <update_contact>richard_at_hughsie.com</update_contact>
+</component>

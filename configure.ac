@@ -152,6 +152,7 @@ data/ch-flash.rc
 data/ch-main.rc
 data/ch-refresh.rc
 data/Makefile
+data/appdata/Makefile
 data/icons/Makefile
 data/icons/16x16/Makefile
 data/icons/22x22/Makefile

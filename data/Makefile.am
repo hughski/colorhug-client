@@ -1,4 +1,5 @@
 SUBDIRS = 						\
+	appdata						\
 	icons						\
 	tests
 
@@ -23,16 +24,6 @@ endif
 @GSETTINGS_RULES@
 gsettings_SCHEMAS = com.hughski.colorhug-client.gschema.xml
 
-if HAVE_UNIX
-@INTLTOOL_XML_RULE@
-appdatadir = $(datadir)/appdata
-appdata_DATA = $(appdata_in_files:.xml.in=.xml)
-appdata_in_files =					\
-	com.hughski.ColorHug.CcmxLoader.appdata.xml.in	\
-	com.hughski.ColorHug.DisplayAnalysis.appdata.xml.in \
-	com.hughski.ColorHug.FlashLoader.appdata.xml.in
-endif
-
 UI_FILES =						\
 	ch-ccmx.ui					\
 	ch-flash.ui					\
@@ -53,18 +44,12 @@ EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
 	$(desktop_in_files)				\
 	$(pkgdata_DATA)					\
-	$(appdata_in_files)				\
 	$(SVG_FILES)					\
 	$(RC_FILES)					\
 	$(UI_FILES)
 
 clean-local :
 	rm -f *~
-
-CLEANFILES =						\
-	com.hughski.ColorHug.CcmxLoader.appdata.xml	\
-	com.hughski.ColorHug.DisplayAnalysis.appdata.xml \
-	com.hughski.ColorHug.FlashLoader.appdata.xml
 
 DISTCLEANFILES =					\
 	colorhug-docs.desktop				\
