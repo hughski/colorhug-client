@@ -23,6 +23,7 @@ BuildRequires: gobject-introspection-devel
 BuildRequires: gnome-doc-utils
 BuildRequires: yelp-tools
 BuildRequires: itstool
+BuildRequires: bash-completion
 
 # require all the subpackages to deal with upgrades
 Requires: colorhug-client-ccmx%{?_isa} = %{version}-%{release}
@@ -136,7 +137,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %dir %{_datadir}/colorhug-client
 %{_libexecdir}/colorhug*
 %{_mandir}/man1/colorhug-cmd.1.gz
-%{_sysconfdir}/bash_completion.d/colorhug-cmd-completion.bash
+%{_datadir}/bash-completion/completions/colorhug-cmd
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#

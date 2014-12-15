@@ -3,10 +3,12 @@ SUBDIRS = 						\
 	icons						\
 	tests
 
-if HAVE_UNIX
-bashcompletiondir = ${SYSCONFDIR}/bash_completion.d
-dist_bashcompletion_DATA = colorhug-cmd-completion.bash
+if HAVE_BASH_COMPLETION
+SUBDIRS += 						\
+	bash
+endif
 
+if HAVE_UNIX
 @INTLTOOL_DESKTOP_RULE@
 pkgdata_in_files = colorhug-docs.desktop.in
 pkgdata_DATA = $(pkgdata_in_files:.desktop.in=.desktop)

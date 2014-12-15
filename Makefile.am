@@ -10,6 +10,9 @@ endif
 
 SUBDIRS += src
 
+DISTCHECK_CONFIGURE_FLAGS =				\
+	--disable-bash-completion
+
 EXTRA_DIST =						\
 	COPYING						\
 	MAINTAINERS					\

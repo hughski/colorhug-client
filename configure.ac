@@ -136,6 +136,18 @@ fi
 AM_CONDITIONAL([HAS_WINDOWS_ICON], [test "$ICOTOOL" != "no"])
 
 dnl ---------------------------------------------------------------------------
+dnl - Bash completion
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(bash_completion, AS_HELP_STRING([--enable-bash-completion],[Enable bash completion]),
+	      enable_bash_completion=$enableval, enable_bash_completion=yes)
+if test x$enable_bash_completion != xno; then
+	PKG_CHECK_MODULES([BASH_COMPLETION], [bash-completion >= 2.0])
+	BASH_COMPLETIONS_DIR="`pkg-config --variable=completionsdir bash-completion`"
+	AC_SUBST([BASH_COMPLETIONS_DIR])
+fi
+AM_CONDITIONAL([HAVE_BASH_COMPLETION],[test "x$enable_bash_completion" = "xyes"])
+
+dnl ---------------------------------------------------------------------------
 dnl - Build windows release build (no debugging window)
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(release, AS_HELP_STRING([--enable-release],[Enable Windows release build]),
@@ -153,6 +165,7 @@ data/ch-main.rc
 data/ch-refresh.rc
 data/Makefile
 data/appdata/Makefile
+data/bash/Makefile
 data/icons/Makefile
 data/icons/16x16/Makefile
 data/icons/22x22/Makefile
