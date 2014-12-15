@@ -157,19 +157,49 @@ colorhug_refresh_DEPENDENCIES = ch-refresh-rc.$(OBJEXT)
 endif
 
 ch-flash-resources.c: colorhug-flash.gresource.xml ../data/ch-flash.ui
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-flash.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-source				\
+	--c-name ch					\
+	$(srcdir)/colorhug-flash.gresource.xml
 ch-flash-resources.h: colorhug-flash.gresource.xml
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-flash.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-header				\
+	--c-name ch					\
+	$(srcdir)/colorhug-flash.gresource.xml
 
 ch-ccmx-resources.c: colorhug-ccmx.gresource.xml ../data/ch-ccmx.ui
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-ccmx.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-source				\
+	--c-name ch					\
+	$(srcdir)/colorhug-ccmx.gresource.xml
 ch-ccmx-resources.h: colorhug-ccmx.gresource.xml
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-ccmx.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-header				\
+	--c-name ch					\
+	$(srcdir)/colorhug-ccmx.gresource.xml
 
 ch-refresh-resources.c: colorhug-refresh.gresource.xml ../data/ch-refresh.ui ../data/ch-refresh-menus.ui
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name ch $(srcdir)/colorhug-refresh.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-source				\
+	--c-name ch					\
+	$(srcdir)/colorhug-refresh.gresource.xml
 ch-refresh-resources.h: colorhug-refresh.gresource.xml
-	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name ch $(srcdir)/colorhug-refresh.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-header				\
+	--c-name ch					\
+	$(srcdir)/colorhug-refresh.gresource.xml
 
 BUILT_SOURCES =						\
 	ch-ccmx-resources.c				\
