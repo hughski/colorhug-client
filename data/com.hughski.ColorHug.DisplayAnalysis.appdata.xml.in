@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
+<application>
+  <id type="desktop">com.hughski.ColorHug.DisplayAnalysis.desktop</id>
+  <licence>CC0</licence>
+  <name>ColorHug Display Analysis</name>
+  <summary>Sample the display over time to observe PWM, input latency and refresh artifacts</summary>
+  <description>
+    <_p>
+      The ColorHug display analysis tool can be used to profile display and GPU devices.
+      It will measure various kinds of latency, e.g. black-to-white and input-lag as
+      well as reporting color information and colorspace gamut volume.
+    </_p>
+    <_p>
+      Results can be exported as standalone HTML files and shared.
+    </_p>
+  </description>
+  <screenshots>
+    <screenshot type="default">https://raw.githubusercontent.com/hughski/colorhug-client/master/data/screenshots/colorhug-refresh1.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/hughski/colorhug-client/master/data/screenshots/colorhug-refresh2.png</screenshot>
+  </screenshots>
+  <url type="homepage">http://www.hughski.com/</url>
+  <updatecontact>richard_at_hughsie.com</updatecontact>
+</application>

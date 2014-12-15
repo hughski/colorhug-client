@@ -6,6 +6,7 @@
 data/colorhug-docs.desktop.in
 data/com.hughski.ColorHug.CcmxLoader.appdata.xml.in
 data/com.hughski.ColorHug.CcmxLoader.desktop.in
+data/com.hughski.ColorHug.DisplayAnalysis.appdata.xml.in
 data/com.hughski.ColorHug.DisplayAnalysis.desktop.in
 data/com.hughski.ColorHug.FlashLoader.appdata.xml.in
 data/com.hughski.ColorHug.FlashLoader.desktop.in
