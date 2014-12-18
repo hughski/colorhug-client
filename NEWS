@@ -1,3 +1,14 @@
+Version 0.2.5
+~~~~~~~~~~~~~
+Released: 2014-12-18
+
+New Features:
+ - Add a simple man page and AppData file for colorhug-refresh (Richard Hughes)
+
+Bugfixes:
+ - Add keywords to the various desktop files (Richard Hughes)
+ - Do not install the bash-completion files in /etc (Richard Hughes)
+
 Version 0.2.4
 ~~~~~~~~~~~~~
 Released: 2014-12-04

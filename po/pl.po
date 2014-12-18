@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-04 16:28+0000\n"
-"PO-Revision-Date: 2014-12-04 16:28+0000\n"
+"POT-Creation-Date: 2014-12-18 16:18+0000\n"
+"PO-Revision-Date: 2014-12-18 16:18+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/colorhug-client/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -101,61 +101,58 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Nie należy odłączać urządzenia ani wyłączać komputera."
 
 msgid "page0"
-msgstr ""
+msgstr "strona0"
 
 msgid "Your Score"
-msgstr ""
+msgstr "Wynik"
 
 msgid "Display"
-msgstr ""
+msgstr "Ekran"
 
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 msgid "Black-to-White"
-msgstr ""
+msgstr "Czarne do białego"
 
 msgid "White-to-Black"
-msgstr ""
+msgstr "Białe do czarnego"
 
 msgid "Refresh Rate"
-msgstr ""
+msgstr "Częstotliwość odświeżania"
 
 msgid "Color Temperature"
-msgstr ""
+msgstr "Temperatura koloru"
 
 msgid "White Luminance"
-msgstr ""
+msgstr "Luminacja bieli"
 
 msgid "Black Luminance"
-msgstr ""
+msgstr "Luminacja czerni"
 
 msgid "sRGB Coverage"
-msgstr ""
+msgstr "Pokrycie sRGB"
 
 msgid "AdobeRGB Coverage"
-msgstr ""
+msgstr "Pokrycie AdobeRGB"
 
 msgid "Native Gamma"
-msgstr ""
+msgstr "Natywna gamma"
 
 msgid "page1"
-msgstr ""
+msgstr "strona1"
 
 msgid "_Export results…"
-msgstr ""
+msgstr "Wy_eksportuj wyniki…"
 
 msgid "_About"
-msgstr ""
+msgstr "_O programie"
 
 msgid "_Quit"
-msgstr ""
+msgstr "Za_kończ"
 
-msgid "ColorHug Documentation"
-msgstr "Dokumentacja ColorHug"
-
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "Dokumentacja kolorymetru ekranów ColorHug"
+msgid "Modify the calibration matrices on the ColorHug device"
+msgstr "Modyfikuje macierze kalibracji urządzenia ColorHug"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -169,22 +166,38 @@ msgid ""
 "result."
 msgstr "Wybranie macierzy korekcji zwiększa dokładność urządzenia ColorHug, ale użycie domyślnej macierzy daje zadowalające wyniki kalibracji dla większości użytkowników."
 
-msgid "CCMX Loader"
-msgstr "Program wczytujący dane CCMX"
-
-msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Modyfikuje macierze kalibracji urządzenia ColorHug"
+msgid "The correction matrices on the device"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr ""
+msgstr "Analiza ekranu ColorHug"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
+msgstr "Próbkuje ekran przez dany czas, obserwując PWM, opóźnienie wprowadzania i artefakty odświeżania"
+
+msgid ""
+"The ColorHug display analysis tool can be used to profile display and GPU "
+"devices. It will measure various kinds of latency, e.g. black-to-white and "
+"input-lag as well as reporting color information and colorspace gamut "
+"volume."
 msgstr ""
+
+msgid "Results can be exported as standalone HTML files and shared."
+msgstr ""
+
+msgid "Main application window"
+msgstr ""
+
+msgid "Display analysis results"
+msgstr ""
+
+msgid "Update the firmware on the ColorHug colorimeter"
+msgstr "Aktualizuje oprogramowanie sprzętowe kolorymetru ColorHug"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -197,11 +210,23 @@ msgid ""
 " the device."
 msgstr "Używając parametrów wiersza poleceń, to narzędzie może także nagrywać specjalnie dostosowane pliki flash na urządzenie."
 
-msgid "Firmware Updater"
-msgstr "Aktualizacja oprogramowania sprzętowego"
+msgid "Application window showing new firmware detected"
+msgstr ""
 
-msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Aktualizuje oprogramowanie sprzętowe kolorymetru ColorHug"
+msgid "Applying updated firmware to the ColorHug device"
+msgstr ""
+
+msgid "ColorHug Documentation"
+msgstr "Dokumentacja ColorHug"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "Dokumentacja kolorymetru ekranów ColorHug"
+
+msgid "CCMX Loader"
+msgstr "Program wczytujący dane CCMX"
+
+msgid "CCMX;ColorHug;"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Określa, czy aktualizować oprogramowanie sprzętowe"
@@ -218,21 +243,30 @@ msgid ""
 msgstr "Położenie aktualizacji oprogramowania sprzętowego i plików kalibracji."
 
 msgid "Zoom in the graph to show only one pulse"
-msgstr ""
+msgstr "Przybliża wykres, aby wyświetlić tylko jeden puls"
 
 msgid "Whether the refresh graph should be zoomed to show one pulse only."
-msgstr ""
+msgstr "Czy wykres odświeżania powinien być przybliżony tak, aby wyświetlał tylko jeden puls."
 
 msgid "Show all RGB channels on the graph"
-msgstr ""
+msgstr "Wyświetla wszystkie kanały RGB na wykresie"
 
 msgid "Whether all captured channels should be shown."
-msgstr ""
+msgstr "Czy wyświetlać wszystkie przechwytywane kanały."
 
-msgid "Hide blacklight flicker on the graph"
-msgstr ""
+msgid "Hide backlight flicker on the graph"
+msgstr "Ukrywa miganie podświetlenia na wykresie"
 
 msgid "Whether the backlight PWM should be removed."
+msgstr "Czy usuwać PWM podświetlenia."
+
+msgid "Display;Analysis;ColorHug;"
+msgstr ""
+
+msgid "Firmware Updater"
+msgstr "Aktualizacja oprogramowania sprzętowego"
+
+msgid "Flash;Firmware;ColorHug;"
 msgstr ""
 
 msgid "Failed to create directory"
@@ -338,7 +372,7 @@ msgstr "Zapisanie pliku się nie powiodło"
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of CCMX files"
-msgstr ""
+msgstr "Pobranie listy plików CCMX się nie powiodło"
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -631,7 +665,7 @@ msgstr "%2im%02i"
 #. TRANSLATORS: This is ms
 #, c-format
 msgid "%.0fms"
-msgstr ""
+msgstr "%.0f ms"
 
 #. Translators: This is %2i seconds
 #, c-format
@@ -947,7 +981,7 @@ msgstr "Ustawia wartości kalibracji CCD"
 
 #. TRANSLATORS: command description
 msgid "Converts Intel HEX to BIN"
-msgstr ""
+msgstr "Konwertuje wartość HEX (szesnastkową) firmy Intel do wartości BIN (binarnej)"
 
 #. TRANSLATORS: program name
 msgid "Color Management"
@@ -963,63 +997,63 @@ msgstr "Pobranie próbek z urządzenia się nie powiodło"
 
 #. TRANSLATORS: PWM is pulse-width-modulation?
 msgid "Failed to remove PWM"
-msgstr ""
+msgstr "Usunięcie PWM się nie powiodło"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Nieznane"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to calculate USB latency"
-msgstr ""
+msgstr "Obliczenie opóźnienia USB się nie powiodło"
 
 msgid "Show single pulse"
-msgstr ""
+msgstr "Wyświetlanie jednego pulsu"
 
 msgid "Show channels"
-msgstr ""
+msgstr "Wyświetlanie kanałów"
 
 msgid "Filter backlight"
-msgstr ""
+msgstr "Filtrowanie podświetlenia"
 
 msgid "Export results"
-msgstr ""
+msgstr "Eksportowanie wyników"
 
 msgid "Export"
-msgstr ""
+msgstr "Eksport"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get save file"
-msgstr ""
+msgstr "Zapisanie pliku się nie powiodło"
 
 msgid "Please connect your ColorHug2"
-msgstr ""
+msgstr "Proszę podłączyć urządzenie ColorHug2"
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
-"start analysing your display."
+"start analyzing your display."
 msgstr ""
 
 msgid "Don't disturb the device while working!"
-msgstr ""
+msgstr "Nie należy ruszać urządzenia podczas działania."
 
 msgid ""
 "Please update the firmware on your ColorHug before using this application."
-msgstr ""
+msgstr "Proszę zaktualizować oprogramowanie sprzętowe urządzenia ColorHug przed użyciem tego programu."
 
 msgid "Device unsupported."
-msgstr ""
+msgstr "Nieobsługiwane urządzenie."
 
 msgid "Please connect your ColorHug2."
-msgstr ""
+msgstr "Proszę podłączyć urządzenie ColorHug2."
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Display Analysis"
-msgstr ""
+msgstr "O programie do analizy ekranu ColorHug"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr ""
+msgstr "Próbkuje ekran przez dany czas, obserwując PWM, opóźnienie wprowadzania i artefakty odświeżania."
 
 msgid "translator-credits"
-msgstr ""
+msgstr "Łukasz Jernaś <deejay1@srem.org>, 2012.\\n\nPiotr Drąg <piotrdrag@gmail.com>, 2012-2014."

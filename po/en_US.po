@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-04 16:28+0000\n"
-"PO-Revision-Date: 2014-12-04 16:28+0000\n"
+"POT-Creation-Date: 2014-12-18 16:18+0000\n"
+"PO-Revision-Date: 2014-12-18 16:18+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: English (United States) (http://www.transifex.com/projects/p/colorhug-client/language/en_US/)\n"
 "MIME-Version: 1.0\n"
@@ -149,11 +149,8 @@ msgstr "_About"
 msgid "_Quit"
 msgstr "_Quit"
 
-msgid "ColorHug Documentation"
-msgstr "ColorHug Documentation"
-
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "Documentation for the ColorHug display colorimeter"
+msgid "Modify the calibration matrices on the ColorHug device"
+msgstr "Modify the calibration matrices on the ColorHug device"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -167,11 +164,8 @@ msgid ""
 "result."
 msgstr "Selecting a correction matrix maximises the accuracy of the ColorHug but using the default matrix will give most users an acceptable calibration result."
 
-msgid "CCMX Loader"
-msgstr "CCMX Loader"
-
-msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Modify the calibration matrices on the ColorHug device"
+msgid "The correction matrices on the device"
+msgstr "The correction matrices on the device"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
@@ -185,6 +179,25 @@ msgid ""
 msgstr "Sample the display over time to observe PWM, input latency and refresh artifacts"
 
 msgid ""
+"The ColorHug display analysis tool can be used to profile display and GPU "
+"devices. It will measure various kinds of latency, e.g. black-to-white and "
+"input-lag as well as reporting color information and colorspace gamut "
+"volume."
+msgstr "The ColorHug display analysis tool can be used to profile display and GPU devices. It will measure various kinds of latency, e.g. black-to-white and input-lag as well as reporting color information and colorspace gamut volume."
+
+msgid "Results can be exported as standalone HTML files and shared."
+msgstr "Results can be exported as standalone HTML files and shared."
+
+msgid "Main application window"
+msgstr "Main application window"
+
+msgid "Display analysis results"
+msgstr "Display analysis results"
+
+msgid "Update the firmware on the ColorHug colorimeter"
+msgstr "Update the firmware on the ColorHug colorimeter"
+
+msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
@@ -195,11 +208,23 @@ msgid ""
 " the device."
 msgstr "Using command line arguments, this tool can also flash custom flash files to the device."
 
-msgid "Firmware Updater"
-msgstr "Firmware Updater"
+msgid "Application window showing new firmware detected"
+msgstr "Application window showing new firmware detected"
 
-msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Update the firmware on the ColorHug colorimeter"
+msgid "Applying updated firmware to the ColorHug device"
+msgstr "Applying updated firmware to the ColorHug device"
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug Documentation"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "Documentation for the ColorHug display colorimeter"
+
+msgid "CCMX Loader"
+msgstr "CCMX Loader"
+
+msgid "CCMX;ColorHug;"
+msgstr "CCMX;ColorHug;"
 
 msgid "Whether we should update to test firmware"
 msgstr "Whether we should update to test firmware"
@@ -227,11 +252,20 @@ msgstr "Show all RGB channels on the graph"
 msgid "Whether all captured channels should be shown."
 msgstr "Whether all captured channels should be shown."
 
-msgid "Hide blacklight flicker on the graph"
-msgstr "Hide blacklight flicker on the graph"
+msgid "Hide backlight flicker on the graph"
+msgstr "Hide backlight flicker on the graph"
 
 msgid "Whether the backlight PWM should be removed."
 msgstr "Whether the backlight PWM should be removed."
+
+msgid "Display;Analysis;ColorHug;"
+msgstr "Display;Analysis;ColorHug;"
+
+msgid "Firmware Updater"
+msgstr "Firmware Updater"
+
+msgid "Flash;Firmware;ColorHug;"
+msgstr "Flash;Firmware;ColorHug;"
 
 msgid "Failed to create directory"
 msgstr "Failed to create directory"
@@ -994,8 +1028,8 @@ msgstr "Please connect your ColorHug2"
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
-"start analysing your display."
-msgstr "Place your ColorHug in the spot on the left and click the blue button to start analysing your display."
+"start analyzing your display."
+msgstr "Place your ColorHug in the spot on the left and click the blue button to start analyzing your display."
 
 msgid "Don't disturb the device while working!"
 msgstr "Don't disturb the device while working!"

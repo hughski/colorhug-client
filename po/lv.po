@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-04 16:28+0000\n"
-"PO-Revision-Date: 2014-12-04 16:28+0000\n"
+"POT-Creation-Date: 2014-12-18 16:18+0000\n"
+"PO-Revision-Date: 2014-12-18 16:18+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Latvian (http://www.transifex.com/projects/p/colorhug-client/language/lv/)\n"
 "MIME-Version: 1.0\n"
@@ -101,61 +101,58 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
 
 msgid "page0"
-msgstr ""
+msgstr "lapa0"
 
 msgid "Your Score"
-msgstr ""
+msgstr "Jūsu rezultāts"
 
 msgid "Display"
-msgstr ""
+msgstr "Displejs"
 
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 msgid "Black-to-White"
-msgstr ""
+msgstr "Melns uz baltu"
 
 msgid "White-to-Black"
-msgstr ""
+msgstr "Balts uz melnu"
 
 msgid "Refresh Rate"
-msgstr ""
+msgstr "Atsvaidzināšanas biežums"
 
 msgid "Color Temperature"
-msgstr ""
+msgstr "Krāsas temperatūra"
 
 msgid "White Luminance"
-msgstr ""
+msgstr "Baltā gaišums"
 
 msgid "Black Luminance"
-msgstr ""
+msgstr "Melnā gaišums"
 
 msgid "sRGB Coverage"
-msgstr ""
+msgstr "sRGB pārklājums"
 
 msgid "AdobeRGB Coverage"
-msgstr ""
+msgstr "AdobeRGB pārklājums"
 
 msgid "Native Gamma"
-msgstr ""
+msgstr "Vietējā gamma"
 
 msgid "page1"
-msgstr ""
+msgstr "lapa1"
 
 msgid "_Export results…"
-msgstr ""
+msgstr "_Eksportēšanas rezultāti"
 
 msgid "_About"
-msgstr ""
+msgstr "P_ar"
 
 msgid "_Quit"
-msgstr ""
+msgstr "_Iziet"
 
-msgid "ColorHug Documentation"
-msgstr "ColorHug dokumentācija"
-
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "ColorHug displeja krāsu mērītāja dokumentācija"
+msgid "Modify the calibration matrices on the ColorHug device"
+msgstr "Modificēt kalibrācijas matricas ColorHug ierīcē"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -169,22 +166,38 @@ msgid ""
 "result."
 msgstr "Korekciju matricu izvēlē palielina ColorHug precizitāti, bet noklusējuma matricas izmantošana dos pieņemamus kalibrēšanas rezultātus."
 
-msgid "CCMX Loader"
-msgstr "CCMX ielādētājs"
-
-msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Modificēt kalibrācijas matricas ColorHug ierīcē"
+msgid "The correction matrices on the device"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr ""
+msgstr "ColorHug displeju analīze"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
 msgstr ""
+
+msgid ""
+"The ColorHug display analysis tool can be used to profile display and GPU "
+"devices. It will measure various kinds of latency, e.g. black-to-white and "
+"input-lag as well as reporting color information and colorspace gamut "
+"volume."
+msgstr ""
+
+msgid "Results can be exported as standalone HTML files and shared."
+msgstr ""
+
+msgid "Main application window"
+msgstr ""
+
+msgid "Display analysis results"
+msgstr ""
+
+msgid "Update the firmware on the ColorHug colorimeter"
+msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -197,11 +210,23 @@ msgid ""
 " the device."
 msgstr "Izmantojot komandrindas parametrus, šis rīks var arī pārrakstīt pielāgotās zibatmiņas datnes uz ierīces."
 
-msgid "Firmware Updater"
-msgstr "Aparātprogrammatūras atjauninātājs"
+msgid "Application window showing new firmware detected"
+msgstr ""
 
-msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
+msgid "Applying updated firmware to the ColorHug device"
+msgstr ""
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug dokumentācija"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "ColorHug displeja krāsu mērītāja dokumentācija"
+
+msgid "CCMX Loader"
+msgstr "CCMX ielādētājs"
+
+msgid "CCMX;ColorHug;"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Vai vajadzētu atjaunināt uz testa aparātprogrammatūru"
@@ -229,10 +254,19 @@ msgstr ""
 msgid "Whether all captured channels should be shown."
 msgstr ""
 
-msgid "Hide blacklight flicker on the graph"
+msgid "Hide backlight flicker on the graph"
 msgstr ""
 
 msgid "Whether the backlight PWM should be removed."
+msgstr ""
+
+msgid "Display;Analysis;ColorHug;"
+msgstr ""
+
+msgid "Firmware Updater"
+msgstr "Aparātprogrammatūras atjauninātājs"
+
+msgid "Flash;Firmware;ColorHug;"
 msgstr ""
 
 msgid "Failed to create directory"
@@ -631,7 +665,7 @@ msgstr "%2im%02i"
 #. TRANSLATORS: This is ms
 #, c-format
 msgid "%.0fms"
-msgstr ""
+msgstr "%.0fms"
 
 #. Translators: This is %2i seconds
 #, c-format
@@ -996,7 +1030,7 @@ msgstr ""
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
-"start analysing your display."
+"start analyzing your display."
 msgstr ""
 
 msgid "Don't disturb the device while working!"
@@ -1022,4 +1056,4 @@ msgid ""
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
+msgstr "Rūdolfs Mazurs"

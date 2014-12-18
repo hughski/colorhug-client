@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Zoltan Hoppár <zoltanh721@fedoraproject.org>, 2013
+# Zoltan Hoppár <zoltanh721@fedoraproject.org>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-04 16:28+0000\n"
-"PO-Revision-Date: 2014-12-04 16:28+0000\n"
+"POT-Creation-Date: 2014-12-18 16:18+0000\n"
+"PO-Revision-Date: 2014-12-18 16:18+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/colorhug-client/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -100,61 +101,58 @@ msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne húzza ki és ne kapcsolja ki a számítógépét."
 
 msgid "page0"
-msgstr ""
+msgstr "oldal 0"
 
 msgid "Your Score"
-msgstr ""
+msgstr "Pontjai száma"
 
 msgid "Display"
-msgstr ""
+msgstr "Kijelző"
 
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 msgid "Black-to-White"
-msgstr ""
+msgstr "Feketétől-fehérig"
 
 msgid "White-to-Black"
-msgstr ""
+msgstr "Fehértől-feketéig"
 
 msgid "Refresh Rate"
-msgstr ""
+msgstr "Frissítési sebesség"
 
 msgid "Color Temperature"
-msgstr ""
+msgstr "Színhőmérséklet"
 
 msgid "White Luminance"
-msgstr ""
+msgstr "Fehér fényesség"
 
 msgid "Black Luminance"
-msgstr ""
+msgstr "Fekete fényesség"
 
 msgid "sRGB Coverage"
-msgstr ""
+msgstr "sRGB átfedés"
 
 msgid "AdobeRGB Coverage"
-msgstr ""
+msgstr "AdobeRGB átfedés"
 
 msgid "Native Gamma"
-msgstr ""
+msgstr "Nativ Gamma"
 
 msgid "page1"
-msgstr ""
+msgstr "oldal 1"
 
 msgid "_Export results…"
-msgstr ""
+msgstr "_Exportálás eredménye..."
 
 msgid "_About"
-msgstr ""
+msgstr "A programról"
 
 msgid "_Quit"
-msgstr ""
+msgstr "Kilépés"
 
-msgid "ColorHug Documentation"
-msgstr "ColorHug Dokumentáció"
-
-msgid "Documentation for the ColorHug display colorimeter"
-msgstr "Dokumentáció a ColorHug coloriméterhez"
+msgid "Modify the calibration matrices on the ColorHug device"
+msgstr "Módosítsa a kalibrációs mátrixokat a ColorHug eszközön"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -168,22 +166,38 @@ msgid ""
 "result."
 msgstr "A korrekciós mátrix kiválasztásával maximalizálja a pontosságát a ColorHug-nak, de az alapértelmezett mátrix használatával a legtöbb felhasználó számára megfelelő kalibrációs eredményt biztosít."
 
-msgid "CCMX Loader"
-msgstr "CCMX betöltő"
-
-msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Módosítsa a kalibrációs mátrixokat a ColorHug eszközön"
+msgid "The correction matrices on the device"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr ""
+msgstr "ColorHug Kijelző Analízis"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
 msgstr ""
+
+msgid ""
+"The ColorHug display analysis tool can be used to profile display and GPU "
+"devices. It will measure various kinds of latency, e.g. black-to-white and "
+"input-lag as well as reporting color information and colorspace gamut "
+"volume."
+msgstr ""
+
+msgid "Results can be exported as standalone HTML files and shared."
+msgstr ""
+
+msgid "Main application window"
+msgstr ""
+
+msgid "Display analysis results"
+msgstr ""
+
+msgid "Update the firmware on the ColorHug colorimeter"
+msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
@@ -196,11 +210,23 @@ msgid ""
 " the device."
 msgstr "Parancssori paraméterek használatával, ez az eszköz képes egyéni, saját flash fájlokat írni az eszközre."
 
-msgid "Firmware Updater"
-msgstr "Firmware Frissítő"
+msgid "Application window showing new firmware detected"
+msgstr ""
 
-msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
+msgid "Applying updated firmware to the ColorHug device"
+msgstr ""
+
+msgid "ColorHug Documentation"
+msgstr "ColorHug Dokumentáció"
+
+msgid "Documentation for the ColorHug display colorimeter"
+msgstr "Dokumentáció a ColorHug coloriméterhez"
+
+msgid "CCMX Loader"
+msgstr "CCMX betöltő"
+
+msgid "CCMX;ColorHug;"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
 msgstr "Mindenképp frissítenie kell, hogy tesztelni tudja a firmware-t"
@@ -223,15 +249,24 @@ msgid "Whether the refresh graph should be zoomed to show one pulse only."
 msgstr ""
 
 msgid "Show all RGB channels on the graph"
-msgstr ""
+msgstr "Minden RGB csatorna megjelenítése a grafikonon"
 
 msgid "Whether all captured channels should be shown."
 msgstr ""
 
-msgid "Hide blacklight flicker on the graph"
-msgstr ""
+msgid "Hide backlight flicker on the graph"
+msgstr "Háttérfény szűrő elrejtése a grafikonon"
 
 msgid "Whether the backlight PWM should be removed."
+msgstr ""
+
+msgid "Display;Analysis;ColorHug;"
+msgstr ""
+
+msgid "Firmware Updater"
+msgstr "Firmware Frissítő"
+
+msgid "Flash;Firmware;ColorHug;"
 msgstr ""
 
 msgid "Failed to create directory"
@@ -337,7 +372,7 @@ msgstr "Sikertelen a fájlba mentés"
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of CCMX files"
-msgstr ""
+msgstr "Nem sikerült a CCMX fájlok letöltése"
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -469,7 +504,7 @@ msgstr "ColorHug alaphelyzetbe állítása sikertelen"
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Helytelen eszközhöz tartozó firmware!"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
@@ -544,11 +579,11 @@ msgstr "ColorHug észlelve"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "ColorHug2 észlelve"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "ColorHug+ észlelve"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -630,7 +665,7 @@ msgstr "%2im%02i"
 #. TRANSLATORS: This is ms
 #, c-format
 msgid "%.0fms"
-msgstr ""
+msgstr "%.0fms"
 
 #. Translators: This is %2i seconds
 #, c-format
@@ -858,11 +893,11 @@ msgstr "Beállítja az előméretező állandót"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "Lekérdezi a DAC értéket"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "DAC értéket állítja be"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
@@ -946,7 +981,7 @@ msgstr "Beállítja a CCD kalibrációs értékeit"
 
 #. TRANSLATORS: command description
 msgid "Converts Intel HEX to BIN"
-msgstr ""
+msgstr "Intel HEX átalakítása BIN formátumba"
 
 #. TRANSLATORS: program name
 msgid "Color Management"
@@ -962,58 +997,58 @@ msgstr "Minták lekérdezése nem sikerült"
 
 #. TRANSLATORS: PWM is pulse-width-modulation?
 msgid "Failed to remove PWM"
-msgstr ""
+msgstr "PWM eltávolítása sikertelen"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ismeretlen"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to calculate USB latency"
-msgstr ""
+msgstr "USB késés kiszámítása sikertelen"
 
 msgid "Show single pulse"
-msgstr ""
+msgstr "Egyetlen pulzus megjelenítése"
 
 msgid "Show channels"
-msgstr ""
+msgstr "Csatornák megjelenítése"
 
 msgid "Filter backlight"
-msgstr ""
+msgstr "Háttérfény szűrése"
 
 msgid "Export results"
-msgstr ""
+msgstr "Exportálás eredménye"
 
 msgid "Export"
-msgstr ""
+msgstr "Exportálás"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get save file"
-msgstr ""
+msgstr "Fájl mentése sikertelen (hozzáférési hiba?)"
 
 msgid "Please connect your ColorHug2"
-msgstr ""
+msgstr "Kérem csatlakoztassa a ColorHug2 eszközét"
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
-"start analysing your display."
+"start analyzing your display."
 msgstr ""
 
 msgid "Don't disturb the device while working!"
-msgstr ""
+msgstr "Kérem ne nyúljon az eszközhöz amig dolgozik!"
 
 msgid ""
 "Please update the firmware on your ColorHug before using this application."
-msgstr ""
+msgstr "Kérem frissítse a firmware-jét a ColorHug eszközén mielőtt használja ezt az alkalmazást."
 
 msgid "Device unsupported."
-msgstr ""
+msgstr "Nem támogatott eszköz."
 
 msgid "Please connect your ColorHug2."
-msgstr ""
+msgstr "Kérem csatlakoztassa a ColorHug2-őt!"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Display Analysis"
-msgstr ""
+msgstr "A ColorHug Kijelző Analízisről"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
@@ -1021,4 +1056,4 @@ msgid ""
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
+msgstr "Zoltan Hoppar (zoltanh721 at fedoraproject dot org)"
