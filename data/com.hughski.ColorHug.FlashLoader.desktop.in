@@ -6,5 +6,6 @@ Exec=colorhug-flash
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;System;
+_Keywords=Flash;Firmware;ColorHug;
 StartupNotify=true
 NoDisplay=false

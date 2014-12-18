@@ -6,5 +6,6 @@ Exec=colorhug-refresh
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;System;
+_Keywords=Display;Analysis;ColorHug;
 StartupNotify=true
 NoDisplay=false
