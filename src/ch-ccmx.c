@@ -509,6 +509,10 @@ _ch_device_get_download_id (GUsbDevice *device)
 	case CH_DEVICE_MODE_FIRMWARE2:
 		str = "colorhug2";
 		break;
+	case CH_DEVICE_MODE_BOOTLOADER_ALS:
+	case CH_DEVICE_MODE_FIRMWARE_ALS:
+		str = "colorhug-als";
+		break;
 	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
 	case CH_DEVICE_MODE_FIRMWARE_PLUS:
 		str = "colorhug-plus";

@@ -536,6 +536,7 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	switch (ch_device_get_mode (priv->device)) {
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_BOOTLOADER2:
+	case CH_DEVICE_MODE_BOOTLOADER_ALS:
 		ch_flash_set_flash_success_0 (priv);
 		return;
 		break;
@@ -716,6 +717,10 @@ ch_flash_get_device_download_kind (ChFlashPrivate *priv)
 	case CH_DEVICE_MODE_BOOTLOADER2:
 	case CH_DEVICE_MODE_FIRMWARE2:
 		str = "colorhug2";
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER_ALS:
+	case CH_DEVICE_MODE_FIRMWARE_ALS:
+		str = "colorhug-als";
 		break;
 	case CH_DEVICE_MODE_BOOTLOADER_PLUS:
 	case CH_DEVICE_MODE_FIRMWARE_PLUS:
@@ -1031,6 +1036,10 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 		/* TRANSLATORS: first release hardware */
 		str = g_strdup (_("ColorHug+ Detected"));
 		break;
+	case 0x04:
+		/* TRANSLATORS: ALS stands for ambient light sensor */
+		str = g_strdup (_("ColorHug ALS Detected"));
+		break;
 	case 0xff:
 		/* TRANSLATORS: fake hardware */
 		str = g_strdup (_("Emulated ColorHug Detected"));
@@ -1048,6 +1057,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	switch (ch_device_get_mode (priv->device)) {
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_BOOTLOADER2:
+	case CH_DEVICE_MODE_BOOTLOADER_ALS:
 		/* TRANSLATORS: the device is in bootloader mode */
 		title = _("Bootloader version");
 		str2 = g_strdup_printf ("%s %i.%i.%i",
@@ -1185,6 +1195,7 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	switch (ch_device_get_mode (priv->device)) {
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_BOOTLOADER2:
+	case CH_DEVICE_MODE_BOOTLOADER_ALS:
 		ch_flash_got_device_data (priv);
 		break;
 	default:

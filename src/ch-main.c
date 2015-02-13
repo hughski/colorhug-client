@@ -1956,6 +1956,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 {
 	gboolean ret;
 	gsize len = 0;
+	guint16 runcode_addr;
 	GMainLoop *loop = NULL;
 	_cleanup_free_ gchar *data_raw = NULL;
 	_cleanup_free_ guint8 *data = NULL;
@@ -1973,7 +1974,9 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	if (g_str_has_suffix (filename, ".bin")) {
 		data = g_memdup (data_raw, len);
 	} else if (g_str_has_suffix (filename, ".hex")) {
-		ret = ch_inhx32_to_bin (data_raw, &data, &len, error);
+		runcode_addr = ch_device_get_runcode_address (priv->device);
+		ret = ch_inhx32_to_bin_full (data_raw, &data, &len,
+					     runcode_addr, error);
 		if (!ret)
 			goto out;
 	} else {
@@ -2296,6 +2299,7 @@ static gboolean
 ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gsize len = 0;
+	guint16 runcode_addr;
 	_cleanup_free_ gchar *data = NULL;
 	_cleanup_free_ guint8 *out = NULL;
 
@@ -2313,7 +2317,8 @@ ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
 		return FALSE;
 
 	/* convert */
-	if (!ch_inhx32_to_bin (data, &out, &len, error))
+	runcode_addr = ch_device_get_runcode_address (priv->device);
+	if (!ch_inhx32_to_bin_full (data, &out, &len, runcode_addr, error))
 		return FALSE;
 
 	/* save file */
@@ -2510,7 +2515,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* read flash */
 	address = g_ascii_strtoull (values[0], NULL, 16);
-	if (address < CH_EEPROM_ADDR_RUNCODE) {
+	if (address < ch_device_get_runcode_address (priv->device)) {
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
@@ -2575,7 +2580,7 @@ ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* read flash */
 	address = g_ascii_strtoull (values[0], NULL, 16);
-	if (address < CH_EEPROM_ADDR_RUNCODE) {
+	if (address < ch_device_get_runcode_address (priv->device)) {
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
@@ -2619,7 +2624,7 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	/* read flash */
 	address = g_ascii_strtoull (values[0], NULL, 16);
-	if (address < CH_EEPROM_ADDR_RUNCODE) {
+	if (address < ch_device_get_runcode_address (priv->device)) {
 		g_set_error (error, 1, 0,
 			     "invalid address 0x%04x",
 			     address);
