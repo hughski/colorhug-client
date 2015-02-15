@@ -25,6 +25,7 @@
 #include <gio/gio.h>
 #include <locale.h>
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include <colord.h>
 #include <colorhug.h>
@@ -2504,12 +2505,14 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	gsize len;
 	guint16 address;
 	guint i;
+	guint val;
 	_cleanup_free_ guint8 *data = NULL;
 
 	/* parse */
-	if (g_strv_length (values) != 2) {
+	if (g_strv_length (values) < 2) {
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
+				     "invalid input, expect 'address (base-16)'"
+				     " 'length (base-10)' [value (base-16)]");
 		return FALSE;
 	}
 
@@ -2529,8 +2532,31 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 		return FALSE;
 	}
 
-	/* just write zeros */
+	/* get optional start value */
 	data = g_new0 (guint8, len);
+	if (g_strv_length (values) == 3) {
+		val = g_ascii_strtoull (values[2], NULL, 16);
+		if (val > 255) {
+			g_set_error (error, 1, 0, "invalid start val 0x%04x", val);
+			return FALSE;
+		}
+		for (i = 0; i < len; i++)
+			data[i] = val + i;
+	} else if (g_strv_length (values) == len + 2) {
+		for (i = 0; i < len; i++) {
+			val = g_ascii_strtoull (values[i + 2], NULL, 16);
+			if (val > 255) {
+				g_set_error (error, 1, 0, "invalid val 0x%04x", val);
+				return FALSE;
+			}
+			data[i] = val;
+		}
+	} else {
+		g_set_error_literal (error, 1, 0, "invalid argument format");
+		return FALSE;
+	}
+
+	/* write data */
 	ch_device_queue_write_flash (priv->device_queue,
 				     priv->device,
 				     address,
