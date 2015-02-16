@@ -1291,6 +1291,8 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	}
 
 	/* get the LEDs value */
+	if (g_strstr_len (values[0], -1, "off") != NULL)
+		ret = TRUE;
 	if (g_strstr_len (values[0], -1, "red") != NULL) {
 		leds |= CH_STATUS_LED_RED;
 		ret = TRUE;
