@@ -1995,23 +1995,34 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		goto out;
 
 	/* boot to bootloader */
-	ch_device_queue_reset (priv->device_queue, priv->device);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		goto out;
-
-	/* wait for the device to reconnect */
 	loop = g_main_loop_new (NULL, FALSE);
-	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
-		       ch_util_helper_quit_loop_cb,
-		       loop);
-	g_main_loop_run (loop);
-	device = ch_util_get_default_device (error);
-	if (device == NULL)
-		goto out;
+	switch (ch_device_get_mode (priv->device)) {
+	case CH_DEVICE_MODE_FIRMWARE:
+	case CH_DEVICE_MODE_FIRMWARE2:
+	case CH_DEVICE_MODE_FIRMWARE_ALS:
+	case CH_DEVICE_MODE_FIRMWARE_PLUS:
+	case CH_DEVICE_MODE_LEGACY:
+		ch_device_queue_reset (priv->device_queue, priv->device);
+		ret = ch_device_queue_process (priv->device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       error);
+		if (!ret)
+			goto out;
+
+		/* wait for the device to reconnect */
+		g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT,
+			       ch_util_helper_quit_loop_cb,
+			       loop);
+		g_main_loop_run (loop);
+		device = ch_util_get_default_device (error);
+		if (device == NULL)
+			goto out;
+		break;
+	default:
+		device = g_object_ref (priv->device);
+		break;
+	}
 
 	/* write firmware */
 	ch_device_queue_set_flash_success (priv->device_queue,
