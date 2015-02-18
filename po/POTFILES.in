@@ -1,16 +1,21 @@
 [encoding: UTF-8]
+[type: gettext/glade]data/ch-backlight-menus.ui
+[type: gettext/glade]data/ch-backlight.ui
 [type: gettext/glade]data/ch-ccmx.ui
 [type: gettext/glade]data/ch-flash.ui
 [type: gettext/glade]data/ch-refresh.ui
 [type: gettext/glade]data/ch-refresh-menus.ui
+data/appdata/com.hughski.ColorHug.Backlight.appdata.xml.in
 data/appdata/com.hughski.ColorHug.CcmxLoader.appdata.xml.in
 data/appdata/com.hughski.ColorHug.DisplayAnalysis.appdata.xml.in
 data/appdata/com.hughski.ColorHug.FlashLoader.appdata.xml.in
 data/colorhug-docs.desktop.in
+data/com.hughski.ColorHug.Backlight.desktop.in
 data/com.hughski.ColorHug.CcmxLoader.desktop.in
 data/com.hughski.colorhug-client.gschema.xml
 data/com.hughski.ColorHug.DisplayAnalysis.desktop.in
 data/com.hughski.ColorHug.FlashLoader.desktop.in
+src/ch-backlight.c
 src/ch-ccmx.c
 src/ch-flash.c
 src/ch-graph-widget.c

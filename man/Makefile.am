@@ -1,4 +1,5 @@
 EXTRA_DIST =						\
+	colorhug-backlight.sgml				\
 	colorhug-ccmx.sgml				\
 	colorhug-cmd.sgml				\
 	colorhug-refresh.sgml				\
@@ -6,6 +7,7 @@ EXTRA_DIST =						\
 
 if HAVE_DOCBOOK2MAN
 man_MANS =						\
+	colorhug-backlight.1				\
 	colorhug-ccmx.1					\
 	colorhug-cmd.1					\
 	colorhug-refresh.1				\
@@ -13,6 +15,8 @@ man_MANS =						\
 endif
 
 if HAVE_DOCBOOK2MAN
+colorhug-backlight.1: colorhug-backlight.sgml
+	docbook2man $? > /dev/null
 colorhug-ccmx.1: colorhug-ccmx.sgml
 	docbook2man $? > /dev/null
 colorhug-cmd.1: colorhug-cmd.sgml

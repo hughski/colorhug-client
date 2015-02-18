@@ -15,6 +15,7 @@ AM_CPPFLAGS =						\
 	-DLOCALEDIR=\""$(localedir)"\"
 
 bin_PROGRAMS =						\
+	colorhug-backlight				\
 	colorhug-ccmx					\
 	colorhug-cmd					\
 	colorhug-flash					\
@@ -146,6 +147,33 @@ colorhug_refresh_LDADD =				\
 colorhug_refresh_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
+colorhug_backlight_SOURCES =				\
+	ch-cleanup.h					\
+	ch-graph-widget.c				\
+	ch-graph-widget.h				\
+	ch-point-obj.c					\
+	ch-point-obj.h					\
+	ch-backlight.c					\
+	ch-backlight-resources.c				\
+	ch-backlight-resources.h
+
+if HAVE_WIN32_RELEASE
+colorhug_backlight_LDFLAGS =				\
+	-mwindows
+endif
+
+colorhug_backlight_LDADD =				\
+	$(COLORD_LIBS)					\
+	$(COLORD_GTK_LIBS)				\
+	$(GUSB_LIBS)					\
+	$(GLIB_LIBS)					\
+	$(GTK_LIBS)					\
+	$(COLORHUG_LIBS)				\
+	-lm
+
+colorhug_backlight_CFLAGS =				\
+	$(WARNINGFLAGS_C)
+
 if HAS_WINDOWS_ICON
 ch-refresh-rc.$(OBJEXT) : $(top_builddir)/data/ch-refresh.rc
 	$(AM_V_GEN)					\
@@ -201,7 +229,24 @@ ch-refresh-resources.h: colorhug-refresh.gresource.xml
 	--c-name ch					\
 	$(srcdir)/colorhug-refresh.gresource.xml
 
+ch-backlight-resources.c: colorhug-backlight.gresource.xml ../data/ch-backlight.ui ../data/ch-backlight-menus.ui
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-source				\
+	--c-name ch					\
+	$(srcdir)/colorhug-backlight.gresource.xml
+ch-backlight-resources.h: colorhug-backlight.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-header				\
+	--c-name ch					\
+	$(srcdir)/colorhug-backlight.gresource.xml
+
 BUILT_SOURCES =						\
+	ch-backlight-resources.c			\
+	ch-backlight-resources.h			\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
 	ch-flash-resources.c				\
@@ -210,6 +255,7 @@ BUILT_SOURCES =						\
 	ch-refresh-resources.h
 
 EXTRA_DIST =						\
+	colorhug-backlight.gresource.xml		\
 	colorhug-ccmx.gresource.xml			\
 	colorhug-flash.gresource.xml			\
 	colorhug-refresh.gresource.xml

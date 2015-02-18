@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Richard Hughes <richard@hughsie.com> -->
+<component type="desktop">
+  <id>com.hughski.ColorHug.Backlight.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <_name>ColorHug Backlight Utility</_name>
+  <_summary>Sample the ambient light level to control the backlight</_summary>
+  <description>
+    <_p>
+      The ColorHug backlight utility uses the ColorHug device to alter the
+      backlight level to compensate for the changing ambient light level.
+    </_p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/hughski/colorhug-client/master/data/appdata/colorhug-backlight.png</image>
+      <_caption>The ambient light control utility</_caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">http://www.hughski.com/</url>
+  <update_contact>richard_at_hughsie.com</update_contact>
+  <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
+  <developer_name>Hughski Limited</developer_name>
+  <update_contact>richard_at_hughsie.com</update_contact>
+</component>

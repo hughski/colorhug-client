@@ -38,6 +38,13 @@ This package includes the client tools which allows the user to upgrade
 the firmware on the sensor or to access the sensor from command line
 scripts.
 
+%package backlight
+Summary: ColorHug Backlight Utility
+Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
+
+%description backlight
+Sample the ambient light level to control the backlight.
+
 %package ccmx
 Summary: ColorHug CCMX Utility
 Requires: yelp
@@ -99,6 +106,14 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %files
 %doc COPYING
+
+%files backlight
+%doc COPYING
+%{_bindir}/colorhug-backlight
+%{_datadir}/appdata/com.hughski.ColorHug.Backlight.appdata.xml
+%{_datadir}/applications/com.hughski.ColorHug.Backlight.desktop
+%{_datadir}/icons/hicolor/*/apps/colorhug-backlight.png
+%{_mandir}/man1/colorhug-backlight.1.gz
 
 %files ccmx
 %doc COPYING

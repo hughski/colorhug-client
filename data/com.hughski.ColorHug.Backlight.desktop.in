@@ -1,0 +1,11 @@
+[Desktop Entry]
+_Name=ColorHug Backlight Utility
+_Comment=Sample the ambient light level to control the backlight
+Icon=colorhug-backlight
+Exec=colorhug-backlight
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;System;
+_Keywords=Display;Backlight;Ambient;ColorHug;
+StartupNotify=true
+NoDisplay=false

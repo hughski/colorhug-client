@@ -28,4 +28,21 @@
       <description>Whether the backlight PWM should be removed.</description>
     </key>
   </schema>
+  <schema id="com.hughski.ColorHug.Backlight" path="/com/hughski/ColorHug/Backlight/">
+    <key name="integration" type="d">
+      <default>0.2</default>
+      <summary>The integration time for each sample</summary>
+      <description>Set the integration time in seconds for the ambient light sample.</description>
+    </key>
+    <key name="smooth" type="d">
+      <default>0.3</default>
+      <summary>Backlight smoothing factor</summary>
+      <description>The amount of backlight smoothing for ambient light changes.</description>
+    </key>
+    <key name="refresh" type="d">
+      <default>0.3</default>
+      <summary>The refresh rate between samples</summary>
+      <description>The refresh rate in seconds between samples.</description>
+    </key>
+  </schema>
 </schemalist>

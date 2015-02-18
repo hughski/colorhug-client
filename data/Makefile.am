@@ -17,6 +17,7 @@ pkgdata_DATA = $(pkgdata_in_files:.desktop.in=.desktop)
 desktopdir = $(datadir)/applications
 desktop_in_files =					\
 	colorhug-docs.desktop.in			\
+	com.hughski.ColorHug.Backlight.desktop.in	\
 	com.hughski.ColorHug.CcmxLoader.desktop.in	\
 	com.hughski.ColorHug.DisplayAnalysis.desktop.in	\
 	com.hughski.ColorHug.FlashLoader.desktop.in
@@ -27,6 +28,8 @@ endif
 gsettings_SCHEMAS = com.hughski.colorhug-client.gschema.xml
 
 UI_FILES =						\
+	ch-backlight-menus.ui				\
+	ch-backlight.ui					\
 	ch-ccmx.ui					\
 	ch-flash.ui					\
 	ch-refresh-menus.ui				\
@@ -55,6 +58,7 @@ clean-local :
 
 DISTCLEANFILES =					\
 	colorhug-docs.desktop				\
+	com.hughski.ColorHug.Backlight.desktop		\
 	com.hughski.ColorHug.CcmxLoader.desktop		\
 	com.hughski.ColorHug.DisplayAnalysis.desktop	\
 	com.hughski.ColorHug.FlashLoader.desktop	\
