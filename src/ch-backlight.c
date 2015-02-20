@@ -128,6 +128,29 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 		break;
 	}
 
+	/* set subtitle */
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "header"));
+	switch (mode) {
+	case CH_DEVICE_MODE_BOOTLOADER:
+	case CH_DEVICE_MODE_FIRMWARE:
+		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     _("Using ColorHug device"));
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER2:
+	case CH_DEVICE_MODE_FIRMWARE2:
+		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     _("Using ColorHug2 device"));
+		break;
+	case CH_DEVICE_MODE_BOOTLOADER_ALS:
+	case CH_DEVICE_MODE_FIRMWARE_ALS:
+		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     _("Using ColorHugALS device"));
+		break;
+	default:
+		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w), NULL);
+		break;
+	}
+
 	/* make the window as small as possible */
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_backlight"));
 	gtk_window_resize (GTK_WINDOW (w), 100, 100);
