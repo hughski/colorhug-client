@@ -114,6 +114,7 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "connect");
 		g_string_append_printf (msg, "%s\n\n",
+			/* TRANSLATORS: the bootloader can't do ambient readings */
 			_("Please update the firmware on your ColorHug before "
 			  "using this application."));
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_intro"));
@@ -122,6 +123,7 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 	default:
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "connect");
+		/* TRANSLATORS: no device is attached */
 		g_string_append (msg, _("Please connect your ColorHug."));
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_intro"));
 		gtk_label_set_label (GTK_LABEL (w), msg->str);
@@ -134,16 +136,19 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_FIRMWARE:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     /* TRANSLATORS: original device */
 					     _("Using ColorHug device"));
 		break;
 	case CH_DEVICE_MODE_BOOTLOADER2:
 	case CH_DEVICE_MODE_FIRMWARE2:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     /* TRANSLATORS: new and improved */
 					     _("Using ColorHug2 device"));
 		break;
 	case CH_DEVICE_MODE_BOOTLOADER_ALS:
 	case CH_DEVICE_MODE_FIRMWARE_ALS:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     /* TRANSLATORS: ambient light sensor */
 					     _("Using ColorHugALS device"));
 		break;
 	default:
@@ -186,8 +191,9 @@ ch_backlight_set_brightness (ChBacklightPrivate *priv, gdouble percentage)
 					 &error);
 	if (retval == NULL) {
 		ch_backlight_error_dialog (priv,
-					 _("Failed to set brightness"),
-					 error->message);
+					   /* TRANSLATORS: set the backlight */
+					   _("Failed to set brightness"),
+					   error->message);
 		return;
 	}
 	g_timer_reset (priv->last_set);
@@ -216,8 +222,9 @@ ch_backlight_get_brightness (ChBacklightPrivate *priv)
 					 &error);
 	if (retval == NULL) {
 		ch_backlight_error_dialog (priv,
-					 _("Failed to get brightness"),
-					 error->message);
+					   /* TRANSLATORS: get the backlight */
+					   _("Failed to get brightness"),
+					   error->message);
 		return -1;
 	}
 	g_variant_get (retval, "(v)", &brightness);
@@ -375,6 +382,7 @@ ch_backlight_tick_cb (gpointer user_data)
 	if (priv->device == NULL)
 		return FALSE;
 	if (priv->idle_id > 0) {
+		priv->idle_id = 0;
 		g_warning ("sample time too fast, dropping event");
 		return TRUE;
 	}
@@ -481,6 +489,7 @@ ch_backlight_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpo
 			       /* TRANSLATORS: this is the application name */
 			       "program-name", _("ColorHug Backlight Utility"),
 			       "authors", authors,
+			       /* TRANSLATORS: application description */
 			       "comments", _("Sample the ambient light to control the backlight."),
 			       "copyright", copyright,
 			       "license-type", GTK_LICENSE_GPL_2_0,
@@ -806,6 +815,7 @@ main (int argc, char **argv)
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_add_main_entries (context, options, NULL);
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
+		/* TRANSLATORS: user has sausages for fingers */
 		g_warning ("%s: %s", _("Failed to parse command line options"),
 			   error->message);
 	}

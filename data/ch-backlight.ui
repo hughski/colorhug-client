@@ -70,7 +70,7 @@
           </object>
           <packing>
             <property name="name">connect</property>
-            <property name="title" translatable="yes">page0</property>
+            <property name="title">page0</property>
           </packing>
         </child>
         <child>
@@ -96,7 +96,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Ambient</property>
+                    <property name="label" translatable="yes" comments="The surrounding light level">Ambient</property>
                     <property name="xalign">1</property>
                     <style>
                       <class name="dim-label"/>
@@ -127,7 +127,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Color</property>
+                    <property name="label" translatable="yes" comments="The backlight color">Color</property>
                     <property name="xalign">1</property>
                     <style>
                       <class name="dim-label"/>
@@ -156,7 +156,7 @@
                   <object class="GtkLabel" id="label_smooth_title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Smoothing</property>
+                    <property name="label" translatable="yes" comments="The amount of smoothing done to the backlight readings">Smoothing</property>
                     <property name="xalign">1</property>
                     <style>
                       <class name="dim-label"/>
@@ -186,7 +186,7 @@
                   <object class="GtkLabel" id="label_refresh_title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Refresh</property>
+                    <property name="label" translatable="yes" comments="The rate that we're sampling the sensor">Refresh</property>
                     <property name="xalign">1</property>
                     <style>
                       <class name="dim-label"/>
@@ -250,7 +250,7 @@
           </object>
           <packing>
             <property name="name">results</property>
-            <property name="title" translatable="yes">page1</property>
+            <property name="title">page1</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -290,7 +290,7 @@
                   <object class="GtkLabel" id="label_button_up">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Up</property>
+                    <property name="label" translatable="yes" comments="Backlight up 5%">Up</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -332,7 +332,7 @@
                   <object class="GtkLabel" id="label_button_down">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Down</property>
+                    <property name="label" translatable="yes" comments="Backlight down 5%">Down</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -346,9 +346,6 @@
               <class name="suggested-action"/>
             </style>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
