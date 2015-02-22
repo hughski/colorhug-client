@@ -362,6 +362,7 @@ static void
 ch_refresh_update_ui (ChRefreshPrivate *priv)
 {
 	CdSpectrum *sp_tmp;
+	GAction *action;
 	gboolean ret;
 	gboolean zoom;
 	gdouble jitter;
@@ -370,6 +371,10 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	gdouble duration;
 	GtkWidget *w;
 	_cleanup_error_free_ GError *error = NULL;
+
+	/* enable export */
+	action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "export");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
 	/* update display refresh rate */
 	ch_refresh_update_refresh_rate (priv);
@@ -1320,6 +1325,7 @@ static void
 ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 {
 	CdColorRGB source;
+	GAction *action;
 	GtkBox *box;
 	GtkWidget *main_window;
 	GtkWidget *w;
@@ -1331,6 +1337,8 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	g_action_map_add_action_entries (G_ACTION_MAP (application),
 					 actions, G_N_ELEMENTS (actions),
 					 priv);
+	action = g_action_map_lookup_action (G_ACTION_MAP (application), "export");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
 	/* get UI */
 	priv->builder = gtk_builder_new ();
