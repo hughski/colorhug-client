@@ -668,7 +668,7 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	/* get UI */
 	priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_resource (priv->builder,
-						"/com/hughski/ColorHug/ch-backlight.ui",
+						"/com/hughski/ColorHug/Backlight/ch-backlight.ui",
 						&error);
 	if (retval == 0) {
 		g_warning ("failed to load ui: %s", error->message);
@@ -683,7 +683,7 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	gtk_widget_hide (main_window);
 
 	/* setup USB image */
-	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/usb.svg",
+	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/Backlight/usb.svg",
 							200, -1, TRUE, &error);
 	if (pixbuf == NULL) {
 		g_warning ("failed to load usb.svg: %s", error->message);

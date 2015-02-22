@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
- <gresource prefix="/com/hughski/ColorHug">
+ <gresource prefix="/com/hughski/ColorHug/Backlight">
  <file compressed="true">ch-backlight.ui</file>
  <file compressed="true" alias="gtk/menus.ui">ch-backlight-menus.ui</file>
  <file compressed="true">colorhug-gray.svg</file>
