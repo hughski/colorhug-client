@@ -105,12 +105,20 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 	case CH_DEVICE_MODE_FIRMWARE:
 	case CH_DEVICE_MODE_FIRMWARE2:
 	case CH_DEVICE_MODE_FIRMWARE_ALS:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
+		gtk_widget_set_visible (w, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_down"));
+		gtk_widget_set_visible (w, TRUE);
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "results");
 		break;
 	case CH_DEVICE_MODE_BOOTLOADER:
 	case CH_DEVICE_MODE_BOOTLOADER2:
 	case CH_DEVICE_MODE_BOOTLOADER_ALS:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_down"));
+		gtk_widget_set_visible (w, FALSE);
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "connect");
 		g_string_append_printf (msg, "%s\n\n",
@@ -121,6 +129,10 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 		gtk_label_set_label (GTK_LABEL (w), msg->str);
 		break;
 	default:
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_down"));
+		gtk_widget_set_visible (w, FALSE);
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "connect");
 		/* TRANSLATORS: no device is attached */
