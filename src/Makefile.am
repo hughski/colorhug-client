@@ -191,7 +191,7 @@ ch-flash-resources.c: colorhug-flash.gresource.xml ../data/ch-flash.ui
 	--generate-source				\
 	--c-name ch					\
 	$(srcdir)/colorhug-flash.gresource.xml
-ch-flash-resources.h: colorhug-flash.gresource.xml
+ch-flash-resources.h: colorhug-flash.gresource.xml ../data/ch-flash.ui ../data/ch-flash-menus.ui
 	$(AM_V_GEN)					\
 	glib-compile-resources --target=$@		\
 	--sourcedir=$(top_srcdir)/data			\
