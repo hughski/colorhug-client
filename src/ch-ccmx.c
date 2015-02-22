@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2009-2014 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2009-2015 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -72,6 +72,7 @@ typedef struct {
 	GMainLoop	*gen_loop;
 	GtkWidget	*gen_sample_widget;
 	CdIt8		*gen_ccmx;
+	guint		 inhibit_id;
 } ChCcmxPrivate;
 
 enum {
@@ -128,37 +129,13 @@ ch_ccmx_activate_cb (GApplication *application, ChCcmxPrivate *priv)
 }
 
 /**
- * ch_ccmx_close_button_cb:
- **/
-static void
-ch_ccmx_close_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
-{
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_ccmx"));
-	gtk_widget_destroy (widget);
-}
-
-/**
- * ch_ccmx_help_button_cb:
- **/
-static void
-ch_ccmx_help_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
-{
-	gboolean ret;
-	_cleanup_error_free_ GError *error = NULL;
-	ret = gtk_show_uri (NULL, "help:colorhug-client/load-ccmx",
-			    GDK_CURRENT_TIME, &error);
-	if (!ret)
-		g_warning ("Failed to load help document: %s", error->message);
-}
-
-/**
  * ch_ccmx_gen_close_button_cb:
  **/
 static void
-ch_ccmx_gen_close_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+ch_ccmx_gen_close_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_gen"));
-	gtk_widget_hide (widget);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_gen"));
+	gtk_widget_hide (w);
 }
 
 /**
@@ -762,10 +739,11 @@ ch_ccmx_get_calibration_cb (GObject *source,
 			    GAsyncResult *res,
 			    gpointer user_data)
 {
+	GAction *action;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	const gchar *title;
-	GtkWidget *widget;
+	GtkWidget *w;
 	guint i;
 	_cleanup_error_free_ GError *error = NULL;
 
@@ -794,22 +772,22 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	ch_ccmx_add_local_files (priv);
 
 	/* setup UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_import"));
-	gtk_widget_show (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_generate"));
-	gtk_widget_set_visible (widget, priv->gen_sensor_spectral != NULL);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+	gtk_widget_hide (w);
+	action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "generate");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), priv->gen_sensor_spectral != NULL);
+	action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "import");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
 	/* select the right checkboxes */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_lcd"));
-	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[0]);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_crt"));
-	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[1]);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_projector"));
-	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[2]);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_led"));
-	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (widget), priv->calibration_map[3]);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_lcd"));
+	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (w), priv->calibration_map[0]);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_crt"));
+	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (w), priv->calibration_map[1]);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_projector"));
+	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (w), priv->calibration_map[2]);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_led"));
+	ch_ccmx_set_combo_from_index (GTK_COMBO_BOX (w), priv->calibration_map[3]);
 
 	/* we've setup */
 	priv->done_get_cal = TRUE;
@@ -871,7 +849,6 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 {
 	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	GtkWidget *widget;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	_cleanup_error_free_ GError *error = NULL;
 
@@ -881,15 +858,11 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 		 * maps a specific matrix to a display type */
 		title = _("Failed to set the calibration map");
 		ch_ccmx_error_dialog (priv, title, error->message);
-		goto out;
+		return;
 	}
 
 	/* update the combos */
 	ch_ccmx_refresh_calibration_data (priv);
-out:
-	/* update UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
-	gtk_widget_set_sensitive (widget, TRUE);
 }
 
 /**
@@ -901,7 +874,6 @@ ch_ccmx_set_calibration_cb (GObject *source,
 			    gpointer user_data)
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	GtkWidget *widget;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
 	_cleanup_error_free_ GError *error = NULL;
 
@@ -912,10 +884,6 @@ ch_ccmx_set_calibration_cb (GObject *source,
 				       error->message);
 		return;
 	}
-
-	/* assign it here */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
-	gtk_widget_set_sensitive (widget, FALSE);
 
 	/* hit hardware */
 	ch_device_queue_set_calibration_map (priv->device_queue,
@@ -1010,42 +978,6 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 }
 
 /**
- * ch_ccmx_import_button_cb:
- **/
-static void
-ch_ccmx_import_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
-{
-	GtkWindow *window;
-	guint i;
-	_cleanup_free_ gchar *filename = NULL;
-	_cleanup_error_free_ GError *error = NULL;
-
-	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_ccmx"));
-	filename = ch_ccmx_get_profile_filename (window);
-	if (filename == NULL)
-		return;
-
-	/* import the file into a spare slot */
-	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
-		if (priv->ccmx_types[i] == 0)
-			break;
-	}
-	if (i == CH_CALIBRATION_MAX) {
-		ch_ccmx_error_dialog (priv,
-				      _("No space left on device"),
-				      _("All 64 slots are used up."));
-		return;
-	}
-
-	/* load this ccmx file as the new calibration */
-	if (!ch_ccmx_set_calibration_file (priv, i, filename, &error)) {
-		ch_ccmx_error_dialog (priv,
-				       _("Failed to load file"),
-				       error->message);
-	}
-}
-
-/**
  * ch_ccmx_refresh_calibration_data:
  **/
 static void
@@ -1084,7 +1016,7 @@ static void
 ch_ccmx_got_device (ChCcmxPrivate *priv)
 {
 	const gchar *title;
-	GtkWidget *widget;
+	GtkWidget *w;
 	_cleanup_error_free_ GError *error = NULL;
 
 	/* fake device */
@@ -1101,20 +1033,20 @@ ch_ccmx_got_device (ChCcmxPrivate *priv)
 
 fake_device:
 	/* update the UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_connect"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_header"));
-	gtk_widget_show (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "grid_data"));
-	gtk_widget_show (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
-	gtk_widget_show (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_connect"));
+	gtk_widget_hide (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_header"));
+	gtk_widget_show (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "grid_data"));
+	gtk_widget_show (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+	gtk_widget_show (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	/* TRANSLATORS: get the calibration matrices from the device */
 	title = _("Getting calibration from device…");
-	gtk_label_set_label (GTK_LABEL (widget), title);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
-	gtk_widget_show (widget);
+	gtk_label_set_label (GTK_LABEL (w), title);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	gtk_widget_show (w);
 
 	/* start getting the calibration matrices */
 	ch_ccmx_refresh_calibration_data (priv);
@@ -1157,7 +1089,6 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 	gint idx_tmp;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	GtkWidget *widget;
 	guint cal_index;
 	guint i;
 	_cleanup_error_free_ GError *error = NULL;
@@ -1219,10 +1150,6 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 							"colorhug-ccmx-idx"));
 	priv->calibration_map[cal_index] = idx_tmp;
 
-	/* update UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
-	gtk_widget_set_sensitive (widget, FALSE);
-
 	/* hit hardware */
 	ch_device_queue_set_calibration_map (priv->device_queue,
 					     priv->device,
@@ -1247,7 +1174,7 @@ ch_ccmx_got_file_cb (SoupSession *session,
 {
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
 	gboolean ret;
-	GtkWidget *widget;
+	GtkWidget *w;
 	SoupURI *uri;
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_free_ gchar *basename = NULL;
@@ -1290,8 +1217,8 @@ ch_ccmx_got_file_cb (SoupSession *session,
 
 	/* update UI */
 	if (--priv->ccmx_idx == 0) {
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
-		gtk_widget_hide (widget);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+		gtk_widget_hide (w);
 		ch_ccmx_add_local_files (priv);
 	}
 }
@@ -1334,7 +1261,7 @@ ch_ccmx_got_index_cb (SoupSession *session,
 {
 	const gchar *title;
 	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
-	GtkWidget *widget;
+	GtkWidget *w;
 	guint i;
 	_cleanup_free_ gchar *location = NULL;
 	_cleanup_free_ gchar *server_uri = NULL;
@@ -1393,8 +1320,8 @@ ch_ccmx_got_index_cb (SoupSession *session,
 
 	/* nothing to do */
 	if (priv->ccmx_idx == 0) {
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
-		gtk_widget_hide (widget);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+		gtk_widget_hide (w);
 	}
 }
 
@@ -1418,7 +1345,7 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 	CdColorXYZ xyz;
 	CdColorXYZ *xyz_tmp;
 	const gchar *tmp;
-	GtkWidget *widget;
+	GtkWidget *w;
 	guint i;
 	guint len;
 	_cleanup_error_free_ GError *error = NULL;
@@ -1452,16 +1379,16 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 					     CD_SENSOR_ERROR,
 					     CD_SENSOR_ERROR_REQUIRED_POSITION_CALIBRATE)) {
 				priv->gen_waiting_for_interaction = TRUE;
-				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-				gtk_widget_set_sensitive (widget, TRUE);
-				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
+				w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+				gtk_widget_set_sensitive (w, TRUE);
+				w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
 				/* TRANSLATORS: the user needs to change something on the device */
-				gtk_label_set_markup (GTK_LABEL (widget), _("Set the device to the calibrate position and click 'Next'."));
-				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+				gtk_label_set_markup (GTK_LABEL (w), _("Set the device to the calibrate position and click 'Next'."));
+				w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
 				tmp = cd_sensor_get_metadata_item (priv->gen_sensor_spectral,
 								   CD_SENSOR_METADATA_IMAGE_CALIBRATE);
-				gtk_image_set_from_file (GTK_IMAGE (widget), tmp);
-				gtk_widget_set_visible (widget, TRUE);
+				gtk_image_set_from_file (GTK_IMAGE (w), tmp);
+				gtk_widget_set_visible (w, TRUE);
 				gtk_widget_set_visible (priv->gen_sample_widget, FALSE);
 				goto out;
 			}
@@ -1469,25 +1396,25 @@ ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 					     CD_SENSOR_ERROR,
 					     CD_SENSOR_ERROR_REQUIRED_POSITION_SURFACE)) {
 				priv->gen_waiting_for_interaction = TRUE;
-				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-				gtk_widget_set_sensitive (widget, TRUE);
-				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
+				w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+				gtk_widget_set_sensitive (w, TRUE);
+				w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
 				/* TRANSLATORS: the user needs to change something on the device */
-				gtk_label_set_markup (GTK_LABEL (widget), _("Set the device to the surface position and click 'Next'."));
-				widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+				gtk_label_set_markup (GTK_LABEL (w), _("Set the device to the surface position and click 'Next'."));
+				w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
 				tmp = cd_sensor_get_metadata_item (priv->gen_sensor_spectral,
 								   CD_SENSOR_METADATA_IMAGE_SCREEN);
-				gtk_image_set_from_file (GTK_IMAGE (widget), tmp);
-				gtk_widget_set_visible (widget, TRUE);
+				gtk_image_set_from_file (GTK_IMAGE (w), tmp);
+				gtk_widget_set_visible (w, TRUE);
 				gtk_widget_set_visible (priv->gen_sample_widget, FALSE);
 				goto out;
 			}
 			g_warning ("failed to get sample: %s", error->message);
 			goto out;
 		}
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), (gfloat) i / (len - 1));
-		gtk_widget_set_visible (widget, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (w), (gfloat) i / (len - 1));
+		gtk_widget_set_visible (w, TRUE);
 		cd_it8_add_data (priv->gen_ti3_spectral, &rgb, xyz_tmp);
 		g_debug ("for %f,%f,%f got %f,%f,%f",
 			 rgb.R, rgb.G, rgb.B,
@@ -1529,7 +1456,7 @@ ch_ccmx_measure_patches_colorhug (ChCcmxPrivate *priv)
 {
 	CdColorRGB rgb;
 	CdColorXYZ xyz;
-	GtkWidget *widget;
+	GtkWidget *w;
 	guint i;
 	guint len;
 
@@ -1561,9 +1488,9 @@ ch_ccmx_measure_patches_colorhug (ChCcmxPrivate *priv)
 					       ch_ccmx_get_sample_colorhug_cb,
 					       priv);
 		g_main_loop_run (priv->gen_loop);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), (gfloat) i / (len - 1));
-		gtk_widget_set_visible (widget, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (w), (gfloat) i / (len - 1));
+		gtk_widget_set_visible (w, TRUE);
 		cd_it8_add_data (priv->gen_ti3_colorhug, &rgb, &xyz);
 		g_debug ("for %f,%f,%f got %f,%f,%f",
 			 rgb.R, rgb.G, rgb.B,
@@ -1623,7 +1550,7 @@ static void
 ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 {
 	GtkNotebook *notebook;
-	GtkWidget *widget;
+	GtkWidget *w;
 	gboolean ret;
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_free_ gchar *markup = NULL;
@@ -1631,66 +1558,66 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 	notebook = GTK_NOTEBOOK (gtk_builder_get_object (priv->builder, "notebook_gen"));
 	switch (priv->gen_current_page) {
 	case CH_CCMX_PAGE_DEVICES:
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-		gtk_widget_set_sensitive (widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+		gtk_widget_set_sensitive (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
 		gtk_notebook_set_current_page (notebook, 0);
 		break;
 	case CH_CCMX_PAGE_REFERENCE:
 		/* show ref measure */
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
-		gtk_label_set_markup (GTK_LABEL (widget), _("Put the photospectrometer on the screen and click 'Next'."));
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-		gtk_widget_set_sensitive (widget, TRUE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
-		gtk_image_set_from_file (GTK_IMAGE (widget), cd_sensor_get_metadata_item (priv->gen_sensor_spectral, CD_SENSOR_METADATA_IMAGE_ATTACH));
-		gtk_widget_set_visible (widget, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
+		gtk_label_set_markup (GTK_LABEL (w), _("Put the photospectrometer on the screen and click 'Next'."));
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+		gtk_widget_set_sensitive (w, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+		gtk_image_set_from_file (GTK_IMAGE (w), cd_sensor_get_metadata_item (priv->gen_sensor_spectral, CD_SENSOR_METADATA_IMAGE_ATTACH));
+		gtk_widget_set_visible (w, TRUE);
 		gtk_widget_set_visible (priv->gen_sample_widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
 		gtk_notebook_set_current_page (notebook, 1);
 
 		/* move window to right screen */
 		ch_ccmx_gen_window_move (priv);
 		break;
 	case CH_CCMX_PAGE_REFERENCE_ACTION:
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
 		markup = g_strdup_printf ("<b>%s</b>", _("Do not remove the device whilst measurement is in progress"));
-		gtk_label_set_markup (GTK_LABEL (widget), markup);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-		gtk_widget_set_sensitive (widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
+		gtk_label_set_markup (GTK_LABEL (w), markup);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+		gtk_widget_set_sensitive (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
 		gtk_widget_set_visible (priv->gen_sample_widget, TRUE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
 		/* measure spectro ti3 */
 		ch_ccmx_measure_patches_spectro (priv);
 		break;
 	case CH_CCMX_PAGE_COLORHUG:
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
-		gtk_label_set_markup (GTK_LABEL (widget), _("Now put the ColorHug on the screen and click 'Next' again."));
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-		gtk_widget_set_sensitive (widget, TRUE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
-		gtk_image_set_from_file (GTK_IMAGE (widget), cd_sensor_get_metadata_item (priv->gen_sensor_colorhug, CD_SENSOR_METADATA_IMAGE_ATTACH));
-		gtk_widget_set_visible (widget, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
+		gtk_label_set_markup (GTK_LABEL (w), _("Now put the ColorHug on the screen and click 'Next' again."));
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+		gtk_widget_set_sensitive (w, TRUE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+		gtk_image_set_from_file (GTK_IMAGE (w), cd_sensor_get_metadata_item (priv->gen_sensor_colorhug, CD_SENSOR_METADATA_IMAGE_ATTACH));
+		gtk_widget_set_visible (w, TRUE);
 		gtk_widget_set_visible (priv->gen_sample_widget, FALSE);
 		gtk_notebook_set_current_page (notebook, 1);
 		break;
 	case CH_CCMX_PAGE_COLORHUG_ACTION:
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_measure"));
 		markup = g_strdup_printf ("<b>%s</b>", _("Do not remove the device whilst measurement is in progress"));
-		gtk_label_set_markup (GTK_LABEL (widget), markup);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-		gtk_widget_set_sensitive (widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
+		gtk_label_set_markup (GTK_LABEL (w), markup);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+		gtk_widget_set_sensitive (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "progressbar_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
 		gtk_widget_set_visible (priv->gen_sample_widget, TRUE);
 		/* measure colorhug ti3 */
 		ch_ccmx_measure_patches_colorhug (priv);
@@ -1708,30 +1635,30 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 		/* show summary */
 		gtk_notebook_set_current_page (notebook, 2);
 		gtk_widget_set_visible (priv->gen_sample_widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
-		gtk_widget_set_visible (widget, FALSE);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-		gtk_widget_set_visible (widget, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_gen_measure"));
+		gtk_widget_set_visible (w, FALSE);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+		gtk_widget_set_visible (w, FALSE);
 
 		/* generate ccmx */
 		ret = cd_it8_utils_calculate_ccmx (priv->gen_ti3_spectral,
 						   priv->gen_ti3_colorhug,
 						   priv->gen_ccmx,
 						   &error);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_share"));
-		gtk_widget_set_visible (widget, ret);
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_save"));
-		gtk_widget_set_visible (widget, ret);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_share"));
+		gtk_widget_set_visible (w, ret);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_save"));
+		gtk_widget_set_visible (w, ret);
 		if (!ret) {
 			g_warning ("Failed to calculate CCMX: %s", error->message);
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_done_msg"));
+			w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_done_msg"));
 			markup = g_strdup_printf ("<b>%s</b>\n%s", _("Correction matrix failed to be generated!"), error->message);
-			gtk_label_set_markup (GTK_LABEL (widget), markup);
+			gtk_label_set_markup (GTK_LABEL (w), markup);
 			return;
 		} else {
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_done_msg"));
+			w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gen_done_msg"));
 			markup = g_strdup_printf ("<b>%s</b>\n", _("Correction matrix successfully generated!"));
-			gtk_label_set_markup (GTK_LABEL (widget), markup);
+			gtk_label_set_markup (GTK_LABEL (w), markup);
 		}
 		break;
 	default:
@@ -1761,7 +1688,7 @@ ch_ccmx_gen_default_ccmx_filename (ChCcmxPrivate *priv)
  * ch_ccmx_gen_done_share_button_cb:
  **/
 static void
-ch_ccmx_gen_done_share_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+ch_ccmx_gen_done_share_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
 	const gchar *uri;
 	gsize length;
@@ -1800,8 +1727,8 @@ ch_ccmx_gen_done_share_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	g_debug ("Successfully uploaded to %s", uri);
 
 	/* disable button */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_share"));
-	gtk_widget_set_sensitive (widget, FALSE);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_share"));
+	gtk_widget_set_sensitive (w, FALSE);
 out:
 	if (buffer != NULL)
 		soup_buffer_free (buffer);
@@ -1813,7 +1740,7 @@ out:
  * ch_ccmx_gen_done_save_button_cb:
  **/
 static void
-ch_ccmx_gen_done_save_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+ch_ccmx_gen_done_save_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
 	GtkWidget *dialog;
 	GtkWindow *window;
@@ -1858,7 +1785,7 @@ out:
  * ch_ccmx_gen_next_button_cb:
  **/
 static void
-ch_ccmx_gen_next_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+ch_ccmx_gen_next_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
 	if (!priv->gen_waiting_for_interaction)
 		priv->gen_current_page++;
@@ -1919,37 +1846,10 @@ ch_ccmx_client_get_devices_cb (GObject *object,
 }
 
 /**
- * ch_ccmx_generate_button_cb:
- **/
-static void
-ch_ccmx_generate_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
-{
-	GtkWindow *window;
-	GtkListStore *list_store;
-
-	/* clear devices */
-	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_devices"));
-	gtk_list_store_clear (list_store);
-
-	/* get display devices */
-	cd_client_get_devices_by_kind (priv->gen_client,
-				       CD_DEVICE_KIND_DISPLAY,
-				       NULL,
-				       ch_ccmx_client_get_devices_cb,
-				       priv);
-
-	/* start ccmx generation */
-	priv->gen_current_page = CH_CCMX_PAGE_DEVICES;
-	ch_ccmx_gen_setup_page (priv);
-	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_gen"));
-	gtk_window_present (window);
-}
-
-/**
  * ch_ccmx_refresh_button_cb:
  **/
 static void
-ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
+ch_ccmx_refresh_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
 	const gchar *title;
 	SoupMessage *msg = NULL;
@@ -1958,12 +1858,12 @@ ch_ccmx_refresh_button_cb (GtkWidget *widget, ChCcmxPrivate *priv)
 	_cleanup_free_ gchar *uri = NULL;
 
 	/* setup UI */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_msg"));
 	/* TRANSLATORS: get the list of firmwares from the internet */
 	title = _("Getting latest data from the web…");
-	gtk_label_set_label (GTK_LABEL (widget), title);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
-	gtk_widget_show_all (widget);
+	gtk_label_set_label (GTK_LABEL (w), title);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+	gtk_widget_show_all (w);
 
 	/* get the latest INDEX file */
 	server_uri = g_settings_get_string (priv->settings, "server-uri");
@@ -2013,13 +1913,11 @@ ch_ccmx_get_fake_device (ChCcmxPrivate *priv)
 static void
 ch_ccmx_gen_update_ui (ChCcmxPrivate *priv)
 {
-	GtkWidget *widget;
-
-	/* next button sensitivity */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_generate"));
-	gtk_widget_set_visible (widget,
-				priv->gen_sensor_colorhug != NULL &&
-				priv->gen_sensor_spectral != NULL);
+	GAction *action;
+	action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "generate");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+				     priv->gen_sensor_colorhug != NULL &&
+				     priv->gen_sensor_spectral != NULL);
 }
 
 /**
@@ -2160,7 +2058,7 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 	gboolean ret;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	GtkWidget *widget;
+	GtkWidget *w;
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_free_ gchar *title_ccmx = NULL;
 
@@ -2198,8 +2096,175 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 	cd_it8_set_title (priv->gen_ccmx, title_ccmx);
 
 	/* set next button */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-	gtk_widget_set_sensitive (widget, TRUE);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+	gtk_widget_set_sensitive (w, TRUE);
+}
+
+/**
+ * ch_ccmx_about_activated_cb:
+ **/
+static void
+ch_ccmx_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	GList *windows;
+	GtkIconTheme *icon_theme;
+	GtkWindow *parent = NULL;
+	const gchar *authors[] = { "Richard Hughes", NULL };
+	const gchar *copyright = "Copyright \xc2\xa9 2009-2015 Richard Hughes";
+	_cleanup_object_unref_ GdkPixbuf *logo = NULL;
+
+	windows = gtk_application_get_windows (GTK_APPLICATION (priv->application));
+	if (windows)
+		parent = windows->data;
+
+	icon_theme = gtk_icon_theme_get_default ();
+	logo = gtk_icon_theme_load_icon (icon_theme, "colorhug-backlight", 256, 0, NULL);
+	gtk_show_about_dialog (parent,
+			       /* TRANSLATORS: this is the title of the about window */
+			       "title", _("About ColorHug CCMX Loader"),
+			       /* TRANSLATORS: this is the application name */
+			       "program-name", _("ColorHug CCMX Loader"),
+			       "authors", authors,
+			       /* TRANSLATORS: application description */
+			       "comments", _("Modify the calibration matrices on the ColorHug device."),
+			       "copyright", copyright,
+			       "license-type", GTK_LICENSE_GPL_2_0,
+			       "logo", logo,
+			       "translator-credits", _("translator-credits"),
+			       "version", VERSION,
+			       NULL);
+}
+
+/**
+ * ch_ccmx_quit_activated_cb:
+ **/
+static void
+ch_ccmx_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	g_application_release (G_APPLICATION (priv->application));
+}
+
+/**
+ * ch_ccmx_help_activated_cb:
+ **/
+static void
+ch_ccmx_help_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	gboolean ret;
+	_cleanup_error_free_ GError *error = NULL;
+	ret = gtk_show_uri (NULL, "help:colorhug-client/load-ccmx",
+			    GDK_CURRENT_TIME, &error);
+	if (!ret)
+		g_warning ("Failed to load help document: %s", error->message);
+}
+
+/**
+ * ch_ccmx_import_activated_cb:
+ **/
+static void
+ch_ccmx_import_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	GtkWindow *window;
+	guint i;
+	_cleanup_free_ gchar *filename = NULL;
+	_cleanup_error_free_ GError *error = NULL;
+
+	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_ccmx"));
+	filename = ch_ccmx_get_profile_filename (window);
+	if (filename == NULL)
+		return;
+
+	/* import the file into a spare slot */
+	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
+		if (priv->ccmx_types[i] == 0)
+			break;
+	}
+	if (i == CH_CALIBRATION_MAX) {
+		ch_ccmx_error_dialog (priv,
+				      _("No space left on device"),
+				      _("All 64 slots are used up."));
+		return;
+	}
+
+	/* load this ccmx file as the new calibration */
+	if (!ch_ccmx_set_calibration_file (priv, i, filename, &error)) {
+		ch_ccmx_error_dialog (priv,
+				       _("Failed to load file"),
+				       error->message);
+	}
+}
+
+/**
+ * ch_ccmx_generate_activated_cb:
+ **/
+static void
+ch_ccmx_generate_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	ChCcmxPrivate *priv = (ChCcmxPrivate *) user_data;
+	GtkWindow *window;
+	GtkListStore *list_store;
+
+	/* clear devices */
+	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_devices"));
+	gtk_list_store_clear (list_store);
+
+	/* get display devices */
+	cd_client_get_devices_by_kind (priv->gen_client,
+				       CD_DEVICE_KIND_DISPLAY,
+				       NULL,
+				       ch_ccmx_client_get_devices_cb,
+				       priv);
+
+	/* start ccmx generation */
+	priv->gen_current_page = CH_CCMX_PAGE_DEVICES;
+	ch_ccmx_gen_setup_page (priv);
+	window = GTK_WINDOW (gtk_builder_get_object (priv->builder, "dialog_gen"));
+	gtk_window_present (window);
+}
+
+static GActionEntry actions[] = {
+	{ "about", ch_ccmx_about_activated_cb, NULL, NULL, NULL },
+	{ "help", ch_ccmx_help_activated_cb, NULL, NULL, NULL },
+	{ "import", ch_ccmx_import_activated_cb, NULL, NULL, NULL },
+	{ "generate", ch_ccmx_generate_activated_cb, NULL, NULL, NULL },
+	{ "quit", ch_ccmx_quit_activated_cb, NULL, NULL, NULL }
+};
+
+/**
+ * ch_ccmx_device_queue_progress_cb:
+ **/
+static void
+ch_ccmx_device_queue_progress_cb (ChDeviceQueue	*device_queue,
+				  guint percentage,
+				  ChCcmxPrivate *priv)
+{
+	GAction *action;
+	g_debug ("queue complete %i%%", percentage);
+	if (percentage == 0 || percentage >= 100) {
+		if (priv->inhibit_id == 0)
+			return;
+		g_application_release (G_APPLICATION (priv->application));
+		gtk_application_uninhibit (priv->application, priv->inhibit_id);
+		action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "quit");
+		g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+		priv->inhibit_id = 0;
+	} else {
+		if (priv->inhibit_id != 0)
+			return;
+		g_application_hold (G_APPLICATION (priv->application));
+		priv->inhibit_id = gtk_application_inhibit (priv->application,
+							    NULL, /* window */
+							    GTK_APPLICATION_INHIBIT_LOGOUT |
+							    GTK_APPLICATION_INHIBIT_SUSPEND |
+							    GTK_APPLICATION_INHIBIT_IDLE,
+							    /* TRANSLATORS: inhibit reason */
+							    _("Writing data to ColorHug device"));
+		action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "quit");
+		g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+	}
 }
 
 /**
@@ -2212,21 +2277,27 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	CdColorXYZ xyz;
 	const gchar *title;
 	gint retval;
+	GAction *action;
 	GtkCellRenderer *renderer;
 	GtkListStore *list_store;
 	GtkTreeSelection *selection;
 	GtkTreeViewColumn *column;
 	GtkWidget *main_window;
-	GtkWidget *widget;
+	GtkWidget *w;
 	guint i;
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
 	_cleanup_object_unref_ GdkPixbuf *pixbuf2 = NULL;
 
+	/* add application menu items */
+	g_action_map_add_action_entries (G_ACTION_MAP (application),
+					 actions, G_N_ELEMENTS (actions),
+					 priv);
+
 	/* get UI */
 	priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_resource (priv->builder,
-						"/com/hughski/colorhug/ch-ccmx.ui",
+						"/com/hughski/ColorHug/CcmxLoader/ch-ccmx.ui",
 						&error);
 	if (retval == 0) {
 		g_warning ("failed to load ui: %s", error->message);
@@ -2260,9 +2331,9 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	column = gtk_tree_view_column_new_with_attributes ("Device", renderer,
 							   "markup", 1, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, 1);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "treeview_gen_detect"));
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "treeview_gen_detect"));
+	gtk_tree_view_append_column (GTK_TREE_VIEW (w), column);
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (w));
 	g_signal_connect (selection, "changed",
 			  G_CALLBACK (gpk_ccmx_treeview_clicked_cb), priv);
 
@@ -2274,43 +2345,31 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	gtk_widget_hide (main_window);
 
 	/* buttons */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_close"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (ch_ccmx_close_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_help"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (ch_ccmx_help_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_close"));
-	g_signal_connect (widget, "clicked",
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_close"));
+	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_ccmx_gen_close_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_import"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (ch_ccmx_import_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
-	g_signal_connect (widget, "clicked",
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_ccmx_refresh_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_generate"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (ch_ccmx_generate_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
-	g_signal_connect (widget, "clicked",
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_next"));
+	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_ccmx_gen_next_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_save"));
-	g_signal_connect (widget, "clicked",
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_save"));
+	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_ccmx_gen_done_save_button_cb), priv);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_share"));
-	g_signal_connect (widget, "clicked",
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_gen_done_share"));
+	g_signal_connect (w, "clicked",
 			  G_CALLBACK (ch_ccmx_gen_done_share_button_cb), priv);
 
 	/* setup logo image */
-	pixbuf2 = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/colorhug/colorhug-gray.svg",
+	pixbuf2 = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/CcmxLoader/colorhug-gray.svg",
 							 -1, 48, TRUE, &error);
 	if (pixbuf2 == NULL) {
 		g_warning ("failed to load colorhug-gray.svg: %s", error->message);
 		return;
 	}
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_logo"));
-	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf2);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_logo"));
+	gtk_image_set_from_pixbuf (GTK_IMAGE (w), pixbuf2);
 
 	/* setup list stores */
 	list_store = GTK_LIST_STORE (gtk_builder_get_object (priv->builder, "liststore_lcd"));
@@ -2331,63 +2390,63 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 					      GTK_SORT_ASCENDING);
 
 	/* setup comboboxes */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_lcd"));
-	g_object_set_data (G_OBJECT (widget),
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_lcd"));
+	g_object_set_data (G_OBJECT (w),
 			   "colorhug-ccmx-idx",
 			   GINT_TO_POINTER (0));
-	g_signal_connect (widget, "changed",
+	g_signal_connect (w, "changed",
 			  G_CALLBACK (ch_ccmx_combo_changed_cb), priv);
-	ch_ccmx_set_combo_simple_text (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_crt"));
-	g_object_set_data (G_OBJECT (widget),
+	ch_ccmx_set_combo_simple_text (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_crt"));
+	g_object_set_data (G_OBJECT (w),
 			   "colorhug-ccmx-idx",
 			   GINT_TO_POINTER (1));
-	g_signal_connect (widget, "changed",
+	g_signal_connect (w, "changed",
 			  G_CALLBACK (ch_ccmx_combo_changed_cb), priv);
-	ch_ccmx_set_combo_simple_text (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_projector"));
-	g_object_set_data (G_OBJECT (widget),
+	ch_ccmx_set_combo_simple_text (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_projector"));
+	g_object_set_data (G_OBJECT (w),
 			   "colorhug-ccmx-idx",
 			   GINT_TO_POINTER (2));
-	g_signal_connect (widget, "changed",
+	g_signal_connect (w, "changed",
 			  G_CALLBACK (ch_ccmx_combo_changed_cb), priv);
-	ch_ccmx_set_combo_simple_text (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_led"));
-	g_object_set_data (G_OBJECT (widget),
+	ch_ccmx_set_combo_simple_text (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "combobox_led"));
+	g_object_set_data (G_OBJECT (w),
 			   "colorhug-ccmx-idx",
 			   GINT_TO_POINTER (3));
-	g_signal_connect (widget, "changed",
+	g_signal_connect (w, "changed",
 			  G_CALLBACK (ch_ccmx_combo_changed_cb), priv);
-	ch_ccmx_set_combo_simple_text (widget);
+	ch_ccmx_set_combo_simple_text (w);
 
 	/* setup USB image */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
-	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/colorhug/usb.svg",
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image_usb"));
+	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/CcmxLoader/usb.svg",
 							-1, 48, TRUE, &error);
 	if (pixbuf == NULL) {
 		g_warning ("failed to load usb.svg: %s", error->message);
 		return;
 	}
-	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (w), pixbuf);
 
 	/* hide all unused widgets until we've connected with the device */
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "grid_data"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_header"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_import"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_generate"));
-	gtk_widget_hide (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
-	gtk_widget_hide (widget);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "grid_data"));
+	gtk_widget_hide (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_progress"));
+	gtk_widget_hide (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_header"));
+	gtk_widget_hide (w);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_refresh"));
+	gtk_widget_hide (w);
+	action = g_action_map_lookup_action (G_ACTION_MAP (application), "generate");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+	action = g_action_map_lookup_action (G_ACTION_MAP (application), "import");
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
-	/* add sample widget */
+	/* add sample w */
 	priv->gen_sample_widget = cd_sample_widget_new ();
-	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_gen_measure"));
-	gtk_box_pack_start (GTK_BOX (widget), priv->gen_sample_widget, TRUE, TRUE, 0);
+	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "box_gen_measure"));
+	gtk_box_pack_start (GTK_BOX (w), priv->gen_sample_widget, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (priv->gen_sample_widget,
 				     CH_CCMX_SAMPLE_SQUARE_SIZE,
 				     CH_CCMX_SAMPLE_SQUARE_SIZE);
@@ -2437,6 +2496,7 @@ ch_ccmx_device_added_cb (GUsbContext *context,
 			 GUsbDevice *device,
 			 ChCcmxPrivate *priv)
 {
+	GtkWidget *w;
 	g_debug ("Added: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
@@ -2446,6 +2506,8 @@ ch_ccmx_device_added_cb (GUsbContext *context,
 	case CH_DEVICE_MODE_FIRMWARE2:
 		priv->device = g_object_ref (device);
 		ch_ccmx_got_device (priv);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_ccmx"));
+		gtk_stack_set_visible_child_name (GTK_STACK (w), "main");
 		break;
 	default:
 		break;
@@ -2460,6 +2522,7 @@ ch_ccmx_device_removed_cb (GUsbContext *context,
 			   GUsbDevice *device,
 			   ChCcmxPrivate *priv)
 {
+	GtkWidget *w;
 	g_debug ("Removed: %i:%i",
 		 g_usb_device_get_vid (device),
 		 g_usb_device_get_pid (device));
@@ -2470,6 +2533,8 @@ ch_ccmx_device_removed_cb (GUsbContext *context,
 		if (priv->device != NULL)
 			g_object_unref (priv->device);
 		priv->device = NULL;
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_ccmx"));
+		gtk_stack_set_visible_child_name (GTK_STACK (w), "insert");
 		break;
 	default:
 		break;
@@ -2534,6 +2599,8 @@ main (int argc, char **argv)
 	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	priv->device_queue = ch_device_queue_new ();
+	g_signal_connect (priv->device_queue, "progress-changed",
+			  G_CALLBACK (ch_ccmx_device_queue_progress_cb), priv);
 	priv->gen_current_page = CH_CCMX_PAGE_DEVICES;
 	priv->gen_loop = g_main_loop_new (NULL, FALSE);
 	g_signal_connect (priv->usb_ctx, "device-added",

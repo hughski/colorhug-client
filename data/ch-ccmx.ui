@@ -1,106 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="dialog_ccmx">
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkListStore" id="liststore_crt">
+    <columns>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name Index -->
+      <column type="gint"/>
+      <!-- column-name Type -->
+      <column type="gchararray"/>
+      <!-- column-name LocalFilename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore_devices">
+    <columns>
+      <!-- column-name device -->
+      <column type="GObject"/>
+      <!-- column-name title -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore_lcd">
+    <columns>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name Index -->
+      <column type="gint"/>
+      <!-- column-name Type -->
+      <column type="gchararray"/>
+      <!-- column-name LocalFilename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore_led">
+    <columns>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name Index -->
+      <column type="gint"/>
+      <!-- column-name Type -->
+      <column type="gchararray"/>
+      <!-- column-name LocalFilename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore_projector">
+    <columns>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name Index -->
+      <column type="gint"/>
+      <!-- column-name Type -->
+      <column type="gchararray"/>
+      <!-- column-name LocalFilename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkApplicationWindow" id="dialog_ccmx">
     <property name="can_focus">False</property>
-    <property name="border_width">12</property>
-    <property name="title" translatable="yes">ColorHug CCMX Loader</property>
-    <property name="resizable">False</property>
-    <property name="type_hint">dialog</property>
-    <property name="deletable">False</property>
-    <property name="has_resize_grip">False</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+    <property name="icon_name">colorhug-ccmx</property>
+    <child>
+      <object class="GtkStack" id="stack_ccmx">
+        <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">15</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+        <property name="transition_type">crossfade</property>
+        <child>
+          <object class="GtkBox" id="box_connect">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="border_width">30</property>
+            <property name="spacing">24</property>
             <child>
-              <object class="GtkButton" id="button_help">
-                <property name="label">gtk-help</property>
+              <object class="GtkImage" id="image_usb">
+                <property name="width_request">175</property>
+                <property name="height_request">175</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">12</property>
+                <property name="stock">gtk-stop</property>
+                <property name="icon_size">6</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
-                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_generate">
-                <property name="label" translatable="yes">Generate CCMX</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+              <object class="GtkLabel" id="label_intro">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Please insert your ColorHug device.</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="max_width_chars">40</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="1.2"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_import">
-                <property name="label" translatable="yes" comments="Button to import a CCMX file">Import file</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Import a local CCMX file</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_refresh">
-                <property name="label">gtk-refresh</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Refresh the list of matrices from the device</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_close">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Close this window</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
+            <property name="name">insert</property>
+            <property name="title">page0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box1">
+          <object class="GtkBox" id="box_main">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="border_width">18</property>
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
@@ -114,7 +134,7 @@
                     <property name="can_focus">False</property>
                     <property name="pixel_size">48</property>
                     <property name="icon_name">colorhug</property>
-                    <property name="icon-size">6</property>
+                    <property name="icon_size">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -131,9 +151,9 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" comments="A correction matrix is used alongside the calibration matrix to better adapt the colorimeter primaries to a new device type.">Selecting a correction matrix maximises the accuracy of the ColorHug.</property>
                         <property name="wrap">True</property>
+                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="foreground" value="#828282828282"/>
                         </attributes>
@@ -148,9 +168,9 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" comments="Only advanced users have to change this...">Using the default matrix will give most users an acceptable calibration result.</property>
                         <property name="wrap">True</property>
+                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="foreground" value="#828282828282"/>
                         </attributes>
@@ -185,8 +205,8 @@
                   <object class="GtkLabel" id="label_lcd">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" comments="Default liquid crystal display matrix">LCD</property>
+                    <property name="xalign">1</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans 10"/>
                       <attribute name="foreground" value="#828282828282"/>
@@ -195,16 +215,14 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_crt">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" comments="Default cathode ray tube (ask your parents...) matrix">CRT</property>
+                    <property name="xalign">1</property>
                     <attributes>
                       <attribute name="foreground" value="#828282828282"/>
                     </attributes>
@@ -212,16 +230,14 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_projector">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" comments="Default projector (beamer etc) matrix">Projector</property>
+                    <property name="xalign">1</property>
                     <attributes>
                       <attribute name="foreground" value="#828282828282"/>
                     </attributes>
@@ -229,8 +245,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -243,8 +257,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -257,8 +269,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -271,16 +281,14 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_led">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" comments="Default light emitting diode matrix">LED</property>
+                    <property name="xalign">1</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans 10"/>
                       <attribute name="foreground" value="#828282828282"/>
@@ -289,8 +297,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -303,8 +309,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -315,18 +319,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box_connect">
+              <object class="GtkBox" id="box_progress">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="halign">center</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image_usb">
+                  <object class="GtkSpinner" id="spinner_progress">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="ypad">12</property>
-                    <property name="stock">gtk-stop</property>
-                    <property name="icon-size">6</property>
+                    <property name="active">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -335,14 +337,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_connect">
+                  <object class="GtkLabel" id="label_msg">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Please connect your ColorHug</property>
+                    <property name="label">Getting firmware version...</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -353,70 +356,39 @@
                 <property name="position">2</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkBox" id="box_progress">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label_padding">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinner" id="spinner_progress">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="active">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_msg">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label">Getting firmware version...</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="name">main</property>
+            <property name="title">page1</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="0">button_help</action-widget>
-      <action-widget response="0">button_generate</action-widget>
-      <action-widget response="0">button_import</action-widget>
-      <action-widget response="0">button_refresh</action-widget>
-      <action-widget response="0">button_close</action-widget>
-    </action-widgets>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="headerbar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title">ColorHug CCMX Loader</property>
+        <child>
+          <object class="GtkButton" id="button_refresh">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage" id="image_refresh">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">view-refresh-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkDialog" id="dialog_gen">
     <property name="can_focus">False</property>
@@ -478,6 +450,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="show_tabs">False</property>
+            <property name="show_border">False</property>
             <child>
               <object class="GtkBox" id="box5">
                 <property name="visible">True</property>
@@ -489,8 +462,8 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Select the screen to use when generating the color calibration matrix.</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -639,10 +612,10 @@
                                 <property name="can_focus">False</property>
                                 <property name="pixel_size">48</property>
                                 <property name="icon_name">document-save-as-symbolic</property>
+                                <property name="icon_size">6</property>
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
-                                <property name="icon-size">6</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -691,10 +664,10 @@
                                 <property name="can_focus">False</property>
                                 <property name="pixel_size">48</property>
                                 <property name="icon_name">emblem-shared-symbolic</property>
+                                <property name="icon_size">6</property>
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
-                                <property name="icon-size">6</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -763,62 +736,6 @@ the community</property>
       <action-widget response="0">button_gen_close</action-widget>
       <action-widget response="0">button_gen_next</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="liststore_crt">
-    <columns>
-      <!-- column-name Description -->
-      <column type="gchararray"/>
-      <!-- column-name Index -->
-      <column type="gint"/>
-      <!-- column-name Type -->
-      <column type="gchararray"/>
-      <!-- column-name LocalFilename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="liststore_devices">
-    <columns>
-      <!-- column-name device -->
-      <column type="GObject"/>
-      <!-- column-name title -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="liststore_lcd">
-    <columns>
-      <!-- column-name Description -->
-      <column type="gchararray"/>
-      <!-- column-name Index -->
-      <column type="gint"/>
-      <!-- column-name Type -->
-      <column type="gchararray"/>
-      <!-- column-name LocalFilename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="liststore_led">
-    <columns>
-      <!-- column-name Description -->
-      <column type="gchararray"/>
-      <!-- column-name Index -->
-      <column type="gint"/>
-      <!-- column-name Type -->
-      <column type="gchararray"/>
-      <!-- column-name LocalFilename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="liststore_projector">
-    <columns>
-      <!-- column-name Description -->
-      <column type="gchararray"/>
-      <!-- column-name Index -->
-      <column type="gint"/>
-      <!-- column-name Type -->
-      <column type="gchararray"/>
-      <!-- column-name LocalFilename -->
-      <column type="gchararray"/>
-    </columns>
   </object>
   <object class="GtkSizeGroup" id="sizegroup_gen_buttons">
     <widgets>

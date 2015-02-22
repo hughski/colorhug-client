@@ -31,6 +31,7 @@ UI_FILES =						\
 	ch-backlight-menus.ui				\
 	ch-backlight.ui					\
 	ch-ccmx.ui					\
+	ch-ccmx-menus.ui				\
 	ch-flash.ui					\
 	ch-flash-menus.ui				\
 	ch-refresh-menus.ui				\
