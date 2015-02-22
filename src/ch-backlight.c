@@ -136,7 +136,7 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "connect");
 		/* TRANSLATORS: no device is attached */
-		g_string_append (msg, _("Please connect your ColorHug."));
+		g_string_append (msg, _("Please insert your ColorHugALS device."));
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_intro"));
 		gtk_label_set_label (GTK_LABEL (w), msg->str);
 		break;
@@ -683,7 +683,7 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	gtk_widget_hide (main_window);
 
 	/* setup USB image */
-	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/Backlight/usb.svg",
+	pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/com/hughski/ColorHug/Backlight/usb-als.svg",
 							200, -1, TRUE, &error);
 	if (pixbuf == NULL) {
 		g_warning ("failed to load usb.svg: %s", error->message);

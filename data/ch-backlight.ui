@@ -51,7 +51,7 @@
               <object class="GtkLabel" id="label_intro">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">Please insert your ColorHug device.</property>
+                <property name="label">Please insert your ColorHugALS device.</property>
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="max_width_chars">40</property>

@@ -39,6 +39,7 @@ UI_FILES =						\
 
 SVG_FILES =						\
 	colorhug-gray.svg				\
+	usb-als.svg					\
 	usb.svg
 
 RC_FILES =						\

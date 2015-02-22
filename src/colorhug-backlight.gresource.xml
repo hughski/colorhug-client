@@ -3,7 +3,6 @@
  <gresource prefix="/com/hughski/ColorHug/Backlight">
  <file compressed="true">ch-backlight.ui</file>
  <file compressed="true" alias="gtk/menus.ui">ch-backlight-menus.ui</file>
- <file compressed="true">colorhug-gray.svg</file>
- <file compressed="true">usb.svg</file>
+ <file compressed="true">usb-als.svg</file>
  </gresource>
 </gresources>
