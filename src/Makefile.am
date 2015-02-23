@@ -149,12 +149,14 @@ colorhug_refresh_CFLAGS =				\
 
 colorhug_backlight_SOURCES =				\
 	ch-cleanup.h					\
+	ch-ambient.c					\
+	ch-ambient.h					\
 	ch-graph-widget.c				\
 	ch-graph-widget.h				\
 	ch-point-obj.c					\
 	ch-point-obj.h					\
 	ch-backlight.c					\
-	ch-backlight-resources.c				\
+	ch-backlight-resources.c			\
 	ch-backlight-resources.h
 
 if HAVE_WIN32_RELEASE

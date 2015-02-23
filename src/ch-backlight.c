@@ -30,11 +30,12 @@
 #include <gusb.h>
 #include <colorhug.h>
 
+#include "ch-ambient.h"
 #include "ch-cleanup.h"
 #include "ch-graph-widget.h"
 
 typedef struct {
-	ChDeviceQueue		*device_queue;
+	ChAmbient		*ambient;
 	GDBusProxy		*proxy_changed;
 	GDBusProxy		*proxy_property;
 	GPtrArray		*data;
@@ -43,13 +44,13 @@ typedef struct {
 	GtkApplication		*application;
 	GtkBuilder		*builder;
 	GtkWidget		*graph;
-	GUsbContext		*usb_ctx;
-	GUsbDevice		*device;
+	guint			 idle_id;
+
+	/* algorithm */
 	gboolean		 norm_required;
 	gdouble			 accumulator;
 	gdouble			 norm_value;
 	gdouble			 percentage_old;
-	guint			 idle_id;
 } ChBacklightPrivate;
 
 /**
@@ -92,41 +93,19 @@ ch_backlight_activate_cb (GApplication *application, ChBacklightPrivate *priv)
 static void
 ch_backlight_update_ui (ChBacklightPrivate *priv)
 {
-	ChDeviceMode mode = CH_DEVICE_MODE_UNKNOWN;
 	GtkWidget *w;
 	_cleanup_string_free_ GString *msg = g_string_new ("");
 
-	/* get actual device mode */
-	if (priv->device != NULL)
-		mode = ch_device_get_mode (priv->device);
-
 	/* update UI */
-	switch (mode) {
-	case CH_DEVICE_MODE_FIRMWARE:
-	case CH_DEVICE_MODE_FIRMWARE2:
-	case CH_DEVICE_MODE_FIRMWARE_ALS:
+	switch (ch_ambient_get_kind (priv->ambient)) {
+	case CH_AMBIENT_KIND_COLORHUG:
+	case CH_AMBIENT_KIND_INTERNAL:
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
 		gtk_widget_set_visible (w, TRUE);
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_down"));
 		gtk_widget_set_visible (w, TRUE);
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
 		gtk_stack_set_visible_child_name (GTK_STACK (w), "results");
-		break;
-	case CH_DEVICE_MODE_BOOTLOADER:
-	case CH_DEVICE_MODE_BOOTLOADER2:
-	case CH_DEVICE_MODE_BOOTLOADER_ALS:
-		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
-		gtk_widget_set_visible (w, FALSE);
-		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_down"));
-		gtk_widget_set_visible (w, FALSE);
-		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "stack_backlight"));
-		gtk_stack_set_visible_child_name (GTK_STACK (w), "connect");
-		g_string_append_printf (msg, "%s\n\n",
-			/* TRANSLATORS: the bootloader can't do ambient readings */
-			_("Please update the firmware on your ColorHug before "
-			  "using this application."));
-		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_intro"));
-		gtk_label_set_label (GTK_LABEL (w), msg->str);
 		break;
 	default:
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
@@ -144,24 +123,16 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 
 	/* set subtitle */
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "header"));
-	switch (mode) {
-	case CH_DEVICE_MODE_BOOTLOADER:
-	case CH_DEVICE_MODE_FIRMWARE:
+	switch (ch_ambient_get_kind (priv->ambient)) {
+	case CH_AMBIENT_KIND_COLORHUG:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
-					     /* TRANSLATORS: original device */
-					     _("Using ColorHug device"));
-		break;
-	case CH_DEVICE_MODE_BOOTLOADER2:
-	case CH_DEVICE_MODE_FIRMWARE2:
-		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
-					     /* TRANSLATORS: new and improved */
-					     _("Using ColorHug2 device"));
-		break;
-	case CH_DEVICE_MODE_BOOTLOADER_ALS:
-	case CH_DEVICE_MODE_FIRMWARE_ALS:
-		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
-					     /* TRANSLATORS: ambient light sensor */
+					     /* TRANSLATORS: our device */
 					     _("Using ColorHugALS device"));
+		break;
+	case CH_AMBIENT_KIND_INTERNAL:
+		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     /* TRANSLATORS: laptop ambient light sensor */
+					     _("Using internal device"));
 		break;
 	default:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w), NULL);
@@ -343,12 +314,20 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_free_ gchar *lux_str = NULL;
 	_cleanup_free_ gchar *rgb_str = NULL;
+//	_cleanup_free_ GdkRGBA *rgba = NULL;
+	GdkRGBA *rgba;
 
 	/* get result */
-	if (!ch_device_queue_process_finish (CH_DEVICE_QUEUE (source), res, &error)) {
+	rgba = ch_ambient_get_value_finish (CH_AMBIENT (source), res, &error);
+	if (rgba == NULL) {
 		g_warning ("failed to get measurement: %s", error->message);
 		return;
 	}
+	sample = g_ptr_array_index (priv->data, 0);
+	sample->data[0] = rgba->alpha;
+	sample->data[1] = rgba->red;
+	sample->data[2] = rgba->green;
+	sample->data[3] = rgba->blue;
 
 	/* the user has asked to renormalize */
 	if (priv->data->len == 1 || priv->norm_required) {
@@ -358,7 +337,6 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 	ch_backlight_update_graph (priv);
 
 	/* update Lux */
-	sample = g_ptr_array_index (priv->data, 0);
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_lux"));
 	lux_str = g_strdup_printf ("%.1f Lux", sample->data[0] / 1000.0f);
 	gtk_label_set_label (GTK_LABEL (w), lux_str);
@@ -391,7 +369,7 @@ ch_backlight_tick_cb (gpointer user_data)
 	gdouble timeout;
 	guint max_points;
 
-	if (priv->device == NULL)
+	if (ch_ambient_get_kind (priv->ambient) == CH_AMBIENT_KIND_NONE)
 		return FALSE;
 	if (priv->idle_id > 0) {
 		priv->idle_id = 0;
@@ -406,73 +384,14 @@ ch_backlight_tick_cb (gpointer user_data)
 	if (priv->data->len > max_points)
 		g_ptr_array_set_size (priv->data, max_points);
 	g_ptr_array_insert (priv->data, 0, sample);
-	ch_device_queue_set_color_select (priv->device_queue,
-					  priv->device,
-					  CH_COLOR_SELECT_WHITE);
-	ch_device_queue_take_reading_raw (priv->device_queue,
-					  priv->device,
-					  &sample->data[0]);
-	ch_device_queue_set_color_select (priv->device_queue,
-					  priv->device,
-					  CH_COLOR_SELECT_RED);
-	ch_device_queue_take_reading_raw (priv->device_queue,
-					  priv->device,
-					  &sample->data[1]);
-	ch_device_queue_set_color_select (priv->device_queue,
-					  priv->device,
-					  CH_COLOR_SELECT_GREEN);
-	ch_device_queue_take_reading_raw (priv->device_queue,
-					  priv->device,
-					  &sample->data[2]);
-	ch_device_queue_set_color_select (priv->device_queue,
-					  priv->device,
-					  CH_COLOR_SELECT_BLUE);
-	ch_device_queue_take_reading_raw (priv->device_queue,
-					  priv->device,
-					  &sample->data[3]);
-	ch_device_queue_process_async (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       ch_backlight_take_reading_cb,
-				       priv);
+	ch_ambient_get_value_async (priv->ambient, NULL,
+				    ch_backlight_take_reading_cb, priv);
 
 	/* schedule again */
 	timeout = g_settings_get_double (priv->settings, "refresh") * 1000.f;
 	priv->idle_id = g_timeout_add (timeout, ch_backlight_tick_cb, priv);
 
 	return FALSE;
-}
-
-/**
- * ch_backlight_device_open:
- **/
-static void
-ch_backlight_device_open (ChBacklightPrivate *priv)
-{
-	const gchar *title;
-	guint16 integral_time;
-	_cleanup_error_free_ GError *error = NULL;
-
-	/* open device */
-	if (!ch_device_open (priv->device, &error)) {
-		/* TRANSLATORS: permissions error perhaps? */
-		title = _("Failed to open device");
-		ch_backlight_error_dialog (priv, title, error->message);
-		return;
-	}
-
-	/* these stay constant */
-	ch_device_queue_set_multiplier (priv->device_queue, priv->device,
-					CH_FREQ_SCALE_100);
-	integral_time = 0xffff * g_settings_get_double (priv->settings, "integration");
-	ch_device_queue_set_integral_time (priv->device_queue, priv->device,
-					   integral_time);
-
-	/* run after we've connected to gnome-settings-daemon */
-	g_timeout_add (100, ch_backlight_tick_cb, priv);
-
-	/* measurement possible */
-	ch_backlight_update_ui (priv);
 }
 
 /**
@@ -750,8 +669,8 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	ch_backlight_settings_changed_cb (priv->settings, "smooth", priv);
 	ch_backlight_settings_changed_cb (priv->settings, "refresh", priv);
 
-	/* is the colorhug already plugged in? */
-	g_usb_context_enumerate (priv->usb_ctx);
+	/* enumerate */
+	ch_ambient_enumerate (priv->ambient);
 
 	/* show main UI */
 	gtk_widget_show (main_window);
@@ -760,39 +679,16 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 }
 
 /**
- * ch_backlight_device_added_cb:
+ * ch_backlight_ambient_changed_cb:
  **/
 static void
-ch_backlight_device_added_cb (GUsbContext *context,
-			    GUsbDevice *device,
-			    ChBacklightPrivate *priv)
+ch_backlight_ambient_changed_cb (ChAmbient *ambient,
+				 ChBacklightPrivate *priv)
 {
-	g_debug ("Added: %i:%i",
-		 g_usb_device_get_vid (device),
-		 g_usb_device_get_pid (device));
-	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE_ALS) {
-		priv->device = g_object_ref (device);
-		ch_backlight_device_open (priv);
-	}
-}
-
-/**
- * ch_backlight_device_removed_cb:
- **/
-static void
-ch_backlight_device_removed_cb (GUsbContext *context,
-			      GUsbDevice *device,
-			      ChBacklightPrivate *priv)
-{
-	g_debug ("Removed: %i:%i",
-		 g_usb_device_get_vid (device),
-		 g_usb_device_get_pid (device));
-	if (ch_device_get_mode (device) == CH_DEVICE_MODE_FIRMWARE_ALS) {
-		if (priv->device != NULL)
-			g_object_unref (priv->device);
-		priv->device = NULL;
-		ch_backlight_update_ui (priv);
-	}
+	/* run after we've connected to gnome-settings-daemon */
+	if (ch_ambient_get_kind (ambient) != CH_AMBIENT_KIND_NONE)
+		g_timeout_add (100, ch_backlight_tick_cb, priv);
+	ch_backlight_update_ui (priv);
 }
 
 /**
@@ -838,13 +734,10 @@ main (int argc, char **argv)
 	priv->settings = g_settings_new ("com.hughski.ColorHug.Backlight");
 	g_signal_connect (priv->settings, "changed",
 			  G_CALLBACK (ch_backlight_settings_changed_cb), priv);
-	priv->usb_ctx = g_usb_context_new (NULL);
 	priv->data = g_ptr_array_new_with_free_func (g_free);
-	priv->device_queue = ch_device_queue_new ();
-	g_signal_connect (priv->usb_ctx, "device-added",
-			  G_CALLBACK (ch_backlight_device_added_cb), priv);
-	g_signal_connect (priv->usb_ctx, "device-removed",
-			  G_CALLBACK (ch_backlight_device_removed_cb), priv);
+	priv->ambient = ch_ambient_new ();
+	g_signal_connect (priv->ambient, "changed",
+			  G_CALLBACK (ch_backlight_ambient_changed_cb), priv);
 
 	/* ensure single instance */
 	priv->application = gtk_application_new ("com.hughski.ColorHug.Backlight", 0);
@@ -860,10 +753,8 @@ main (int argc, char **argv)
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);
 
 	g_object_unref (priv->application);
-	if (priv->device_queue != NULL)
-		g_object_unref (priv->device_queue);
-	if (priv->usb_ctx != NULL)
-		g_object_unref (priv->usb_ctx);
+	if (priv->ambient != NULL)
+		g_object_unref (priv->ambient);
 	if (priv->builder != NULL)
 		g_object_unref (priv->builder);
 	if (priv->proxy_property != NULL)
