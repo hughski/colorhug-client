@@ -398,7 +398,8 @@ ch_ambient_finalize (GObject *object)
 	ChAmbient *ambient = CH_AMBIENT (object);
 	ChAmbientPrivate *priv = ambient->priv;
 
-	g_object_unref (priv->acpi_internal);
+	if (priv->acpi_internal != NULL)
+		g_object_unref (priv->acpi_internal);
 	g_object_unref (priv->settings);
 	g_object_unref (priv->usb_ctx);
 	g_object_unref (priv->device_queue);
