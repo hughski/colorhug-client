@@ -44,5 +44,10 @@
       <summary>The refresh rate between samples</summary>
       <description>The refresh rate in seconds between samples.</description>
     </key>
+    <key name="gamma" type="d">
+      <default>1.0</default>
+      <summary>The gamma value for ambient light</summary>
+      <description>The gamma values to use when scaling ambient light samples.</description>
+    </key>
   </schema>
 </schemalist>

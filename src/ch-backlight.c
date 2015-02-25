@@ -309,6 +309,7 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 	ChBacklightPrivate *priv = (ChBacklightPrivate *) user_data;
 	ChBacklightSample *sample;
 	GtkWidget *w;
+	gdouble gma;
 	gdouble rgb_max = 0.f;
 	guint i;
 	_cleanup_error_free_ GError *error = NULL;
@@ -323,6 +324,15 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 		g_warning ("failed to get measurement: %s", error->message);
 		return;
 	}
+
+	/* scale by gamma */
+	gma = g_settings_get_double (priv->settings, "gamma");
+	rgba->alpha = pow (rgba->alpha, gma);
+	rgba->red = pow (rgba->red, gma);
+	rgba->green = pow (rgba->green, gma);
+	rgba->blue = pow (rgba->blue, gma);
+
+	/* save sample */
 	sample = g_ptr_array_index (priv->data, 0);
 	sample->data[0] = rgba->alpha;
 	sample->data[1] = rgba->red;
@@ -556,6 +566,14 @@ ch_backlight_settings_changed_cb (GSettings *settings, const gchar *key, ChBackl
 		gtk_label_set_label (GTK_LABEL (w), str);
 		return;
 	}
+	if (g_strcmp0 (key, "gamma") == 0) {
+		value = g_settings_get_double (settings, key);
+		str = g_strdup_printf ("%.2f", value);
+		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_gamma_value"));
+		gtk_label_set_label (GTK_LABEL (w), str);
+		priv->norm_required = TRUE;
+		return;
+	}
 	if (g_strcmp0 (key, "refresh") == 0) {
 		value = g_settings_get_double (settings, key);
 		str = g_strdup_printf ("%.0fms", value * 1000.f);
@@ -664,10 +682,14 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	a = GTK_ADJUSTMENT (gtk_builder_get_object (priv->builder, "adjustment_refresh"));
 	g_settings_bind (priv->settings, "refresh",
 			 a, "value", G_SETTINGS_BIND_DEFAULT);
+	a = GTK_ADJUSTMENT (gtk_builder_get_object (priv->builder, "adjustment_gamma"));
+	g_settings_bind (priv->settings, "gamma",
+			 a, "value", G_SETTINGS_BIND_DEFAULT);
 
 	/* set default values */
 	ch_backlight_settings_changed_cb (priv->settings, "smooth", priv);
 	ch_backlight_settings_changed_cb (priv->settings, "refresh", priv);
+	ch_backlight_settings_changed_cb (priv->settings, "gamma", priv);
 
 	/* enumerate */
 	ch_ambient_enumerate (priv->ambient);
