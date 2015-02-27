@@ -303,7 +303,7 @@ ch_ambient_device_added_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *amb
 
 		/* these stay constant */
 		ch_device_queue_set_multiplier (priv->device_queue, priv->device,
-						CH_FREQ_SCALE_100);
+						CH_FREQ_SCALE_20);
 		integral_time = 0xffff * g_settings_get_double (priv->settings, "integration");
 		ch_device_queue_set_integral_time (priv->device_queue, priv->device,
 						   integral_time);

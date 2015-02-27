@@ -348,7 +348,7 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 
 	/* update Lux */
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "label_lux"));
-	lux_str = g_strdup_printf ("%.1f Lux", sample->data[0] / 1000.0f);
+	lux_str = g_strdup_printf ("%.1f Lux", (gdouble) sample->data[0]);
 	gtk_label_set_label (GTK_LABEL (w), lux_str);
 
 	/* update RGB */
