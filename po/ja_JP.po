@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 16:18+0000\n"
-"PO-Revision-Date: 2014-12-18 16:18+0000\n"
+"POT-Creation-Date: 2015-03-10 19:40+0000\n"
+"PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/projects/p/colorhug-client/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -19,24 +19,52 @@ msgstr ""
 "Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "ColorHug CCMX Loader"
-msgstr "カラーハッグCCMXローダー"
-
-msgid "Generate CCMX"
+msgid "_About"
 msgstr ""
 
-#. Button to import a CCMX file
-msgid "Import file"
-msgstr "ファイルをインポートする"
+msgid "_Quit"
+msgstr ""
 
-msgid "Import a local CCMX file"
-msgstr "ローかるCCMXファイルを取り込む"
+#. The surrounding light level
+msgid "Ambient"
+msgstr ""
 
-msgid "Refresh the list of matrices from the device"
-msgstr "デバイスの行列をリフレッシュ"
+#. The backlight color
+#. TRANSLATORS: this is the enabled sensor color
+msgid "Color"
+msgstr "カラー"
 
-msgid "Close this window"
-msgstr "ウインドウを閉じる"
+#. The amount of smoothing done to the backlight readings
+msgid "Smoothing"
+msgstr ""
+
+#. The rate that we're sampling the sensor
+msgid "Refresh"
+msgstr ""
+
+#. The amount the sensor can influence the brightness
+msgid "Weight"
+msgstr ""
+
+#. Backlight up 5%
+msgid "Up"
+msgstr ""
+
+#. Backlight down 5%
+msgid "Down"
+msgstr ""
+
+msgid "_Import file"
+msgstr ""
+
+msgid "_Generate CCMX"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Please insert your ColorHug device."
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -65,10 +93,6 @@ msgstr "映写機"
 msgid "LED"
 msgstr "LED"
 
-#. TRANSLATORS: device is not connected to the computer
-msgid "Please connect your ColorHug"
-msgstr "カラーハッグを接続してください"
-
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr ""
 
@@ -83,22 +107,19 @@ msgid ""
 "the community"
 msgstr ""
 
-msgid "ColorHug Firmware Updater"
-msgstr "ファームウェア最新"
-
-#. Button to update to a newer version of the firmware
-msgid "Update!"
-msgstr "最新する"
-
-msgid "Flash new firmware to the device"
-msgstr "ファームウェアを最新する"
-
 msgid "Firmware version unknown"
 msgstr "ファームウェア バージョンを表示出来ませんでした"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "注意！でバイスを抜いたりコンピュタの電源を切ったりするべからず"
+
+#. Button to update to a newer version of the firmware
+msgid "Update"
+msgstr ""
+
+msgid "Flash new firmware to the device"
+msgstr "ファームウェアを最新する"
 
 msgid "page0"
 msgstr ""
@@ -145,11 +166,26 @@ msgstr ""
 msgid "_Export results…"
 msgstr ""
 
-msgid "_About"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Backlight Utility"
 msgstr ""
 
-msgid "_Quit"
+msgid "Sample the ambient light level to control the backlight"
 msgstr ""
+
+msgid ""
+"The ColorHug backlight utility uses the ColorHug device to alter the "
+"backlight level to compensate for the changing ambient light level."
+msgstr ""
+
+msgid "The ambient light control utility"
+msgstr ""
+
+#. TRANSLATORS: this is the application name
+msgid "ColorHug CCMX Loader"
+msgstr "カラーハッグCCMXローダー"
 
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "デバイスの校正行列を手直しする"
@@ -196,6 +232,11 @@ msgstr ""
 msgid "Display analysis results"
 msgstr ""
 
+#. TRANSLATORS: this is the application name
+msgid "ColorHug Firmware Updater"
+msgstr "ファームウェア最新"
+
+#. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "ファームウェア バジョンを最新する"
 
@@ -220,6 +261,9 @@ msgid "ColorHug Documentation"
 msgstr ""
 
 msgid "Documentation for the ColorHug display colorimeter"
+msgstr ""
+
+msgid "Display;Backlight;Ambient;ColorHug;"
 msgstr ""
 
 msgid "CCMX Loader"
@@ -260,6 +304,30 @@ msgstr ""
 msgid "Whether the backlight PWM should be removed."
 msgstr ""
 
+msgid "The integration time for each sample"
+msgstr ""
+
+msgid "Set the integration time in seconds for the ambient light sample."
+msgstr ""
+
+msgid "Backlight smoothing factor"
+msgstr ""
+
+msgid "The amount of backlight smoothing for ambient light changes."
+msgstr ""
+
+msgid "The refresh rate between samples"
+msgstr ""
+
+msgid "The refresh rate in seconds between samples."
+msgstr ""
+
+msgid "The gamma value for ambient light"
+msgstr ""
+
+msgid "The gamma values to use when scaling ambient light samples."
+msgstr ""
+
 msgid "Display;Analysis;ColorHug;"
 msgstr ""
 
@@ -268,6 +336,45 @@ msgstr "ファームウェア最新機能"
 
 msgid "Flash;Firmware;ColorHug;"
 msgstr ""
+
+#. TRANSLATORS: no device is attached
+msgid "Please insert your ColorHugALS device."
+msgstr ""
+
+#. TRANSLATORS: our device
+msgid "Using ColorHugALS device"
+msgstr ""
+
+#. TRANSLATORS: laptop ambient light sensor
+msgid "Using internal device"
+msgstr ""
+
+#. TRANSLATORS: set the backlight
+msgid "Failed to set brightness"
+msgstr ""
+
+#. TRANSLATORS: get the backlight
+msgid "Failed to get brightness"
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Backlight Utility"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Sample the ambient light to control the backlight."
+msgstr ""
+
+msgid "translator-credits"
+msgstr ""
+
+#. TRANSLATORS: command line option
+msgid "Show extra debugging information"
+msgstr "デバッギング情報を表示する"
+
+#. TRANSLATORS: user has sausages for fingers
+msgid "Failed to parse command line options"
+msgstr "コマンドオープション解析失敗しました"
 
 msgid "Failed to create directory"
 msgstr "フォルダー作成失敗しました"
@@ -346,6 +453,14 @@ msgstr "校正マップをセット出来ませんでした"
 msgid "Failed to set the calibration matrix"
 msgstr "校正行列をセット出来ませんでした"
 
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to open device"
+msgstr "デバイスにアクセス出来ませんでした"
+
+#. TRANSLATORS: get the calibration matrices from the device
+msgid "Getting calibration from device…"
+msgstr ""
+
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
@@ -358,14 +473,6 @@ msgstr "全ての64スロットは使用中"
 #. * local firmware file
 msgid "Failed to load file"
 msgstr "ファイルをロード出来ませんでした。"
-
-#. TRANSLATORS: permissions error perhaps?
-msgid "Failed to open device"
-msgstr "デバイスにアクセス出来ませんでした"
-
-#. TRANSLATORS: get the calibration matrices from the device
-msgid "Getting calibration from device…"
-msgstr ""
 
 msgid "Failed to write file"
 msgstr "ファイルの書き込み出来ませんでした"
@@ -405,13 +512,21 @@ msgstr ""
 msgid "Getting latest data from the web…"
 msgstr ""
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug CCMX Loader"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Modify the calibration matrices on the ColorHug device."
+msgstr ""
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing data to ColorHug device"
+msgstr ""
+
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
 msgstr "ネットワークに接続出来ませんでした"
-
-#. TRANSLATORS: command line option
-msgid "Show extra debugging information"
-msgstr "デバッギング情報を表示する"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -422,28 +537,11 @@ msgstr ""
 msgid "ColorHug CCMX loader"
 msgstr "CCMX ローダー"
 
-msgid "Failed to parse command line options"
-msgstr "コマンドオープション解析失敗しました"
-
 msgid "ColorHug Updater"
 msgstr ""
 
 msgid "Calibration Failed"
 msgstr ""
-
-#. TRANSLATORS: we broke the device
-msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "ファームウェア最新失敗しましたが、デバイスは無事です"
-
-#. TRANSLATORS: hopefully we can "fix" this automatically
-msgid ""
-"Remove the ColorHug device from the computer, reinsert it and re-run this "
-"program."
-msgstr ""
-
-#. TRANSLATORS: the user has to be online to get firmware
-msgid "Connect to the internet to check for updates"
-msgstr "最新ファームェアを確認する"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
@@ -585,6 +683,10 @@ msgstr ""
 msgid "ColorHug+ Detected"
 msgstr ""
 
+#. TRANSLATORS: ALS stands for ambient light sensor
+msgid "ColorHug ALS Detected"
+msgstr ""
+
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
 msgstr "バーチュアルカラーハッグ発見"
@@ -620,9 +722,17 @@ msgstr ""
 msgid "Update details"
 msgstr "最新情報"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Firmware Updater"
+msgstr ""
+
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
 msgstr "最新詳細"
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing firmware to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -708,10 +818,6 @@ msgstr ""
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
 msgstr ""
-
-#. TRANSLATORS: this is the enabled sensor color
-msgid "Color"
-msgstr "カラー"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
@@ -1053,7 +1159,4 @@ msgstr ""
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr ""
-
-msgid "translator-credits"
 msgstr ""

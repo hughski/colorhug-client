@@ -3,8 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Wnt <jonni@egarden.fi>, 2012
-# Oskari Timperi <>, 2012
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
@@ -12,18 +11,18 @@ msgstr ""
 "POT-Creation-Date: 2015-03-10 19:40+0000\n"
 "PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: Finnish (http://www.transifex.com/projects/p/colorhug-client/language/fi/)\n"
+"Language-Team: Serbian (http://www.transifex.com/projects/p/colorhug-client/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sr\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "_About"
-msgstr ""
+msgstr "_О програму"
 
 msgid "_Quit"
-msgstr ""
+msgstr "_Изађи"
 
 #. The surrounding light level
 msgid "Ambient"
@@ -32,7 +31,7 @@ msgstr ""
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
 msgid "Color"
-msgstr ""
+msgstr "Боја"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
@@ -69,102 +68,102 @@ msgstr ""
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
-msgstr "Korjausmatriisin valinta varmistaa ColorHug-mittauksen tarkkuuden."
+msgstr "Избор матрице поправке повећава тачност Бојохвата."
 
 #. Only advanced users have to change this...
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "Oletusmatriisi riittää useimmille käyttäjille käyttökelpoisen matriisin tuottamiseen."
+msgstr "Коришћење основне матрице даће већини корисника прихватљив резултат калибрације."
 
 #. Default liquid crystal display matrix
 msgid "LCD"
-msgstr "LCD"
+msgstr "ЛЦД"
 
 #. Default cathode ray tube (ask your parents...) matrix
 msgid "CRT"
-msgstr "CRT"
+msgstr "ЦРТ"
 
 #. Default projector (beamer etc) matrix
 msgid "Projector"
-msgstr "Projektori"
+msgstr "Пројектор"
 
 #. Default light emitting diode matrix
 msgid "LED"
-msgstr ""
+msgstr "ЛЕД"
 
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr ""
+msgstr "Изаберите екран за коришћење приликом стварања матрице калибрације боје."
 
 msgid "Do not remove the device whilst measurement is in progress"
-msgstr ""
+msgstr "Немојте уклонити уређај за време мерења"
 
 msgid "Save file"
-msgstr ""
+msgstr "Сачувај датотеку"
 
 msgid ""
 "Share with\n"
 "the community"
-msgstr ""
+msgstr "Дели са\nзаједницом"
 
 msgid "Firmware version unknown"
-msgstr "Tuntematon firmware-versio"
+msgstr "Издање фирмвера није познато"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
-msgstr "Älä irrota laitetta tai sammuta tietokonetta."
+msgstr "Немојте откачити уређај и немојте угасити рачунар."
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
 msgstr ""
 
 msgid "Flash new firmware to the device"
-msgstr "Päivitä laitteen sisäinen ohjelmisto"
+msgstr "Сними нови фирмвер на уређај"
 
 msgid "page0"
-msgstr ""
+msgstr "страница0"
 
 msgid "Your Score"
-msgstr ""
+msgstr "Ваш резултат"
 
 msgid "Display"
-msgstr ""
+msgstr "Екран"
 
 msgid "USB"
-msgstr ""
+msgstr "УСБ"
 
 msgid "Black-to-White"
-msgstr ""
+msgstr "Црна-у-белу"
 
 msgid "White-to-Black"
-msgstr ""
+msgstr "Бела-у-црну"
 
 msgid "Refresh Rate"
-msgstr ""
+msgstr "Учесталост освежавања"
 
 msgid "Color Temperature"
-msgstr ""
+msgstr "Температура боје"
 
 msgid "White Luminance"
-msgstr ""
+msgstr "Светлина беле"
 
 msgid "Black Luminance"
-msgstr ""
+msgstr "Светлина црне"
 
 msgid "sRGB Coverage"
-msgstr ""
+msgstr "Покривеност сРГБ-а"
 
 msgid "AdobeRGB Coverage"
-msgstr ""
+msgstr "Покривеност Адобе РГБ-а"
 
 msgid "Native Gamma"
-msgstr ""
+msgstr "Изворна гама"
 
 msgid "page1"
-msgstr ""
+msgstr "страница1"
 
 msgid "_Export results…"
-msgstr ""
+msgstr "_Извези резултате…"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
@@ -185,124 +184,124 @@ msgstr ""
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug CCMX Loader"
-msgstr "ColorHug CCMX-lataaja"
+msgstr "Учитавач МТПБ-а Бојохвата"
 
 msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Muokkaa ColorHug-laitteen kalibrointimatriiseja"
+msgstr "Измените матрице калибрације на уређају Бојохвата"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr ""
+msgstr "Алат за учитавање МТПБ-а Бојохвата сам преузима и инсталира матрице поправке уређаја које су послали корисници на ваш мерач боја екрана Хагхски Бојохвата."
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr ""
+msgstr "Бирање матрице поправке повећава тачност Бојохвата али ће и коришћење основне матрице дати већини корисника прихватљив резултат калибрације."
 
 msgid "The correction matrices on the device"
-msgstr ""
+msgstr "Матрице поправке на уређају"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr ""
+msgstr "Анализа екрана Бојохвата"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
-msgstr ""
+msgstr "Узоркујте екран током времена да посматрате МШИ, кашњење улаза и да освежите рукотворине"
 
 msgid ""
 "The ColorHug display analysis tool can be used to profile display and GPU "
 "devices. It will measure various kinds of latency, e.g. black-to-white and "
 "input-lag as well as reporting color information and colorspace gamut "
 "volume."
-msgstr ""
+msgstr "Алат за анализирање екрана Бојохвата може да се користи на екрану профила и на ГПЈ уређајима. Мериће разне врсте кашњења, нпр. црне-у-белу и кашњење-улаза а и извештаваће и о подацима боја и о волумену гамута простора боје."
 
 msgid "Results can be exported as standalone HTML files and shared."
-msgstr ""
+msgstr "Резултати могу бити извезени као самосталне ХТМЛ датотеке и размењивани."
 
 msgid "Main application window"
-msgstr ""
+msgstr "Главни прозор програма"
 
 msgid "Display analysis results"
-msgstr ""
+msgstr "Резултати анализе екрана"
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug Firmware Updater"
-msgstr "ColorHugin firmware-päivitys"
+msgstr "Дограђивач фирмвера Бојохвата"
 
 #. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "Päivitä ColorHug-värimittarin sisäinen ohjelmisto"
+msgstr "Доградите фирмвер на бојомерачу Бојохвата"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr ""
+msgstr "Ажурирање алатка ЦолорХуг блиц аутоматски преузима нове верзије фирмваре на то иоур Хугхски ЦолорХуг дисплеј колориметру. Фирмваре ће додати карактеристике, исправљању грешака и побољшању тачност."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr ""
+msgstr "Коришћењем аргумената линије наредби, овај алат може такође да преточи произвољне датотеке претоке на уређај."
 
 msgid "Application window showing new firmware detected"
-msgstr ""
+msgstr "Прозор који приказује откриће новог фирмвера"
 
 msgid "Applying updated firmware to the ColorHug device"
-msgstr ""
+msgstr "Примењујем дограђени фирмвер на уређај Бојохвата"
 
 msgid "ColorHug Documentation"
-msgstr ""
+msgstr "Документација Бојохвата"
 
 msgid "Documentation for the ColorHug display colorimeter"
-msgstr ""
+msgstr "Документација за мерач боје екрана Бојохвата"
 
 msgid "Display;Backlight;Ambient;ColorHug;"
 msgstr ""
 
 msgid "CCMX Loader"
-msgstr "CCMX-lataaja"
+msgstr "Учитавач МТПБ"
 
 msgid "CCMX;ColorHug;"
-msgstr ""
+msgstr "МТПБ;бојохват;"
 
 msgid "Whether we should update to test firmware"
-msgstr ""
+msgstr "Да ли да догради на пробни фирмвер"
 
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr ""
+msgstr "Да ли треба да прикаже пробни фирмвер и да ли да омогући кориснику да догради на исти."
 
 msgid "The remote location of ColorHug files"
-msgstr ""
+msgstr "Удаљена путања датотека Бојохвата"
 
 msgid ""
 "The location of where firmware updates and calibration files are stored."
-msgstr ""
+msgstr "Место на коме се налазе доградње фирмвера и датотеке калибрације."
 
 msgid "Zoom in the graph to show only one pulse"
-msgstr ""
+msgstr "Увеличање графика зарад приказа само једног импулса"
 
 msgid "Whether the refresh graph should be zoomed to show one pulse only."
-msgstr ""
+msgstr "Да ли график освежавања треба да буде увеличан да прикаже само један импулс."
 
 msgid "Show all RGB channels on the graph"
-msgstr ""
+msgstr "Приказ свих РГБ канала на графику"
 
 msgid "Whether all captured channels should be shown."
-msgstr ""
+msgstr "Да ли требају бити приказани сви снимљени канали."
 
 msgid "Hide backlight flicker on the graph"
-msgstr ""
+msgstr "Скривање трептања позадинског светла на графику"
 
 msgid "Whether the backlight PWM should be removed."
-msgstr ""
+msgstr "Да ли треба уклонити МШИ позадинског светла."
 
 msgid "The integration time for each sample"
 msgstr ""
@@ -329,13 +328,13 @@ msgid "The gamma values to use when scaling ambient light samples."
 msgstr ""
 
 msgid "Display;Analysis;ColorHug;"
-msgstr ""
+msgstr "екран;анализа;бојохват;"
 
 msgid "Firmware Updater"
-msgstr "Firmware-päivittäjä"
+msgstr "Догрђивач фирмвера"
 
 msgid "Flash;Firmware;ColorHug;"
-msgstr ""
+msgstr "претока;фирмвер;бојохват;"
 
 #. TRANSLATORS: no device is attached
 msgid "Please insert your ColorHugALS device."
@@ -366,151 +365,151 @@ msgid "Sample the ambient light to control the backlight."
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
+msgstr "Мирослав Николић <miroslavnikolic@rocketmail.com>"
 
 #. TRANSLATORS: command line option
 msgid "Show extra debugging information"
-msgstr "Näytä enemmän vianmääritystietoja"
+msgstr "Приказује додатне податке за уклањање грешака"
 
 #. TRANSLATORS: user has sausages for fingers
 msgid "Failed to parse command line options"
-msgstr "Komentorivivalitsimia ei voitu jäsentää"
+msgstr "Нисам успео да обрадим опције линије наредби"
 
 msgid "Failed to create directory"
-msgstr "Kansion luominen epäonnistui"
+msgstr "Нисам успео да направим директоријум"
 
 msgid "Failed to download file"
-msgstr "Tiedoston lataus epäonnistui"
+msgstr "Нисам успео да преузмем датотеку"
 
 msgid "File has zero size"
-msgstr "Tiedostokoko on nolla"
+msgstr "Датотека је нулте величине"
 
 msgid "Failed to load data"
-msgstr ""
+msgstr "Нисам успео да учитам податке"
 
 #. TRANSLATORS: the request failed
 msgid "Failed to contact ColorHug"
-msgstr "ColorHugiin ei saatu yhteyttä"
+msgstr "Нисам успео да ступим у везу са Бојохватом"
 
 #. TRANSLATORS: internal error when setting up HTTP request
 msgid "Failed to setup message"
-msgstr "Viestin asetus epäonnistui"
+msgstr "Нисам успео да подесим поруку"
 
 #. TRANSLATORS: device is broken and needs fixing
 msgid "The ColorHug is missing the factory calibration values."
-msgstr ""
+msgstr "Бојохвату недостају фабричке вредности калибрације."
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
 msgid "Device calibration error"
-msgstr "Virhe laitekalibroinnissa"
+msgstr "Грешка калибрације уређаја"
 
 #. TRANSLATORS: this is a button
 msgid "Ignore"
-msgstr "Hylkää"
+msgstr "Занемари"
 
 #. TRANSLATORS: this is a button
 msgid "Repair"
-msgstr "Korjaa"
+msgstr "Поправи"
 
 #. TRANSLATORS: device is broken and needs fixing
 msgid "Update the factory calibration values?"
-msgstr ""
+msgstr "Да доградим вредности фабричке калибрације?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
 msgid "Device calibration update"
-msgstr ""
+msgstr "Доградња калибрације уређаја"
 
 #. TRANSLATORS: this is a button
 msgid "Cancel"
-msgstr "Peruuta"
+msgstr "Откажи"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to get the calibration data"
-msgstr ""
+msgstr "Нисам успео да добавим податке калибрације"
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 msgid "Select correction matrix"
-msgstr "Valitse korjausmatriisi"
+msgstr "Изаберите матрицу калибрације"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Откажи"
 
 msgid "_Open"
-msgstr ""
+msgstr "_Отвори"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
-msgstr "Korjausmatriisit"
+msgstr "Матрице поправке"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to set the calibration map"
-msgstr "Kalibrointitaulun asetus epäonnistui"
+msgstr "Нисам успео да подесим мапу калибрације"
 
 msgid "Failed to set the calibration matrix"
-msgstr "Kalibrointimatriisin asetus epäonnistui"
+msgstr "Нисам успео да подесим матрицу калибрације"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to open device"
-msgstr "Laitteen avaaminen epäonnistui"
+msgstr "Нисам успео да отворим уређај"
 
 #. TRANSLATORS: get the calibration matrices from the device
 msgid "Getting calibration from device…"
-msgstr ""
+msgstr "Добављам калибрацију са уређаја…"
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
-msgstr "Laitteella ei ole tilaa"
+msgstr "Нема више места на уређају"
 
 msgid "All 64 slots are used up."
-msgstr "Kaikki 64 paikkaa on käytössä."
+msgstr "Искоришћена су сва 64 жлеба."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
 msgid "Failed to load file"
-msgstr "Tiedoston lataus epäonnistui."
+msgstr "Нисам успео да учитам датотеку"
 
 msgid "Failed to write file"
-msgstr "Tiedoston kirjoitus epäonnistui"
+msgstr "Нисам успео да запишем датотеку"
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of CCMX files"
-msgstr ""
+msgstr "Нисам успео да преузмем списак датотека МТПБ-а"
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
-msgstr "Firmware-listaus on tyhjä"
+msgstr "Списак фирмвера има нулту величину"
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the calibrate position and click 'Next'."
-msgstr ""
+msgstr "Подесите уређај на положај за калибрацију и притисните „Даље“."
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the surface position and click 'Next'."
-msgstr ""
+msgstr "Подесите уређај на положај за површину и притисните „Даље“."
 
 msgid "Put the photospectrometer on the screen and click 'Next'."
-msgstr ""
+msgstr "Поставите фотоспектрометар на екран и притисните „Даље“."
 
 msgid "Now put the ColorHug on the screen and click 'Next' again."
-msgstr ""
+msgstr "Сада поставите Бојохват на екран и опет притисните „Даље“."
 
 msgid "Correction matrix failed to be generated!"
-msgstr ""
+msgstr "Стварање матрице поправке није успело!"
 
 msgid "Correction matrix successfully generated!"
-msgstr ""
+msgstr "Стварање матрице поправке је успело!"
 
 msgid "_Save"
-msgstr ""
+msgstr "_Сачувај"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
-msgstr ""
+msgstr "Преузимам најновије податке са Интернета…"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug CCMX Loader"
@@ -526,162 +525,162 @@ msgstr ""
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
-msgstr "Verkon asetus epäonnistui"
+msgstr "Нисам успео да подесим умрежавање"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
-msgstr ""
+msgstr "Оправља фабричку матрицу калибрације"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug CCMX loader"
-msgstr "ColorHug CCMX-lataaja"
+msgstr "Учитавач МТПБ-а Бојохвата"
 
 msgid "ColorHug Updater"
-msgstr ""
+msgstr "Дограђивач Бојохвата"
 
 msgid "Calibration Failed"
-msgstr ""
+msgstr "Калибрација није успела"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
 msgid "Failed to set the flash success true"
-msgstr "Päivitystulosta ei voitu asettaa arvoon true"
+msgstr "Нисам успео да подесим успешност претакања тачном"
 
 #. TRANSLATORS: we've uploaded new firmware
 msgid "Device successfully updated"
-msgstr "Laitteen päivitys onnistui"
+msgstr "Уређај је успешно дограђен"
 
 msgid "Calibration Completed"
-msgstr ""
+msgstr "Калибрација је завршена"
 
 #. TRANSLATORS: tell the hardware we succeeded
 msgid "Completing firmware upgrade…"
-msgstr ""
+msgstr "Завршавам доградњу фирмвера…"
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
 msgid "Failed to startup the ColorHug"
-msgstr "ColorHugin käynnistys epäonnistui"
+msgstr "Нисам успео да покренем Бојохвата"
 
 #. TRANSLATORS: the new firmware will not load
 msgid "Failed to boot the ColorHug"
-msgstr "ColorHugin alustus epäonnistui"
+msgstr "Нисам успео да подигнем Бојохвата"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to verify the firmware"
-msgstr ""
+msgstr "Нисам успео да проверим фирмвер"
 
 #. TRANSLATORS: boot into the new firmware
 msgid "Starting the new firmware…"
-msgstr ""
+msgstr "Покрећем нови фирмвер…"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to write the firmware"
-msgstr ""
+msgstr "Нисам успео да запишем фирмвер"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
 msgid "Verifying new firmware…"
-msgstr ""
+msgstr "Проверавам нови фирмвер…"
 
 #. TRANSLATORS: now write the new firmware chunks
 msgid "Writing new firmware…"
-msgstr ""
+msgstr "Записујем нови фирмвер…"
 
 #. TRANSLATORS: the device failed to come back alive
 msgid "Failed to reboot the ColorHug"
-msgstr "ColorHug ei käynnistynyt uudelleen"
+msgstr "Нисам успео поново да подигнем Бојохвата"
 
 #. TRANSLATORS: we restart the device in bootloader mode
 msgid "Failed to reset the ColorHug"
-msgstr "ColorHugin alkulataaja ei käynnistynyt"
+msgstr "Нисам успео поново да подесим Бојохвата"
 
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Погрешна врста фирмвера!"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
-msgstr ""
+msgstr "Покрећем доградњу фирмвера…"
 
 #. TRANSLATORS: failed to get the firmware file
 msgid "Failed to get firmware"
-msgstr "Firmware-tiedoston lataus epäonnistui"
+msgstr "Нисам успео да добавим фирмвер"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has zero size"
-msgstr "Firmware-tiedoston koko on nolla"
+msgstr "Фирмвер има нулту величину"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has incorrect checksum"
-msgstr ""
+msgstr "Фирмвер има нетачну суму провере"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 msgid "Warnings about this update"
-msgstr ""
+msgstr "Упозорења о овој доградњи"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
 msgid "Flash anyway"
-msgstr ""
+msgstr "Преточи ипак"
 
 #. TRANSLATORS: this is the button text to abort the flash process
 msgid "Do not flash"
-msgstr ""
+msgstr "Не претачи"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
 msgid "Downloading update…"
-msgstr ""
+msgstr "Преузимам доградњу…"
 
 #. TRANSLATORS: the user is already running the latest firmware
 msgid "There are no updates available."
-msgstr "Ei päivityksiä saatavilla."
+msgstr "Нема доступних доградњи."
 
 #. TRANSLATORS: the user is running an old firmware version
 msgid "A firmware update is available."
-msgstr "Firmware-päivitys saatavilla."
+msgstr "Доступна је доградња фирмвера."
 
 #. TRANSLATORS: the HTTP request failed
 msgid "Failed to get the listing of firmware files"
-msgstr "Firmware-tiedostolistan lataus epäonnistui"
+msgstr "Нисам успео да преузмем списак датотека фирмвера"
 
 #. TRANSLATORS: we got an invalid response from the server
 msgid "The firmware listing has zero size"
-msgstr "Firmware-tiedostolista on tyhjä"
+msgstr "Списак фирмвера има нулту величину"
 
 #. TRANSLATORS: the XML file was corrupt
 msgid "Failed to parse the update metadata"
-msgstr ""
+msgstr "Нисам успео да обрадим метаподатке доградње"
 
 #. TRANSLATORS: this is test firmware
 msgid "This is a test firmware not intended for general release."
-msgstr ""
+msgstr "Ово је пробни фирмвер који није намењен за опште издање."
 
 #. TRANSLATORS: all bets are off
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr ""
+msgstr "Овај фирмвер није подробније испитан и можда неће радити као што се очекује."
 
 #. TRANSLATORS: pre-production hardware
 msgid "Prototype ColorHug Detected"
-msgstr "Prototyyppi-ColorHug havaittu"
+msgstr "Откривен је прототип Бојохвата"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
-msgstr "ColorHug havaittu"
+msgstr "Откривен је Бојохват"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "Откривен је Бојохват 2"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "Откривен је Бојохват +"
 
 #. TRANSLATORS: ALS stands for ambient light sensor
 msgid "ColorHug ALS Detected"
@@ -689,38 +688,38 @@ msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
-msgstr "Emuloitu ColorHug havaittu"
+msgstr "Откривен је опонашани Бојохват"
 
 #. TRANSLATORS: new-issue hardware
 #, c-format
 msgid "ColorHug v%i Detected"
-msgstr "ColorHug v%i havaittu"
+msgstr "Откривен је Бојохват и%i"
 
 #. TRANSLATORS: the device is in bootloader mode
 msgid "Bootloader version"
-msgstr "Alkulataajatila"
+msgstr "Издање подизног учитавача"
 
 #. TRANSLATORS: the device is in firmware mode
 msgid "Firmware version"
-msgstr "Firmware-tila"
+msgstr "Издање фирмвера"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
 msgid "Checking for updates…"
-msgstr ""
+msgstr "Проверавам доградње…"
 
 #. TRANSLATORS: we've specified a local file
 msgid "Flashing firmware file…"
-msgstr ""
+msgstr "Претачем датотеку фирмвера…"
 
 #. TRANSLATORS: request the firmware version from the device
 msgid "Getting firmware version…"
-msgstr ""
+msgstr "Добављам издање фирмвера…"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 msgid "Update details"
-msgstr "Päivitystiedot"
+msgstr "Појединости доградње"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Firmware Updater"
@@ -728,7 +727,7 @@ msgstr ""
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
-msgstr "Lisätietoja päivityksestä"
+msgstr "Погледајте појединости о доградњи"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing firmware to ColorHug device"
@@ -736,427 +735,427 @@ msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
-msgstr ""
+msgstr "Претаче нарочиту датотеку фирмвера"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
 msgid "ColorHug Flash Program"
-msgstr "ColorHug-laitteen päivitysohjelma"
+msgstr "Бојохватов програм претакања"
 
 #. Translators: This is %i days
 #, c-format
 msgid "%id"
-msgstr ""
+msgstr "%iд"
 
 #. Translators: This is %i days %02i hours
 #, c-format
 msgid "%id%02ih"
-msgstr ""
+msgstr "%iд%02iч"
 
 #. Translators: This is %i hours
 #, c-format
 msgid "%ih"
-msgstr ""
+msgstr "%iч"
 
 #. Translators: This is %i hours %02i minutes
 #, c-format
 msgid "%ih%02im"
-msgstr ""
+msgstr "%iч%02iм"
 
 #. Translators: This is %2i minutes
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2iм"
 
 #. Translators: This is %2i minutes %02i seconds
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2iм%02iс"
 
 #. TRANSLATORS: This is ms
 #, c-format
 msgid "%.0fms"
-msgstr ""
+msgstr "%.0fмс"
 
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2iс"
 
 #. TRANSLATORS: This is %i Percentage
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
 #, c-format
 msgid "%.1fW"
-msgstr ""
+msgstr "%.1fW"
 
 #. TRANSLATORS: This is %.1f Volts
 #, c-format
 msgid "%.1fV"
-msgstr ""
+msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
 #, c-format
 msgid "%.0f nm"
-msgstr ""
+msgstr "%.0f nm"
 
 #. TRANSLATORS: this is a command alias
 #, c-format
 msgid "Alias to %s"
-msgstr "Komennon %s alias"
+msgstr "Алијас за „%s“"
 
 #. TRANSLATORS: error message
 msgid "Command not found, valid commands are:"
-msgstr "Tuntematon komento. Komennot ovat:"
+msgstr "Нисам пронашао наредбу, исправне наредбе су:"
 
 #. TRANSLATORS: wait for user to press the device into a desk…
 msgid "Ensure the ColorHug aperture is blocked"
-msgstr ""
+msgstr "Уверите се да је отвор Бојохвата блокиран"
 
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
-msgstr ""
+msgstr "Подеси ове вредности као помераје тамног"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
-msgstr ""
+msgstr "Множилац"
 
 #. TRANSLATORS: this is the measurement mode
 msgid "Measure mode"
-msgstr ""
+msgstr "Режим мерења"
 
 #. TRANSLATORS: this is the sensor sample time
 msgid "Integral"
-msgstr ""
+msgstr "Целовито"
 
 #. TRANSLATORS: this is the number of pulses detected
 msgid "Pulses"
-msgstr ""
+msgstr "Бр. импулса"
 
 msgid "Multiple ColorHug devices are attached"
-msgstr ""
+msgstr "Прикачено је неколико уређаја Бојохвата"
 
 msgid "No ColorHug devices were found"
-msgstr ""
+msgstr "Нисам пронашао уређаје Бојохвата"
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
-msgstr "Päivitä laite?"
+msgstr "Да преточим уређај?"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"
-msgstr "Hakee sensorin värisuotimen"
+msgstr "Добавља пропусник боје сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor color filter"
-msgstr "Asettaa sensorin värisuotimen"
+msgstr "Подешава пропусник боје сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor multiplier"
-msgstr "Hakee sensorin kertoimen"
+msgstr "Добавља множиоца сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor multiplier"
-msgstr "Asettaa sensorin kertoimien"
+msgstr "Подешава множиоца сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor sample read time"
-msgstr "Hakee sensorin näytteenlukuajan"
+msgstr "Добавља време читања узорка сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor sample read time"
-msgstr "Asettaa sensorin näytteenlukuajan"
+msgstr "Подешава време читања узорка сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor firmware version"
-msgstr "Hakee sensorin ohjelmistoversion"
+msgstr "Добавља издање фирмвера сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration matrix"
-msgstr "Hakee sensorin kalibrointimatriisin"
+msgstr "Добавља матрицу калибрације сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix"
-msgstr "Asettaa sensorin kalibrointimatriisin"
+msgstr "Подешава матрицу калибрације сензора"
 
 #. TRANSLATORS: command description
 msgid "Clear the sensor calibration matrix"
-msgstr "Tyhjennä sensorin kalibrointimatriisi"
+msgstr "Чисти матрицу калибрације сензора"
 
 #. TRANSLATORS: command description
 msgid "List the sensor calibration matrices"
-msgstr "Listaa sensorin kalibrointimatriisit"
+msgstr "Исписује матрице калибрације сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix from a CCMX file"
-msgstr "Asettaa sensorin kalibrointimatriisin CCMX-tiedostosta"
+msgstr "Подешава матрицу калибрације сензора из МТПБ датотеке"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor serial number"
-msgstr "Hakee sensorin sarjanumeron"
+msgstr "Добавља серијски број сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor serial number"
-msgstr "Asetta sensorin sarjanumeron"
+msgstr "Подешава серијски број сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's name"
-msgstr ""
+msgstr "Добавља име власника"
 
 #. TRANSLATORS: command description
 msgid "Sets the owner's name"
-msgstr ""
+msgstr "Подешава име власника"
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's email address"
-msgstr ""
+msgstr "Добавља адресу ел. поште власника"
 
 #. TRANSLATORS: command description
 msgid "Sets the owner's email address"
-msgstr ""
+msgstr "Подешава адресу ел. поште власника"
 
 #. TRANSLATORS: command description
 msgid "Gets the LED values"
-msgstr "Hakee ledien arvot"
+msgstr "Добавља вредности ЛЕД-а"
 
 #. TRANSLATORS: command description
 msgid "Sets the LEDs"
-msgstr "Asettaa ledit"
+msgstr "Подешава ЛЕД-се"
 
 #. TRANSLATORS: command description
 msgid "Gets the PCB errata"
-msgstr ""
+msgstr "Добавља ПЦБ грешкопис"
 
 #. TRANSLATORS: command description
 msgid "Sets the PCB errata"
-msgstr ""
+msgstr "Подешава ПЦБ грешкопис"
 
 #. TRANSLATORS: command description
 msgid "Gets the remote profile SHA1 hash"
-msgstr ""
+msgstr "Добавља СХА1 хеш удаљеног профила"
 
 #. TRANSLATORS: command description
 msgid "Sets the remote profile SHA1 hash"
-msgstr ""
+msgstr "Подешава СХА1 хеш удаљеног профила"
 
 #. TRANSLATORS: command description
 msgid "Gets the dark offset values"
-msgstr "Hakee mustan raja-arvon"
+msgstr "Добавља вредности помераја тамног"
 
 #. TRANSLATORS: command description
 msgid "Sets the dark offset values"
-msgstr "Asettaa mustan raja-arvon"
+msgstr "Подешава вредности помераја тамног"
 
 #. TRANSLATORS: command description
 msgid "Writes the EEPROM with updated values"
-msgstr "Kirjoittaa uudet arvot EEPROM:iin"
+msgstr "Пише у EEPROM дограђене вредности"
 
 #. TRANSLATORS: command description
 msgid "Takes a reading"
-msgstr "Ottaa arvon"
+msgstr "Предузима читање"
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to device RGB)"
-msgstr "Ottaa kaikki väriarvot (laitteen RGB-tilaan))"
+msgstr "Предузима читања свих боја (на РГБ-у уређаја)"
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to XYZ)"
-msgstr "Ottaa kaikki väriarvot (XYZ-väritilaan)"
+msgstr "Предузима читања свих боја (на XYZ)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr ""
+msgstr "Предузима читање спектра (чувајући у SRAM)"
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
-msgstr "Palauta laite alkulataajaan"
+msgstr "Поново подешава процесор на подизног учитавача"
 
 #. TRANSLATORS: command description
 msgid "Flash firmware into the processor"
-msgstr "Päivitä ohjelmisto laitteeseen"
+msgstr "Претаче фирмвер у процесор"
 
 #. TRANSLATORS: command description
 msgid "Read EEPROM at a specified address"
-msgstr ""
+msgstr "Чита EEPROM на наведеној адреси"
 
 #. TRANSLATORS: command description
 msgid "Erase EEPROM at a specified address"
-msgstr ""
+msgstr "Брише EEPROM на наведеној адреси"
 
 #. TRANSLATORS: command description
 msgid "Write EEPROM at a specified address"
-msgstr ""
+msgstr "Пише EEPROM на наведеној адреси"
 
 #. TRANSLATORS: command description
 msgid "Gets the pre scale constant"
-msgstr "Hakee esiskaalausvakion"
+msgstr "Добавља константу пре-сразмеравања"
 
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
-msgstr "Asettaa esiskaalausvakion"
+msgstr "Подешава константу пре-сразмеравања"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "Добавља вредност ДАЦ-а"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "Подешава вредност ДАЦ-а"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
-msgstr "Hakee jälkiskaalausvakion"
+msgstr "Добавља константу пост-сразмеравања"
 
 #. TRANSLATORS: command description
 msgid "Sets the post scale constant"
-msgstr "Asettaa jälkiskaalausvakion"
+msgstr "Подешава константу пост-сразмеравања"
 
 #. TRANSLATORS: command description
 msgid "Sets the flash success"
-msgstr "Asettaa päivitystuloksen"
+msgstr "Подешава успешност претакања"
 
 #. TRANSLATORS: command description
 msgid "Boots from the bootloader into the firmware"
-msgstr "Käynnistää laiteohjelmiston alkulataajasta"
+msgstr "Учитава из подизног учитавача у фирмвер"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration map"
-msgstr "Hakee sensorin kalibrointitaulukon"
+msgstr "Добавља мапу калибрације сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration map"
-msgstr "Asettaa sensorin kalibrointitaulukon"
+msgstr "Подешава мапу калибрације сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the hardware version"
-msgstr "Hakee laiteversion"
+msgstr "Добавља издање хардвера"
 
 #. TRANSLATORS: command description
 msgid "Gets an array of raw samples"
-msgstr ""
+msgstr "Добавља низ сирових узорака"
 
 #. TRANSLATORS: command description
 msgid "Downloads a remote profile"
-msgstr ""
+msgstr "Преузима удаљени профил"
 
 #. TRANSLATORS: command description
 msgid "Uploads a remote profile"
-msgstr ""
+msgstr "Отпрема удаљени профил"
 
 #. TRANSLATORS: command description
 msgid "Uploads a correction matrix"
-msgstr ""
+msgstr "Отпрема матрицу калибрације"
 
 #. TRANSLATORS: command description
 msgid "Does a quick self test on the device"
-msgstr ""
+msgstr "Обавља брзу самопробу на уређају"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor measurement mode"
-msgstr ""
+msgstr "Добавља режим мерења сензора"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor measurement mode"
-msgstr ""
+msgstr "Подешава режим мерења сензора"
 
 #. TRANSLATORS: command description
 msgid "Read SRAM at a specified address"
-msgstr ""
+msgstr "Чита SRAM на наведеној адреси"
 
 #. TRANSLATORS: command description
 msgid "Write SRAM at a specified address"
-msgstr ""
+msgstr "Пише SRAM на наведеној адреси"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor temperature"
-msgstr ""
+msgstr "Добавља температуру сензора"
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
-msgstr ""
+msgstr "Добавља вредности АДЦ В-упуте"
 
 #. TRANSLATORS: command description
 msgid "Gets the CCD calibration values"
-msgstr ""
+msgstr "Добавља ЦЦД вредности калибрације"
 
 #. TRANSLATORS: command description
 msgid "Sets the CCD calibration values"
-msgstr ""
+msgstr "Подешава ЦЦД вредности калибрације"
 
 #. TRANSLATORS: command description
 msgid "Converts Intel HEX to BIN"
-msgstr ""
+msgstr "Преводи Интелове HEX у BIN"
 
 #. TRANSLATORS: program name
 msgid "Color Management"
-msgstr "Värienhallinta"
+msgstr "Управљање бојама"
 
 #. TRANSLATORS: no colord available
 msgid "No connection to device:"
-msgstr "Ei yhteyttä laitteeseen:"
+msgstr "Нема везе са уређајем:"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get samples from device"
-msgstr ""
+msgstr "Нисам успео да добавим узорке са уређаја"
 
 #. TRANSLATORS: PWM is pulse-width-modulation?
 msgid "Failed to remove PWM"
-msgstr ""
+msgstr "Нисам успео да уклоним МШИ"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Непознато"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to calculate USB latency"
-msgstr ""
+msgstr "Нисам успео да израчунам кашњење УСБ-а"
 
 msgid "Show single pulse"
-msgstr ""
+msgstr "Прикажи један импулс"
 
 msgid "Show channels"
-msgstr ""
+msgstr "Прикажи канале"
 
 msgid "Filter backlight"
-msgstr ""
+msgstr "Издвој позадинско светло"
 
 msgid "Export results"
-msgstr ""
+msgstr "Извези резултате"
 
 msgid "Export"
-msgstr ""
+msgstr "Извези"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get save file"
-msgstr ""
+msgstr "Нисам успео да сачувам датотеку"
 
 msgid "Please connect your ColorHug2"
-msgstr ""
+msgstr "Повежите Бојохват 2"
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
 "start analyzing your display."
-msgstr ""
+msgstr "Поставите Бојохват на тачку на левој страни и започните анализирање екрана."
 
 msgid "Don't disturb the device while working!"
-msgstr ""
+msgstr "Не ометајте уређај за време рада!"
 
 msgid ""
 "Please update the firmware on your ColorHug before using this application."
-msgstr ""
+msgstr "Доградите фирмвер на Бојохвату пре коришћења овог програма."
 
 msgid "Device unsupported."
-msgstr ""
+msgstr "Уређај није подржан."
 
 msgid "Please connect your ColorHug2."
-msgstr ""
+msgstr "Повежите Бојохват 2."
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Display Analysis"
-msgstr ""
+msgstr "О анализи екрана Бојохвата"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr ""
+msgstr "Узоркујте екран током времена да посматрате МШИ, кашњење улаза и да освежите рукотворине."

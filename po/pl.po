@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 16:18+0000\n"
-"PO-Revision-Date: 2014-12-18 16:18+0000\n"
+"POT-Creation-Date: 2015-03-10 19:40+0000\n"
+"PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/colorhug-client/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -19,24 +19,52 @@ msgstr ""
 "Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "ColorHug CCMX Loader"
-msgstr "Program wczytujący dane CCMX dla ColorHug"
+msgid "_About"
+msgstr "_O programie"
 
-msgid "Generate CCMX"
-msgstr "Utwórz CCMX"
+msgid "_Quit"
+msgstr "Za_kończ"
 
-#. Button to import a CCMX file
-msgid "Import file"
-msgstr "Zaimportuj plik"
+#. The surrounding light level
+msgid "Ambient"
+msgstr ""
 
-msgid "Import a local CCMX file"
-msgstr "Importuje lokalny plik CCMX"
+#. The backlight color
+#. TRANSLATORS: this is the enabled sensor color
+msgid "Color"
+msgstr "Kolor"
 
-msgid "Refresh the list of matrices from the device"
-msgstr "Odświeża listę macierzy z urządzenia"
+#. The amount of smoothing done to the backlight readings
+msgid "Smoothing"
+msgstr ""
 
-msgid "Close this window"
-msgstr "Zamyka to okno"
+#. The rate that we're sampling the sensor
+msgid "Refresh"
+msgstr ""
+
+#. The amount the sensor can influence the brightness
+msgid "Weight"
+msgstr ""
+
+#. Backlight up 5%
+msgid "Up"
+msgstr ""
+
+#. Backlight down 5%
+msgid "Down"
+msgstr ""
+
+msgid "_Import file"
+msgstr ""
+
+msgid "_Generate CCMX"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Please insert your ColorHug device."
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -65,10 +93,6 @@ msgstr "Projektor"
 msgid "LED"
 msgstr "LED"
 
-#. TRANSLATORS: device is not connected to the computer
-msgid "Please connect your ColorHug"
-msgstr "Proszę podłączyć urządzenie ColorHug"
-
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr "Wybór ekranu używanego do tworzenia macierzy kalibracji kolorów."
 
@@ -83,22 +107,19 @@ msgid ""
 "the community"
 msgstr "Podziel się ze\nspołecznością"
 
-msgid "ColorHug Firmware Updater"
-msgstr "Aktualizacja oprogramowania urządzenia ColorHug"
-
-#. Button to update to a newer version of the firmware
-msgid "Update!"
-msgstr "Zaktualizuj"
-
-msgid "Flash new firmware to the device"
-msgstr "Zapisuje nowe oprogramowanie sprzętowe w urządzeniu"
-
 msgid "Firmware version unknown"
 msgstr "Nieznana wersja oprogramowania sprzętowego"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Nie należy odłączać urządzenia ani wyłączać komputera."
+
+#. Button to update to a newer version of the firmware
+msgid "Update"
+msgstr ""
+
+msgid "Flash new firmware to the device"
+msgstr "Zapisuje nowe oprogramowanie sprzętowe w urządzeniu"
 
 msgid "page0"
 msgstr "strona0"
@@ -145,11 +166,26 @@ msgstr "strona1"
 msgid "_Export results…"
 msgstr "Wy_eksportuj wyniki…"
 
-msgid "_About"
-msgstr "_O programie"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Backlight Utility"
+msgstr ""
 
-msgid "_Quit"
-msgstr "Za_kończ"
+msgid "Sample the ambient light level to control the backlight"
+msgstr ""
+
+msgid ""
+"The ColorHug backlight utility uses the ColorHug device to alter the "
+"backlight level to compensate for the changing ambient light level."
+msgstr ""
+
+msgid "The ambient light control utility"
+msgstr ""
+
+#. TRANSLATORS: this is the application name
+msgid "ColorHug CCMX Loader"
+msgstr "Program wczytujący dane CCMX dla ColorHug"
 
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Modyfikuje macierze kalibracji urządzenia ColorHug"
@@ -167,7 +203,7 @@ msgid ""
 msgstr "Wybranie macierzy korekcji zwiększa dokładność urządzenia ColorHug, ale użycie domyślnej macierzy daje zadowalające wyniki kalibracji dla większości użytkowników."
 
 msgid "The correction matrices on the device"
-msgstr ""
+msgstr "Macierze poprawkowe na urządzeniu"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
@@ -185,17 +221,22 @@ msgid ""
 "devices. It will measure various kinds of latency, e.g. black-to-white and "
 "input-lag as well as reporting color information and colorspace gamut "
 "volume."
-msgstr ""
+msgstr "Narzędzie do analizy ekranu ColorHug może być używane do profilowania ekranów i kart graficznych. Mierzy ono różne rodzaje opóźnień, na przykład czarne do białego i opóźnienie wprowadzania, a także zgłasza informacje o kolorze i natężenie gamutu przestrzeni kolorów."
 
 msgid "Results can be exported as standalone HTML files and shared."
-msgstr ""
+msgstr "Wyniki mogą być eksportowane jako samodzielne pliki HTML i przesyłane dalej."
 
 msgid "Main application window"
-msgstr ""
+msgstr "Główne okno programu"
 
 msgid "Display analysis results"
-msgstr ""
+msgstr "Wyniki analizy ekranu"
 
+#. TRANSLATORS: this is the application name
+msgid "ColorHug Firmware Updater"
+msgstr "Aktualizacja oprogramowania urządzenia ColorHug"
+
+#. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Aktualizuje oprogramowanie sprzętowe kolorymetru ColorHug"
 
@@ -211,10 +252,10 @@ msgid ""
 msgstr "Używając parametrów wiersza poleceń, to narzędzie może także nagrywać specjalnie dostosowane pliki flash na urządzenie."
 
 msgid "Application window showing new firmware detected"
-msgstr ""
+msgstr "Okno programu wyświetlające nowo wykryte oprogramowanie sprzętowe"
 
 msgid "Applying updated firmware to the ColorHug device"
-msgstr ""
+msgstr "Zastosowywanie zaktualizowanego oprogramowania sprzętowego na urządzeniu ColorHug"
 
 msgid "ColorHug Documentation"
 msgstr "Dokumentacja ColorHug"
@@ -222,11 +263,14 @@ msgstr "Dokumentacja ColorHug"
 msgid "Documentation for the ColorHug display colorimeter"
 msgstr "Dokumentacja kolorymetru ekranów ColorHug"
 
+msgid "Display;Backlight;Ambient;ColorHug;"
+msgstr ""
+
 msgid "CCMX Loader"
 msgstr "Program wczytujący dane CCMX"
 
 msgid "CCMX;ColorHug;"
-msgstr ""
+msgstr "CCMX;ColorHug;"
 
 msgid "Whether we should update to test firmware"
 msgstr "Określa, czy aktualizować oprogramowanie sprzętowe"
@@ -260,14 +304,77 @@ msgstr "Ukrywa miganie podświetlenia na wykresie"
 msgid "Whether the backlight PWM should be removed."
 msgstr "Czy usuwać PWM podświetlenia."
 
-msgid "Display;Analysis;ColorHug;"
+msgid "The integration time for each sample"
 msgstr ""
+
+msgid "Set the integration time in seconds for the ambient light sample."
+msgstr ""
+
+msgid "Backlight smoothing factor"
+msgstr ""
+
+msgid "The amount of backlight smoothing for ambient light changes."
+msgstr ""
+
+msgid "The refresh rate between samples"
+msgstr ""
+
+msgid "The refresh rate in seconds between samples."
+msgstr ""
+
+msgid "The gamma value for ambient light"
+msgstr ""
+
+msgid "The gamma values to use when scaling ambient light samples."
+msgstr ""
+
+msgid "Display;Analysis;ColorHug;"
+msgstr "Ekran;Monitor;Wyświetlacz;Display;Analiza;ColorHug;"
 
 msgid "Firmware Updater"
 msgstr "Aktualizacja oprogramowania sprzętowego"
 
 msgid "Flash;Firmware;ColorHug;"
+msgstr "Flash;Flaszowanie;Flashowanie;Firmware;Oprogramowanie;sprzętowe;wbudowane;ColorHug;"
+
+#. TRANSLATORS: no device is attached
+msgid "Please insert your ColorHugALS device."
 msgstr ""
+
+#. TRANSLATORS: our device
+msgid "Using ColorHugALS device"
+msgstr ""
+
+#. TRANSLATORS: laptop ambient light sensor
+msgid "Using internal device"
+msgstr ""
+
+#. TRANSLATORS: set the backlight
+msgid "Failed to set brightness"
+msgstr ""
+
+#. TRANSLATORS: get the backlight
+msgid "Failed to get brightness"
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Backlight Utility"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Sample the ambient light to control the backlight."
+msgstr ""
+
+msgid "translator-credits"
+msgstr "Łukasz Jernaś <deejay1@srem.org>, 2012.\\n\nPiotr Drąg <piotrdrag@gmail.com>, 2012-2014."
+
+#. TRANSLATORS: command line option
+msgid "Show extra debugging information"
+msgstr "Wyświetla dodatkowe informacje debugowania"
+
+#. TRANSLATORS: user has sausages for fingers
+msgid "Failed to parse command line options"
+msgstr "Przetworzenie opcji wiersza poleceń się nie powiodło"
 
 msgid "Failed to create directory"
 msgstr "Utworzenie katalogu się nie powiodło"
@@ -346,6 +453,14 @@ msgstr "Zapisanie mapowania kalibracji się nie powiodło"
 msgid "Failed to set the calibration matrix"
 msgstr "Ustawienie macierzy kalibracji się nie powiodło"
 
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to open device"
+msgstr "Otwarcie urządzenia się nie powiodło"
+
+#. TRANSLATORS: get the calibration matrices from the device
+msgid "Getting calibration from device…"
+msgstr "Pobieranie kalibracji z urządzenia…"
+
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
@@ -358,14 +473,6 @@ msgstr "Wszystkie 64 gniazda są używane."
 #. * local firmware file
 msgid "Failed to load file"
 msgstr "Wczytanie pliku się nie powiodło"
-
-#. TRANSLATORS: permissions error perhaps?
-msgid "Failed to open device"
-msgstr "Otwarcie urządzenia się nie powiodło"
-
-#. TRANSLATORS: get the calibration matrices from the device
-msgid "Getting calibration from device…"
-msgstr "Pobieranie kalibracji z urządzenia…"
 
 msgid "Failed to write file"
 msgstr "Zapisanie pliku się nie powiodło"
@@ -405,13 +512,21 @@ msgstr "Zapi_sz"
 msgid "Getting latest data from the web…"
 msgstr "Pobieranie najnowszych danych z sieci…"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug CCMX Loader"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Modify the calibration matrices on the ColorHug device."
+msgstr ""
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing data to ColorHug device"
+msgstr ""
+
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
 msgstr "Ustawienie sieci się nie powiodło"
-
-#. TRANSLATORS: command line option
-msgid "Show extra debugging information"
-msgstr "Wyświetla dodatkowe informacje debugowania"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -422,28 +537,11 @@ msgstr "Naprawia fabryczną macierz kalibracji"
 msgid "ColorHug CCMX loader"
 msgstr "Program wczytujący dane CCMX dla ColorHug"
 
-msgid "Failed to parse command line options"
-msgstr "Przetworzenie opcji wiersza poleceń się nie powiodło"
-
 msgid "ColorHug Updater"
 msgstr "Aktualizacja ColorHug"
 
 msgid "Calibration Failed"
 msgstr "Kalibracja się nie powiodła"
-
-#. TRANSLATORS: we broke the device
-msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Zapisywanie w pamięci urządzenia się nie powiodło, ale urządzenie ColorHug nie zostało uszkodzone."
-
-#. TRANSLATORS: hopefully we can "fix" this automatically
-msgid ""
-"Remove the ColorHug device from the computer, reinsert it and re-run this "
-"program."
-msgstr "Proszę odłączyć urządzenia ColorHug od komputera, ponownie je podłączyć i uruchomić ten program."
-
-#. TRANSLATORS: the user has to be online to get firmware
-msgid "Connect to the internet to check for updates"
-msgstr "Łączy z Internetem w poszukiwaniu aktualizacji"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
@@ -585,6 +683,10 @@ msgstr "Wykryto urządzenie ColorHug2"
 msgid "ColorHug+ Detected"
 msgstr "Wykryto urządzenie ColorHug+"
 
+#. TRANSLATORS: ALS stands for ambient light sensor
+msgid "ColorHug ALS Detected"
+msgstr ""
+
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
 msgstr "Wykryto emulowane urządzenie ColorHug"
@@ -620,9 +722,17 @@ msgstr "Pobieranie wersji oprogramowania sprzętowego…"
 msgid "Update details"
 msgstr "Szczegóły aktualizacji"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Firmware Updater"
+msgstr ""
+
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
 msgstr "Proszę zobaczyć szczegóły aktualizacji"
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing firmware to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -708,10 +818,6 @@ msgstr "Upewnia się, że przesłona urządzenia ColorHug jest zablokowana"
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
 msgstr "Ustawia te wartości jako przesunięcia czerni"
-
-#. TRANSLATORS: this is the enabled sensor color
-msgid "Color"
-msgstr "Kolor"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
@@ -1031,7 +1137,7 @@ msgstr "Proszę podłączyć urządzenie ColorHug2"
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
 "start analyzing your display."
-msgstr ""
+msgstr "Należy umieścić urządzenie ColorHug na miejscu po lewej i kliknąć niebieski przycisk, aby rozpocząć analizę ekranu."
 
 msgid "Don't disturb the device while working!"
 msgstr "Nie należy ruszać urządzenia podczas działania."
@@ -1054,6 +1160,3 @@ msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
 msgstr "Próbkuje ekran przez dany czas, obserwując PWM, opóźnienie wprowadzania i artefakty odświeżania."
-
-msgid "translator-credits"
-msgstr "Łukasz Jernaś <deejay1@srem.org>, 2012.\\n\nPiotr Drąg <piotrdrag@gmail.com>, 2012-2014."

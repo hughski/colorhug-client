@@ -4,13 +4,13 @@
 # 
 # Translators:
 # Zoltan Hoppár <zoltanh721@fedoraproject.org>, 2013
-# Zoltan Hoppár <zoltanh721@fedoraproject.org>, 2014
+# Zoltan Hoppár <zoltanh721@fedoraproject.org>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 16:18+0000\n"
-"PO-Revision-Date: 2014-12-18 16:18+0000\n"
+"POT-Creation-Date: 2015-03-10 19:40+0000\n"
+"PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/colorhug-client/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -19,24 +19,52 @@ msgstr ""
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "ColorHug CCMX Loader"
-msgstr "ColorHug CCMX betöltő"
+msgid "_About"
+msgstr "A programról"
 
-msgid "Generate CCMX"
-msgstr "CCMX előállítása"
+msgid "_Quit"
+msgstr "Kilépés"
 
-#. Button to import a CCMX file
-msgid "Import file"
-msgstr "Fájl importálása"
+#. The surrounding light level
+msgid "Ambient"
+msgstr ""
 
-msgid "Import a local CCMX file"
-msgstr "Lokális CCMX fájl importálása"
+#. The backlight color
+#. TRANSLATORS: this is the enabled sensor color
+msgid "Color"
+msgstr "Szín"
 
-msgid "Refresh the list of matrices from the device"
-msgstr "Frissítse a márixlistát az eszközről"
+#. The amount of smoothing done to the backlight readings
+msgid "Smoothing"
+msgstr ""
 
-msgid "Close this window"
-msgstr "Zárja be ezt az ablakot"
+#. The rate that we're sampling the sensor
+msgid "Refresh"
+msgstr ""
+
+#. The amount the sensor can influence the brightness
+msgid "Weight"
+msgstr ""
+
+#. Backlight up 5%
+msgid "Up"
+msgstr ""
+
+#. Backlight down 5%
+msgid "Down"
+msgstr ""
+
+msgid "_Import file"
+msgstr ""
+
+msgid "_Generate CCMX"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Please insert your ColorHug device."
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -65,10 +93,6 @@ msgstr "Kivetítő"
 msgid "LED"
 msgstr "LED"
 
-#. TRANSLATORS: device is not connected to the computer
-msgid "Please connect your ColorHug"
-msgstr "Kérem csatlakoztassa a ColorHug eszközét"
-
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr "Válassza ki a kijelzőt a használathoz amikor színkalibrációs mátrixot készít."
 
@@ -83,22 +107,19 @@ msgid ""
 "the community"
 msgstr "Megosztás\na közösséggel"
 
-msgid "ColorHug Firmware Updater"
-msgstr "ColorHug Firmware Frissítő"
-
-#. Button to update to a newer version of the firmware
-msgid "Update!"
-msgstr "Frissíts!"
-
-msgid "Flash new firmware to the device"
-msgstr "Formázza meg az új firmware-t az eszközre"
-
 msgid "Firmware version unknown"
 msgstr "Firmware verzió ismeretlen"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Ne húzza ki és ne kapcsolja ki a számítógépét."
+
+#. Button to update to a newer version of the firmware
+msgid "Update"
+msgstr ""
+
+msgid "Flash new firmware to the device"
+msgstr "Formázza meg az új firmware-t az eszközre"
 
 msgid "page0"
 msgstr "oldal 0"
@@ -145,11 +166,26 @@ msgstr "oldal 1"
 msgid "_Export results…"
 msgstr "_Exportálás eredménye..."
 
-msgid "_About"
-msgstr "A programról"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Backlight Utility"
+msgstr ""
 
-msgid "_Quit"
-msgstr "Kilépés"
+msgid "Sample the ambient light level to control the backlight"
+msgstr ""
+
+msgid ""
+"The ColorHug backlight utility uses the ColorHug device to alter the "
+"backlight level to compensate for the changing ambient light level."
+msgstr ""
+
+msgid "The ambient light control utility"
+msgstr ""
+
+#. TRANSLATORS: this is the application name
+msgid "ColorHug CCMX Loader"
+msgstr "ColorHug CCMX betöltő"
 
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Módosítsa a kalibrációs mátrixokat a ColorHug eszközön"
@@ -167,7 +203,7 @@ msgid ""
 msgstr "A korrekciós mátrix kiválasztásával maximalizálja a pontosságát a ColorHug-nak, de az alapértelmezett mátrix használatával a legtöbb felhasználó számára megfelelő kalibrációs eredményt biztosít."
 
 msgid "The correction matrices on the device"
-msgstr ""
+msgstr "A korrekciós mátrixok az eszközön"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
@@ -178,24 +214,29 @@ msgstr "ColorHug Kijelző Analízis"
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
-msgstr ""
+msgstr "Mintázza a kijelzőt az idő múlásával hogy a PWM-et megfigyelhesse, a bemeneti késést, és frissítési képességeket"
 
 msgid ""
 "The ColorHug display analysis tool can be used to profile display and GPU "
 "devices. It will measure various kinds of latency, e.g. black-to-white and "
 "input-lag as well as reporting color information and colorspace gamut "
 "volume."
-msgstr ""
+msgstr "A ColorHug kijelző elemző felhasználható, hogy profilozhassa a kijelzőjét és GPU eszközeit. Képes mérni sokféle időzítést, csúszást, pl. fekete-fehér váltásokat, bemeneti-csúszást, mint ahogy színinformációkat, és színtér telítettsége."
 
 msgid "Results can be exported as standalone HTML files and shared."
-msgstr ""
+msgstr "Eredmények kimenthetőek, mint önálló HTML fájlok és megosztások."
 
 msgid "Main application window"
-msgstr ""
+msgstr "Fő alkalmazás ablak"
 
 msgid "Display analysis results"
-msgstr ""
+msgstr "Analízis eredményének megjelenítése"
 
+#. TRANSLATORS: this is the application name
+msgid "ColorHug Firmware Updater"
+msgstr "ColorHug Firmware Frissítő"
+
+#. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Frissítse a firmware-t a ColorHug koloriméteren"
 
@@ -211,10 +252,10 @@ msgid ""
 msgstr "Parancssori paraméterek használatával, ez az eszköz képes egyéni, saját flash fájlokat írni az eszközre."
 
 msgid "Application window showing new firmware detected"
-msgstr ""
+msgstr "Alkalmazásablak jelzi hogy új firmware érzékelhető"
 
 msgid "Applying updated firmware to the ColorHug device"
-msgstr ""
+msgstr "A frissített firmware telepítése a ColorHug eszközre"
 
 msgid "ColorHug Documentation"
 msgstr "ColorHug Dokumentáció"
@@ -222,11 +263,14 @@ msgstr "ColorHug Dokumentáció"
 msgid "Documentation for the ColorHug display colorimeter"
 msgstr "Dokumentáció a ColorHug coloriméterhez"
 
+msgid "Display;Backlight;Ambient;ColorHug;"
+msgstr ""
+
 msgid "CCMX Loader"
 msgstr "CCMX betöltő"
 
 msgid "CCMX;ColorHug;"
-msgstr ""
+msgstr "CCMX;ColorHug;"
 
 msgid "Whether we should update to test firmware"
 msgstr "Mindenképp frissítenie kell, hogy tesztelni tudja a firmware-t"
@@ -243,31 +287,94 @@ msgid ""
 msgstr "A firmware frissítések és kalibrációs fájlok tárolásának helye."
 
 msgid "Zoom in the graph to show only one pulse"
-msgstr ""
+msgstr "Nagyítson a grafikába hogy csak egyetlen pulzust mutasson"
 
 msgid "Whether the refresh graph should be zoomed to show one pulse only."
-msgstr ""
+msgstr "Hogy a frissített grafikon nagyítva legyen, hogy egy pulzust mutasson csak."
 
 msgid "Show all RGB channels on the graph"
 msgstr "Minden RGB csatorna megjelenítése a grafikonon"
 
 msgid "Whether all captured channels should be shown."
-msgstr ""
+msgstr "Hogy az összes befogott csatorna megjelenítésre kerüljön."
 
 msgid "Hide backlight flicker on the graph"
 msgstr "Háttérfény szűrő elrejtése a grafikonon"
 
 msgid "Whether the backlight PWM should be removed."
+msgstr "Hogy a háttérvilágítás PWM-je eltávoltásra kerüljön."
+
+msgid "The integration time for each sample"
+msgstr ""
+
+msgid "Set the integration time in seconds for the ambient light sample."
+msgstr ""
+
+msgid "Backlight smoothing factor"
+msgstr ""
+
+msgid "The amount of backlight smoothing for ambient light changes."
+msgstr ""
+
+msgid "The refresh rate between samples"
+msgstr ""
+
+msgid "The refresh rate in seconds between samples."
+msgstr ""
+
+msgid "The gamma value for ambient light"
+msgstr ""
+
+msgid "The gamma values to use when scaling ambient light samples."
 msgstr ""
 
 msgid "Display;Analysis;ColorHug;"
-msgstr ""
+msgstr "Kijelző; Analízis; ColorHug;"
 
 msgid "Firmware Updater"
 msgstr "Firmware Frissítő"
 
 msgid "Flash;Firmware;ColorHug;"
+msgstr "Flash;Firmware;ColorHug;"
+
+#. TRANSLATORS: no device is attached
+msgid "Please insert your ColorHugALS device."
 msgstr ""
+
+#. TRANSLATORS: our device
+msgid "Using ColorHugALS device"
+msgstr ""
+
+#. TRANSLATORS: laptop ambient light sensor
+msgid "Using internal device"
+msgstr ""
+
+#. TRANSLATORS: set the backlight
+msgid "Failed to set brightness"
+msgstr ""
+
+#. TRANSLATORS: get the backlight
+msgid "Failed to get brightness"
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Backlight Utility"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Sample the ambient light to control the backlight."
+msgstr ""
+
+msgid "translator-credits"
+msgstr "Zoltan Hoppar (zoltanh721 at fedoraproject dot org)"
+
+#. TRANSLATORS: command line option
+msgid "Show extra debugging information"
+msgstr "Jelenítse meg az bővebb hibakeresési információkat"
+
+#. TRANSLATORS: user has sausages for fingers
+msgid "Failed to parse command line options"
+msgstr "Parancssori opciók értelmezése nem sikerült"
 
 msgid "Failed to create directory"
 msgstr "Nem sikerült a mappa elkészítése"
@@ -346,6 +453,14 @@ msgstr "Nem sikerült a kalibrációs térkép beállítása"
 msgid "Failed to set the calibration matrix"
 msgstr "A kalibrációs mátrix beállítása nem sikerült"
 
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to open device"
+msgstr "Nem sikerült az eszközt megnyitni"
+
+#. TRANSLATORS: get the calibration matrices from the device
+msgid "Getting calibration from device…"
+msgstr "Kalibráció lekérdezése az eszközről..."
+
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
@@ -358,14 +473,6 @@ msgstr "Az összes 64 hely felhasználásra került."
 #. * local firmware file
 msgid "Failed to load file"
 msgstr "Sikertelen a fájl betöltése"
-
-#. TRANSLATORS: permissions error perhaps?
-msgid "Failed to open device"
-msgstr "Nem sikerült az eszközt megnyitni"
-
-#. TRANSLATORS: get the calibration matrices from the device
-msgid "Getting calibration from device…"
-msgstr "Kalibráció lekérdezése az eszközről..."
 
 msgid "Failed to write file"
 msgstr "Sikertelen a fájlba mentés"
@@ -405,13 +512,21 @@ msgstr "Menté_s"
 msgid "Getting latest data from the web…"
 msgstr "Legutolsó adatok beszerzése az internetről..."
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug CCMX Loader"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Modify the calibration matrices on the ColorHug device."
+msgstr ""
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing data to ColorHug device"
+msgstr ""
+
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
 msgstr "Sikertelen a hálózat beállítása"
-
-#. TRANSLATORS: command line option
-msgid "Show extra debugging information"
-msgstr "Jelenítse meg az bővebb hibakeresési információkat"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -422,28 +537,11 @@ msgstr "Javítsd a gyári kalibrációs mátrixot"
 msgid "ColorHug CCMX loader"
 msgstr "ColorHug CCMX betöltő"
 
-msgid "Failed to parse command line options"
-msgstr "Parancssori opciók értelmezése nem sikerült"
-
 msgid "ColorHug Updater"
 msgstr "ColorHug Frissítő"
 
 msgid "Calibration Failed"
 msgstr "Kalibráció sikertelen"
-
-#. TRANSLATORS: we broke the device
-msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Az eszköz formázása sikertelen, de a ColorHug maga nem sérült."
-
-#. TRANSLATORS: hopefully we can "fix" this automatically
-msgid ""
-"Remove the ColorHug device from the computer, reinsert it and re-run this "
-"program."
-msgstr "Távolítsa el a ColorHug eszközt a számítógépből, illessze be újra, és indítsa el ezt a programot megint."
-
-#. TRANSLATORS: the user has to be online to get firmware
-msgid "Connect to the internet to check for updates"
-msgstr "Csatlakozzon az internetre, hogy vannak-e elérhető frissítések"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
@@ -585,6 +683,10 @@ msgstr "ColorHug2 észlelve"
 msgid "ColorHug+ Detected"
 msgstr "ColorHug+ észlelve"
 
+#. TRANSLATORS: ALS stands for ambient light sensor
+msgid "ColorHug ALS Detected"
+msgstr ""
+
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
 msgstr "Emulált ColorHug észlelve"
@@ -620,9 +722,17 @@ msgstr "Firmware fájl verziójának lekérdezése..."
 msgid "Update details"
 msgstr "Részletek frissítése"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Firmware Updater"
+msgstr ""
+
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
 msgstr "Tekintse meg a frissítés részleteit"
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing firmware to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -708,10 +818,6 @@ msgstr "Bizonyosodjon meg róla hogy a ColorHug ablaka kitakart"
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
 msgstr "Állítsa be ezeket az értékeket mint sötét offszeteket"
-
-#. TRANSLATORS: this is the enabled sensor color
-msgid "Color"
-msgstr "Szín"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
@@ -1031,7 +1137,7 @@ msgstr "Kérem csatlakoztassa a ColorHug2 eszközét"
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
 "start analyzing your display."
-msgstr ""
+msgstr "Helyezze a ColorHug-ját a pontra a bal oldalon és kattintson a kék gombbal a kijelző analízis megkezdéséhez."
 
 msgid "Don't disturb the device while working!"
 msgstr "Kérem ne nyúljon az eszközhöz amig dolgozik!"
@@ -1053,7 +1159,4 @@ msgstr "A ColorHug Kijelző Analízisről"
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr ""
-
-msgid "translator-credits"
-msgstr "Zoltan Hoppar (zoltanh721 at fedoraproject dot org)"
+msgstr "Mintázza a kijelzőt az idő múlásával hogy a PWM-et megfigyelhesse, a bemeneti késést, és frissítési képességeket"

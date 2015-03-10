@@ -22,6 +22,14 @@
   <update_contact>richard_at_hughsie.com</update_contact>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
   <releases>
+    <release version="0.2.6" timestamp="1426014599">
+      <description>
+        <p>
+          This is the first release of this application which was designed for
+          testing ambient light sensors, including the ColorHugALS device.
+        </p>
+      </description>
+    </release>
   </releases>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>

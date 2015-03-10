@@ -5,18 +5,6 @@ PackageKit Release Notes
 git log --format="%s" COLORHUG_CLIENT_0_2_5.. | grep -i -v trivial | grep -v Merge | uniq
 Add any user visible changes into data/appdata/*.appdata.xml.in
 
---------------------------------------------------------------------------------
-Version 0.2.6
-~~~~~~~~~~~~~
-Released: 2014-xx-xx
-
-Notes:
-
-New Features:
-
-Bugfixes:
---------------------------------------------------------------------------------
-
 3. Commit changes in git:
 
 cd po

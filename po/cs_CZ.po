@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 16:18+0000\n"
-"PO-Revision-Date: 2014-12-18 16:18+0000\n"
+"POT-Creation-Date: 2015-03-10 19:40+0000\n"
+"PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/projects/p/colorhug-client/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
@@ -20,24 +20,52 @@ msgstr ""
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-msgid "ColorHug CCMX Loader"
-msgstr "ColorHug nahrávač CCMX"
+msgid "_About"
+msgstr ""
 
-msgid "Generate CCMX"
-msgstr "Vytvořit CCMX"
+msgid "_Quit"
+msgstr ""
 
-#. Button to import a CCMX file
-msgid "Import file"
-msgstr "Importovat soubor"
+#. The surrounding light level
+msgid "Ambient"
+msgstr ""
 
-msgid "Import a local CCMX file"
-msgstr "Nahrát soubor CCMX"
+#. The backlight color
+#. TRANSLATORS: this is the enabled sensor color
+msgid "Color"
+msgstr "Barva"
 
-msgid "Refresh the list of matrices from the device"
-msgstr "Obnovit seznam matic ze zařízení"
+#. The amount of smoothing done to the backlight readings
+msgid "Smoothing"
+msgstr ""
 
-msgid "Close this window"
-msgstr "Zavřít toto okno"
+#. The rate that we're sampling the sensor
+msgid "Refresh"
+msgstr ""
+
+#. The amount the sensor can influence the brightness
+msgid "Weight"
+msgstr ""
+
+#. Backlight up 5%
+msgid "Up"
+msgstr ""
+
+#. Backlight down 5%
+msgid "Down"
+msgstr ""
+
+msgid "_Import file"
+msgstr ""
+
+msgid "_Generate CCMX"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Please insert your ColorHug device."
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -66,10 +94,6 @@ msgstr "Projektor"
 msgid "LED"
 msgstr "LED"
 
-#. TRANSLATORS: device is not connected to the computer
-msgid "Please connect your ColorHug"
-msgstr "Prosím připojte Váš ColorHug"
-
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr ""
 
@@ -84,22 +108,19 @@ msgid ""
 "the community"
 msgstr "Sdílejte\ns komunitou"
 
-msgid "ColorHug Firmware Updater"
-msgstr "ColorHug Firmware aktualizátor"
-
-#. Button to update to a newer version of the firmware
-msgid "Update!"
-msgstr "Aktualizovat!"
-
-msgid "Flash new firmware to the device"
-msgstr "Nahrát do zařízení nový firmware"
-
 msgid "Firmware version unknown"
 msgstr "Neznámá verze firmwaru"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Nevypínejte ani neodpojujte zařízení od počítače."
+
+#. Button to update to a newer version of the firmware
+msgid "Update"
+msgstr ""
+
+msgid "Flash new firmware to the device"
+msgstr "Nahrát do zařízení nový firmware"
 
 msgid "page0"
 msgstr ""
@@ -146,11 +167,26 @@ msgstr ""
 msgid "_Export results…"
 msgstr ""
 
-msgid "_About"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Backlight Utility"
 msgstr ""
 
-msgid "_Quit"
+msgid "Sample the ambient light level to control the backlight"
 msgstr ""
+
+msgid ""
+"The ColorHug backlight utility uses the ColorHug device to alter the "
+"backlight level to compensate for the changing ambient light level."
+msgstr ""
+
+msgid "The ambient light control utility"
+msgstr ""
+
+#. TRANSLATORS: this is the application name
+msgid "ColorHug CCMX Loader"
+msgstr "ColorHug nahrávač CCMX"
 
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Upravit kalibrační matici zařízení ColorHug"
@@ -197,6 +233,11 @@ msgstr ""
 msgid "Display analysis results"
 msgstr ""
 
+#. TRANSLATORS: this is the application name
+msgid "ColorHug Firmware Updater"
+msgstr "ColorHug Firmware aktualizátor"
+
+#. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Aktualizuj firmware na ColorHug kolorimetru"
 
@@ -221,6 +262,9 @@ msgid "ColorHug Documentation"
 msgstr ""
 
 msgid "Documentation for the ColorHug display colorimeter"
+msgstr ""
+
+msgid "Display;Backlight;Ambient;ColorHug;"
 msgstr ""
 
 msgid "CCMX Loader"
@@ -261,6 +305,30 @@ msgstr ""
 msgid "Whether the backlight PWM should be removed."
 msgstr ""
 
+msgid "The integration time for each sample"
+msgstr ""
+
+msgid "Set the integration time in seconds for the ambient light sample."
+msgstr ""
+
+msgid "Backlight smoothing factor"
+msgstr ""
+
+msgid "The amount of backlight smoothing for ambient light changes."
+msgstr ""
+
+msgid "The refresh rate between samples"
+msgstr ""
+
+msgid "The refresh rate in seconds between samples."
+msgstr ""
+
+msgid "The gamma value for ambient light"
+msgstr ""
+
+msgid "The gamma values to use when scaling ambient light samples."
+msgstr ""
+
 msgid "Display;Analysis;ColorHug;"
 msgstr ""
 
@@ -269,6 +337,45 @@ msgstr "Aktualizátor firmwaru"
 
 msgid "Flash;Firmware;ColorHug;"
 msgstr ""
+
+#. TRANSLATORS: no device is attached
+msgid "Please insert your ColorHugALS device."
+msgstr ""
+
+#. TRANSLATORS: our device
+msgid "Using ColorHugALS device"
+msgstr ""
+
+#. TRANSLATORS: laptop ambient light sensor
+msgid "Using internal device"
+msgstr ""
+
+#. TRANSLATORS: set the backlight
+msgid "Failed to set brightness"
+msgstr ""
+
+#. TRANSLATORS: get the backlight
+msgid "Failed to get brightness"
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Backlight Utility"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Sample the ambient light to control the backlight."
+msgstr ""
+
+msgid "translator-credits"
+msgstr ""
+
+#. TRANSLATORS: command line option
+msgid "Show extra debugging information"
+msgstr "Zobrazit "
+
+#. TRANSLATORS: user has sausages for fingers
+msgid "Failed to parse command line options"
+msgstr "Nepodařilo se zpracovat parametry příkazové řádky"
 
 msgid "Failed to create directory"
 msgstr "Nepodařilo se vytvořit složku"
@@ -347,6 +454,14 @@ msgstr "Selhalo nastavení kalibrační matice"
 msgid "Failed to set the calibration matrix"
 msgstr "Selhalo nastavení kalibrační matice"
 
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to open device"
+msgstr "Nepodařilo se otevřít zařízení"
+
+#. TRANSLATORS: get the calibration matrices from the device
+msgid "Getting calibration from device…"
+msgstr ""
+
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
@@ -359,14 +474,6 @@ msgstr "Všech 64 slotů je zaplněno."
 #. * local firmware file
 msgid "Failed to load file"
 msgstr "Nepodařilo se načíst soubor"
-
-#. TRANSLATORS: permissions error perhaps?
-msgid "Failed to open device"
-msgstr "Nepodařilo se otevřít zařízení"
-
-#. TRANSLATORS: get the calibration matrices from the device
-msgid "Getting calibration from device…"
-msgstr ""
 
 msgid "Failed to write file"
 msgstr "Nepodařilo se zapsat soubor"
@@ -406,13 +513,21 @@ msgstr "_Uložit"
 msgid "Getting latest data from the web…"
 msgstr ""
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug CCMX Loader"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Modify the calibration matrices on the ColorHug device."
+msgstr ""
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing data to ColorHug device"
+msgstr ""
+
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
 msgstr "Nepodařilo se nastavit síť"
-
-#. TRANSLATORS: command line option
-msgid "Show extra debugging information"
-msgstr "Zobrazit "
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -423,28 +538,11 @@ msgstr "Opravit kalibrační matici"
 msgid "ColorHug CCMX loader"
 msgstr "Nahrávač ColorHug CCMX"
 
-msgid "Failed to parse command line options"
-msgstr "Nepodařilo se zpracovat parametry příkazové řádky"
-
 msgid "ColorHug Updater"
 msgstr "ColorHug aktualizace"
 
 msgid "Calibration Failed"
 msgstr "Kalibrace selhala"
-
-#. TRANSLATORS: we broke the device
-msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Zápis nového firmware selhal, ale ColorHug není poškozen."
-
-#. TRANSLATORS: hopefully we can "fix" this automatically
-msgid ""
-"Remove the ColorHug device from the computer, reinsert it and re-run this "
-"program."
-msgstr "Odpojte ColorHug od počítače, znovu ho připojte a znovu spusťte tento program."
-
-#. TRANSLATORS: the user has to be online to get firmware
-msgid "Connect to the internet to check for updates"
-msgstr "Připojit k internetu pro kontrolu aktualizací"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
@@ -586,6 +684,10 @@ msgstr ""
 msgid "ColorHug+ Detected"
 msgstr ""
 
+#. TRANSLATORS: ALS stands for ambient light sensor
+msgid "ColorHug ALS Detected"
+msgstr ""
+
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
 msgstr "Zjištěn emulovaný ColorHug"
@@ -621,9 +723,17 @@ msgstr "Zjišťuji verzi firmware..."
 msgid "Update details"
 msgstr "Detaily aktualizace"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Firmware Updater"
+msgstr ""
+
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
 msgstr "Zobrazit podrobnosti o této aktualizaci"
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing firmware to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -710,10 +820,6 @@ msgstr "Ujistěte se, že ColorHug clona je zablokována"
 msgid "Set these values as the dark offsets"
 msgstr "Nastaví tyto hodnoty jako posun tmavých barev"
 
-#. TRANSLATORS: this is the enabled sensor color
-msgid "Color"
-msgstr "Barva"
-
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
 msgstr "Násobitel"
@@ -774,7 +880,7 @@ msgstr "Načíst kalibrační matici čidla"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix"
-msgstr "Nastaví kalibrační matici čidla"
+msgstr "Nastavit kalibrační matici čidla"
 
 #. TRANSLATORS: command description
 msgid "Clear the sensor calibration matrix"
@@ -1054,7 +1160,4 @@ msgstr ""
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr ""
-
-msgid "translator-credits"
 msgstr ""

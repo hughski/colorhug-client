@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2012-2014
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2012-2015
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 16:18+0000\n"
-"PO-Revision-Date: 2014-12-18 16:18+0000\n"
+"POT-Creation-Date: 2015-03-10 19:40+0000\n"
+"PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Latvian (http://www.transifex.com/projects/p/colorhug-client/language/lv/)\n"
 "MIME-Version: 1.0\n"
@@ -19,24 +19,52 @@ msgstr ""
 "Language: lv\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
 
-msgid "ColorHug CCMX Loader"
-msgstr "ColorHug CCMX ielādētājs"
+msgid "_About"
+msgstr "P_ar"
 
-msgid "Generate CCMX"
-msgstr "Veidot CCMX"
+msgid "_Quit"
+msgstr "_Iziet"
 
-#. Button to import a CCMX file
-msgid "Import file"
-msgstr "Importēt datni"
+#. The surrounding light level
+msgid "Ambient"
+msgstr ""
 
-msgid "Import a local CCMX file"
-msgstr "Importēt lokālo CCMX datni"
+#. The backlight color
+#. TRANSLATORS: this is the enabled sensor color
+msgid "Color"
+msgstr "Krāsa"
 
-msgid "Refresh the list of matrices from the device"
-msgstr "Atsvaidzināt matricu sarakstu no ierīces"
+#. The amount of smoothing done to the backlight readings
+msgid "Smoothing"
+msgstr ""
 
-msgid "Close this window"
-msgstr "Aizvērt šo logu"
+#. The rate that we're sampling the sensor
+msgid "Refresh"
+msgstr ""
+
+#. The amount the sensor can influence the brightness
+msgid "Weight"
+msgstr ""
+
+#. Backlight up 5%
+msgid "Up"
+msgstr ""
+
+#. Backlight down 5%
+msgid "Down"
+msgstr ""
+
+msgid "_Import file"
+msgstr ""
+
+msgid "_Generate CCMX"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Please insert your ColorHug device."
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -65,10 +93,6 @@ msgstr "Projektors"
 msgid "LED"
 msgstr "LED"
 
-#. TRANSLATORS: device is not connected to the computer
-msgid "Please connect your ColorHug"
-msgstr "Pievienojiet ColorHug ierīci"
-
 msgid "Select the screen to use when generating the color calibration matrix."
 msgstr "Izvēlieties ekrānu, ko izmantot, lai veidotu krāsu kalibrācijas matricu"
 
@@ -83,22 +107,19 @@ msgid ""
 "the community"
 msgstr "Dalīties ar\nkopienu"
 
-msgid "ColorHug Firmware Updater"
-msgstr "ColorHug aparātprogrammatūras atjauninātājs"
-
-#. Button to update to a newer version of the firmware
-msgid "Update!"
-msgstr "Atjaunināt!"
-
-msgid "Flash new firmware to the device"
-msgstr "Atjauniniet aparātprogrammatūru uz ierīces"
-
 msgid "Firmware version unknown"
 msgstr "Programmaparatūras versija nav zināma"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Neatvienojiet ierīci un neizslēdziet datoru."
+
+#. Button to update to a newer version of the firmware
+msgid "Update"
+msgstr ""
+
+msgid "Flash new firmware to the device"
+msgstr "Atjauniniet aparātprogrammatūru uz ierīces"
 
 msgid "page0"
 msgstr "lapa0"
@@ -145,11 +166,26 @@ msgstr "lapa1"
 msgid "_Export results…"
 msgstr "_Eksportēšanas rezultāti"
 
-msgid "_About"
-msgstr "P_ar"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Backlight Utility"
+msgstr ""
 
-msgid "_Quit"
-msgstr "_Iziet"
+msgid "Sample the ambient light level to control the backlight"
+msgstr ""
+
+msgid ""
+"The ColorHug backlight utility uses the ColorHug device to alter the "
+"backlight level to compensate for the changing ambient light level."
+msgstr ""
+
+msgid "The ambient light control utility"
+msgstr ""
+
+#. TRANSLATORS: this is the application name
+msgid "ColorHug CCMX Loader"
+msgstr "ColorHug CCMX ielādētājs"
 
 msgid "Modify the calibration matrices on the ColorHug device"
 msgstr "Modificēt kalibrācijas matricas ColorHug ierīcē"
@@ -167,7 +203,7 @@ msgid ""
 msgstr "Korekciju matricu izvēlē palielina ColorHug precizitāti, bet noklusējuma matricas izmantošana dos pieņemamus kalibrēšanas rezultātus."
 
 msgid "The correction matrices on the device"
-msgstr ""
+msgstr "Korekcijas matricas uz ierīces"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
@@ -191,11 +227,16 @@ msgid "Results can be exported as standalone HTML files and shared."
 msgstr ""
 
 msgid "Main application window"
-msgstr ""
+msgstr "Galvenais lietotnes logs"
 
 msgid "Display analysis results"
-msgstr ""
+msgstr "Attēlot analīžu rezultātus"
 
+#. TRANSLATORS: this is the application name
+msgid "ColorHug Firmware Updater"
+msgstr "ColorHug aparātprogrammatūras atjauninātājs"
+
+#. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atjaunināt aparātprogrammatūru uz ColorHug krāsu mērītāja"
 
@@ -222,11 +263,14 @@ msgstr "ColorHug dokumentācija"
 msgid "Documentation for the ColorHug display colorimeter"
 msgstr "ColorHug displeja krāsu mērītāja dokumentācija"
 
+msgid "Display;Backlight;Ambient;ColorHug;"
+msgstr ""
+
 msgid "CCMX Loader"
 msgstr "CCMX ielādētājs"
 
 msgid "CCMX;ColorHug;"
-msgstr ""
+msgstr "CCMX;ColorHug;"
 
 msgid "Whether we should update to test firmware"
 msgstr "Vai vajadzētu atjaunināt uz testa aparātprogrammatūru"
@@ -260,6 +304,30 @@ msgstr ""
 msgid "Whether the backlight PWM should be removed."
 msgstr ""
 
+msgid "The integration time for each sample"
+msgstr ""
+
+msgid "Set the integration time in seconds for the ambient light sample."
+msgstr ""
+
+msgid "Backlight smoothing factor"
+msgstr ""
+
+msgid "The amount of backlight smoothing for ambient light changes."
+msgstr ""
+
+msgid "The refresh rate between samples"
+msgstr ""
+
+msgid "The refresh rate in seconds between samples."
+msgstr ""
+
+msgid "The gamma value for ambient light"
+msgstr ""
+
+msgid "The gamma values to use when scaling ambient light samples."
+msgstr ""
+
 msgid "Display;Analysis;ColorHug;"
 msgstr ""
 
@@ -268,6 +336,45 @@ msgstr "Aparātprogrammatūras atjauninātājs"
 
 msgid "Flash;Firmware;ColorHug;"
 msgstr ""
+
+#. TRANSLATORS: no device is attached
+msgid "Please insert your ColorHugALS device."
+msgstr ""
+
+#. TRANSLATORS: our device
+msgid "Using ColorHugALS device"
+msgstr ""
+
+#. TRANSLATORS: laptop ambient light sensor
+msgid "Using internal device"
+msgstr ""
+
+#. TRANSLATORS: set the backlight
+msgid "Failed to set brightness"
+msgstr ""
+
+#. TRANSLATORS: get the backlight
+msgid "Failed to get brightness"
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Backlight Utility"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Sample the ambient light to control the backlight."
+msgstr ""
+
+msgid "translator-credits"
+msgstr "Rūdolfs Mazurs"
+
+#. TRANSLATORS: command line option
+msgid "Show extra debugging information"
+msgstr "Rādīt papildu atkļūdošanas informāciju"
+
+#. TRANSLATORS: user has sausages for fingers
+msgid "Failed to parse command line options"
+msgstr "Neizdevās apstrādāt komandrindas opcijas"
 
 msgid "Failed to create directory"
 msgstr "Neizdevās izveidot direktoriju"
@@ -346,6 +453,14 @@ msgstr "Neizdevās iestatīt kalibrēšanas karti"
 msgid "Failed to set the calibration matrix"
 msgstr "Neizdevās iestatīt kalibrēšanas matricu"
 
+#. TRANSLATORS: permissions error perhaps?
+msgid "Failed to open device"
+msgstr "Neizdevās atvērt ierīci"
+
+#. TRANSLATORS: get the calibration matrices from the device
+msgid "Getting calibration from device…"
+msgstr "Saņem kalibrāciju no ierīces…"
+
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
@@ -358,14 +473,6 @@ msgstr "Visi 64 sloti ir aizņemti."
 #. * local firmware file
 msgid "Failed to load file"
 msgstr "Neizdevās ielādēt datni"
-
-#. TRANSLATORS: permissions error perhaps?
-msgid "Failed to open device"
-msgstr "Neizdevās atvērt ierīci"
-
-#. TRANSLATORS: get the calibration matrices from the device
-msgid "Getting calibration from device…"
-msgstr "Saņem kalibrāciju no ierīces…"
 
 msgid "Failed to write file"
 msgstr "Neizdevās ierakstīt datni"
@@ -405,13 +512,21 @@ msgstr "_Saglabāt"
 msgid "Getting latest data from the web…"
 msgstr "Saņem jaunākos datus no tīmekļa…"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug CCMX Loader"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Modify the calibration matrices on the ColorHug device."
+msgstr ""
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing data to ColorHug device"
+msgstr ""
+
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
 msgstr "Neizdevās iestatīt tīklošanu"
-
-#. TRANSLATORS: command line option
-msgid "Show extra debugging information"
-msgstr "Rādīt papildu atkļūdošanas informāciju"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -422,28 +537,11 @@ msgstr "Salabot ražotnes kalibrācijas matricu"
 msgid "ColorHug CCMX loader"
 msgstr "ColorHug CCMX ielādētājs"
 
-msgid "Failed to parse command line options"
-msgstr "Neizdevās apstrādāt komandrindas opcijas"
-
 msgid "ColorHug Updater"
 msgstr "ColorHug atjauninātājs"
 
 msgid "Calibration Failed"
 msgstr "Kalibrēšana neizdevās"
-
-#. TRANSLATORS: we broke the device
-msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Ierīces zibatmiņas atjaunināšana neizdevās, bet ColorHug nav bojāts."
-
-#. TRANSLATORS: hopefully we can "fix" this automatically
-msgid ""
-"Remove the ColorHug device from the computer, reinsert it and re-run this "
-"program."
-msgstr "Izņemiet ColorHug no datora, atkal ievietojiet to un atkal palaidiet šo programmu."
-
-#. TRANSLATORS: the user has to be online to get firmware
-msgid "Connect to the internet to check for updates"
-msgstr "Savienojaties ar internetu, lai pārbaudītu atjauninājumus"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
@@ -585,6 +683,10 @@ msgstr "Atrasts ColorHug2"
 msgid "ColorHug+ Detected"
 msgstr "Atrasts ColorHug+"
 
+#. TRANSLATORS: ALS stands for ambient light sensor
+msgid "ColorHug ALS Detected"
+msgstr ""
+
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
 msgstr "Atrasts emulēts ColorHug"
@@ -620,9 +722,17 @@ msgstr "Saņem aparātprogrammatūras versiju…"
 msgid "Update details"
 msgstr "Informācija par atjauninājumu"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Firmware Updater"
+msgstr ""
+
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
 msgstr "Apskatiet sīkāku informāciju par atjauninājumu"
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing firmware to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -708,10 +818,6 @@ msgstr "Pārliecināties, ka ColorHug diafragma ir bloķēta"
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
 msgstr "Iestatīt šīs vērtības kā tumšās nobīdes"
-
-#. TRANSLATORS: this is the enabled sensor color
-msgid "Color"
-msgstr "Krāsa"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
@@ -1000,7 +1106,7 @@ msgid "Failed to remove PWM"
 msgstr ""
 
 msgid "Unknown"
-msgstr ""
+msgstr "Nezināms"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to calculate USB latency"
@@ -1016,10 +1122,10 @@ msgid "Filter backlight"
 msgstr ""
 
 msgid "Export results"
-msgstr ""
+msgstr "Eksportēt rezultātus"
 
 msgid "Export"
-msgstr ""
+msgstr "Eksportēt"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get save file"
@@ -1054,6 +1160,3 @@ msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
 msgstr ""
-
-msgid "translator-credits"
-msgstr "Rūdolfs Mazurs"

@@ -30,6 +30,19 @@
   <url type="homepage">http://www.hughski.com/</url>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
   <releases>
+    <release version="0.2.6" timestamp="1426014599">
+      <description>
+        <p>This stable release adds the following features:</p>
+        <ul>
+          <li>Add support for the ColorHug ALS device</li>
+        </ul>
+        <p>This release also fixes the following bug:</p>
+        <ul>
+          <li>Do not reset the device when flashing firmware if already in bootloader mode</li>
+          <li>Make the firmware updater adhere to the GNOME 3 guidelines</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.5" timestamp="1418860800">
       <description>
         <p>This release fixes the following bugs:</p>

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Derek Stavis <dekestavis@gmail.com>, 2015
 # Enrico Nicoletto <enrico.BR@gmx.co.uk>, 2013
 # jrbenito <jrbenito@benito.qsl.br>, 2013-2014
 # Rafael Ferreira <rafael.f.f1@gmail.com>, 2014
@@ -10,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 16:18+0000\n"
-"PO-Revision-Date: 2014-12-18 16:18+0000\n"
+"POT-Creation-Date: 2015-03-10 19:40+0000\n"
+"PO-Revision-Date: 2015-03-10 19:40+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/colorhug-client/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -20,24 +21,52 @@ msgstr ""
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "ColorHug CCMX Loader"
-msgstr "Carregador de ColorHug CCMX"
+msgid "_About"
+msgstr "Sobre"
 
-msgid "Generate CCMX"
-msgstr "Gerando CCMX"
+msgid "_Quit"
+msgstr "Sair"
 
-#. Button to import a CCMX file
-msgid "Import file"
-msgstr "Importar arquivo"
+#. The surrounding light level
+msgid "Ambient"
+msgstr ""
 
-msgid "Import a local CCMX file"
-msgstr "Importar arquivo CCMX local"
+#. The backlight color
+#. TRANSLATORS: this is the enabled sensor color
+msgid "Color"
+msgstr "Cor"
 
-msgid "Refresh the list of matrices from the device"
-msgstr "Atauliza lista de matrizes do dispositivo"
+#. The amount of smoothing done to the backlight readings
+msgid "Smoothing"
+msgstr ""
 
-msgid "Close this window"
-msgstr "Fechar esta janela"
+#. The rate that we're sampling the sensor
+msgid "Refresh"
+msgstr ""
+
+#. The amount the sensor can influence the brightness
+msgid "Weight"
+msgstr ""
+
+#. Backlight up 5%
+msgid "Up"
+msgstr ""
+
+#. Backlight down 5%
+msgid "Down"
+msgstr ""
+
+msgid "_Import file"
+msgstr ""
+
+msgid "_Generate CCMX"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "Please insert your ColorHug device."
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -48,7 +77,7 @@ msgstr "Selecionar a matriz de correção aumenta a precisão do ColorHug."
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "Utilizar a matriz padrão trará um resultado de calibragem aceitável para a maioria dos usuários."
+msgstr "Utilizar a matriz padrão trará um resultado de calibração aceitável para a maioria dos usuários."
 
 #. Default liquid crystal display matrix
 msgid "LCD"
@@ -66,12 +95,8 @@ msgstr "Projetor"
 msgid "LED"
 msgstr "LED"
 
-#. TRANSLATORS: device is not connected to the computer
-msgid "Please connect your ColorHug"
-msgstr "Por favor, conecte seu ColorHug"
-
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr "Selecionar a tela para usar quando gerar a matriz de calibração de cor."
+msgstr "Selecione a tela a ser usada para gerar a matriz de calibração de cor."
 
 msgid "Do not remove the device whilst measurement is in progress"
 msgstr "Não remova o dispositivo enquanto a medição está em andamento"
@@ -84,22 +109,19 @@ msgid ""
 "the community"
 msgstr "Compartilhar com\na comunidade"
 
-msgid "ColorHug Firmware Updater"
-msgstr "Atualizador de Firmware ColorHug"
-
-#. Button to update to a newer version of the firmware
-msgid "Update!"
-msgstr "Atualizar!"
-
-msgid "Flash new firmware to the device"
-msgstr "Carregar novo firmware no dispositivo"
-
 msgid "Firmware version unknown"
 msgstr "Versão desconhecida do firmware"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
 msgstr "Não remova o dispositivo e não desligue o computador."
+
+#. Button to update to a newer version of the firmware
+msgid "Update"
+msgstr ""
+
+msgid "Flash new firmware to the device"
+msgstr "Carregar novo firmware no dispositivo"
 
 msgid "page0"
 msgstr "página 0"
@@ -146,14 +168,29 @@ msgstr "página 1"
 msgid "_Export results…"
 msgstr "Exportar resultados..."
 
-msgid "_About"
-msgstr "Sobre"
+#. TRANSLATORS: this is the application name
+#. TRANSLATORS: A program to load on CCMX correction matrices
+#. * onto the hardware
+msgid "ColorHug Backlight Utility"
+msgstr ""
 
-msgid "_Quit"
-msgstr "Sair"
+msgid "Sample the ambient light level to control the backlight"
+msgstr ""
+
+msgid ""
+"The ColorHug backlight utility uses the ColorHug device to alter the "
+"backlight level to compensate for the changing ambient light level."
+msgstr ""
+
+msgid "The ambient light control utility"
+msgstr ""
+
+#. TRANSLATORS: this is the application name
+msgid "ColorHug CCMX Loader"
+msgstr "Carregador de CCMX ColorHug"
 
 msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "Modificar as matrizes de calibragem do dispositivo ColorHug"
+msgstr "Modificar as matrizes de calibração do dispositivo ColorHug"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
@@ -165,38 +202,43 @@ msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "Utilizar a matriz padrão trará um resultado de calibragem aceitável para a maioria dos usuários enquanto selecionar uma matriz de correção para um monitor específico irá melhorar a precisão naquele dispositivo."
+msgstr "Utilizar a matriz padrão trará um resultado de calibração aceitável para a maioria dos usuários enquanto selecionar uma matriz de correção para um monitor específico irá melhorar a precisão naquele dispositivo."
 
 msgid "The correction matrices on the device"
-msgstr ""
+msgstr "As matrizes de correção no dispositvo"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr "ColorHug Análise de Monitor"
+msgstr "Analisador de Display ColorHug"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
-msgstr "Amostragem do monitor para observar o PWM, a latência de entrada e artefatos de atualização"
+msgstr "Amostra o monitor por um período para analisar o PWM, a latência de entrada e os artefatos de atualização"
 
 msgid ""
 "The ColorHug display analysis tool can be used to profile display and GPU "
 "devices. It will measure various kinds of latency, e.g. black-to-white and "
 "input-lag as well as reporting color information and colorspace gamut "
 "volume."
-msgstr ""
+msgstr "A ferramenta de análise de monitor ColorHug pode ser usada para caracterização de monitores e GPUs. Ele pode medir diversos tipo de latência, por exemplo branco para preto e retardo de entrada como também relatório de cor e gamut."
 
 msgid "Results can be exported as standalone HTML files and shared."
-msgstr ""
+msgstr "Os resultados podem ser exportados para arquivos HTML para compartilhamento."
 
 msgid "Main application window"
-msgstr ""
+msgstr "Janela principal"
 
 msgid "Display analysis results"
-msgstr ""
+msgstr "Resultados da análise de monitor"
 
+#. TRANSLATORS: this is the application name
+msgid "ColorHug Firmware Updater"
+msgstr "Atualizador de Firmware ColorHug"
+
+#. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
 msgstr "Atualizar o firmware no colorímetro do ColorHug"
 
@@ -212,10 +254,10 @@ msgid ""
 msgstr "Usando argumentos na linha de comando essa ferramenta também pode carregar binários customizados no dispositivo."
 
 msgid "Application window showing new firmware detected"
-msgstr ""
+msgstr "Janela de aplicação mostrando novo firmware detectado"
 
 msgid "Applying updated firmware to the ColorHug device"
-msgstr ""
+msgstr "Aplicando atualização de firmware ao ColorHug"
 
 msgid "ColorHug Documentation"
 msgstr "Documentação do ColorHug"
@@ -223,31 +265,34 @@ msgstr "Documentação do ColorHug"
 msgid "Documentation for the ColorHug display colorimeter"
 msgstr "Documentação para o colorímetro de tela ColorHug"
 
+msgid "Display;Backlight;Ambient;ColorHug;"
+msgstr ""
+
 msgid "CCMX Loader"
 msgstr "Carregador de CCMX"
 
 msgid "CCMX;ColorHug;"
-msgstr ""
+msgstr "CCMX;ColorHug;"
 
 msgid "Whether we should update to test firmware"
 msgstr "Quando se deve fazer upgrade para firmware de teste"
 
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr "Quando se deve mostrar firmware de teste disponíveis e permitir ao usuário fazer upgrade para esta versão."
+msgstr "Quando se deve mostrar firmware de teste disponíveis e permitir ao usuário atualizar para esta versão."
 
 msgid "The remote location of ColorHug files"
 msgstr "Localização remota dos arquivos do ColorHug"
 
 msgid ""
 "The location of where firmware updates and calibration files are stored."
-msgstr "Localização onde as atualizações de firmware e arquivos de calibração estão armazenados."
+msgstr "Localização onde as atualizações de firmware e arquivos de calibração serão armazenados."
 
 msgid "Zoom in the graph to show only one pulse"
-msgstr "Aproxime o zoom no gráfico para mostrar apenas um pulso"
+msgstr "Aproxime o gráfico para mostrar apenas um pulso"
 
 msgid "Whether the refresh graph should be zoomed to show one pulse only."
-msgstr "A atualização do gráfico deve aproximar o zoom para mostrar apenas um pulso"
+msgstr "Quando a atualização do gráfico deve ser aproximada para mostrar apenas um pulso"
 
 msgid "Show all RGB channels on the graph"
 msgstr "Mostrar todos os canais RGB no gráfico"
@@ -259,16 +304,79 @@ msgid "Hide backlight flicker on the graph"
 msgstr "Esconder a oscilação da luz de fundo no gráfico"
 
 msgid "Whether the backlight PWM should be removed."
-msgstr "O PWM da luz de fundo deve ser removido"
+msgstr "Quando o PWM da luz de fundo deve ser removido"
+
+msgid "The integration time for each sample"
+msgstr ""
+
+msgid "Set the integration time in seconds for the ambient light sample."
+msgstr ""
+
+msgid "Backlight smoothing factor"
+msgstr ""
+
+msgid "The amount of backlight smoothing for ambient light changes."
+msgstr ""
+
+msgid "The refresh rate between samples"
+msgstr ""
+
+msgid "The refresh rate in seconds between samples."
+msgstr ""
+
+msgid "The gamma value for ambient light"
+msgstr ""
+
+msgid "The gamma values to use when scaling ambient light samples."
+msgstr ""
 
 msgid "Display;Analysis;ColorHug;"
-msgstr ""
+msgstr "Monitor;Análise;ColorHug;"
 
 msgid "Firmware Updater"
 msgstr "Atualizador de Firmware"
 
 msgid "Flash;Firmware;ColorHug;"
+msgstr "Gravar;Firmware;ColorHug;"
+
+#. TRANSLATORS: no device is attached
+msgid "Please insert your ColorHugALS device."
 msgstr ""
+
+#. TRANSLATORS: our device
+msgid "Using ColorHugALS device"
+msgstr ""
+
+#. TRANSLATORS: laptop ambient light sensor
+msgid "Using internal device"
+msgstr ""
+
+#. TRANSLATORS: set the backlight
+msgid "Failed to set brightness"
+msgstr ""
+
+#. TRANSLATORS: get the backlight
+msgid "Failed to get brightness"
+msgstr ""
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Backlight Utility"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Sample the ambient light to control the backlight."
+msgstr ""
+
+msgid "translator-credits"
+msgstr "Derek Stavis <derekstavis@me.com>"
+
+#. TRANSLATORS: command line option
+msgid "Show extra debugging information"
+msgstr "Mostrar informações adicionais de depuração"
+
+#. TRANSLATORS: user has sausages for fingers
+msgid "Failed to parse command line options"
+msgstr "Falha ao interpretar as opções na linha de comando"
 
 msgid "Failed to create directory"
 msgstr "Falha ao criar diretório"
@@ -277,14 +385,14 @@ msgid "Failed to download file"
 msgstr "Falha ao baixar arquivo"
 
 msgid "File has zero size"
-msgstr "Arquivo tem tamanho zero"
+msgstr "Arquivo sem conteúdo"
 
 msgid "Failed to load data"
 msgstr "Falha ao carregar dados"
 
 #. TRANSLATORS: the request failed
 msgid "Failed to contact ColorHug"
-msgstr "Falha ao contactar ColorHug"
+msgstr "Falha na comunicação com o ColorHug"
 
 #. TRANSLATORS: internal error when setting up HTTP request
 msgid "Failed to setup message"
@@ -342,23 +450,10 @@ msgstr "Matrizes de correção"
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to set the calibration map"
-msgstr "Falha ao definir o mapa de calibragem"
+msgstr "Falha ao definir o mapa de calibração"
 
 msgid "Failed to set the calibration matrix"
 msgstr "Falha ao configurar a matriz de calibração"
-
-#. TRANSLATORS: You can only store 64 calibration
-#. * matrices on the device at any one time
-msgid "No space left on device"
-msgstr "Faltou espaço no dispositivo"
-
-msgid "All 64 slots are used up."
-msgstr "Todos os 64 slots estão em uso."
-
-#. TRANSLATORS: file read error when reading
-#. * local firmware file
-msgid "Failed to load file"
-msgstr "Falha ao carregar arquivo"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to open device"
@@ -367,6 +462,19 @@ msgstr "Falha ao abrir dispositivo"
 #. TRANSLATORS: get the calibration matrices from the device
 msgid "Getting calibration from device…"
 msgstr "Obtendo a calibração do dispositivo..."
+
+#. TRANSLATORS: You can only store 64 calibration
+#. * matrices on the device at any one time
+msgid "No space left on device"
+msgstr "Sem espaço no dispositivo"
+
+msgid "All 64 slots are used up."
+msgstr "Todos os 64 slots estão em uso."
+
+#. TRANSLATORS: file read error when reading
+#. * local firmware file
+msgid "Failed to load file"
+msgstr "Falha ao carregar arquivo"
 
 msgid "Failed to write file"
 msgstr "Falha ao escrever arquivo"
@@ -404,15 +512,23 @@ msgstr "_Salvar"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
-msgstr "Obtendo informações recentes da web..."
+msgstr "Obtendo dados recentes via web..."
+
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug CCMX Loader"
+msgstr ""
+
+#. TRANSLATORS: application description
+msgid "Modify the calibration matrices on the ColorHug device."
+msgstr ""
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing data to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
 msgstr "Falha ao iniciar rede"
-
-#. TRANSLATORS: command line option
-msgid "Show extra debugging information"
-msgstr "Mostrar informações adicionais de debug"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
@@ -421,30 +537,13 @@ msgstr "Reparar a matriz de calibração de fábrica"
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug CCMX loader"
-msgstr "Carregador de ColorHug CCMX"
-
-msgid "Failed to parse command line options"
-msgstr "Falha ao processar as opções na linha de comando"
+msgstr "Carregador de CCMX no ColorHug"
 
 msgid "ColorHug Updater"
 msgstr "Atualizador do ColorHug"
 
 msgid "Calibration Failed"
 msgstr "Falha de calibração"
-
-#. TRANSLATORS: we broke the device
-msgid "Flashing the device failed but the ColorHug is not damaged."
-msgstr "Carregamento de software falhou mas o dispositivo ColorHug não está danificado"
-
-#. TRANSLATORS: hopefully we can "fix" this automatically
-msgid ""
-"Remove the ColorHug device from the computer, reinsert it and re-run this "
-"program."
-msgstr "Remova o ColorHug do computador, religue ele e rode novamente este programa."
-
-#. TRANSLATORS: the user has to be online to get firmware
-msgid "Connect to the internet to check for updates"
-msgstr "Conectar à Internet para obter atualizações"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
@@ -483,7 +582,7 @@ msgstr "Inciando o novo firmware..."
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to write the firmware"
-msgstr "Falha ao escrever o firmware"
+msgstr "Falha ao gravar o firmware"
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
@@ -496,7 +595,7 @@ msgstr "Escrevendo novo firmware..."
 
 #. TRANSLATORS: the device failed to come back alive
 msgid "Failed to reboot the ColorHug"
-msgstr "Falha ao recarregar o ColorHug no boot"
+msgstr "Falha ao reiniciar o ColorHug"
 
 #. TRANSLATORS: we restart the device in bootloader mode
 msgid "Failed to reset the ColorHug"
@@ -521,7 +620,7 @@ msgstr "Firmware tem tamanho zero"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has incorrect checksum"
-msgstr "Firmware tem checksum incorreto"
+msgstr "Firmware corrompido"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
@@ -586,6 +685,10 @@ msgstr "ColorHug2 Detectado"
 msgid "ColorHug+ Detected"
 msgstr "ColorHug+ Detectado"
 
+#. TRANSLATORS: ALS stands for ambient light sensor
+msgid "ColorHug ALS Detected"
+msgstr ""
+
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
 msgstr "ColorHug Emulado Detectado"
@@ -621,9 +724,17 @@ msgstr "Obtendo versão do firmware..."
 msgid "Update details"
 msgstr "Detalhes da atualização"
 
+#. TRANSLATORS: this is the title of the about window
+msgid "About ColorHug Firmware Updater"
+msgstr ""
+
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
 msgstr "Veja detalhes da atualização"
+
+#. TRANSLATORS: inhibit reason
+msgid "Writing firmware to ColorHug device"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -708,11 +819,7 @@ msgstr "Certifique que a abertura do ColorHug esteja bloqueada"
 
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
-msgstr "Definir estes valores para compensação de negro"
-
-#. TRANSLATORS: this is the enabled sensor color
-msgid "Color"
-msgstr "Cor"
+msgstr "Definir estes valores para compensação de preto"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
@@ -720,7 +827,7 @@ msgstr "Multiplicador"
 
 #. TRANSLATORS: this is the measurement mode
 msgid "Measure mode"
-msgstr "Modo de medida"
+msgstr "Modo de medição"
 
 #. TRANSLATORS: this is the sensor sample time
 msgid "Integral"
@@ -728,7 +835,7 @@ msgstr "Integral"
 
 #. TRANSLATORS: this is the number of pulses detected
 msgid "Pulses"
-msgstr "Pusos"
+msgstr "Pulsos"
 
 msgid "Multiple ColorHug devices are attached"
 msgstr "Vários dispositivos ColorHug estão conectados"
@@ -738,7 +845,7 @@ msgstr "Não foi encontrado nenhum dispositivo ColorHug"
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
-msgstr "Gravar o dispositivo"
+msgstr "Gravar o dispositivo?"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"
@@ -758,11 +865,11 @@ msgstr "Define o multiplicador do sensor"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor sample read time"
-msgstr "Obter tempo de amostragem do sensor"
+msgstr "Obtém o tempo de amostragem do sensor"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor sample read time"
-msgstr "Configurar tempo de amostragem do sensor"
+msgstr "Define o tempo de amostragem do sensor"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor firmware version"
@@ -770,23 +877,23 @@ msgstr "Lê a versão do firmware do sensor"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration matrix"
-msgstr "Lê a matriz de calibragem do sensor"
+msgstr "Lê a matriz de calibração do sensor"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix"
-msgstr "Define a matriz de calibragem do sensor"
+msgstr "Define a matriz de calibração do sensor"
 
 #. TRANSLATORS: command description
 msgid "Clear the sensor calibration matrix"
-msgstr "Limpar a matriz de calibragem do sensor"
+msgstr "Limpa a matriz de calibração do sensor"
 
 #. TRANSLATORS: command description
 msgid "List the sensor calibration matrices"
-msgstr "Listar as matrizes de calibragem do sensor"
+msgstr "Lista as matrizes de calibração do sensor"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix from a CCMX file"
-msgstr "Define a matriz de calibragem do sensor a partir de um arquivo CCMX"
+msgstr "Define a matriz de calibração do sensor a partir de um arquivo CCMX"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor serial number"
@@ -798,19 +905,19 @@ msgstr "Define o número de série do sensor"
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's name"
-msgstr "Obter o nome do proprietário"
+msgstr "Obtém o nome do proprietário"
 
 #. TRANSLATORS: command description
 msgid "Sets the owner's name"
-msgstr "Definir o nome do proprietário"
+msgstr "Define o nome do proprietário"
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's email address"
-msgstr "Obter o endereço de e-mail do proprietário"
+msgstr "Obtém o endereço de e-mail do proprietário"
 
 #. TRANSLATORS: command description
 msgid "Sets the owner's email address"
-msgstr "Definir o endereço de e-mail do proprietário"
+msgstr "Define o endereço de e-mail do proprietário"
 
 #. TRANSLATORS: command description
 msgid "Gets the LED values"
@@ -822,27 +929,27 @@ msgstr "Define os LEDs"
 
 #. TRANSLATORS: command description
 msgid "Gets the PCB errata"
-msgstr "Obter a errata da PCB"
+msgstr "Obtém a errata da PCB"
 
 #. TRANSLATORS: command description
 msgid "Sets the PCB errata"
-msgstr "Definir a errata da PCB"
+msgstr "Define a errata da PCB"
 
 #. TRANSLATORS: command description
 msgid "Gets the remote profile SHA1 hash"
-msgstr "Obter hash SHA1 do perfil remoto"
+msgstr "Obtém o hash SHA1 do perfil remoto"
 
 #. TRANSLATORS: command description
 msgid "Sets the remote profile SHA1 hash"
-msgstr "Definir hash SHA1 do perfil remoto"
+msgstr "Define o hash SHA1 do perfil remoto"
 
 #. TRANSLATORS: command description
 msgid "Gets the dark offset values"
-msgstr "Lê os valores de compensação de negro"
+msgstr "Lê os valores de compensação de preto"
 
 #. TRANSLATORS: command description
 msgid "Sets the dark offset values"
-msgstr "Define os valores de compensação de negro"
+msgstr "Define os valores de compensação de preto"
 
 #. TRANSLATORS: command description
 msgid "Writes the EEPROM with updated values"
@@ -850,7 +957,7 @@ msgstr "Escreve a EEPROM com valores atualizados"
 
 #. TRANSLATORS: command description
 msgid "Takes a reading"
-msgstr "Faz uma leitura"
+msgstr "Obtém uma leitura"
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to device RGB)"
@@ -858,11 +965,11 @@ msgstr "Obtém todas as leituras de cor (para o dispositivo RGB)"
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to XYZ)"
-msgstr "Faz todos as leituras de cor (para XYZ)"
+msgstr "Obtém todos as leituras de cor (para XYZ)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr "Faz uma leitura espectral (economia de SRAM)"
+msgstr "Obtém uma leitura espectral (economia de SRAM)"
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
@@ -870,23 +977,23 @@ msgstr "Reinicia o processador de volta ao bootloader"
 
 #. TRANSLATORS: command description
 msgid "Flash firmware into the processor"
-msgstr "Realizar flash do firmware no processador"
+msgstr "Grava o firmware no processador"
 
 #. TRANSLATORS: command description
 msgid "Read EEPROM at a specified address"
-msgstr "Ler o endereço específicado da EEPROM"
+msgstr "Lê o endereço específicado da EEPROM"
 
 #. TRANSLATORS: command description
 msgid "Erase EEPROM at a specified address"
-msgstr "Apagar o endereço especificado da EEPROM"
+msgstr "Apaga o endereço especificado da EEPROM"
 
 #. TRANSLATORS: command description
 msgid "Write EEPROM at a specified address"
-msgstr "Escrever no endereço especificado da EEPROM"
+msgstr "Escreve no endereço especificado da EEPROM"
 
 #. TRANSLATORS: command description
 msgid "Gets the pre scale constant"
-msgstr "Lê a constante de pré-escala"
+msgstr "Obtém a constante de pré-escala"
 
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
@@ -902,7 +1009,7 @@ msgstr "Define o valor DAC"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
-msgstr "Lê a constante de pós-escala"
+msgstr "Obtém a constante de pós-escala"
 
 #. TRANSLATORS: command description
 msgid "Sets the post scale constant"
@@ -914,51 +1021,51 @@ msgstr "Define o sucesso da flash"
 
 #. TRANSLATORS: command description
 msgid "Boots from the bootloader into the firmware"
-msgstr "Carrega do bootloader para o firmware"
+msgstr "Inicializa o firmware quando no bootloader"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration map"
-msgstr "Lê o mapa de calibragem do sensor"
+msgstr "Obtém o mapa de calibração do sensor"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration map"
-msgstr "Define o mapa de calibragem do sensor"
+msgstr "Define o mapa de calibração do sensor"
 
 #. TRANSLATORS: command description
 msgid "Gets the hardware version"
-msgstr "Lê a versão do hardware"
+msgstr "Obtém a versão do hardware"
 
 #. TRANSLATORS: command description
 msgid "Gets an array of raw samples"
-msgstr "Obter uma matriz de amostras RAW"
+msgstr "Obtém uma matriz de amostras RAW"
 
 #. TRANSLATORS: command description
 msgid "Downloads a remote profile"
-msgstr "Baixar o perfil remoto"
+msgstr "Baixa um perfil remoto"
 
 #. TRANSLATORS: command description
 msgid "Uploads a remote profile"
-msgstr "Subir o perfil remoto"
+msgstr "Carrega um perfil remoto"
 
 #. TRANSLATORS: command description
 msgid "Uploads a correction matrix"
-msgstr "Subindo a matriz de correção"
+msgstr "Carrega a matriz de correção"
 
 #. TRANSLATORS: command description
 msgid "Does a quick self test on the device"
-msgstr "Fazer autoteste rápido no dispositivo"
+msgstr "Faz um autoteste rápido no dispositivo"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor measurement mode"
-msgstr "Obter o mode de medida do sensor"
+msgstr "Obtém o mode de medida do sensor"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor measurement mode"
-msgstr "Definir o modo de medida do sensor"
+msgstr "Define o modo de medida do sensor"
 
 #. TRANSLATORS: command description
 msgid "Read SRAM at a specified address"
-msgstr "Ler endereço especificado da SRAM"
+msgstr "Lê o endereço especificado da SRAM"
 
 #. TRANSLATORS: command description
 msgid "Write SRAM at a specified address"
@@ -966,7 +1073,7 @@ msgstr "Gravar endereço especificado da SRAM"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor temperature"
-msgstr "Obter temperatura do sensor"
+msgstr "Obtém temperatura do sensor"
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
@@ -982,7 +1089,7 @@ msgstr "Define os valores de calibração CCD "
 
 #. TRANSLATORS: command description
 msgid "Converts Intel HEX to BIN"
-msgstr "Converter Hexadecimal para Binário"
+msgstr "Converte Intel Hexadecimal para Binário"
 
 #. TRANSLATORS: program name
 msgid "Color Management"
@@ -994,7 +1101,7 @@ msgstr "Não há conexão com o dispositivo:"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get samples from device"
-msgstr "Falha ao obter amostras dos dispositivo"
+msgstr "Falha ao obter amostras do dispositivo"
 
 #. TRANSLATORS: PWM is pulse-width-modulation?
 msgid "Failed to remove PWM"
@@ -1032,7 +1139,7 @@ msgstr "Por favor conecte seu ColorHug2"
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
 "start analyzing your display."
-msgstr ""
+msgstr "Posicione o ColorHug sobre a área à esquerda e clique no botão azul para começar a análise do monitor."
 
 msgid "Don't disturb the device while working!"
 msgstr "Não mexa no dispositivo durante a análise!"
@@ -1054,7 +1161,4 @@ msgstr "Sobre a Análise de Monitor do ColorHug"
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr "Amostragem do monitor para observar PWM, latência de entrada e artefatos de atualização"
-
-msgid "translator-credits"
-msgstr "Créditos de tradução"
+msgstr "Amostra o monitor por um período para observar o PWM, a latência de entrada e os artefatos de atualização"
