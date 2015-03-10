@@ -27,6 +27,49 @@
   <url type="homepage">http://www.hughski.com/</url>
   <update_contact>richard_at_hughsie.com</update_contact>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
+  <releases>
+    <release version="0.2.5" timestamp="1418860800">
+      <description>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Add keywords to the various desktop files</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.4" timestamp="1417651200">
+      <description>
+        <p>This is the first release with experimental Windows support.</p>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Do not use deprecated libgusb API</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.3" timestamp="1384041600">
+      <description>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Do not fail TakeReadingRaw when using CH2</li>
+          <li>Do not show CCMX matrices for different device types</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.2" timestamp="1410476400"/>
+    <release version="0.2.1" timestamp="1384128000"/>
+    <release version="0.2.0" timestamp="1367362800">
+      <description>
+        <p>This release adds the following features:</p>
+        <ul>
+          <li>Add help buttons to the UI</li>
+        </ul>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Do not refresh the calibration data twice when setting a custom CCMX</li>
+          <li>Set a title when generating a CCMX file</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>
 </component>

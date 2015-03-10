@@ -28,6 +28,25 @@
   </screenshots>
   <url type="homepage">http://www.hughski.com/</url>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
+  <releases>
+    <release version="0.2.5" timestamp="1418860800">
+      <description>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Add keywords to the various desktop files</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.4" timestamp="1417651200">
+      <description>
+        <p>This is the first release with experimental Windows support.</p>
+        <p>This release adds the following features:</p>
+        <ul>
+          <li>Add colorhug-refresh for measuring display latency and refresh rates</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>
 </component>

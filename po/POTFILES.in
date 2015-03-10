@@ -1,7 +1,9 @@
 [encoding: UTF-8]
 [type: gettext/glade]data/ch-backlight-menus.ui
 [type: gettext/glade]data/ch-backlight.ui
+[type: gettext/glade]data/ch-ccmx-menus.ui
 [type: gettext/glade]data/ch-ccmx.ui
+[type: gettext/glade]data/ch-flash-menus.ui
 [type: gettext/glade]data/ch-flash.ui
 [type: gettext/glade]data/ch-refresh.ui
 [type: gettext/glade]data/ch-refresh-menus.ui

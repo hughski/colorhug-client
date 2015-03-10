@@ -2,7 +2,8 @@ PackageKit Release Notes
 
 1. Write NEWS entries in the same format as usual.
 
-git shortlog COLORHUG_CLIENT_0_2_5.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git log --format="%s" COLORHUG_CLIENT_0_2_5.. | grep -i -v trivial | grep -v Merge | uniq
+Add any user visible changes into data/appdata/*.appdata.xml.in
 
 --------------------------------------------------------------------------------
 Version 0.2.6

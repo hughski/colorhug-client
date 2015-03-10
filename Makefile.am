@@ -39,6 +39,7 @@ MAINTAINERCLEANFILES =					\
 	$(srcdir)/ltmain.sh				\
 	$(srcdir)/missing				\
 	$(srcdir)/mkinstalldirs				\
+	$(srcdir)/NEWS					\
 	$(srcdir)/omf.make				\
 	$(srcdir)/ChangeLog				\
 	$(srcdir)/colorhug-*.tar.*			\
@@ -50,6 +51,7 @@ setup-win32:
 distclean-local:
 	if test $(srdcir) = .; then :; else \
 		rm -f ChangeLog; \
+		rm -f NEWS; \
 	fi
 
 ChangeLog:
@@ -66,6 +68,14 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> $@); \
 	fi
 
-.PHONY: ChangeLog
+NEWS: data/appdata/*.appdata.xml
+	$(AM_V_GEN) \
+	if test -e $(APPSTREAM_UTIL); then \
+		$(APPSTREAM_UTIL) appdata-to-news $^ > $@; \
+	else \
+		touch $@; \
+	fi
+
+.PHONY: ChangeLog NEWS
 
 -include $(top_srcdir)/git.mk

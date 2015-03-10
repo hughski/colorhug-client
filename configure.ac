@@ -94,6 +94,7 @@ PKG_CHECK_MODULES(COLORD, colord >= 1.2.9)
 PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(COLORHUG, colorhug >= 1.2.3)
+AC_PATH_PROG(APPSTREAM_UTIL, [appstream-util], [unfound])
 
 dnl ---------------------------------------------------------------------------
 dnl - Sound effects using libcanberra are optional

@@ -21,6 +21,8 @@
   <url type="homepage">http://www.hughski.com/</url>
   <update_contact>richard_at_hughsie.com</update_contact>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
+  <releases>
+  </releases>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>
 </component>
