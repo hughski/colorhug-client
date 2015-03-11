@@ -3,5 +3,4 @@ _Name=ColorHug Documentation
 _Comment=Documentation for the ColorHug display colorimeter
 Icon=colorimeter-colorhug
 URL=help:colorhug-client
-Terminal=false
 Type=Link
