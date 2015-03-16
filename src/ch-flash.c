@@ -959,7 +959,7 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 		break;
 	case 0x04:
 		/* TRANSLATORS: ALS stands for ambient light sensor */
-		str = g_strdup (_("ColorHug ALS Detected"));
+		str = g_strdup (_("ColorHugALS Detected"));
 		break;
 	case 0xff:
 		/* TRANSLATORS: fake hardware */
