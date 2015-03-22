@@ -277,7 +277,7 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 	sample = g_ptr_array_index (priv->data, 0);
 	brightness = sample->data[0] * 100.f / priv->norm_value;
 	brightness = MIN (brightness, 100.f);
-	brightness = MAX (brightness, 0.f);
+	brightness = MAX (brightness, 5.f);
 	priv->accumulator = (alpha * brightness) + (1.0 - alpha) * priv->accumulator;
 
 	/* set new value */
