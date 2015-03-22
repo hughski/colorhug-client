@@ -269,6 +269,12 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 					CH_GRAPH_WIDGET_PLOT_LINE, array);
 	}
 
+	/* sanity check */
+	if (ABS (priv->norm_value) < 0.001) {
+		g_debug ("No normalised brightness value, ignoring");
+		return;
+	}
+
 	/* calculate exponential moving average */
 	a = GTK_ADJUSTMENT (gtk_builder_get_object (priv->builder, "adjustment_smooth"));
 	alpha = gtk_adjustment_get_value (a);
@@ -357,10 +363,14 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 		if (sample->data[i] > rgb_max)
 			rgb_max = sample->data[i];
 	}
-	rgb_str = g_strdup_printf ("%.0f:%.0f:%.0f",
-				   (gdouble) sample->data[1] * 255.f / rgb_max,
-				   (gdouble) sample->data[2] * 255.f / rgb_max,
-				   (gdouble) sample->data[3] * 255.f / rgb_max);
+	if (rgb_max != 0.f) {
+		rgb_str = g_strdup_printf ("%.0f:%.0f:%.0f",
+					   (gdouble) sample->data[1] * 255.f / rgb_max,
+					   (gdouble) sample->data[2] * 255.f / rgb_max,
+					   (gdouble) sample->data[3] * 255.f / rgb_max);
+	} else {
+		rgb_str = g_strdup ("Unknown");
+	}
 	gtk_label_set_label (GTK_LABEL (w), rgb_str);
 
 	/* done action now */
