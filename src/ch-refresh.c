@@ -356,6 +356,15 @@ ch_refresh_update_refresh_rate (ChRefreshPrivate *priv)
 }
 
 /**
+ * ch_refresh_round_fraction:
+ **/
+static gdouble
+ch_refresh_round_fraction (gdouble tmp)
+{
+	return ceilf (tmp * 10.f) / 10.f;
+}
+
+/**
  * ch_refresh_update_ui:
  **/
 static void
@@ -392,16 +401,15 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	zoom = gtk_switch_get_active (GTK_SWITCH (priv->switch_zoom));
 	duration = cd_spectrum_get_resolution (sp_tmp) * (gdouble) NR_DATA_POINTS;
 	tmp = zoom ? duration / 5 : duration;
-	tmp = ceilf (tmp * 10.f) / 10.f;
 	if (zoom) {
 		g_object_set (priv->graph,
-			      "start-x", tmp,
-			      "stop-x", tmp + 0.3f,
+			      "start-x", ch_refresh_round_fraction (tmp),
+			      "stop-x", ch_refresh_round_fraction (tmp + (duration / 5.f)),
 			      NULL);
 	} else {
 		g_object_set (priv->graph,
 			      "start-x", 0.f,
-			      "stop-x", tmp,
+			      "stop-x", ch_refresh_round_fraction (tmp),
 			      NULL);
 	}
 
