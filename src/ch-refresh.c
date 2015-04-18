@@ -374,7 +374,7 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 
 	/* enable export */
 	action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "export");
-	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
 	/* update display refresh rate */
 	ch_refresh_update_refresh_rate (priv);
