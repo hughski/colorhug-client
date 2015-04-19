@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Ferry Huberts <mailings@hupie.com>, 2012
+# Heimen Stoffels <vistausss@outlook.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-10 19:40+0000\n"
-"PO-Revision-Date: 2015-03-10 19:40+0000\n"
+"POT-Creation-Date: 2015-04-19 11:14+0100\n"
+"PO-Revision-Date: 2015-03-16 10:17+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/colorhug-client/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -19,14 +20,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "_About"
-msgstr ""
+msgstr "_Over"
 
 msgid "_Quit"
-msgstr ""
+msgstr "_Afsluiten"
 
 #. The surrounding light level
 msgid "Ambient"
-msgstr ""
+msgstr "Omringend"
 
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
@@ -35,35 +36,35 @@ msgstr "Kleur"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
-msgstr ""
+msgstr "Overvloeien"
 
-#. The rate that we're sampling the sensor
+#. The rate that we
 msgid "Refresh"
-msgstr ""
+msgstr "Bijwerking"
 
 #. The amount the sensor can influence the brightness
 msgid "Weight"
-msgstr ""
+msgstr "Gewicht"
 
 #. Backlight up 5%
 msgid "Up"
-msgstr ""
+msgstr "Omhoog"
 
 #. Backlight down 5%
 msgid "Down"
-msgstr ""
+msgstr "Omlaag"
 
 msgid "_Import file"
-msgstr ""
+msgstr "Bestand _importeren"
 
 msgid "_Generate CCMX"
-msgstr ""
+msgstr "CCMX _genereren"
 
 msgid "_Help"
-msgstr ""
+msgstr "_Hulp"
 
 msgid "Please insert your ColorHug device."
-msgstr ""
+msgstr "Plug alstublieft uw ColorHug-apparaat in."
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -82,7 +83,7 @@ msgstr "LCD"
 
 #. Default cathode ray tube (ask your parents...) matrix
 msgid "CRT"
-msgstr "Beeldbuis"
+msgstr "Beeldbuis (CRT)"
 
 #. Default projector (beamer etc) matrix
 msgid "Projector"
@@ -99,15 +100,15 @@ msgid "Do not remove the device whilst measurement is in progress"
 msgstr ""
 
 msgid "Save file"
-msgstr ""
+msgstr "Bestand opslaan"
 
 msgid ""
 "Share with\n"
 "the community"
-msgstr ""
+msgstr "Delen met\nde gemeenschap"
 
 msgid "Firmware version unknown"
-msgstr "Firmware versie onbekend"
+msgstr "Onbekende firmware-versie"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
@@ -115,7 +116,7 @@ msgstr "Verbreek de verbinding met het apparaat niet en zet de computer niet uit
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
-msgstr ""
+msgstr "Bijwerken"
 
 msgid "Flash new firmware to the device"
 msgstr "Schrijf de nieuwe firmware naar het apparaat"
@@ -124,46 +125,46 @@ msgid "page0"
 msgstr ""
 
 msgid "Your Score"
-msgstr ""
+msgstr "Uw score"
 
 msgid "Display"
-msgstr ""
+msgstr "Weergave"
 
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 msgid "Black-to-White"
-msgstr ""
+msgstr "Zwart-naar-wit"
 
 msgid "White-to-Black"
-msgstr ""
+msgstr "Wit-naar-zwart"
 
 msgid "Refresh Rate"
-msgstr ""
+msgstr "Bijwerkrate"
 
 msgid "Color Temperature"
-msgstr ""
+msgstr "Kleurtemperatuur"
 
 msgid "White Luminance"
-msgstr ""
+msgstr "Witte intensiteit"
 
 msgid "Black Luminance"
-msgstr ""
+msgstr "Zwarte intensiteit"
 
 msgid "sRGB Coverage"
-msgstr ""
+msgstr "sRGB-dekking"
 
 msgid "AdobeRGB Coverage"
-msgstr ""
+msgstr "AdobeRGB-dekking"
 
 msgid "Native Gamma"
-msgstr ""
+msgstr "Natief gamma"
 
 msgid "page1"
 msgstr ""
 
 msgid "_Export results…"
-msgstr ""
+msgstr "Resultaten _exporteren..."
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
@@ -683,7 +684,7 @@ msgid "ColorHug+ Detected"
 msgstr ""
 
 #. TRANSLATORS: ALS stands for ambient light sensor
-msgid "ColorHug ALS Detected"
+msgid "ColorHugALS Detected"
 msgstr ""
 
 #. TRANSLATORS: fake hardware

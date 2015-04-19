@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-10 19:40+0000\n"
-"PO-Revision-Date: 2015-03-10 19:40+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2015-04-19 11:14+0100\n"
+"PO-Revision-Date: 2015-03-21 03:46+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/colorhug-client/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "Ви_йти"
 
 #. The surrounding light level
 msgid "Ambient"
-msgstr ""
+msgstr "Зовнішнє світло"
 
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
@@ -35,35 +35,35 @@ msgstr "Колір"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
-msgstr ""
+msgstr "Згладжування"
 
-#. The rate that we're sampling the sensor
+#. The rate that we
 msgid "Refresh"
-msgstr ""
+msgstr "Оновлення"
 
 #. The amount the sensor can influence the brightness
 msgid "Weight"
-msgstr ""
+msgstr "Вага"
 
 #. Backlight up 5%
 msgid "Up"
-msgstr ""
+msgstr "Вище"
 
 #. Backlight down 5%
 msgid "Down"
-msgstr ""
+msgstr "Нижче"
 
 msgid "_Import file"
-msgstr ""
+msgstr "_Імпортувати файл"
 
 msgid "_Generate CCMX"
-msgstr ""
+msgstr "С_творити CCMX"
 
 msgid "_Help"
-msgstr ""
+msgstr "_Довідка"
 
 msgid "Please insert your ColorHug device."
-msgstr ""
+msgstr "Будь ласка, вставте ваш пристрій ColorHug."
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -115,7 +115,7 @@ msgstr "Не від’єднуйте пристрій від комп’ютер
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
-msgstr ""
+msgstr "Оновити"
 
 msgid "Flash new firmware to the device"
 msgstr "Записати нову мікропрограму на пристрій"
@@ -169,18 +169,18 @@ msgstr "_Експортувати результати…"
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Backlight Utility"
-msgstr ""
+msgstr "Інструмент зворотного підсвічування ColorHug"
 
 msgid "Sample the ambient light level to control the backlight"
-msgstr ""
+msgstr "Створити зразок зовнішнього освітлення для керування зворотним підсвічуванням"
 
 msgid ""
 "The ColorHug backlight utility uses the ColorHug device to alter the "
 "backlight level to compensate for the changing ambient light level."
-msgstr ""
+msgstr "Інструмент керування зворотним підсвічуванням ColorHug використовує пристрій ColorHug для зміни рівня зворотного підсвічування з метою компенсування змін у рівні зовнішнього освітлення."
 
 msgid "The ambient light control utility"
-msgstr ""
+msgstr "Інструмент керування зовнішнім освітленням"
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug CCMX Loader"
@@ -263,7 +263,7 @@ msgid "Documentation for the ColorHug display colorimeter"
 msgstr "Документація щодо колориметра для дисплеїв ColorHug"
 
 msgid "Display;Backlight;Ambient;ColorHug;"
-msgstr ""
+msgstr "Display;Backlight;Ambient;ColorHug;показ;дисплей;зворотне;підсвічування;освітлення;колоргаґ;"
 
 msgid "CCMX Loader"
 msgstr "Завантажувач CCMX"
@@ -304,28 +304,28 @@ msgid "Whether the backlight PWM should be removed."
 msgstr "Визначає, чи слід вилучати PWM підсвічування."
 
 msgid "The integration time for each sample"
-msgstr ""
+msgstr "Час інтегрування для кожного зі зразків"
 
 msgid "Set the integration time in seconds for the ambient light sample."
-msgstr ""
+msgstr "Встановити час інтегрування у секундах для захоплення зразка зовнішнього освітлення."
 
 msgid "Backlight smoothing factor"
-msgstr ""
+msgstr "Коефіцієнт згладжування зворотного підсвічування"
 
 msgid "The amount of backlight smoothing for ambient light changes."
-msgstr ""
+msgstr "Потужність згладжування зворотного підсвічування для змін у зовнішньому освітленні."
 
 msgid "The refresh rate between samples"
-msgstr ""
+msgstr "Частота оновлення між зразками"
 
 msgid "The refresh rate in seconds between samples."
-msgstr ""
+msgstr "Частота оновлення у секундах між зразками."
 
 msgid "The gamma value for ambient light"
-msgstr ""
+msgstr "Значення коефіцієнта контрастності для зовнішнього освітлення"
 
 msgid "The gamma values to use when scaling ambient light samples."
-msgstr ""
+msgstr "Значення коефіцієнта контрастності, якими слід скористатися для масштабування зразків зовнішнього освітлення."
 
 msgid "Display;Analysis;ColorHug;"
 msgstr "Display;Analysis;ColorHug;дисплей;аналіз;"
@@ -338,31 +338,31 @@ msgstr "Flash;Firmware;ColorHug;флеш;мікрокод;фермвеар;мі�
 
 #. TRANSLATORS: no device is attached
 msgid "Please insert your ColorHugALS device."
-msgstr ""
+msgstr "Будь ласка, вставте ваш пристрій ColorHugALS."
 
 #. TRANSLATORS: our device
 msgid "Using ColorHugALS device"
-msgstr ""
+msgstr "За допомогою пристрою ColorHugALS"
 
 #. TRANSLATORS: laptop ambient light sensor
 msgid "Using internal device"
-msgstr ""
+msgstr "За допомогою вбудованого пристрою"
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
-msgstr ""
+msgstr "Не вдалося встановити яскравість"
 
 #. TRANSLATORS: get the backlight
 msgid "Failed to get brightness"
-msgstr ""
+msgstr "Не вдалося отримати яскравість"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Backlight Utility"
-msgstr ""
+msgstr "Про інструмент зворотного підсвічування ColorHug"
 
 #. TRANSLATORS: application description
 msgid "Sample the ambient light to control the backlight."
-msgstr ""
+msgstr "Створити зразок зовнішнього освітлення для керування зворотним підсвічуванням."
 
 msgid "translator-credits"
 msgstr "Юрій Чорноіван <yurchor@ukr.net>"
@@ -513,15 +513,15 @@ msgstr "Отримання найсвіжіших даних з інтернет
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug CCMX Loader"
-msgstr ""
+msgstr "Про завантажувач CCMX ColorHug"
 
 #. TRANSLATORS: application description
 msgid "Modify the calibration matrices on the ColorHug device."
-msgstr ""
+msgstr "Змінити матриці калібрування на пристрої ColorHug."
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing data to ColorHug device"
-msgstr ""
+msgstr "Записуємо дані на пристрій ColorHug"
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
@@ -683,8 +683,8 @@ msgid "ColorHug+ Detected"
 msgstr "Виявлено ColorHug+"
 
 #. TRANSLATORS: ALS stands for ambient light sensor
-msgid "ColorHug ALS Detected"
-msgstr ""
+msgid "ColorHugALS Detected"
+msgstr "Виявлено ColorHugALS"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -723,7 +723,7 @@ msgstr "Дані щодо оновлення"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Firmware Updater"
-msgstr ""
+msgstr "Про засіб оновлення мікропрограми ColorHug"
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
@@ -731,7 +731,7 @@ msgstr "Докладніше про оновлення"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing firmware to ColorHug device"
-msgstr ""
+msgstr "Записуємо мікрокод на пристрій ColorHug"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"

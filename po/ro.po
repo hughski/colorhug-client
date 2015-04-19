@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-10 19:40+0000\n"
-"PO-Revision-Date: 2015-03-10 19:40+0000\n"
+"POT-Creation-Date: 2015-04-19 11:14+0100\n"
+"PO-Revision-Date: 2015-03-16 10:17+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/colorhug-client/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr "Culoare"
 msgid "Smoothing"
 msgstr ""
 
-#. The rate that we're sampling the sensor
+#. The rate that we
 msgid "Refresh"
 msgstr ""
 
@@ -115,7 +115,7 @@ msgstr "Nu deconectați dispozitivul și nu opriți computerul."
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
-msgstr ""
+msgstr "Actualizare"
 
 msgid "Flash new firmware to the device"
 msgstr "Scrie noul firmware în memoria flash a dispozitivului"
@@ -683,7 +683,7 @@ msgid "ColorHug+ Detected"
 msgstr ""
 
 #. TRANSLATORS: ALS stands for ambient light sensor
-msgid "ColorHug ALS Detected"
+msgid "ColorHugALS Detected"
 msgstr ""
 
 #. TRANSLATORS: fake hardware

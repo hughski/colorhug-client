@@ -22,6 +22,14 @@
   <update_contact>richard_at_hughsie.com</update_contact>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
   <releases>
+    <release version="0.2.7" timestamp="1429438376">
+      <description>
+        <p>This stable release fixes the following bug:</p>
+        <ul>
+          <li>Never auto-dim less than 5%</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.6" timestamp="1426014599">
       <description>
         <p>

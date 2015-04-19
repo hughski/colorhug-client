@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-10 19:40+0000\n"
-"PO-Revision-Date: 2015-03-10 19:40+0000\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2015-04-19 11:14+0100\n"
+"PO-Revision-Date: 2015-03-21 03:46+0000\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/colorhug-client/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "退出(_Q)"
 
 #. The surrounding light level
 msgid "Ambient"
-msgstr ""
+msgstr "周遭"
 
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
@@ -35,35 +35,35 @@ msgstr "色彩"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
-msgstr ""
+msgstr "平滑處理"
 
-#. The rate that we're sampling the sensor
+#. The rate that we
 msgid "Refresh"
-msgstr ""
+msgstr "重新整理"
 
 #. The amount the sensor can influence the brightness
 msgid "Weight"
-msgstr ""
+msgstr "權重"
 
 #. Backlight up 5%
 msgid "Up"
-msgstr ""
+msgstr "上"
 
 #. Backlight down 5%
 msgid "Down"
-msgstr ""
+msgstr "下"
 
 msgid "_Import file"
-msgstr ""
+msgstr "匯入檔案(_I)"
 
 msgid "_Generate CCMX"
-msgstr ""
+msgstr "生成 CCMX(_G)"
 
 msgid "_Help"
-msgstr ""
+msgstr "求助(_H)"
 
 msgid "Please insert your ColorHug device."
-msgstr ""
+msgstr "請插入您的 ColorHug 裝置。"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -115,7 +115,7 @@ msgstr "請不要拔除裝置，也不要關閉電腦。"
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 msgid "Flash new firmware to the device"
 msgstr "刷寫新韌體至裝置"
@@ -169,18 +169,18 @@ msgstr "匯出結果(_E)…"
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Backlight Utility"
-msgstr ""
+msgstr "ColorHug 背光公用程式"
 
 msgid "Sample the ambient light level to control the backlight"
-msgstr ""
+msgstr "取樣周遭光程度來控制背光"
 
 msgid ""
 "The ColorHug backlight utility uses the ColorHug device to alter the "
 "backlight level to compensate for the changing ambient light level."
-msgstr ""
+msgstr "ColorHug 背光公用程式使用 ColorHug 裝置來改變背光程度以補償周遭光程度的變動。"
 
 msgid "The ambient light control utility"
-msgstr ""
+msgstr "周遭光控制公用程式"
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug CCMX Loader"
@@ -263,7 +263,7 @@ msgid "Documentation for the ColorHug display colorimeter"
 msgstr "ColorHug 顯示器色度計的文件"
 
 msgid "Display;Backlight;Ambient;ColorHug;"
-msgstr ""
+msgstr "Display;Backlight;Ambient;ColorHug;顯示;背光;周遭;環境"
 
 msgid "CCMX Loader"
 msgstr "CCMX 載入器"
@@ -304,28 +304,28 @@ msgid "Whether the backlight PWM should be removed."
 msgstr "移除背光 PWM。"
 
 msgid "The integration time for each sample"
-msgstr ""
+msgstr "每次取樣的整合時間"
 
 msgid "Set the integration time in seconds for the ambient light sample."
-msgstr ""
+msgstr "為周遭光採樣設定整合時間 (單位為秒)。"
 
 msgid "Backlight smoothing factor"
-msgstr ""
+msgstr "背光平滑處理係數"
 
 msgid "The amount of backlight smoothing for ambient light changes."
-msgstr ""
+msgstr "周遭光改變時的背光平滑處理量。"
 
 msgid "The refresh rate between samples"
-msgstr ""
+msgstr "採樣之間的重新整理率"
 
 msgid "The refresh rate in seconds between samples."
-msgstr ""
+msgstr "採樣之間的重新整理率，單位為秒。"
 
 msgid "The gamma value for ambient light"
-msgstr ""
+msgstr "周遭光的 Gamma 值"
 
 msgid "The gamma values to use when scaling ambient light samples."
-msgstr ""
+msgstr "當縮放周遭光採樣時使用的 Gamma 值。"
 
 msgid "Display;Analysis;ColorHug;"
 msgstr "Display;Analysis;ColorHug;顯示器;分析;"
@@ -338,31 +338,31 @@ msgstr "Flash;Firmware;ColorHug;韌體;刷寫;"
 
 #. TRANSLATORS: no device is attached
 msgid "Please insert your ColorHugALS device."
-msgstr ""
+msgstr "請插入您的 ColorHugALS 裝置。"
 
 #. TRANSLATORS: our device
 msgid "Using ColorHugALS device"
-msgstr ""
+msgstr "正使用 ColorHugALS 裝置"
 
 #. TRANSLATORS: laptop ambient light sensor
 msgid "Using internal device"
-msgstr ""
+msgstr "正使用內部裝置"
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
-msgstr ""
+msgstr "無法設定亮度"
 
 #. TRANSLATORS: get the backlight
 msgid "Failed to get brightness"
-msgstr ""
+msgstr "無法取得亮度"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Backlight Utility"
-msgstr ""
+msgstr "關於 ColorHug 背光公用程式"
 
 #. TRANSLATORS: application description
 msgid "Sample the ambient light to control the backlight."
-msgstr ""
+msgstr "採樣周遭光以控制背光。"
 
 msgid "translator-credits"
 msgstr "Cheng-Chia Tseng <pswo10680@gmail.com>, 2014-2015."
@@ -513,15 +513,15 @@ msgstr "正從網路取得最新資料..."
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug CCMX Loader"
-msgstr ""
+msgstr "關於 ColorHug CCMX 載入器"
 
 #. TRANSLATORS: application description
 msgid "Modify the calibration matrices on the ColorHug device."
-msgstr ""
+msgstr "修改 ColorHug 裝置上的校準矩陣。"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing data to ColorHug device"
-msgstr ""
+msgstr "正將資料寫入 ColorHug 裝置"
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
@@ -683,8 +683,8 @@ msgid "ColorHug+ Detected"
 msgstr "偵測到 ColorHug+"
 
 #. TRANSLATORS: ALS stands for ambient light sensor
-msgid "ColorHug ALS Detected"
-msgstr ""
+msgid "ColorHugALS Detected"
+msgstr "偵測到 ColorHugALS"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -723,7 +723,7 @@ msgstr "更新細節"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Firmware Updater"
-msgstr ""
+msgstr "關於 ColorHug 韌體更新器"
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
@@ -731,7 +731,7 @@ msgstr "查看更新的相關細節"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing firmware to ColorHug device"
-msgstr ""
+msgstr "正將韌體寫入 ColorHug 裝置"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
