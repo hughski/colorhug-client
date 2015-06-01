@@ -33,6 +33,10 @@ static void	ch_ambient_finalize	(GObject     *object);
 
 #define CH_AMBIENT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CH_TYPE_AMBIENT, ChAmbientPrivate))
 
+#ifndef CH_USB_PID_FIRMWARE_ALS_SENSOR_HID
+#define CH_USB_PID_FIRMWARE_ALS_SENSOR_HID 0x1008
+#endif
+
 /**
  * ChAmbientPrivate:
  *
@@ -40,6 +44,8 @@ static void	ch_ambient_finalize	(GObject     *object);
  **/
 struct _ChAmbientPrivate
 {
+	GDBusProxy		*iio_proxy;
+	guint			 iio_proxy_watch_id;
 	ChAmbientKind		 kind;
 	GSettings		*settings;
 	GUsbContext		*usb_ctx;	/* watching USB devices */
@@ -152,6 +158,36 @@ ch_ambient_file_read_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 }
 
 /**
+ * ch_ambient_get_iio_value_cb:
+ **/
+static void
+ch_ambient_get_iio_value_cb (ChAmbientHelper *helper)
+{
+	GdkRGBA *rgba;
+	_cleanup_variant_unref_ GVariant *val = NULL;
+	ChAmbient *ambient = CH_AMBIENT (helper->ambient);
+
+	val = g_dbus_proxy_get_cached_property (ambient->priv->iio_proxy, "LightLevel");
+	if (val == NULL) {
+		g_simple_async_result_set_error (helper->res,
+						 G_IO_ERROR,
+						 G_IO_ERROR_NOT_SUPPORTED,
+						 "%s", "no iio-sensor-proxy");
+		g_simple_async_result_complete_in_idle (helper->res);
+		ch_ambient_free_helper (helper);
+		return;
+	}
+
+	rgba = g_new (GdkRGBA, 1);
+	rgba->alpha = g_variant_get_double (val);
+	rgba->red = 0.f;
+	rgba->green = 0.f;
+	rgba->blue = 0.f;
+	g_simple_async_result_set_op_res_gpointer (helper->res, rgba, g_free);
+	g_simple_async_result_complete_in_idle (helper->res);
+}
+
+/**
  * ch_ambient_get_value_async:
  **/
 void
@@ -177,7 +213,11 @@ ch_ambient_get_value_async (ChAmbient *ambient,
 
 	/* take readings */
 	switch (priv->kind) {
-	case CH_AMBIENT_KIND_INTERNAL:
+	case CH_AMBIENT_KIND_SENSOR_HID:
+		ch_ambient_get_iio_value_cb (helper);
+		ch_ambient_free_helper (helper);
+		break;
+	case CH_AMBIENT_KIND_ACPI:
 		g_file_read_async (priv->acpi_internal,
 				   G_PRIORITY_DEFAULT, cancellable,
 				   ch_ambient_file_read_cb, ambient);
@@ -287,6 +327,12 @@ ch_ambient_device_added_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *amb
 	switch (ch_device_get_mode (device)) {
 	case CH_DEVICE_MODE_FIRMWARE_ALS:
 
+		/* new firmware handled by iio-sensor-proxy */
+		if (g_usb_device_get_pid (device) == CH_USB_PID_FIRMWARE_ALS_SENSOR_HID) {
+			g_debug ("Ignoring SensorHID device");
+			break;
+		}
+
 		/* we've got an internal ALS sensor */
 		if (priv->kind != CH_AMBIENT_KIND_NONE) {
 			g_warning ("ignoring device as already have sensor");
@@ -368,6 +414,58 @@ ch_ambient_find_acpi_internal (void)
 	return g_file_new_for_path (dev);
 }
 
+static void
+iio_proxy_changed_cb (GDBusProxy *proxy,
+		      GVariant   *changed_properties,
+		      GStrv       invalidated_properties,
+		      gpointer    user_data)
+{
+	_cleanup_variant_unref_ GVariant *val_has = NULL;
+	val_has = g_dbus_proxy_get_cached_property (proxy, "HasAmbientLight");
+	if (val_has == NULL || !g_variant_get_boolean (val_has))
+		return;
+}
+
+static void
+iio_proxy_appeared_cb (GDBusConnection *connection,
+		       const gchar *name,
+		       const gchar *name_owner,
+		       gpointer user_data)
+{
+	ChAmbient *ambient = CH_AMBIENT (user_data);
+	_cleanup_error_free_ GError *error = NULL;
+
+	ambient->priv->iio_proxy =
+		g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+					       0,
+					       NULL,
+					       "net.hadess.SensorProxy",
+					       "/net/hadess/SensorProxy",
+					       "net.hadess.SensorProxy",
+					       NULL,
+					       NULL);
+	g_signal_connect (ambient->priv->iio_proxy, "g-properties-changed",
+			  G_CALLBACK (iio_proxy_changed_cb), ambient);
+	if (!g_dbus_proxy_call_sync (ambient->priv->iio_proxy,
+				     "ClaimLight", NULL,
+				     G_DBUS_CALL_FLAGS_NONE,
+				     -1, NULL, &error)) {
+		g_warning ("Call to ii-proxy failed: %s", error->message);
+	}
+	ambient->priv->kind = CH_AMBIENT_KIND_SENSOR_HID;
+	g_signal_emit (ambient, signals[SIGNAL_CHANGED], 0);
+}
+
+static void
+iio_proxy_vanished_cb (GDBusConnection *connection,
+		       const gchar *name,
+		       gpointer user_data)
+{
+	ChAmbient *ambient = CH_AMBIENT (user_data);
+	g_signal_emit (ambient, signals[SIGNAL_CHANGED], 0);
+	g_clear_object (&ambient->priv->iio_proxy);
+}
+
 /**
  * ch_ambient_init:
  **/
@@ -386,7 +484,16 @@ ch_ambient_init (ChAmbient *ambient)
 	/* internal device support does not support hotplug */
 	ambient->priv->acpi_internal = ch_ambient_find_acpi_internal ();
 	if (ambient->priv->acpi_internal != NULL)
-		ambient->priv->kind = CH_AMBIENT_KIND_INTERNAL;
+		ambient->priv->kind = CH_AMBIENT_KIND_ACPI;
+
+	/* setup ambient light support */
+	ambient->priv->iio_proxy_watch_id =
+		g_bus_watch_name (G_BUS_TYPE_SYSTEM,
+				  "net.hadess.SensorProxy",
+				  G_BUS_NAME_WATCHER_FLAGS_NONE,
+				  iio_proxy_appeared_cb,
+				  iio_proxy_vanished_cb,
+				  ambient, NULL);
 }
 
 /**
@@ -400,6 +507,8 @@ ch_ambient_finalize (GObject *object)
 
 	if (priv->acpi_internal != NULL)
 		g_object_unref (priv->acpi_internal);
+	if (ambient->priv->iio_proxy_watch_id != 0)
+		g_bus_unwatch_name (ambient->priv->iio_proxy_watch_id);
 	g_object_unref (priv->settings);
 	g_object_unref (priv->usb_ctx);
 	g_object_unref (priv->device_queue);

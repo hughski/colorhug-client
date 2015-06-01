@@ -99,7 +99,8 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 	/* update UI */
 	switch (ch_ambient_get_kind (priv->ambient)) {
 	case CH_AMBIENT_KIND_COLORHUG:
-	case CH_AMBIENT_KIND_INTERNAL:
+	case CH_AMBIENT_KIND_SENSOR_HID:
+	case CH_AMBIENT_KIND_ACPI:
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_up"));
 		gtk_widget_set_visible (w, TRUE);
 		w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "button_down"));
@@ -129,10 +130,15 @@ ch_backlight_update_ui (ChBacklightPrivate *priv)
 					     /* TRANSLATORS: our device */
 					     _("Using ColorHugALS device"));
 		break;
-	case CH_AMBIENT_KIND_INTERNAL:
+	case CH_AMBIENT_KIND_ACPI:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
 					     /* TRANSLATORS: laptop ambient light sensor */
-					     _("Using internal device"));
+					     _("Using ACPI device"));
+		break;
+	case CH_AMBIENT_KIND_SENSOR_HID:
+		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w),
+					     /* TRANSLATORS: windows * sensor class device */
+					     _("Using sensor HID device"));
 		break;
 	default:
 		gtk_header_bar_set_subtitle (GTK_HEADER_BAR (w), NULL);
