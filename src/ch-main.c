@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2011-2014 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2011-2015 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -1896,46 +1896,64 @@ ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 
 /**
  * ch_util_get_default_device:
+ * device_idx: the index, or -1 for 'any'
  **/
 static GUsbDevice *
-ch_util_get_default_device (GError **error)
+ch_util_get_default_device (gint device_idx, GError **error)
 {
 	guint i;
 	GUsbDevice *device_tmp;
 	_cleanup_object_unref_ GUsbContext *usb_ctx = NULL;
 	_cleanup_object_unref_ GUsbDevice *device = NULL;
 	_cleanup_ptrarray_unref_ GPtrArray *devices = NULL;
+	_cleanup_ptrarray_unref_ GPtrArray *devices_ch = NULL;
 
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	/* try to find the ColorHug device */
+	/* filter ColorHug devices */
 	usb_ctx = g_usb_context_new (NULL);
-
-	/* ensure we only find one device */
 	devices = g_usb_context_get_devices (usb_ctx);
+	devices_ch = g_ptr_array_new ();
 	for (i = 0; i < devices->len; i++) {
 		device_tmp = g_ptr_array_index (devices, i);
 		if (!ch_device_is_colorhug (device_tmp))
 			continue;
-		if (device != NULL) {
-			g_set_error_literal (error, 1, 0,
-					     _("Multiple ColorHug devices are attached"));
-			return NULL;
-		}
-		device = g_object_ref (device_tmp);
+		g_debug ("Found ColorHug device %s",
+			 g_usb_device_get_platform_id (device_tmp));
+		g_ptr_array_add (devices_ch, device_tmp);
 	}
-	if (device == NULL) {
+
+	/* no devices */
+	if (devices_ch->len == 0) {
 		g_set_error_literal (error, 1, 0,
 				     _("No ColorHug devices were found"));
 		return NULL;
 	}
-	g_debug ("Found ColorHug device %s",
-		 g_usb_device_get_platform_id (device));
-	if (!ch_device_open (device, error))
+
+	/* multiple devices */
+	if (devices_ch->len == 1) {
+		device_tmp = g_ptr_array_index (devices_ch, 0);
+	} else {
+		if (device_idx > (gint) devices_ch->len - 1) {
+			g_set_error_literal (error, 1, 0,
+					     _("Multiple ColorHug devices attached "
+					       "and invalid device index specified"));
+			return NULL;
+		}
+		if (device_idx < 0) {
+			g_set_error_literal (error, 1, 0,
+					     _("Multiple ColorHug devices attached "
+					       "and no device index specified"));
+			return NULL;
+		}
+		device_tmp = g_ptr_array_index (devices_ch, device_idx);
+	}
+
+	if (!ch_device_open (device_tmp, error))
 		return NULL;
 
 	/* success */
-	return g_object_ref (device);
+	return g_object_ref (device_tmp);
 }
 
 /**
@@ -2015,7 +2033,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 			       ch_util_helper_quit_loop_cb,
 			       loop);
 		g_main_loop_run (loop);
-		device = ch_util_get_default_device (error);
+		device = ch_util_get_default_device (-1, error);
 		if (device == NULL)
 			goto out;
 		break;
@@ -2059,7 +2077,7 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 		       ch_util_helper_quit_loop_cb,
 		       loop);
 	g_main_loop_run (loop);
-	device = ch_util_get_default_device (error);
+	device = ch_util_get_default_device (-1, error);
 	if (device == NULL) {
 		ret = FALSE;
 		goto out;
@@ -2890,6 +2908,7 @@ main (int argc, char *argv[])
 {
 	ChUtilPrivate *priv;
 	gboolean verbose = FALSE;
+	gint device_idx = -1;
 	guint retval = 1;
 	_cleanup_error_free_ GError *error = NULL;
 	_cleanup_free_ gchar *cmd_descriptions = NULL;
@@ -2897,6 +2916,9 @@ main (int argc, char *argv[])
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */
 			_("Show extra debugging information"), NULL },
+		{ "device", 'd', 0, G_OPTION_ARG_INT, &device_idx,
+			/* TRANSLATORS: command line option */
+			_("Use this device when multiple are available"), NULL },
 		{ NULL}
 	};
 
@@ -3252,7 +3274,7 @@ main (int argc, char *argv[])
 
 	/* get connection to colord */
 	priv->device_queue = ch_device_queue_new ();
-	priv->device = ch_util_get_default_device (&error);
+	priv->device = ch_util_get_default_device (device_idx, &error);
 	if (priv->device == NULL) {
 		/* TRANSLATORS: no colord available */
 		g_print ("%s %s\n", _("No connection to device:"), error->message);
