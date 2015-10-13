@@ -34,7 +34,6 @@
 #include <canberra-gtk.h>
 #endif
 
-#include "ch-cleanup.h"
 #include "ch-markdown.h"
 #include "ch-flash-md.h"
 
@@ -145,7 +144,7 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 	gboolean ret;
 	GtkWidget *w;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	ret = ch_device_queue_process_finish (device_queue, res, &error);
@@ -237,7 +236,7 @@ ch_flash_boot_flash_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	gboolean ret;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	ret = ch_device_queue_process_finish (device_queue, res, &error);
@@ -266,7 +265,7 @@ ch_flash_verify_firmware_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
 	GtkWidget *w;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
@@ -321,7 +320,7 @@ ch_flash_write_firmware_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
 	GtkWidget *w;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
@@ -416,7 +415,7 @@ ch_flash_reset_cb (GObject *source,
 	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
@@ -440,7 +439,7 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 	const gchar *title;
 	GtkWidget *w;
 	gboolean ret;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* check the firmware is designed for this device */
 	ret = ch_device_check_firmware	(priv->device,
@@ -495,8 +494,8 @@ ch_flash_got_firmware_cb (SoupSession *session,
 {
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
-	_cleanup_free_ gchar *checksum_tmp = NULL;
-	_cleanup_free_ gchar *message = NULL;
+	g_autofree gchar *checksum_tmp = NULL;
+	g_autofree gchar *message = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -594,7 +593,7 @@ ch_flash_show_warning_dialog (ChFlashPrivate *priv)
 	GtkWindow *window;
 	GtkWidget *dialog;
 	GtkResponseType response;
-	_cleanup_free_ gchar *format = NULL;
+	g_autofree gchar *format = NULL;
 
 	/* anything to show? */
 	if (priv->warning_details->len == 0)
@@ -665,8 +664,8 @@ ch_flash_flash_button_cb (GtkWidget *w, ChFlashPrivate *priv)
 	const gchar *title;
 	SoupURI *base_uri = NULL;
 	SoupMessage *msg = NULL;
-	_cleanup_free_ gchar *server_uri = NULL;
-	_cleanup_free_ gchar *uri = NULL;
+	g_autofree gchar *server_uri = NULL;
+	g_autofree gchar *uri = NULL;
 
 	/* show the user any warning dialog */
 	if (!ch_flash_show_warning_dialog (priv))
@@ -746,7 +745,7 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 	gboolean ret = FALSE;
 	guint16 tmp[3];
 	guint i;
-	_cleanup_strv_free_ gchar **split = NULL;
+	g_auto(GStrv) split = NULL;
 
 	/* split up the version string */
 	split = g_strsplit (version, ".", -1);
@@ -819,8 +818,8 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	const gchar *title;
 	guint i;
 	gboolean enable_test_firmware;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_ptrarray_unref_ GPtrArray *updates = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GPtrArray) updates = NULL;
 
 	/* we failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
@@ -922,12 +921,12 @@ ch_flash_got_device_data (ChFlashPrivate *priv)
 	GtkWidget *w;
 	SoupMessage *msg = NULL;
 	SoupURI *base_uri = NULL;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *server_uri = NULL;
-	_cleanup_free_ gchar *str = NULL;
-	_cleanup_free_ gchar *str2 = NULL;
-	_cleanup_free_ gchar *uri = NULL;
-	_cleanup_free_ gchar *user_agent = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autofree gchar *server_uri = NULL;
+	g_autofree gchar *str = NULL;
+	g_autofree gchar *str2 = NULL;
+	g_autofree gchar *uri = NULL;
+	g_autofree gchar *user_agent = NULL;
 
 	/* set user agent */
 	user_agent = g_strdup_printf ("colorhug-flash-hw%i-fw%i.%i.%i-sn%i",
@@ -1084,7 +1083,7 @@ ch_flash_get_serial_number_cb (GObject *source,
 	const gchar *title;
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	ChDeviceQueue *device_queue = CH_DEVICE_QUEUE (source);
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	if (!ch_device_queue_process_finish (device_queue, res, &error)) {
@@ -1110,7 +1109,7 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	ChFlashPrivate *priv = (ChFlashPrivate *) user_data;
 	const gchar *title;
 	gboolean ret;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get data */
 	ret = ch_device_queue_process_finish (device_queue, res, &error);
@@ -1147,7 +1146,7 @@ ch_flash_get_firmware_version_cb (GObject *source,
 static GUsbDevice *
 ch_flash_get_fake_device (ChFlashPrivate *priv)
 {
-	_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
+	g_autoptr(GPtrArray) array = NULL;
 
 	/* just return the first device */
 	array = g_usb_context_get_devices (priv->usb_ctx);
@@ -1165,7 +1164,7 @@ ch_flash_got_device (ChFlashPrivate *priv)
 	const gchar *title;
 	gboolean ret;
 	GtkWidget *w;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* fake device */
 	if (g_getenv ("COLORHUG_EMULATE") != NULL)
@@ -1220,7 +1219,7 @@ ch_flash_activate_link_cb (GtkLabel *label,
 	const gchar *title;
 	GtkWindow *window;
 	GtkWidget *dialog;
-	_cleanup_free_ gchar *format = NULL;
+	g_autofree gchar *format = NULL;
 
 	/* the update text is markdown formatted */
 	format = ch_markdown_parse (priv->markdown,
@@ -1261,7 +1260,7 @@ static void
 ch_backlight_help_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
 	gboolean ret;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 	ret = gtk_show_uri (NULL,
 			    "help:colorhug-client/update-firmware",
 			    GDK_CURRENT_TIME,
@@ -1292,7 +1291,7 @@ ch_backlight_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpo
 	GtkWindow *parent = NULL;
 	const gchar *authors[] = { "Richard Hughes", NULL };
 	const gchar *copyright = "Copyright \xc2\xa9 2009-2015 Richard Hughes";
-	_cleanup_object_unref_ GdkPixbuf *logo = NULL;
+	g_autoptr(GdkPixbuf) logo = NULL;
 
 	windows = gtk_application_get_windows (GTK_APPLICATION (priv->application));
 	if (windows)
@@ -1332,10 +1331,10 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	gint retval;
 	GtkWidget *main_window;
 	GtkWidget *w;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
-	_cleanup_object_unref_ GdkPixbuf *pixbuf2 = NULL;
-	_cleanup_string_free_ GString *string = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GdkPixbuf) pixbuf = NULL;
+	g_autoptr(GdkPixbuf) pixbuf2 = NULL;
+	g_autoptr(GString) string = NULL;
 
 	/* add application menu items */
 	g_action_map_add_action_entries (G_ACTION_MAP (application),
@@ -1514,7 +1513,7 @@ main (int argc, char **argv)
 	gchar *filename = NULL;
 	GOptionContext *context;
 	int status = 0;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */

@@ -26,7 +26,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "ch-cleanup.h"
 #include "ch-refresh-utils.h"
 
 /**
@@ -37,7 +36,7 @@ cd_test_get_filename (const gchar *filename)
 {
 	gchar *tmp;
 	char full_tmp[PATH_MAX];
-	_cleanup_free_ gchar *path = NULL;
+	g_autofree gchar *path = NULL;
 	path = g_build_filename (TESTDATADIR, filename, NULL);
 	tmp = realpath (path, full_tmp);
 	if (tmp == NULL)
@@ -55,10 +54,10 @@ ch_test_refresh_smooth_func (void)
 	gboolean ret;
 	gdouble jitter = 0.f;
 	gdouble value = 0.f;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *filename = NULL;
-	_cleanup_object_unref_ CdIt8 *samples = NULL;
-	_cleanup_object_unref_ GFile *file = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autofree gchar *filename = NULL;
+	g_autoptr(CdIt8) samples = NULL;
+	g_autoptr(GFile) file = NULL;
 
 	/* load file */
 	samples = cd_it8_new ();
@@ -109,10 +108,10 @@ ch_test_refresh_pwm_func (void)
 		gboolean ret;
 		gdouble jitter = 0.f;
 		gdouble value = 0.f;
-		_cleanup_error_free_ GError *error = NULL;
-		_cleanup_free_ gchar *filename = NULL;
-		_cleanup_object_unref_ CdIt8 *samples = NULL;
-		_cleanup_object_unref_ GFile *file = NULL;
+		g_autoptr(GError) error = NULL;
+		g_autofree gchar *filename = NULL;
+		g_autoptr(CdIt8) samples = NULL;
+		g_autoptr(GFile) file = NULL;
 
 		/* load file */
 		samples = cd_it8_new ();

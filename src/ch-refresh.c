@@ -30,7 +30,6 @@
 #include <gusb.h>
 #include <colorhug.h>
 
-#include "ch-cleanup.h"
 #include "ch-graph-widget.h"
 #include "ch-refresh-utils.h"
 
@@ -151,7 +150,7 @@ ch_refresh_get_usb_speed (ChRefreshPrivate *priv,
 	gdouble elapsed[10];
 	guint8 hw_version;
 	guint i;
-	_cleanup_timer_destroy_ GTimer *timer = NULL;
+	g_autoptr(GTimer) timer = NULL;
 
 	timer = g_timer_new ();
 	for (i = 0; i < 10; i ++) {
@@ -189,7 +188,7 @@ ch_refresh_get_data_from_sram (ChRefreshMeasureHelper *helper)
 	guint16 buffer[4096];
 	guint i;
 	guint j;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get 3694 samples from the sram */
 	ch_device_queue_read_sram (helper->priv->device_queue,
@@ -251,7 +250,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	gdouble tmp;
 	guint i;
 	guint j;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* optionally remove pwm */
 	filter_pwm = gtk_switch_get_active (GTK_SWITCH (priv->switch_pwm));
@@ -270,7 +269,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	ch_graph_widget_clear (CH_GRAPH_WIDGET (priv->graph));
 	if (gtk_switch_get_active (GTK_SWITCH (priv->switch_channels))) {
 		for (j = 0; j < 3; j++) {
-			_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
+			g_autoptr(GPtrArray) array = NULL;
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 			for (i = 0; i < NR_DATA_POINTS; i++) {
 				point = ch_point_obj_new ();
@@ -284,7 +283,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 						array);
 		}
 	} else {
-		_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
+		g_autoptr(GPtrArray) array = NULL;
 		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 		for (i = 0; i < NR_DATA_POINTS; i++) {
 			/* get maximum value */
@@ -308,7 +307,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	/* add trigger lines */
 	if (!gtk_switch_get_active (GTK_SWITCH (priv->switch_zoom))) {
 		for (j = 1; j < NR_PULSES; j++) {
-			_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
+			g_autoptr(GPtrArray) array = NULL;
 			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 
 			/* bottom */
@@ -379,7 +378,7 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	gdouble value;
 	gdouble duration;
 	GtkWidget *w;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* enable export */
 	action = g_action_map_lookup_action (G_ACTION_MAP (priv->application), "export");
@@ -416,7 +415,7 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	/* find rise time (10% -> 90% transition) */
 	ret = ch_refresh_get_rise (sp_tmp, &value, &jitter, &error);
 	if (ret) {
-		_cleanup_free_ gchar *str = NULL;
+		g_autofree gchar *str = NULL;
 		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
 				       value * 1000.f, jitter * 1000.f);
 		ch_refresh_result_add (priv->results, "label_rise", str);
@@ -428,7 +427,7 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	/* find rise time (10% -> 90% transition) */
 	ret = ch_refresh_get_fall (sp_tmp, &value, &jitter, &error);
 	if (ret) {
-		_cleanup_free_ gchar *str = NULL;
+		g_autofree gchar *str = NULL;
 		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
 				       value * 1000.f, jitter * 1000.f);
 		ch_refresh_result_add (priv->results, "label_fall", str);
@@ -440,7 +439,7 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	/* find display latency */
 	ret = ch_refresh_get_input_latency (sp_tmp, &value, &jitter, &error);
 	if (ret) {
-		_cleanup_free_ gchar *str = NULL;
+		g_autofree gchar *str = NULL;
 		str = g_strdup_printf ("<b>%.0fms</b> ±%.1fms",
 				       value * 1000.f, jitter * 1000.f);
 		ch_refresh_result_add (priv->results, "label_display_latency", str);
@@ -522,7 +521,7 @@ ch_refresh_find_colord_icc_profile (const gchar *filename)
 
 	dirs = g_get_system_data_dirs ();
 	for (i = 0; dirs[i] != NULL; i++) {
-		_cleanup_free_ gchar *tmp = NULL;
+		g_autofree gchar *tmp = NULL;
 		tmp = g_build_filename (dirs[i],
 					"color",
 					"icc",
@@ -550,12 +549,12 @@ ch_refresh_update_coverage (ChRefreshMeasureHelper *helper)
 	gdouble coverage_adobergb = -1.f;
 	gdouble coverage_srgb = -1.f;
 	gdouble gamma_y;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_object_unref_ CdIcc *icc_adobergb = NULL;
-	_cleanup_object_unref_ CdIcc *icc = NULL;
-	_cleanup_object_unref_ CdIcc *icc_srgb = NULL;
-	_cleanup_object_unref_ GFile *file_adobergb = NULL;
-	_cleanup_object_unref_ GFile *file_srgb = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(CdIcc) icc_adobergb = NULL;
+	g_autoptr(CdIcc) icc = NULL;
+	g_autoptr(CdIcc) icc_srgb = NULL;
+	g_autoptr(GFile) file_adobergb = NULL;
+	g_autoptr(GFile) file_srgb = NULL;
 
 	/* convert to Yxy */
 	tmp = cd_it8_get_xyz_for_rgb (helper->it8_ti3, 1.f, 0.f, 0.f, 0.01f);
@@ -639,7 +638,7 @@ ch_refresh_update_labels_from_results (GtkBuilder *builder, GHashTable *results)
 	GtkWidget *w;
 	const gchar *key;
 	const gchar *value;
-	_cleanup_list_free_ GList *keys = NULL;
+	g_autoptr(GList) keys = NULL;
 
 	keys = g_hash_table_get_keys (results);
 	for (l = keys; l != NULL; l = l->next) {
@@ -662,7 +661,7 @@ ch_refresh_ti3_take_readings_cb (GObject *source, GAsyncResult *res, gpointer us
 	CdColorXYZ *tmp;
 	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
 	ChRefreshPrivate *priv = helper->priv;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	if (!ch_device_queue_process_finish (CH_DEVICE_QUEUE (source), res, &error)) {
@@ -741,7 +740,7 @@ ch_refresh_take_reading_array_cb (GObject *source, GAsyncResult *res, gpointer d
 {
 	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) data;
 	const gchar *title;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* check success */
 	if (!ch_device_queue_process_finish (helper->priv->device_queue, res, &error)) {
@@ -769,9 +768,9 @@ ch_refresh_update_usb_latency (ChRefreshMeasureHelper *helper)
 	GtkWidget *w;
 	const gchar *title;
 	gdouble usb_jitter = 0.f;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *usb_jitter_str = NULL;
-	_cleanup_free_ gchar *usb_latency_str = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autofree gchar *usb_jitter_str = NULL;
+	g_autofree gchar *usb_latency_str = NULL;
 
 	/* measure new USB values */
 	if (!ch_refresh_get_usb_speed (helper->priv, &helper->usb_latency, &usb_jitter, &error)) {
@@ -801,7 +800,7 @@ ch_refresh_get_readings_cb (gpointer user_data)
 {
 	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
 	guint i;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* do NR_PULSES white flashes, 350ms apart */
 	g_idle_add (ch_refresh_sample_set_white_cb, helper);
@@ -918,7 +917,7 @@ static void
 ch_refresh_device_profiling_inhibit_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result, but it's no huge problem if it fails */
 	if (!cd_device_profiling_inhibit_finish (CD_DEVICE (source), res, &error))
@@ -935,7 +934,7 @@ static void
 ch_refresh_device_connect_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	if (!cd_device_connect_finish (CD_DEVICE (source), res, &error)) {
@@ -963,7 +962,7 @@ static void
 ch_refresh_colord_find_device_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	ChRefreshMeasureHelper *helper = (ChRefreshMeasureHelper *) user_data;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	helper->device = cd_client_find_device_by_property_finish (CD_CLIENT (source), res, &error);
@@ -1017,12 +1016,12 @@ static void
 ch_refresh_update_title (ChRefreshPrivate *priv, const gchar *filename)
 {
 	GtkWidget *w;
-	_cleanup_free_ gchar *title = NULL;
+	g_autofree gchar *title = NULL;
 
 	if (filename == NULL) {
 		title = g_strdup ("ColorHug Display Analysis");
 	} else {
-		_cleanup_free_ gchar *basename = NULL;
+		g_autofree gchar *basename = NULL;
 		basename = g_path_get_basename (filename);
 		title = g_strdup_printf ("ColorHug Display Analysis — %s", basename);
 	}
@@ -1042,7 +1041,7 @@ ch_refresh_export_html_file (ChRefreshPrivate *priv, const gchar *filename, GErr
 	GtkAllocation size;
 	guint i;
 	const gchar *tmp;
-	_cleanup_free_ gchar *svg_data = NULL;
+	g_autofree gchar *svg_data = NULL;
 	const gchar *keys[] = { "label_display_latency",	_("Display"),
 				"label_rise",			_("Black-to-White"),
 				"label_fall",			_("White-to-Black"),
@@ -1138,8 +1137,8 @@ ch_refresh_export_activated_cb (GSimpleAction *action, GVariant *parameter, gpoi
 	GtkWidget *d;
 	GtkWidget *w;
 	const gchar *title;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *filename = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autofree gchar *filename = NULL;
 
 	w = GTK_WIDGET (gtk_builder_get_object (priv->builder, "dialog_refresh"));
 	d = gtk_file_chooser_dialog_new (_("Export results"),
@@ -1184,7 +1183,7 @@ ch_refresh_update_ui_for_device (ChRefreshPrivate *priv)
 {
 	ChDeviceMode mode = CH_DEVICE_MODE_UNKNOWN;
 	GtkWidget *w;
-	_cleanup_string_free_ GString *msg = g_string_new ("");
+	g_autoptr(GString) msg = g_string_new ("");
 
 	/* get actual device mode */
 	if (priv->device != NULL)
@@ -1246,7 +1245,7 @@ static void
 ch_refresh_device_open (ChRefreshPrivate *priv)
 {
 	const gchar *title;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* open device */
 	if (!ch_device_open (priv->device, &error)) {
@@ -1272,7 +1271,7 @@ ch_refresh_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpoin
 	GtkWindow *parent = NULL;
 	const gchar *authors[] = { "Richard Hughes", NULL };
 	const gchar *copyright = "Copyright \xc2\xa9 2014 Richard Hughes";
-	_cleanup_object_unref_ GdkPixbuf *logo = NULL;
+	g_autoptr(GdkPixbuf) logo = NULL;
 
 	windows = gtk_application_get_windows (GTK_APPLICATION (priv->application));
 	if (windows)
@@ -1317,7 +1316,7 @@ static GActionEntry actions[] = {
 static void
 ch_refresh_colord_connect_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	if (!cd_client_connect_finish (CD_CLIENT (source), res, &error)) {
@@ -1338,8 +1337,8 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	GtkWidget *main_window;
 	GtkWidget *w;
 	gint retval;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GdkPixbuf) pixbuf = NULL;
 
 	/* add application menu items */
 	g_action_map_add_action_entries (G_ACTION_MAP (application),
@@ -1490,7 +1489,7 @@ main (int argc, char **argv)
 	GOptionContext *context;
 	guint i;
 	int status = 0;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */

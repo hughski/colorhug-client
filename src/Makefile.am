@@ -22,7 +22,6 @@ bin_PROGRAMS =						\
 	colorhug-refresh
 
 colorhug_cmd_SOURCES =					\
-	ch-cleanup.h					\
 	ch-main.c
 
 colorhug_cmd_LDADD =					\
@@ -47,7 +46,6 @@ colorhug_cmd_DEPENDENCIES = ch-main-rc.$(OBJEXT)
 endif
 
 colorhug_flash_SOURCES =				\
-	ch-cleanup.h					\
 	ch-markdown.c					\
 	ch-markdown.h					\
 	ch-flash-resources.c				\
@@ -85,7 +83,6 @@ colorhug_flash_DEPENDENCIES = ch-flash-rc.$(OBJEXT)
 endif
 
 colorhug_ccmx_SOURCES =					\
-	ch-cleanup.h					\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
 	ch-ccmx.c
@@ -119,7 +116,6 @@ colorhug_ccmx_DEPENDENCIES = ch-ccmx-rc.$(OBJEXT)
 endif
 
 colorhug_refresh_SOURCES =				\
-	ch-cleanup.h					\
 	ch-graph-widget.c				\
 	ch-graph-widget.h				\
 	ch-point-obj.c					\
@@ -148,7 +144,6 @@ colorhug_refresh_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
 colorhug_backlight_SOURCES =				\
-	ch-cleanup.h					\
 	ch-ambient.c					\
 	ch-ambient.h					\
 	ch-graph-widget.c				\

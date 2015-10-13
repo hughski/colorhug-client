@@ -87,10 +87,10 @@ AC_SUBST(WARNINGFLAGS_C)
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.31.10 gobject-2.0 gmodule-2.0 gio-2.0 >= 2.25.9)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44.0 gobject-2.0 gmodule-2.0 gio-2.0 >= 2.25.9)
 PKG_CHECK_MODULES(GUSB, gusb >= 0.2.2)
 PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.11.2)
-PKG_CHECK_MODULES(COLORD, colord >= 1.2.9)
+PKG_CHECK_MODULES(COLORD, colord >= 1.3.1)
 PKG_CHECK_MODULES(COLORD_GTK, colord-gtk >= 0.1.24)
 PKG_CHECK_MODULES(SOUP, libsoup-2.4)
 PKG_CHECK_MODULES(COLORHUG, colorhug >= 1.2.3)

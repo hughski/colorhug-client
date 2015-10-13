@@ -31,8 +31,6 @@
 #include <colorhug.h>
 #include <libsoup/soup.h>
 
-#include "ch-cleanup.h"
-
 typedef struct {
 	ChDeviceQueue		*device_queue;
 	GOptionContext		*context;
@@ -79,7 +77,7 @@ ch_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUt
 {
 	guint i;
 	ChUtilItem *item;
-	_cleanup_strv_free_ gchar **names = NULL;
+	g_auto(GStrv) names = NULL;
 
 	/* add each one */
 	names = g_strsplit (name, ",", -1);
@@ -151,7 +149,7 @@ ch_util_run (ChUtilPrivate *priv, const gchar *command, gchar **values, GError *
 {
 	ChUtilItem *item;
 	guint i;
-	_cleanup_string_free_ GString *string = NULL;
+	g_autoptr(GString) string = NULL;
 
 	/* find command */
 	for (i = 0; i < priv->cmd_array->len; i++) {
@@ -338,10 +336,10 @@ ch_util_remote_profile_download (ChUtilPrivate *priv, gchar **values, GError **e
 	gboolean ret;
 	guint status_code;
 	SoupURI *base_uri = NULL;
-	_cleanup_free_ gchar *filename = NULL;
-	_cleanup_free_ gchar *sha1 = NULL;
-	_cleanup_free_ gchar *uri = NULL;
-	_cleanup_object_unref_ SoupMessage *msg = NULL;
+	g_autofree gchar *filename = NULL;
+	g_autofree gchar *sha1 = NULL;
+	g_autofree gchar *uri = NULL;
+	g_autoptr(SoupMessage) msg = NULL;
 
 	/* get the remote hash from the device */
 	ch_device_queue_get_remote_hash (priv->device_queue,
@@ -426,9 +424,9 @@ ch_util_remote_profile_upload (ChUtilPrivate *priv, gchar **values, GError **err
 	guint status_code;
 	SoupBuffer *buffer = NULL;
 	SoupMultipart *multipart = NULL;
-	_cleanup_free_ gchar *data = NULL;
-	_cleanup_free_ gchar *sha1 = NULL;
-	_cleanup_object_unref_ SoupMessage *msg = NULL;
+	g_autofree gchar *data = NULL;
+	g_autofree gchar *sha1 = NULL;
+	g_autoptr(SoupMessage) msg = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -509,8 +507,8 @@ ch_util_ccmx_upload (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint status_code;
 	SoupBuffer *buffer = NULL;
 	SoupMultipart *multipart = NULL;
-	_cleanup_free_ gchar *data = NULL;
-	_cleanup_object_unref_ SoupMessage *msg = NULL;
+	g_autofree gchar *data = NULL;
+	g_autoptr(SoupMessage) msg = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 1) {
@@ -996,7 +994,7 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	GError *error_local = NULL;
 	guint16 i;
 	guint8 types;
-	_cleanup_string_free_ GString *string = NULL;
+	g_autoptr(GString) string = NULL;
 
 	string = g_string_new ("");
 	for (i = 0; i < CH_CALIBRATION_MAX; i++) {
@@ -1013,7 +1011,7 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					       &error_local);
 		if (ret) {
 			if (description[0] != '\0') {
-				_cleanup_free_ gchar *tmp = NULL;
+				g_autofree gchar *tmp = NULL;
 				tmp = ch_util_types_to_short_string (types);
 				g_string_append_printf (string, "%i\t%s [%s]\n",
 							i, description, tmp);
@@ -1044,8 +1042,8 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 {
 	gboolean ret;
 	guint16 calibration_index;
-	_cleanup_object_unref_ CdIt8 *ccmx = NULL;
-	_cleanup_object_unref_ GFile *file = NULL;
+	g_autoptr(CdIt8) ccmx = NULL;
+	g_autoptr(GFile) file = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
@@ -1422,7 +1420,7 @@ ch_util_get_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	ChSha1 remote_hash;
 	gboolean ret;
-	_cleanup_free_ gchar *tmp = NULL;
+	g_autofree gchar *tmp = NULL;
 
 	/* get from HW */
 	ch_device_queue_get_remote_hash (priv->device_queue,
@@ -1832,7 +1830,7 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 	guint16 sram_addr = 0x0000;
 	guint i;
 	guint j;
-	_cleanup_free_ guint16 *data = NULL;
+	g_autofree guint16 *data = NULL;
 
 	/* get from HW */
 	ch_device_queue_set_integral_time (priv->device_queue,
@@ -1903,10 +1901,10 @@ ch_util_get_default_device (gint device_idx, GError **error)
 {
 	guint i;
 	GUsbDevice *device_tmp;
-	_cleanup_object_unref_ GUsbContext *usb_ctx = NULL;
-	_cleanup_object_unref_ GUsbDevice *device = NULL;
-	_cleanup_ptrarray_unref_ GPtrArray *devices = NULL;
-	_cleanup_ptrarray_unref_ GPtrArray *devices_ch = NULL;
+	g_autoptr(GUsbContext) usb_ctx = NULL;
+	g_autoptr(GUsbDevice) device = NULL;
+	g_autoptr(GPtrArray) devices = NULL;
+	g_autoptr(GPtrArray) devices_ch = NULL;
 
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
@@ -1979,9 +1977,9 @@ ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 	gsize len = 0;
 	guint16 runcode_addr;
 	GMainLoop *loop = NULL;
-	_cleanup_free_ gchar *data_raw = NULL;
-	_cleanup_free_ guint8 *data = NULL;
-	_cleanup_object_unref_ GUsbDevice *device = NULL;
+	g_autofree gchar *data_raw = NULL;
+	g_autofree guint8 *data = NULL;
+	g_autoptr(GUsbDevice) device = NULL;
 
 	g_return_val_if_fail (filename != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -2332,8 +2330,8 @@ ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	gsize len = 0;
 	guint16 runcode_addr;
-	_cleanup_free_ gchar *data = NULL;
-	_cleanup_free_ guint8 *out = NULL;
+	g_autofree gchar *data = NULL;
+	g_autofree guint8 *out = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2 ||
@@ -2537,7 +2535,7 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	guint16 address;
 	guint i;
 	guint val;
-	_cleanup_free_ guint8 *data = NULL;
+	g_autofree guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) < 2) {
@@ -2670,7 +2668,7 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	gsize len;
 	guint16 address;
 	guint i;
-	_cleanup_free_ guint8 *data = NULL;
+	g_autofree guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
@@ -2792,7 +2790,7 @@ ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	gsize len;
 	guint32 address;
 	guint i;
-	_cleanup_free_ guint8 *data = NULL;
+	g_autofree guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
@@ -2848,7 +2846,7 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	gsize len;
 	guint32 address;
 	guint i;
-	_cleanup_free_ guint8 *data = NULL;
+	g_autofree guint8 *data = NULL;
 
 	/* parse */
 	if (g_strv_length (values) != 2) {
@@ -2910,8 +2908,8 @@ main (int argc, char *argv[])
 	gboolean verbose = FALSE;
 	gint device_idx = -1;
 	guint retval = 1;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *cmd_descriptions = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autofree gchar *cmd_descriptions = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */

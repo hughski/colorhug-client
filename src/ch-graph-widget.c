@@ -27,7 +27,6 @@
 #include <math.h>
 #include <cairo-svg.h>
 
-#include "ch-cleanup.h"
 #include "ch-point-obj.h"
 #include "ch-graph-widget.h"
 
@@ -754,7 +753,7 @@ static cairo_status_t
 ch_graph_widget_export_to_svg_cb (void *user_data, const unsigned char *data, unsigned int length)
 {
 	GString *str = (GString *) user_data;
-	_cleanup_free_ gchar *tmp = NULL;
+	g_autofree gchar *tmp = NULL;
 
 	tmp = g_strndup ((const gchar *) data, length);
 	g_string_append (str, tmp);

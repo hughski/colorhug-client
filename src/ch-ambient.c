@@ -27,8 +27,6 @@
 #include <colorhug.h>
 
 #include "ch-ambient.h"
-#include "ch-cleanup.h"
-
 static void	ch_ambient_finalize	(GObject     *object);
 
 #define CH_AMBIENT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CH_TYPE_AMBIENT, ChAmbientPrivate))
@@ -91,7 +89,7 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 {
 	GdkRGBA *rgba;
 	ChAmbientHelper *helper = (ChAmbientHelper *) user_data;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	if (!ch_device_queue_process_finish (CH_DEVICE_QUEUE (source), res, &error)) {
@@ -124,7 +122,7 @@ ch_ambient_file_read_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 	gboolean ret;
 	gchar buffer[256];
 	gsize size = 0;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	stream = g_file_read_finish (G_FILE (source), res, &error);
@@ -164,7 +162,7 @@ static void
 ch_ambient_get_iio_value_cb (ChAmbientHelper *helper)
 {
 	GdkRGBA *rgba;
-	_cleanup_variant_unref_ GVariant *val = NULL;
+	g_autoptr(GVariant) val = NULL;
 	ChAmbient *ambient = CH_AMBIENT (helper->ambient);
 
 	val = g_dbus_proxy_get_cached_property (ambient->priv->iio_proxy, "LightLevel");
@@ -322,7 +320,7 @@ ch_ambient_device_added_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *amb
 {
 	guint16 integral_time;
 	ChAmbientPrivate *priv = ambient->priv;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	switch (ch_device_get_mode (device)) {
 	case CH_DEVICE_MODE_FIRMWARE_ALS:
@@ -400,8 +398,8 @@ static GFile *
 ch_ambient_find_acpi_internal (void)
 {
 	const gchar *tmp;
-	_cleanup_free_ gchar *dev = NULL;
-	_cleanup_dir_close_ GDir *dir = NULL;
+	g_autofree gchar *dev = NULL;
+	g_autoptr(GDir) dir = NULL;
 	dir = g_dir_open ("/sys/class/als", 0, NULL);
 	if (dir == NULL)
 		return NULL;
@@ -420,7 +418,7 @@ iio_proxy_changed_cb (GDBusProxy *proxy,
 		      GStrv       invalidated_properties,
 		      gpointer    user_data)
 {
-	_cleanup_variant_unref_ GVariant *val_has = NULL;
+	g_autoptr(GVariant) val_has = NULL;
 	val_has = g_dbus_proxy_get_cached_property (proxy, "HasAmbientLight");
 	if (val_has == NULL || !g_variant_get_boolean (val_has))
 		return;
@@ -433,7 +431,7 @@ iio_proxy_appeared_cb (GDBusConnection *connection,
 		       gpointer user_data)
 {
 	ChAmbient *ambient = CH_AMBIENT (user_data);
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	ambient->priv->iio_proxy =
 		g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,

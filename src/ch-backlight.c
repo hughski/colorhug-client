@@ -31,7 +31,6 @@
 #include <colorhug.h>
 
 #include "ch-ambient.h"
-#include "ch-cleanup.h"
 #include "ch-graph-widget.h"
 
 typedef struct {
@@ -94,7 +93,7 @@ static void
 ch_backlight_update_ui (ChBacklightPrivate *priv)
 {
 	GtkWidget *w;
-	_cleanup_string_free_ GString *msg = g_string_new ("");
+	g_autoptr(GString) msg = g_string_new ("");
 
 	/* update UI */
 	switch (ch_ambient_get_kind (priv->ambient)) {
@@ -161,8 +160,8 @@ typedef struct {
 static void
 ch_backlight_set_brightness (ChBacklightPrivate *priv, gdouble percentage)
 {
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_variant_unref_ GVariant *retval = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GVariant) retval = NULL;
 
 	if (priv->proxy_property == NULL)
 		return;
@@ -195,9 +194,9 @@ ch_backlight_set_brightness (ChBacklightPrivate *priv, gdouble percentage)
 static gdouble
 ch_backlight_get_brightness (ChBacklightPrivate *priv)
 {
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_variant_unref_ GVariant *retval = NULL;
-	_cleanup_variant_unref_ GVariant *brightness = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GVariant) retval = NULL;
+	g_autoptr(GVariant) brightness = NULL;
 
 	if (priv->proxy_property == NULL)
 		return -1;
@@ -234,14 +233,14 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 	gdouble alpha;
 	gdouble brightness;
 	gdouble refresh;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	ch_graph_widget_clear (CH_GRAPH_WIDGET (priv->graph));
 
 	/* add lines */
 	refresh = g_settings_get_double (priv->settings, "refresh");
 	for (j = 0; j < 4; j++) {
-		_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
+		g_autoptr(GPtrArray) array = NULL;
 		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 		for (i = 0; i < priv->data->len; i++) {
 			sample = g_ptr_array_index (priv->data, i);
@@ -261,7 +260,7 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 
 	/* add historical values */
 	if (1) {
-		_cleanup_ptrarray_unref_ GPtrArray *array = NULL;
+		g_autoptr(GPtrArray) array = NULL;
 		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
 		for (i = 0; i < priv->data->len; i++) {
 			sample = g_ptr_array_index (priv->data, i);
@@ -324,10 +323,10 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 	gdouble gma;
 	gdouble rgb_max = 0.f;
 	guint i;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_free_ gchar *lux_str = NULL;
-	_cleanup_free_ gchar *rgb_str = NULL;
-//	_cleanup_free_ GdkRGBA *rgba = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autofree gchar *lux_str = NULL;
+	g_autofree gchar *rgb_str = NULL;
+//	g_autofree GdkRGBA *rgba = NULL;
 	GdkRGBA *rgba;
 
 	/* get result */
@@ -432,7 +431,7 @@ ch_backlight_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpo
 	GtkWindow *parent = NULL;
 	const gchar *authors[] = { "Richard Hughes", NULL };
 	const gchar *copyright = "Copyright \xc2\xa9 2015 Richard Hughes";
-	_cleanup_object_unref_ GdkPixbuf *logo = NULL;
+	g_autoptr(GdkPixbuf) logo = NULL;
 
 	windows = gtk_application_get_windows (GTK_APPLICATION (priv->application));
 	if (windows)
@@ -501,7 +500,7 @@ ch_backlight_proxy_property_cb (GObject *source, GAsyncResult *res, gpointer use
 {
 	ChBacklightPrivate *priv = (ChBacklightPrivate *) user_data;
 	gdouble value;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	priv->proxy_property = g_dbus_proxy_new_for_bus_finish (res, &error);
@@ -526,7 +525,7 @@ ch_backlight_property_changed_cb (GDBusProxy *proxy, GVariant *changed_propertie
 {
 	ChBacklightPrivate *priv = (ChBacklightPrivate *) user_data;
 	gdouble brightness;
-	_cleanup_variant_unref_ GVariant *value = NULL;
+	g_autoptr(GVariant) value = NULL;
 
 	/* only respond when it wasn't us modifying the value */
 	if (g_timer_elapsed (priv->last_set, NULL) < 1.f) {
@@ -552,7 +551,7 @@ static void
 ch_backlight_proxy_changed_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
 	ChBacklightPrivate *priv = (ChBacklightPrivate *) user_data;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 
 	/* get result */
 	priv->proxy_changed = g_dbus_proxy_new_for_bus_finish (res, &error);
@@ -573,7 +572,7 @@ ch_backlight_settings_changed_cb (GSettings *settings, const gchar *key, ChBackl
 {
 	GtkWidget *w;
 	gdouble value;
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 
 	if (g_strcmp0 (key, "smooth") == 0) {
 		value = g_settings_get_double (settings, key);
@@ -610,8 +609,8 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	GtkWidget *w;
 	GtkAdjustment *a;
 	gint retval;
-	_cleanup_error_free_ GError *error = NULL;
-	_cleanup_object_unref_ GdkPixbuf *pixbuf = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GdkPixbuf) pixbuf = NULL;
 
 	/* add application menu items */
 	g_action_map_add_action_entries (G_ACTION_MAP (application),
@@ -739,7 +738,7 @@ main (int argc, char **argv)
 	gboolean verbose = FALSE;
 	GOptionContext *context;
 	int status = 0;
-	_cleanup_error_free_ GError *error = NULL;
+	g_autoptr(GError) error = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */

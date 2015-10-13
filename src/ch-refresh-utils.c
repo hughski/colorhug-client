@@ -25,8 +25,6 @@
 #include <glib/gi18n.h>
 
 #include "ch-refresh-utils.h"
-#include "ch-cleanup.h"
-
 /**
  * ch_refresh_calc_average:
  **/
@@ -373,7 +371,7 @@ ch_refresh_result_add (GHashTable *results, const gchar *key, const gchar *value
 void
 ch_refresh_result_set_cct (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_cct");
 		return;
@@ -388,7 +386,7 @@ ch_refresh_result_set_cct (GHashTable *results, gdouble value)
 void
 ch_refresh_result_set_lux_white (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_lux_white");
 		return;
@@ -403,7 +401,7 @@ ch_refresh_result_set_lux_white (GHashTable *results, gdouble value)
 void
 ch_refresh_result_set_lux_black (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_lux_black");
 		return;
@@ -418,7 +416,7 @@ ch_refresh_result_set_lux_black (GHashTable *results, gdouble value)
 void
 ch_refresh_result_set_srgb (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_coverage_srgb");
 		return;
@@ -433,7 +431,7 @@ ch_refresh_result_set_srgb (GHashTable *results, gdouble value)
 void
 ch_refresh_result_set_adobergb (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_coverage_adobergb");
 		return;
@@ -448,7 +446,7 @@ ch_refresh_result_set_adobergb (GHashTable *results, gdouble value)
 void
 ch_refresh_result_set_refresh (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_refresh");
 		return;
@@ -463,7 +461,7 @@ ch_refresh_result_set_refresh (GHashTable *results, gdouble value)
 void
 ch_refresh_result_set_gamma (GHashTable *results, gdouble value)
 {
-	_cleanup_free_ gchar *str = NULL;
+	g_autofree gchar *str = NULL;
 	if (value <= 0.f) {
 		g_hash_table_remove (results, "label_gamma");
 		return;
