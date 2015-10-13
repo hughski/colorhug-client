@@ -1044,7 +1044,7 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 {
 	gboolean ret;
 	guint16 calibration_index;
-	_cleanup_ptrarray_unref_ CdIt8 *ccmx = NULL;
+	_cleanup_object_unref_ CdIt8 *ccmx = NULL;
 	_cleanup_object_unref_ GFile *file = NULL;
 
 	/* parse */
