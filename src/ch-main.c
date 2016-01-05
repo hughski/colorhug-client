@@ -2323,6 +2323,57 @@ ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error
 }
 
 /**
+ * ch_util_set_crypto_key:
+ **/
+static gboolean
+ch_util_set_crypto_key (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	guint32 keys[4] = {0x0, 0x0, 0x0, 0x0};
+	guint i;
+	guint key_len;
+
+	/* check args */
+	if (g_strv_length (values) != 1) {
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expect 'key'");
+		return FALSE;
+	}
+
+	/* too long */
+	key_len = strlen (values[0]);
+	if (key_len != 32) {
+		g_set_error (error, 1, 0,
+			     "Key string too long at %i chars, max 16",
+			     key_len);
+		return FALSE;
+	}
+
+	/* parse 4x32b values */
+	for (i = 0; i < 4; i++) {
+		gchar buf[] = "xxxxxxxx";
+		gchar *endptr;
+		guint64 tmp;
+
+		/* copy to 4-char buf (with NUL) */
+		memcpy (buf, values[0] + i*8, 8);
+		tmp = g_ascii_strtoull (buf, &endptr, 16);
+		if (endptr && endptr[0] != '\0') {
+			g_set_error (error, 1, 0,
+				     "Failed to parse key '%s'", values[0]);
+			return FALSE;
+		}
+		keys[3-i] = tmp;
+	}
+
+	/* success */
+	g_debug ("using XTEA key %04x%04x%04x%04x",
+		 keys[3], keys[2], keys[1], keys[0]);
+
+	/* hit hardware */
+	return ch_device_set_crypto_key (priv->device, keys, NULL, error);
+}
+
+/**
  * ch_util_inhx32_to_bin:
  **/
 static gboolean
@@ -3247,6 +3298,11 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Converts Intel HEX to BIN"),
 		     ch_util_inhx32_to_bin);
+	ch_util_add (priv->cmd_array,
+		     "set-crypto-key",
+		     /* TRANSLATORS: command description */
+		     _("Sets a secret key on the device"),
+		     ch_util_set_crypto_key);
 
 	/* sort by command name */
 	g_ptr_array_sort (priv->cmd_array,
