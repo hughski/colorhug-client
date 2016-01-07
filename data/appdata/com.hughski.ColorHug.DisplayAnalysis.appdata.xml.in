@@ -61,6 +61,10 @@
     <kudo>HiDpiIcon</kudo>
     <kudo>ModernToolkit</kudo>
   </kudos>
+  <provides>
+    <modalias>usb:v273Fp1002d*</modalias> <!-- CH+ -->
+    <modalias>usb:v273Fp1004d*</modalias> <!-- CH2 -->
+  </provides>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>
 </component>
