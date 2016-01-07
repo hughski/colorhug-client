@@ -44,6 +44,10 @@
     <kudo>HiDpiIcon</kudo>
     <kudo>ModernToolkit</kudo>
   </kudos>
+  <provides>
+    <modalias>usb:v273Fp1007d*</modalias> <!-- ALS, legacy -->
+    <modalias>usb:v273Fp1008d*</modalias> <!-- ALS, SensorHid -->
+  </provides>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>
 </component>
