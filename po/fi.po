@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 11:14+0100\n"
-"PO-Revision-Date: 2015-03-16 10:17+0000\n"
+"POT-Creation-Date: 2016-01-19 12:23+0000\n"
+"PO-Revision-Date: 2016-01-19 12:23+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: Finnish (http://www.transifex.com/projects/p/colorhug-client/language/fi/)\n"
+"Language-Team: Finnish (http://www.transifex.com/hughsie/colorhug-client/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -346,7 +346,11 @@ msgid "Using ColorHugALS device"
 msgstr ""
 
 #. TRANSLATORS: laptop ambient light sensor
-msgid "Using internal device"
+msgid "Using ACPI device"
+msgstr ""
+
+#. TRANSLATORS: windows * sensor class device
+msgid "Using sensor HID device"
 msgstr ""
 
 #. TRANSLATORS: set the backlight
@@ -835,15 +839,22 @@ msgstr ""
 msgid "Pulses"
 msgstr ""
 
-msgid "Multiple ColorHug devices are attached"
+msgid "No ColorHug devices were found"
 msgstr ""
 
-msgid "No ColorHug devices were found"
+msgid "Multiple ColorHug devices attached and invalid device index specified"
+msgstr ""
+
+msgid "Multiple ColorHug devices attached and no device index specified"
 msgstr ""
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
 msgstr "Päivitä laite?"
+
+#. TRANSLATORS: command line option
+msgid "Use this device when multiple are available"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"

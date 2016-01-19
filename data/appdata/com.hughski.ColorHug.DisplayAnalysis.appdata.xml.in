@@ -29,6 +29,14 @@
   <url type="homepage">http://www.hughski.com/</url>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
   <releases>
+    <release version="0.2.8" timestamp="1453206094">
+      <description>
+        <p>This stable release adds the following features:</p>
+        <ul>
+          <li>Add modalias strings for autoinstallation support</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.7" timestamp="1429438376">
       <description>
         <p>This stable release fixes the following bug:</p>

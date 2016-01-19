@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 11:14+0100\n"
-"PO-Revision-Date: 2015-03-21 20:32+0000\n"
-"Last-Translator: Serge Vylekzhanin <vylekzhanin@mail.ru>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/colorhug-client/language/ru/)\n"
+"POT-Creation-Date: 2016-01-19 12:23+0000\n"
+"PO-Revision-Date: 2016-01-19 12:23+0000\n"
+"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"Language-Team: Russian (http://www.transifex.com/hughsie/colorhug-client/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 msgid "_About"
 msgstr "_О программе"
@@ -347,8 +347,12 @@ msgid "Using ColorHugALS device"
 msgstr "Использование устройства ColorHugALS"
 
 #. TRANSLATORS: laptop ambient light sensor
-msgid "Using internal device"
-msgstr "Использование встроенного устройства"
+msgid "Using ACPI device"
+msgstr ""
+
+#. TRANSLATORS: windows * sensor class device
+msgid "Using sensor HID device"
+msgstr ""
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
@@ -836,15 +840,22 @@ msgstr "Время замера"
 msgid "Pulses"
 msgstr "Импульсы"
 
-msgid "Multiple ColorHug devices are attached"
-msgstr "Присоединено несколько устройств ColorHug"
-
 msgid "No ColorHug devices were found"
 msgstr "Устройства ColorHug не были найдены"
+
+msgid "Multiple ColorHug devices attached and invalid device index specified"
+msgstr ""
+
+msgid "Multiple ColorHug devices attached and no device index specified"
+msgstr ""
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
 msgstr "Прошить устройство?"
+
+#. TRANSLATORS: command line option
+msgid "Use this device when multiple are available"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"

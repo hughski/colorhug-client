@@ -12,10 +12,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 11:14+0100\n"
-"PO-Revision-Date: 2015-03-21 23:00+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German (Germany) (http://www.transifex.com/projects/p/colorhug-client/language/de_DE/)\n"
+"POT-Creation-Date: 2016-01-19 12:23+0000\n"
+"PO-Revision-Date: 2016-01-19 12:23+0000\n"
+"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"Language-Team: German (Germany) (http://www.transifex.com/hughsie/colorhug-client/language/de_DE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -349,8 +349,12 @@ msgid "Using ColorHugALS device"
 msgstr "ColorHugALS-Gerät wird verwendet"
 
 #. TRANSLATORS: laptop ambient light sensor
-msgid "Using internal device"
-msgstr "Internes Gerät wird verwendet"
+msgid "Using ACPI device"
+msgstr ""
+
+#. TRANSLATORS: windows * sensor class device
+msgid "Using sensor HID device"
+msgstr ""
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
@@ -494,13 +498,13 @@ msgstr ""
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the surface position and click 'Next'."
-msgstr ""
+msgstr "Positionieren Sie das Gerät auf der Oberfläche und klicken Sie auf \"Weiter\"."
 
 msgid "Put the photospectrometer on the screen and click 'Next'."
-msgstr "Setzen Sie das Fotospektrometer auf den Bildschirm und klicken Sie auf 'Weiter'."
+msgstr "Setzen Sie das Fotospektrometer auf den Bildschirm und klicken Sie auf \"Weiter\"."
 
 msgid "Now put the ColorHug on the screen and click 'Next' again."
-msgstr "Setzen Sie nun das ColorHug auf den Bildschirm und klicken Sie erneut auf 'Weiter'."
+msgstr "Setzen Sie nun das ColorHug auf den Bildschirm und klicken Sie erneut auf \"Weiter\"."
 
 msgid "Correction matrix failed to be generated!"
 msgstr "Korrekturmatrix konnte nicht erzeugt werden!"
@@ -838,15 +842,22 @@ msgstr "Integral"
 msgid "Pulses"
 msgstr "Impulse"
 
-msgid "Multiple ColorHug devices are attached"
-msgstr "Mehrere ColorHug-Geräte sind angeschlossen"
-
 msgid "No ColorHug devices were found"
 msgstr "Keine ColorHug-Geräte gefunden"
+
+msgid "Multiple ColorHug devices attached and invalid device index specified"
+msgstr ""
+
+msgid "Multiple ColorHug devices attached and no device index specified"
+msgstr ""
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
 msgstr "Auf das Gerät jetzt aufspielen?"
+
+#. TRANSLATORS: command line option
+msgid "Use this device when multiple are available"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"

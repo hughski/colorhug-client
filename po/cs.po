@@ -3,7 +3,8 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Cheng-Chia Tseng <pswo10680@gmail.com>, 2013
+# Jiří Vírava <appukonrad@gmail.com>, 2012
+# nijel <michal@cihar.com>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
@@ -11,70 +12,70 @@ msgstr ""
 "POT-Creation-Date: 2016-01-19 12:23+0000\n"
 "PO-Revision-Date: 2016-01-19 12:23+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/hughsie/colorhug-client/language/zh_TW/)\n"
+"Language-Team: Czech (http://www.transifex.com/hughsie/colorhug-client/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_TW\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 msgid "_About"
-msgstr "關於(_A)"
+msgstr ""
 
 msgid "_Quit"
-msgstr "退出(_Q)"
+msgstr ""
 
 #. The surrounding light level
 msgid "Ambient"
-msgstr "周遭"
+msgstr ""
 
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
 msgid "Color"
-msgstr "色彩"
+msgstr "Barva"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
-msgstr "平滑處理"
+msgstr ""
 
 #. The rate that we
 msgid "Refresh"
-msgstr "重新整理"
+msgstr ""
 
 #. The amount the sensor can influence the brightness
 msgid "Weight"
-msgstr "權重"
+msgstr ""
 
 #. Backlight up 5%
 msgid "Up"
-msgstr "上"
+msgstr ""
 
 #. Backlight down 5%
 msgid "Down"
-msgstr "下"
+msgstr ""
 
 msgid "_Import file"
-msgstr "匯入檔案(_I)"
+msgstr ""
 
 msgid "_Generate CCMX"
-msgstr "生成 CCMX(_G)"
+msgstr ""
 
 msgid "_Help"
-msgstr "求助(_H)"
+msgstr ""
 
 msgid "Please insert your ColorHug device."
-msgstr "請插入您的 ColorHug 裝置。"
+msgstr ""
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
 msgid "Selecting a correction matrix maximises the accuracy of the ColorHug."
-msgstr "選取可強化 ColorHug 精準度的校準矩陣。"
+msgstr "Výběr opravné matice zvýší přesnost ColorHugu."
 
 #. Only advanced users have to change this...
 msgid ""
 "Using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "大多數使用者使用預設矩陣都能得到可接受的校準結果。"
+msgstr "Použití výchozí matice by mělo být pro většinu uživatelů dostatečné."
 
 #. Default liquid crystal display matrix
 msgid "LCD"
@@ -86,263 +87,263 @@ msgstr "CRT"
 
 #. Default projector (beamer etc) matrix
 msgid "Projector"
-msgstr "投影機"
+msgstr "Projektor"
 
 #. Default light emitting diode matrix
 msgid "LED"
 msgstr "LED"
 
 msgid "Select the screen to use when generating the color calibration matrix."
-msgstr "選取製作色彩校準矩陣時要使用的螢幕。"
+msgstr ""
 
 msgid "Do not remove the device whilst measurement is in progress"
-msgstr "請不要在裝置測量之時移除裝置"
+msgstr ""
 
 msgid "Save file"
-msgstr "儲存檔案"
+msgstr "Uložit soubor"
 
 msgid ""
 "Share with\n"
 "the community"
-msgstr "與社群\n分享"
+msgstr "Sdílejte\ns komunitou"
 
 msgid "Firmware version unknown"
-msgstr "韌體版本未知"
+msgstr "Neznámá verze firmwaru"
 
 #. We are flashing the device, so we have to be careful
 msgid "Do not unplug the device and do not turn off the computer."
-msgstr "請不要拔除裝置，也不要關閉電腦。"
+msgstr "Nevypínejte ani neodpojujte zařízení od počítače."
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
-msgstr "更新"
+msgstr "Aktualizovat"
 
 msgid "Flash new firmware to the device"
-msgstr "刷寫新韌體至裝置"
+msgstr "Nahrát do zařízení nový firmware"
 
 msgid "page0"
-msgstr "第0頁"
+msgstr ""
 
 msgid "Your Score"
-msgstr "您的分數"
+msgstr ""
 
 msgid "Display"
-msgstr "顯示器"
+msgstr ""
 
 msgid "USB"
-msgstr "USB"
+msgstr ""
 
 msgid "Black-to-White"
-msgstr "黑到白"
+msgstr ""
 
 msgid "White-to-Black"
-msgstr "白到黑"
+msgstr ""
 
 msgid "Refresh Rate"
-msgstr "重新整理速率"
+msgstr ""
 
 msgid "Color Temperature"
-msgstr "色溫"
+msgstr ""
 
 msgid "White Luminance"
-msgstr "白光輝度"
+msgstr ""
 
 msgid "Black Luminance"
-msgstr "黑光輝度"
+msgstr ""
 
 msgid "sRGB Coverage"
-msgstr "sRGB 覆蓋率"
+msgstr ""
 
 msgid "AdobeRGB Coverage"
-msgstr "AdobeRGB 覆蓋率"
+msgstr ""
 
 msgid "Native Gamma"
-msgstr "原生伽瑪"
+msgstr ""
 
 msgid "page1"
-msgstr "第1頁"
+msgstr ""
 
 msgid "_Export results…"
-msgstr "匯出結果(_E)…"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Backlight Utility"
-msgstr "ColorHug 背光公用程式"
+msgstr ""
 
 msgid "Sample the ambient light level to control the backlight"
-msgstr "取樣周遭光程度來控制背光"
+msgstr ""
 
 msgid ""
 "The ColorHug backlight utility uses the ColorHug device to alter the "
 "backlight level to compensate for the changing ambient light level."
-msgstr "ColorHug 背光公用程式使用 ColorHug 裝置來改變背光程度以補償周遭光程度的變動。"
+msgstr ""
 
 msgid "The ambient light control utility"
-msgstr "周遭光控制公用程式"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug CCMX Loader"
-msgstr "ColorHug CCMX 載入器"
+msgstr "ColorHug nahrávač CCMX"
 
 msgid "Modify the calibration matrices on the ColorHug device"
-msgstr "修改 ColorHug 裝置上的校準矩陣"
+msgstr "Upravit kalibrační matici zařízení ColorHug"
 
 msgid ""
 "The ColorHug CCMX loader tool automatically downloads and installs user-"
 "submitted device correction matrices onto your Hughski ColorHug display "
 "colorimeter."
-msgstr "ColorHug CCMX 載入器工具會自動下載使用者提交的裝置校正矩陣，並安裝至您的 Hughski ColorHug 顯示器色度計上。"
+msgstr ""
 
 msgid ""
 "Selecting a correction matrix maximises the accuracy of the ColorHug but "
 "using the default matrix will give most users an acceptable calibration "
 "result."
-msgstr "選取校正矩陣最能提昇 ColorHug 的精確度，而使用預設矩陣可使大多數使用者取得可接受的校正成果。"
+msgstr ""
 
 msgid "The correction matrices on the device"
-msgstr "裝置使用的校準矩陣"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr "ColorHug 顯示器分析"
+msgstr ""
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
-msgstr "隨著時間對顯示器採樣以觀察 PWM、輸入延遲、畫面重整瑕疵"
+msgstr ""
 
 msgid ""
 "The ColorHug display analysis tool can be used to profile display and GPU "
 "devices. It will measure various kinds of latency, e.g. black-to-white and "
 "input-lag as well as reporting color information and colorspace gamut "
 "volume."
-msgstr "ColorHug 顯示器分析工具可以用來評測顯示器與 GPU 裝置。它能測量許多種延遲，例如：黑到白與輸入遲滯；還能報告色彩資訊與色彩空間的色域範圍。"
+msgstr ""
 
 msgid "Results can be exported as standalone HTML files and shared."
-msgstr "可以將結果匯出為獨立的 HTML 檔並分享。"
+msgstr ""
 
 msgid "Main application window"
-msgstr "主應用程式視窗"
+msgstr ""
 
 msgid "Display analysis results"
-msgstr "顯示器分析結果"
+msgstr ""
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug Firmware Updater"
-msgstr "ColorHug 韌體更新器"
+msgstr "ColorHug Firmware aktualizátor"
 
 #. TRANSLATORS: application description
 msgid "Update the firmware on the ColorHug colorimeter"
-msgstr "更新 ColorHug 色度計上的韌體"
+msgstr "Aktualizuj firmware na ColorHug kolorimetru"
 
 msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr "ColorHug 快閃記憶更新工具可自動將新版韌體下載至您的 Hughski ColorHug 顯示器色度計上。新發行的韌體可增添新功能、修正臭蟲、改善精準度。"
+msgstr ""
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
 " the device."
-msgstr "使用指令列引數，此工具也可以將自訂的快閃用檔案刷寫至裝置中。"
+msgstr ""
 
 msgid "Application window showing new firmware detected"
-msgstr "應用程式視窗顯示有偵測到新軔體"
+msgstr ""
 
 msgid "Applying updated firmware to the ColorHug device"
-msgstr "正將更新後的韌體套用到 ColorHug 裝置"
+msgstr ""
 
 msgid "ColorHug Documentation"
-msgstr "ColorHug 文件"
+msgstr ""
 
 msgid "Documentation for the ColorHug display colorimeter"
-msgstr "ColorHug 顯示器色度計的文件"
+msgstr ""
 
 msgid "Display;Backlight;Ambient;ColorHug;"
-msgstr "Display;Backlight;Ambient;ColorHug;顯示;背光;周遭;環境"
+msgstr ""
 
 msgid "CCMX Loader"
-msgstr "CCMX 載入器"
+msgstr "Nahrávač CCMX"
 
 msgid "CCMX;ColorHug;"
-msgstr "CCMX;ColorHug;"
+msgstr ""
 
 msgid "Whether we should update to test firmware"
-msgstr "是否應更新至測試用韌體"
+msgstr "Jestli se má aktualizovat na testovací firmware"
 
 msgid ""
 "Whether we should show test firmware and allow the user to update to it."
-msgstr "是否應顯示測用韌體並允許使用者更新"
+msgstr "Jestli se má uživateli nabízet testovací firmware."
 
 msgid "The remote location of ColorHug files"
-msgstr "ColorHug 檔案的遠端位置"
+msgstr ""
 
 msgid ""
 "The location of where firmware updates and calibration files are stored."
-msgstr "韌體的更新與校準用檔案儲存之處。"
+msgstr ""
 
 msgid "Zoom in the graph to show only one pulse"
-msgstr "拉近圖表以僅只顯示單一脈衝"
+msgstr ""
 
 msgid "Whether the refresh graph should be zoomed to show one pulse only."
-msgstr "重新整理圖表是否應拉近以僅只顯示單一脈衝。"
+msgstr ""
 
 msgid "Show all RGB channels on the graph"
-msgstr "顯示圖表上的所有 RGB 通道"
+msgstr ""
 
 msgid "Whether all captured channels should be shown."
-msgstr "是否應顯示所有捕捉到的通道。"
+msgstr ""
 
 msgid "Hide backlight flicker on the graph"
-msgstr "隱藏圖表中的背光過濾"
+msgstr ""
 
 msgid "Whether the backlight PWM should be removed."
-msgstr "移除背光 PWM。"
+msgstr ""
 
 msgid "The integration time for each sample"
-msgstr "每次取樣的整合時間"
+msgstr ""
 
 msgid "Set the integration time in seconds for the ambient light sample."
-msgstr "為周遭光採樣設定整合時間 (單位為秒)。"
+msgstr ""
 
 msgid "Backlight smoothing factor"
-msgstr "背光平滑處理係數"
+msgstr ""
 
 msgid "The amount of backlight smoothing for ambient light changes."
-msgstr "周遭光改變時的背光平滑處理量。"
+msgstr ""
 
 msgid "The refresh rate between samples"
-msgstr "採樣之間的重新整理率"
+msgstr ""
 
 msgid "The refresh rate in seconds between samples."
-msgstr "採樣之間的重新整理率，單位為秒。"
+msgstr ""
 
 msgid "The gamma value for ambient light"
-msgstr "周遭光的 Gamma 值"
+msgstr ""
 
 msgid "The gamma values to use when scaling ambient light samples."
-msgstr "當縮放周遭光採樣時使用的 Gamma 值。"
+msgstr ""
 
 msgid "Display;Analysis;ColorHug;"
-msgstr "Display;Analysis;ColorHug;顯示器;分析;"
+msgstr ""
 
 msgid "Firmware Updater"
-msgstr "韌體更新器"
+msgstr "Aktualizátor firmwaru"
 
 msgid "Flash;Firmware;ColorHug;"
-msgstr "Flash;Firmware;ColorHug;韌體;刷寫;"
+msgstr ""
 
 #. TRANSLATORS: no device is attached
 msgid "Please insert your ColorHugALS device."
-msgstr "請插入您的 ColorHugALS 裝置。"
+msgstr ""
 
 #. TRANSLATORS: our device
 msgid "Using ColorHugALS device"
-msgstr "正使用 ColorHugALS 裝置"
+msgstr ""
 
 #. TRANSLATORS: laptop ambient light sensor
 msgid "Using ACPI device"
@@ -354,492 +355,492 @@ msgstr ""
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
-msgstr "無法設定亮度"
+msgstr ""
 
 #. TRANSLATORS: get the backlight
 msgid "Failed to get brightness"
-msgstr "無法取得亮度"
+msgstr ""
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Backlight Utility"
-msgstr "關於 ColorHug 背光公用程式"
+msgstr ""
 
 #. TRANSLATORS: application description
 msgid "Sample the ambient light to control the backlight."
-msgstr "採樣周遭光以控制背光。"
+msgstr ""
 
 msgid "translator-credits"
-msgstr "Cheng-Chia Tseng <pswo10680@gmail.com>, 2014-2015."
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Show extra debugging information"
-msgstr "顯示額外的除錯用資訊"
+msgstr "Zobrazit "
 
 #. TRANSLATORS: user has sausages for fingers
 msgid "Failed to parse command line options"
-msgstr "解析指令列選項失敗"
+msgstr "Nepodařilo se zpracovat parametry příkazové řádky"
 
 msgid "Failed to create directory"
-msgstr "無法建立目錄"
+msgstr "Nepodařilo se vytvořit složku"
 
 msgid "Failed to download file"
-msgstr "下載檔案失敗"
+msgstr "Nepodařilo se stáhnout soubor"
 
 msgid "File has zero size"
-msgstr "檔案大小為零"
+msgstr "Soubor má nulovou velikost"
 
 msgid "Failed to load data"
-msgstr "無法載入資料"
+msgstr "Nepodařilo se načíst data"
 
 #. TRANSLATORS: the request failed
 msgid "Failed to contact ColorHug"
-msgstr "與 ColorHug 溝通失敗"
+msgstr "Nepodařilo se spojení s ColorHug"
 
 #. TRANSLATORS: internal error when setting up HTTP request
 msgid "Failed to setup message"
-msgstr "無法設置訊息"
+msgstr "Nepodařilo se připravit HTTP požadavek"
 
 #. TRANSLATORS: device is broken and needs fixing
 msgid "The ColorHug is missing the factory calibration values."
-msgstr "ColorHug 遺失出廠校準值。"
+msgstr "ColorHugu chybí výchozí nastavení kalibrace."
 
 #. TRANSLATORS: the device is missing
 #. * it's calibration matrix
 msgid "Device calibration error"
-msgstr "裝置校準錯誤"
+msgstr "Chyba při kalibraci zařízení"
 
 #. TRANSLATORS: this is a button
 msgid "Ignore"
-msgstr "忽略"
+msgstr "Ignorovat"
 
 #. TRANSLATORS: this is a button
 msgid "Repair"
-msgstr "修復"
+msgstr "Opravit"
 
 #. TRANSLATORS: device is broken and needs fixing
 msgid "Update the factory calibration values?"
-msgstr "是否要更新出廠校準值？"
+msgstr "Aktualizovat výchozí hodnoty kalibrace?"
 
 #. TRANSLATORS: the device has an
 #. * updated calibration matrix
 msgid "Device calibration update"
-msgstr "裝置校準更新"
+msgstr "Aktualizace kalibrace zařízení"
 
 #. TRANSLATORS: this is a button
 msgid "Cancel"
-msgstr "取消"
+msgstr "Zrušit"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to get the calibration data"
-msgstr "無法取得校準資料"
+msgstr "Nepodařilo se načíst informace o kalibraci."
 
 #. TRANSLATORS: dialog for chosing the correction matrix
 msgid "Select correction matrix"
-msgstr "選取校準矩陣"
+msgstr "Vyberte opravnou matici"
 
 msgid "_Cancel"
-msgstr "取消(_C)"
+msgstr "_Zrušit"
 
 msgid "_Open"
-msgstr "開啟(_O)"
+msgstr "_Otevřít"
 
 #. TRANSLATORS: filter name on the file->open dialog
 msgid "Correction matrices"
-msgstr "校準矩陣"
+msgstr "Opravné matice"
 
 #. TRANSLATORS: the calibration map is an array that
 #. * maps a specific matrix to a display type
 msgid "Failed to set the calibration map"
-msgstr "無法設定校準映射"
+msgstr "Selhalo nastavení kalibrační matice"
 
 msgid "Failed to set the calibration matrix"
-msgstr "設定校準矩陣失敗"
+msgstr "Selhalo nastavení kalibrační matice"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to open device"
-msgstr "無法開啟裝置"
+msgstr "Nepodařilo se otevřít zařízení"
 
 #. TRANSLATORS: get the calibration matrices from the device
 msgid "Getting calibration from device…"
-msgstr "正從裝置取得校準..."
+msgstr ""
 
 #. TRANSLATORS: You can only store 64 calibration
 #. * matrices on the device at any one time
 msgid "No space left on device"
-msgstr "裝置剩餘空間不足"
+msgstr "Na zařízení již není žádné volné místo"
 
 msgid "All 64 slots are used up."
-msgstr "全部的 64 槽皆用罄。"
+msgstr "Všech 64 slotů je zaplněno."
 
 #. TRANSLATORS: file read error when reading
 #. * local firmware file
 msgid "Failed to load file"
-msgstr "無法載入檔案"
+msgstr "Nepodařilo se načíst soubor"
 
 msgid "Failed to write file"
-msgstr "無法寫入檔案"
+msgstr "Nepodařilo se zapsat soubor"
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of CCMX files"
-msgstr "無法取得 CCMX 檔案清單"
+msgstr ""
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
-msgstr "韌體清單大小為零"
+msgstr "Seznam firmware má nulovou velikost"
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the calibrate position and click 'Next'."
-msgstr "將裝置設至校準位置，接著按下「下一步」。"
+msgstr ""
 
 #. TRANSLATORS: the user needs to change something on the device
 msgid "Set the device to the surface position and click 'Next'."
-msgstr "將裝置設至表面位置，接著按下「下一步」。"
+msgstr ""
 
 msgid "Put the photospectrometer on the screen and click 'Next'."
-msgstr "將光譜儀放在螢幕上，接著按下「下一步」。"
+msgstr ""
 
 msgid "Now put the ColorHug on the screen and click 'Next' again."
-msgstr "現在請將 ColorHug 貼在螢幕上，接著再次按下「下一步」。"
+msgstr ""
 
 msgid "Correction matrix failed to be generated!"
-msgstr "校準矩陣製作失敗！"
+msgstr ""
 
 msgid "Correction matrix successfully generated!"
-msgstr "校準矩陣製作成功！"
+msgstr ""
 
 msgid "_Save"
-msgstr "儲存(_S)"
+msgstr "_Uložit"
 
 #. TRANSLATORS: get the list of firmwares from the internet
 msgid "Getting latest data from the web…"
-msgstr "正從網路取得最新資料..."
+msgstr ""
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug CCMX Loader"
-msgstr "關於 ColorHug CCMX 載入器"
+msgstr ""
 
 #. TRANSLATORS: application description
 msgid "Modify the calibration matrices on the ColorHug device."
-msgstr "修改 ColorHug 裝置上的校準矩陣。"
+msgstr ""
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing data to ColorHug device"
-msgstr "正將資料寫入 ColorHug 裝置"
+msgstr ""
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
-msgstr "無法設置網路"
+msgstr "Nepodařilo se nastavit síť"
 
 #. TRANSLATORS: command line option
 msgid "Repair the factory calibration matrix"
-msgstr "修復出廠校準矩陣"
+msgstr "Opravit kalibrační matici"
 
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug CCMX loader"
-msgstr "ColorHug CCMX 載入器"
+msgstr "Nahrávač ColorHug CCMX"
 
 msgid "ColorHug Updater"
-msgstr "ColorHug 更新器"
+msgstr "ColorHug aktualizace"
 
 msgid "Calibration Failed"
-msgstr "校準失敗"
+msgstr "Kalibrace selhala"
 
 #. TRANSLATORS: we can only set the flash success
 #. * flag when the *new* firmware is running
 msgid "Failed to set the flash success true"
-msgstr "無法將 flash success 設為 true"
+msgstr "Nepodařilo se zaznamenat úspěšné nahrání"
 
 #. TRANSLATORS: we've uploaded new firmware
 msgid "Device successfully updated"
-msgstr "裝置成功更新"
+msgstr "Zařízení bylo úspěšně aktualizováno"
 
 msgid "Calibration Completed"
-msgstr "校準完成"
+msgstr "Kalibrace dokončena"
 
 #. TRANSLATORS: tell the hardware we succeeded
 msgid "Completing firmware upgrade…"
-msgstr "正在完成韌體升級…"
+msgstr ""
 
 #. TRANSLATORS: the device failed to boot up with the
 #. * new firmware
 msgid "Failed to startup the ColorHug"
-msgstr "ColorHug 初始啟動失敗"
+msgstr "Nepodařilo se zapnout ColorHug"
 
 #. TRANSLATORS: the new firmware will not load
 msgid "Failed to boot the ColorHug"
-msgstr "ColorHug 開機失敗"
+msgstr "Nepodařilo se nabootovat ColorHug"
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to verify the firmware"
-msgstr "韌體核驗失敗"
+msgstr "Nepodařilo se ověřit firmware."
 
 #. TRANSLATORS: boot into the new firmware
 msgid "Starting the new firmware…"
-msgstr "正在啟動新韌體..."
+msgstr ""
 
 #. TRANSLATORS: tell the device the firmware is no
 #. * longer known working
 msgid "Failed to write the firmware"
-msgstr "韌體寫入失敗"
+msgstr "Nepodařilo se zapsat firmware."
 
 #. TRANSLATORS: now we've written the firmware, we have to
 #. * verify it before we tell the device it was successfull
 msgid "Verifying new firmware…"
-msgstr "正在核驗新韌體..."
+msgstr "Ověřuji nový firmware..."
 
 #. TRANSLATORS: now write the new firmware chunks
 msgid "Writing new firmware…"
-msgstr "正在寫入新韌體..."
+msgstr "Zapisuji nový firmware..."
 
 #. TRANSLATORS: the device failed to come back alive
 msgid "Failed to reboot the ColorHug"
-msgstr "ColorHug 重新開機失敗"
+msgstr "Nepodařilo se rebootovat ColorHug"
 
 #. TRANSLATORS: we restart the device in bootloader mode
 msgid "Failed to reset the ColorHug"
-msgstr "ColorHug 重設失敗"
+msgstr "Nepodařilo se restartovat ColorHug"
 
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr "錯誤的韌體類型！"
+msgstr ""
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
-msgstr "正在起始韌體升級…"
+msgstr ""
 
 #. TRANSLATORS: failed to get the firmware file
 msgid "Failed to get firmware"
-msgstr "無法取得韌體"
+msgstr "Nepodařilo se získat firmware"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has zero size"
-msgstr "韌體大小為零"
+msgstr "Firmware má nulovou velikost"
 
 #. TRANSLATORS: the server gave us an invalid file
 msgid "Firmware has incorrect checksum"
-msgstr "韌體的核驗總和碼不正確"
+msgstr "Firmware má chybný kontrolní součet"
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 msgid "Warnings about this update"
-msgstr "有關此更新的警告"
+msgstr "Varování o této aktualizaci"
 
 #. TRANSLATORS: this is the button text to continue the flash
 #. * after showing the user a warning
 msgid "Flash anyway"
-msgstr "無論如何都刷寫"
+msgstr "Přesto nahrát"
 
 #. TRANSLATORS: this is the button text to abort the flash process
 msgid "Do not flash"
-msgstr "不要刷寫"
+msgstr "Nenahrávat"
 
 #. TRANSLATORS: downloading the firmware binary file from a
 #. * remote server
 msgid "Downloading update…"
-msgstr "正在下載更新..."
+msgstr "Stahuji aktualizaci..."
 
 #. TRANSLATORS: the user is already running the latest firmware
 msgid "There are no updates available."
-msgstr "沒有可用的更新。"
+msgstr "Žádné aktualizace nejsou k dispozici."
 
 #. TRANSLATORS: the user is running an old firmware version
 msgid "A firmware update is available."
-msgstr "有可用的韌體更新。"
+msgstr "Aktualizace firmwaru je k dispozici."
 
 #. TRANSLATORS: the HTTP request failed
 msgid "Failed to get the listing of firmware files"
-msgstr "無法取得韌體檔案清單"
+msgstr "Nepodařilo se získat seznam souborů s firmware"
 
 #. TRANSLATORS: we got an invalid response from the server
 msgid "The firmware listing has zero size"
-msgstr "韌體列出動作大小為零"
+msgstr "Seznam firmware má nulovou velikost"
 
 #. TRANSLATORS: the XML file was corrupt
 msgid "Failed to parse the update metadata"
-msgstr "無法解析更新的中介資料"
+msgstr "Nepodařilo se zpracovat informace o aktualizaci"
 
 #. TRANSLATORS: this is test firmware
 msgid "This is a test firmware not intended for general release."
-msgstr "這是測試用韌體，不是一般發行版。"
+msgstr "Toto je testovací verze firmware a není určená pro běžné používání."
 
 #. TRANSLATORS: all bets are off
 msgid "This firmware has not been widely tested and may not work as expected."
-msgstr "韌體未受廣泛測試，運作上可能不如預期。"
+msgstr "Firmware nebyl dostatečně otestován a nemusí fungovat správně."
 
 #. TRANSLATORS: pre-production hardware
 msgid "Prototype ColorHug Detected"
-msgstr "偵測到 ColorHug 原型機"
+msgstr "Zjištěn prototyp ColorHug"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug Detected"
-msgstr "偵測到 ColorHug"
+msgstr "Zjištěn ColorHug"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr "偵測到 ColorHug2"
+msgstr ""
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr "偵測到 ColorHug+"
+msgstr ""
 
 #. TRANSLATORS: ALS stands for ambient light sensor
 msgid "ColorHugALS Detected"
-msgstr "偵測到 ColorHugALS"
+msgstr ""
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
-msgstr "偵測到模擬的 ColorHug"
+msgstr "Zjištěn emulovaný ColorHug"
 
 #. TRANSLATORS: new-issue hardware
 #, c-format
 msgid "ColorHug v%i Detected"
-msgstr "偵測到 ColorHug v%i"
+msgstr "Zjištěn v%i ColorHug"
 
 #. TRANSLATORS: the device is in bootloader mode
 msgid "Bootloader version"
-msgstr "開機載入器版本"
+msgstr "Verze bootloaderu"
 
 #. TRANSLATORS: the device is in firmware mode
 msgid "Firmware version"
-msgstr "韌體版本"
+msgstr "Firmware verze"
 
 #. TRANSLATORS: Check for newer version of the firmware compared
 #. * to what is installed on the device
 msgid "Checking for updates…"
-msgstr "正在檢查更新..."
+msgstr "Zjišťuji aktualizace..."
 
 #. TRANSLATORS: we've specified a local file
 msgid "Flashing firmware file…"
-msgstr "正在刷寫韌體檔案..."
+msgstr ""
 
 #. TRANSLATORS: request the firmware version from the device
 msgid "Getting firmware version…"
-msgstr "正在取得韌體更新..."
+msgstr "Zjišťuji verzi firmware..."
 
 #. TRANSLATORS: the long details about all the updates that
 #. * are newer than the version the user has installed
 msgid "Update details"
-msgstr "更新細節"
+msgstr "Detaily aktualizace"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Firmware Updater"
-msgstr "關於 ColorHug 韌體更新器"
+msgstr ""
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
-msgstr "查看更新的相關細節"
+msgstr "Zobrazit podrobnosti o této aktualizaci"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing firmware to ColorHug device"
-msgstr "正將韌體寫入 ColorHug 裝置"
+msgstr ""
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
-msgstr "刷寫特定韌體檔案"
+msgstr "Nahrát soubor s firmware"
 
 #. TRANSLATORS: a program to update the firmware flash on the device
 msgid "ColorHug Flash Program"
-msgstr "ColorHug Flash 程式"
+msgstr "Flashovací program pro ColorHug"
 
 #. Translators: This is %i days
 #, c-format
 msgid "%id"
-msgstr "%i天"
+msgstr ""
 
 #. Translators: This is %i days %02i hours
 #, c-format
 msgid "%id%02ih"
-msgstr "%i天%02i小時"
+msgstr ""
 
 #. Translators: This is %i hours
 #, c-format
 msgid "%ih"
-msgstr "%i小時"
+msgstr ""
 
 #. Translators: This is %i hours %02i minutes
 #, c-format
 msgid "%ih%02im"
-msgstr "%i小時%02i分鐘"
+msgstr ""
 
 #. Translators: This is %2i minutes
 #, c-format
 msgid "%2im"
-msgstr "%2i分鐘"
+msgstr ""
 
 #. Translators: This is %2i minutes %02i seconds
 #, c-format
 msgid "%2im%02i"
-msgstr "%2i分鐘%02i秒"
+msgstr ""
 
 #. TRANSLATORS: This is ms
 #, c-format
 msgid "%.0fms"
-msgstr "%.0f毫秒"
+msgstr ""
 
 #. Translators: This is %2i seconds
 #, c-format
 msgid "%2is"
-msgstr "%2i秒"
+msgstr ""
 
 #. TRANSLATORS: This is %i Percentage
 #, c-format
 msgid "%i%%"
-msgstr "%i%%"
+msgstr ""
 
 #. TRANSLATORS: This is %.1f Watts
 #, c-format
 msgid "%.1fW"
-msgstr "%.1fW"
+msgstr ""
 
 #. TRANSLATORS: This is %.1f Volts
 #, c-format
 msgid "%.1fV"
-msgstr "%.1fV"
+msgstr ""
 
 #. TRANSLATORS: This is %.1f nanometers
 #, c-format
 msgid "%.0f nm"
-msgstr "%.0f nm"
+msgstr ""
 
 #. TRANSLATORS: this is a command alias
 #, c-format
 msgid "Alias to %s"
-msgstr "%s 的別名"
+msgstr "Zástupce pro %s"
 
 #. TRANSLATORS: error message
 msgid "Command not found, valid commands are:"
-msgstr "找不到指令，有效的指令有："
+msgstr "Příkaz nenalezen, platné příkazy jsou:"
 
 #. TRANSLATORS: wait for user to press the device into a desk…
 msgid "Ensure the ColorHug aperture is blocked"
-msgstr "請確認 ColorHug 鏡頭是否被遮擋"
+msgstr "Ujistěte se, že ColorHug clona je zablokována"
 
 #. TRANSLATORS: ask before we set these
 msgid "Set these values as the dark offsets"
-msgstr "將這些值設為暗偏移"
+msgstr "Nastaví tyto hodnoty jako posun tmavých barev"
 
 #. TRANSLATORS: this is the sensor scale factor
 msgid "Multiplier"
-msgstr "倍增器"
+msgstr "Násobitel"
 
 #. TRANSLATORS: this is the measurement mode
 msgid "Measure mode"
-msgstr "測量模式"
+msgstr "Režim měření"
 
 #. TRANSLATORS: this is the sensor sample time
 msgid "Integral"
-msgstr "整數"
+msgstr "Vzorkovací doba"
 
 #. TRANSLATORS: this is the number of pulses detected
 msgid "Pulses"
-msgstr "脈衝"
+msgstr "Počet vzorků"
 
 msgid "No ColorHug devices were found"
-msgstr "找不到 ColorHug 裝置"
+msgstr "Nebylo nalezeno žádné zařízení ColorHug"
 
 msgid "Multiple ColorHug devices attached and invalid device index specified"
 msgstr ""
@@ -849,7 +850,7 @@ msgstr ""
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
-msgstr "是否要刷寫裝置？"
+msgstr "Aktualizovat zařízení?"
 
 #. TRANSLATORS: command line option
 msgid "Use this device when multiple are available"
@@ -857,316 +858,316 @@ msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"
-msgstr "取得感測器色彩過濾器"
+msgstr "Načíst barevné filtry čidla"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor color filter"
-msgstr "設定感測器色彩過濾器"
+msgstr "Nastaví barevný filtr senzoru"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor multiplier"
-msgstr "取得感測器倍增器"
+msgstr "Načíst násobitel čidla"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor multiplier"
-msgstr "設定感測器倍增器"
+msgstr "Nastaví násobitel senzoru"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor sample read time"
-msgstr "取得感測器樣本讀取時間"
+msgstr "Načte dobu čtení vzorku"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor sample read time"
-msgstr "設定感測器樣本讀取時間"
+msgstr "Nastaví dobu čtení vzorku"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor firmware version"
-msgstr "取得感測器韌體版本"
+msgstr "Získá verzi firmwaru senzoru"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration matrix"
-msgstr "取得感測器校準矩陣"
+msgstr "Načíst kalibrační matici čidla"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix"
-msgstr "設定感測器校準矩陣"
+msgstr "Nastavit kalibrační matici čidla"
 
 #. TRANSLATORS: command description
 msgid "Clear the sensor calibration matrix"
-msgstr "清除感測器校準矩陣"
+msgstr "Obnovit kalibrační matici senzoru"
 
 #. TRANSLATORS: command description
 msgid "List the sensor calibration matrices"
-msgstr "列出感測器校準矩陣"
+msgstr "Vypsat kalibrační matice senzoru"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration matrix from a CCMX file"
-msgstr "以 CCMX 檔設定感測器校準矩陣"
+msgstr "Nastaví kalibrační matici senzoru ze souboru CCMX"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor serial number"
-msgstr "取得感測器序號"
+msgstr "Získá sériové číslo senzoru"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor serial number"
-msgstr "設定感測器序號"
+msgstr "Nastaví sériové číslo senzoru"
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's name"
-msgstr "取得擁有者的名稱"
+msgstr "Načte jméno majitele"
 
 #. TRANSLATORS: command description
 msgid "Sets the owner's name"
-msgstr "設定擁有者的名稱"
+msgstr "Nastaví jméno majitele"
 
 #. TRANSLATORS: command description
 msgid "Gets the owner's email address"
-msgstr "取得擁有者的電子郵件位址"
+msgstr "Načte email majitele"
 
 #. TRANSLATORS: command description
 msgid "Sets the owner's email address"
-msgstr "設定擁有者的電子郵件位址"
+msgstr "Nastaví email majitele"
 
 #. TRANSLATORS: command description
 msgid "Gets the LED values"
-msgstr "取得 LED 值"
+msgstr "Získat hodnoty LED"
 
 #. TRANSLATORS: command description
 msgid "Sets the LEDs"
-msgstr "設定 LED"
+msgstr "Nastaví LEDky"
 
 #. TRANSLATORS: command description
 msgid "Gets the PCB errata"
-msgstr "取得 PCB errata"
+msgstr "Zjistí PCB erratu"
 
 #. TRANSLATORS: command description
 msgid "Sets the PCB errata"
-msgstr "設定 PCB errata"
+msgstr "Nastaví PCB erratu"
 
 #. TRANSLATORS: command description
 msgid "Gets the remote profile SHA1 hash"
-msgstr "取得遠端描述檔的 SHA1 雜湊碼"
+msgstr "Načte SHA1 hash vzdáleného profilu"
 
 #. TRANSLATORS: command description
 msgid "Sets the remote profile SHA1 hash"
-msgstr "設定遠端描述檔的 SHA1 雜湊碼"
+msgstr "Uloží SHA1 hash vzdáleného profilu"
 
 #. TRANSLATORS: command description
 msgid "Gets the dark offset values"
-msgstr "取得暗偏移值"
+msgstr "Načíst kompenzaci šera"
 
 #. TRANSLATORS: command description
 msgid "Sets the dark offset values"
-msgstr "設定暗偏移值"
+msgstr "Nastaví kompenzaci šera"
 
 #. TRANSLATORS: command description
 msgid "Writes the EEPROM with updated values"
-msgstr "以更新的值寫入 EEPROM"
+msgstr "Zapsat do EEPROM změněné hodnoty"
 
 #. TRANSLATORS: command description
 msgid "Takes a reading"
-msgstr "取得讀取內容"
+msgstr "Provede čtení"
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to device RGB)"
-msgstr "取得所有色彩讀取內容 (到裝置 RGB)"
+msgstr "Provede čtení všech barev (v RGB)"
 
 #. TRANSLATORS: command description
 msgid "Takes all color readings (to XYZ)"
-msgstr "取得所有色彩讀取內容 (到 XYZ)"
+msgstr "Načíst všechny barvy (jako XYZ)"
 
 #. TRANSLATORS: command description
 msgid "Takes a spectral reading (saving to SRAM)"
-msgstr "取得光譜讀取 (儲存至 SRAM)"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Reset the processor back to the bootloader"
-msgstr "將處理器重設回開機載入器"
+msgstr "Restartuje procesor do zavaděče"
 
 #. TRANSLATORS: command description
 msgid "Flash firmware into the processor"
-msgstr "將韌體刷寫至處理器"
+msgstr "Nahrát firmware do procesoru"
 
 #. TRANSLATORS: command description
 msgid "Read EEPROM at a specified address"
-msgstr "讀取指定位址的 EEPROM"
+msgstr "Přečte EEPROM na zadané adrese"
 
 #. TRANSLATORS: command description
 msgid "Erase EEPROM at a specified address"
-msgstr "抹除指定位址的 EERPOM"
+msgstr "Vymaže EEPROM na zadané adrese"
 
 #. TRANSLATORS: command description
 msgid "Write EEPROM at a specified address"
-msgstr "在指定位址寫入 EEPROM"
+msgstr "Zapíše do EEPROM na zadané adrese"
 
 #. TRANSLATORS: command description
 msgid "Gets the pre scale constant"
-msgstr "取得預尺度常數"
+msgstr "Načte měřítko čtení"
 
 #. TRANSLATORS: command description
 msgid "Sets the pre scale constant"
-msgstr "設定預尺度常數"
+msgstr "Nastaví měřítko čtení"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr "取得 DAC 值"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr "設定 DAC 值"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
-msgstr "取得後尺度常數"
+msgstr "Načte měřítko XYZ"
 
 #. TRANSLATORS: command description
 msgid "Sets the post scale constant"
-msgstr "設定後尺度常數"
+msgstr "Nastaví měřítko XYZ"
 
 #. TRANSLATORS: command description
 msgid "Sets the flash success"
-msgstr "flash 設定成功"
+msgstr "Zaznamená úspěšné nahrání"
 
 #. TRANSLATORS: command description
 msgid "Boots from the bootloader into the firmware"
-msgstr "從韌體的開機載入器開機"
+msgstr "Nastartuje firmware ze zavaděče"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor calibration map"
-msgstr "取得感測器校準映射表"
+msgstr "Načte kalibrační mapu senzoru"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor calibration map"
-msgstr "設定感測器校準映射表"
+msgstr "Nastaví kalibrační mapu senzoru"
 
 #. TRANSLATORS: command description
 msgid "Gets the hardware version"
-msgstr "取得硬體版本"
+msgstr "Získá verzi hardwaru"
 
 #. TRANSLATORS: command description
 msgid "Gets an array of raw samples"
-msgstr "取得 raw 樣本的陣列"
+msgstr "Načte seznam surových vzroků"
 
 #. TRANSLATORS: command description
 msgid "Downloads a remote profile"
-msgstr "下載遠端描述檔"
+msgstr "Stáhne vzdálený profil"
 
 #. TRANSLATORS: command description
 msgid "Uploads a remote profile"
-msgstr "更新遠端描述檔"
+msgstr "Nahraje vzdálený profil"
 
 #. TRANSLATORS: command description
 msgid "Uploads a correction matrix"
-msgstr "上傳校準矩陣"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Does a quick self test on the device"
-msgstr "裝置啟用快速自我測試"
+msgstr "Provede rychlý test zařízení"
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor measurement mode"
-msgstr "取得感測器量測模式"
+msgstr "Režim měření ze snímače"
 
 #. TRANSLATORS: command description
 msgid "Sets the sensor measurement mode"
-msgstr "設定感測器量測模式"
+msgstr "Nastavení režimu měření snímačem"
 
 #. TRANSLATORS: command description
 msgid "Read SRAM at a specified address"
-msgstr "讀取指定位址的 SRAM"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Write SRAM at a specified address"
-msgstr "寫入指定位址的 SRAM"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor temperature"
-msgstr "取得感測器溫度"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the ADC Vref values"
-msgstr "取得 ADC Vref 值"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the CCD calibration values"
-msgstr "取得 CCD 校準值"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Sets the CCD calibration values"
-msgstr "設定 CCD 校準值"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Converts Intel HEX to BIN"
-msgstr "將 Intel HEX 轉換為 BIN"
+msgstr ""
 
 #. TRANSLATORS: program name
 msgid "Color Management"
-msgstr "色彩管理"
+msgstr "Správa barev"
 
 #. TRANSLATORS: no colord available
 msgid "No connection to device:"
-msgstr "未連接裝置："
+msgstr "Žádné spojení se zařízením:"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get samples from device"
-msgstr "無法從裝置取得樣本"
+msgstr ""
 
 #. TRANSLATORS: PWM is pulse-width-modulation?
 msgid "Failed to remove PWM"
-msgstr "無法移除 PWM"
+msgstr ""
 
 msgid "Unknown"
-msgstr "未知"
+msgstr ""
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to calculate USB latency"
-msgstr "無法計算 USB 延遲"
+msgstr ""
 
 msgid "Show single pulse"
-msgstr "顯示單一脈衝"
+msgstr ""
 
 msgid "Show channels"
-msgstr "顯示通道"
+msgstr ""
 
 msgid "Filter backlight"
-msgstr "過濾背光"
+msgstr ""
 
 msgid "Export results"
-msgstr "匯出結果"
+msgstr ""
 
 msgid "Export"
-msgstr "匯出"
+msgstr ""
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get save file"
-msgstr "無法取得儲存檔案"
+msgstr ""
 
 msgid "Please connect your ColorHug2"
-msgstr "請接上您的 ColorHug2"
+msgstr ""
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
 "start analyzing your display."
-msgstr "請將您的 ColorHug 放在左方的點上，再按下藍色按鈕開始分析您的顯示器。"
+msgstr ""
 
 msgid "Don't disturb the device while working!"
-msgstr "過程中請勿干擾裝置！"
+msgstr ""
 
 msgid ""
 "Please update the firmware on your ColorHug before using this application."
-msgstr "在使用此應用程式之前，請先更新 ColorHug 上的韌體。"
+msgstr ""
 
 msgid "Device unsupported."
-msgstr "未支援的裝置。"
+msgstr ""
 
 msgid "Please connect your ColorHug2."
-msgstr "請接上您的 ColorHug2。"
+msgstr ""
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Display Analysis"
-msgstr "關於 ColorHug 顯示器分析"
+msgstr ""
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr "隨著時間對顯示器採樣以觀察 PWM、輸入延遲、畫面重整瑕疵。"
+msgstr ""

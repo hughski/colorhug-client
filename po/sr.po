@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 11:14+0100\n"
-"PO-Revision-Date: 2015-03-16 10:17+0000\n"
+"POT-Creation-Date: 2016-01-19 12:23+0000\n"
+"PO-Revision-Date: 2016-01-19 12:23+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: Serbian (http://www.transifex.com/projects/p/colorhug-client/language/sr/)\n"
+"Language-Team: Serbian (http://www.transifex.com/hughsie/colorhug-client/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +26,7 @@ msgstr "_Изађи"
 
 #. The surrounding light level
 msgid "Ambient"
-msgstr ""
+msgstr "Амбијент"
 
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
@@ -35,35 +35,35 @@ msgstr "Боја"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
-msgstr ""
+msgstr "Умекшавање"
 
 #. The rate that we
 msgid "Refresh"
-msgstr ""
+msgstr "Освежавање"
 
 #. The amount the sensor can influence the brightness
 msgid "Weight"
-msgstr ""
+msgstr "Тежина"
 
 #. Backlight up 5%
 msgid "Up"
-msgstr ""
+msgstr "Појачај за"
 
 #. Backlight down 5%
 msgid "Down"
-msgstr ""
+msgstr "Смањи за"
 
 msgid "_Import file"
-msgstr ""
+msgstr "_Увези датотеку"
 
 msgid "_Generate CCMX"
-msgstr ""
+msgstr "_Створи МТПБ"
 
 msgid "_Help"
-msgstr ""
+msgstr "По_моћ"
 
 msgid "Please insert your ColorHug device."
-msgstr ""
+msgstr "Уметните ваш уређај Бојохвата."
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -115,7 +115,7 @@ msgstr "Немојте откачити уређај и немојте угас�
 
 #. Button to update to a newer version of the firmware
 msgid "Update"
-msgstr ""
+msgstr "Ажурирај"
 
 msgid "Flash new firmware to the device"
 msgstr "Сними нови фирмвер на уређај"
@@ -169,18 +169,18 @@ msgstr "_Извези резултате…"
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Backlight Utility"
-msgstr ""
+msgstr "Помагало позадинског светла Бојохвата"
 
 msgid "Sample the ambient light level to control the backlight"
-msgstr ""
+msgstr "Узорак нивоа светла амбијента за управљање позадинским светлом"
 
 msgid ""
 "The ColorHug backlight utility uses the ColorHug device to alter the "
 "backlight level to compensate for the changing ambient light level."
-msgstr ""
+msgstr "Помагало позадинског светла Бојохвата користи уређај Бојохвата да измени ниво позадинског светла како би надоместио промену нивоа светла амбијента."
 
 msgid "The ambient light control utility"
-msgstr ""
+msgstr "Помагало за управљање светлом амбијента"
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug CCMX Loader"
@@ -243,7 +243,7 @@ msgid ""
 "The ColorHug flash update tool automatically downloads new versions of the "
 "firmware on to your Hughski ColorHug display colorimeter. Firmware releases "
 "will add features, fix bugs and improve accuracy."
-msgstr "Ажурирање алатка ЦолорХуг блиц аутоматски преузима нове верзије фирмваре на то иоур Хугхски ЦолорХуг дисплеј колориметру. Фирмваре ће додати карактеристике, исправљању грешака и побољшању тачност."
+msgstr "Алат ажурирања претоке Бојохвата самостално преузима нова издања фирмвера на ваш бојомерач дисплеја Хагхски Бојохват. Нова издања фирмвера ће додати функције, исправити грешке и побољшати тачност."
 
 msgid ""
 "Using command line arguments, this tool can also flash custom flash files to"
@@ -263,7 +263,7 @@ msgid "Documentation for the ColorHug display colorimeter"
 msgstr "Документација за мерач боје екрана Бојохвата"
 
 msgid "Display;Backlight;Ambient;ColorHug;"
-msgstr ""
+msgstr "приказ;позадинско светло;амбијент;Бојохват;"
 
 msgid "CCMX Loader"
 msgstr "Учитавач МТПБ"
@@ -304,28 +304,28 @@ msgid "Whether the backlight PWM should be removed."
 msgstr "Да ли треба уклонити МШИ позадинског светла."
 
 msgid "The integration time for each sample"
-msgstr ""
+msgstr "Време обједињавања за сваки узорак"
 
 msgid "Set the integration time in seconds for the ambient light sample."
-msgstr ""
+msgstr "Подесите време обједињавања у секундама за узорак светла амбијента."
 
 msgid "Backlight smoothing factor"
-msgstr ""
+msgstr "Чинилац умекшавања позадинског светла"
 
 msgid "The amount of backlight smoothing for ambient light changes."
-msgstr ""
+msgstr "Износ умекшавања позадинског светла за промене светла амбијента."
 
 msgid "The refresh rate between samples"
-msgstr ""
+msgstr "Стопа освежавања између узорака"
 
 msgid "The refresh rate in seconds between samples."
-msgstr ""
+msgstr "Стопа освежавања у секундама између узорака."
 
 msgid "The gamma value for ambient light"
-msgstr ""
+msgstr "Вредност гаме за светло амбијента"
 
 msgid "The gamma values to use when scaling ambient light samples."
-msgstr ""
+msgstr "Вредност гаме за коришћење приликом скалирања узорака светла амбијента."
 
 msgid "Display;Analysis;ColorHug;"
 msgstr "екран;анализа;бојохват;"
@@ -338,31 +338,35 @@ msgstr "претока;фирмвер;бојохват;"
 
 #. TRANSLATORS: no device is attached
 msgid "Please insert your ColorHugALS device."
-msgstr ""
+msgstr "Уметните ваш уређај Бојохвата АЛС."
 
 #. TRANSLATORS: our device
 msgid "Using ColorHugALS device"
-msgstr ""
+msgstr "Користим уређај Бојохвта АЛС"
 
 #. TRANSLATORS: laptop ambient light sensor
-msgid "Using internal device"
+msgid "Using ACPI device"
+msgstr ""
+
+#. TRANSLATORS: windows * sensor class device
+msgid "Using sensor HID device"
 msgstr ""
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
-msgstr ""
+msgstr "Нисам успео да подесим осветљеност"
 
 #. TRANSLATORS: get the backlight
 msgid "Failed to get brightness"
-msgstr ""
+msgstr "Нисам успео да добавим осветљеност"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Backlight Utility"
-msgstr ""
+msgstr "О помагалу позадинског светла Бојохвата"
 
 #. TRANSLATORS: application description
 msgid "Sample the ambient light to control the backlight."
-msgstr ""
+msgstr "Узорак светла амбијента за управљање позадинским светлом."
 
 msgid "translator-credits"
 msgstr "Мирослав Николић <miroslavnikolic@rocketmail.com>"
@@ -513,15 +517,15 @@ msgstr "Преузимам најновије податке са Интерне
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug CCMX Loader"
-msgstr ""
+msgstr "О учитавачу МТПБ-а Бојохвата"
 
 #. TRANSLATORS: application description
 msgid "Modify the calibration matrices on the ColorHug device."
-msgstr ""
+msgstr "Измените матрице калибрације на уређају Бојохвата."
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing data to ColorHug device"
-msgstr ""
+msgstr "Записујем податке на уређају Бојохвата"
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
@@ -684,7 +688,7 @@ msgstr "Откривен је Бојохват +"
 
 #. TRANSLATORS: ALS stands for ambient light sensor
 msgid "ColorHugALS Detected"
-msgstr ""
+msgstr "Откривен је Бојохват АСЛ"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -723,7 +727,7 @@ msgstr "Појединости доградње"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Firmware Updater"
-msgstr ""
+msgstr "О дограђивачу фирмвера Бојохвата"
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
@@ -731,7 +735,7 @@ msgstr "Погледајте појединости о доградњи"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing firmware to ColorHug device"
-msgstr ""
+msgstr "Записујем фирмвер на уређају Бојохвата"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -834,15 +838,22 @@ msgstr "Целовито"
 msgid "Pulses"
 msgstr "Бр. импулса"
 
-msgid "Multiple ColorHug devices are attached"
-msgstr "Прикачено је неколико уређаја Бојохвата"
-
 msgid "No ColorHug devices were found"
 msgstr "Нисам пронашао уређаје Бојохвата"
+
+msgid "Multiple ColorHug devices attached and invalid device index specified"
+msgstr ""
+
+msgid "Multiple ColorHug devices attached and no device index specified"
+msgstr ""
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
 msgstr "Да преточим уређај?"
+
+#. TRANSLATORS: command line option
+msgid "Use this device when multiple are available"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"

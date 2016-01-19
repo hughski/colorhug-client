@@ -22,6 +22,15 @@
   <update_contact>richard_at_hughsie.com</update_contact>
   <url type="bugtracker">https://github.com/hughski/colorhug-client/issues</url>
   <releases>
+    <release version="0.2.8" timestamp="1453206094">
+      <description>
+        <p>This stable release adds the following features:</p>
+        <ul>
+          <li>Add modalias strings for autoinstallation support</li>
+          <li>Support the ColorHugALS in SensorHID mode for backlight changes</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.7" timestamp="1429438376">
       <description>
         <p>This stable release fixes the following bug:</p>

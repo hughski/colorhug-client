@@ -3,17 +3,17 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kevin Brubeck Unhammer <unhammer+dill@mm.st>, 2013
+# Kevin Brubeck Unhammer <unhammer+dill@mm.st>, 2013,2015
 # Kevin Brubeck Unhammer <unhammer+dill@mm.st>, 2012
 # Kevin Brubeck Unhammer <unhammer+dill@mm.st>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: colorhug-client\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 11:14+0100\n"
-"PO-Revision-Date: 2015-03-16 10:17+0000\n"
+"POT-Creation-Date: 2016-01-19 12:23+0000\n"
+"PO-Revision-Date: 2016-01-19 12:23+0000\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
-"Language-Team: Norwegian Nynorsk (http://www.transifex.com/projects/p/colorhug-client/language/nn/)\n"
+"Language-Team: Norwegian Nynorsk (http://www.transifex.com/hughsie/colorhug-client/language/nn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,14 +21,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "_About"
-msgstr ""
+msgstr "_Om"
 
 msgid "_Quit"
-msgstr ""
+msgstr "_Avslutt"
 
 #. The surrounding light level
 msgid "Ambient"
-msgstr ""
+msgstr "Omgjevnad"
 
 #. The backlight color
 #. TRANSLATORS: this is the enabled sensor color
@@ -37,35 +37,35 @@ msgstr "Farge"
 
 #. The amount of smoothing done to the backlight readings
 msgid "Smoothing"
-msgstr ""
+msgstr "Utjamning"
 
 #. The rate that we
 msgid "Refresh"
-msgstr ""
+msgstr "Oppfrisk"
 
 #. The amount the sensor can influence the brightness
 msgid "Weight"
-msgstr ""
+msgstr "Vekt"
 
 #. Backlight up 5%
 msgid "Up"
-msgstr ""
+msgstr "Opp"
 
 #. Backlight down 5%
 msgid "Down"
-msgstr ""
+msgstr "Ned"
 
 msgid "_Import file"
-msgstr ""
+msgstr "_Importer fil"
 
 msgid "_Generate CCMX"
-msgstr ""
+msgstr "_Lag CCMX"
 
 msgid "_Help"
-msgstr ""
+msgstr "_Hjelp"
 
 msgid "Please insert your ColorHug device."
-msgstr ""
+msgstr "Kopla til ColorHug-en din"
 
 #. A correction matrix is used alongside the calibration matrix to better
 #. adapt the colorimeter primaries to a new device type.
@@ -123,66 +123,66 @@ msgid "Flash new firmware to the device"
 msgstr "Overfør ny fastvare til eininga"
 
 msgid "page0"
-msgstr ""
+msgstr "side0"
 
 msgid "Your Score"
-msgstr ""
+msgstr "Din skåre"
 
 msgid "Display"
-msgstr ""
+msgstr "Skjerm"
 
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 msgid "Black-to-White"
-msgstr ""
+msgstr "Svart-til-kvit"
 
 msgid "White-to-Black"
-msgstr ""
+msgstr "Kvit-til-svart"
 
 msgid "Refresh Rate"
-msgstr ""
+msgstr "Oppfriskningsrate"
 
 msgid "Color Temperature"
-msgstr ""
+msgstr "Fargetemperatur"
 
 msgid "White Luminance"
-msgstr ""
+msgstr "Kvit luminans"
 
 msgid "Black Luminance"
-msgstr ""
+msgstr "Svart luminans"
 
 msgid "sRGB Coverage"
-msgstr ""
+msgstr "sRGB-dekning"
 
 msgid "AdobeRGB Coverage"
-msgstr ""
+msgstr "AdobeRGB-dekning"
 
 msgid "Native Gamma"
 msgstr ""
 
 msgid "page1"
-msgstr ""
+msgstr "side1"
 
 msgid "_Export results…"
-msgstr ""
+msgstr "_Eksporter resultat …"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Backlight Utility"
-msgstr ""
+msgstr "ColorHug bakgrunnslysverktøy"
 
 msgid "Sample the ambient light level to control the backlight"
-msgstr ""
+msgstr "Mål lyset frå omgjevnadene for å kontrollera bakgrunnslyset"
 
 msgid ""
 "The ColorHug backlight utility uses the ColorHug device to alter the "
 "backlight level to compensate for the changing ambient light level."
-msgstr ""
+msgstr "ColorHug bakgrunnslysverktøy bruker ColorHug-eininga til å endra bakgrunnslyset for å kompensera for endringane i lyset frå omgjevnadene."
 
 msgid "The ambient light control utility"
-msgstr ""
+msgstr "Verktøyet for å måla lyset frå omgjevnadene"
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug CCMX Loader"
@@ -204,34 +204,34 @@ msgid ""
 msgstr "Om du vel ei ei korreksjonsmatrise, vert ColorHug mest nøyaktig, men standardmatrisa gir dei fleste brukarane eit akseptabelt kalibreringsresultat."
 
 msgid "The correction matrices on the device"
-msgstr ""
+msgstr "Korreksjonsmatrisene på eininga"
 
 #. TRANSLATORS: this is the application name
 #. TRANSLATORS: A program to load on CCMX correction matrices
 #. * onto the hardware
 msgid "ColorHug Display Analysis"
-msgstr ""
+msgstr "ColorHug skjermanalyse"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts"
-msgstr ""
+msgstr "Hent målingar frå skjermen over tid for å observera PWM, inndataforseinking og oppfriskingsartefaktar"
 
 msgid ""
 "The ColorHug display analysis tool can be used to profile display and GPU "
 "devices. It will measure various kinds of latency, e.g. black-to-white and "
 "input-lag as well as reporting color information and colorspace gamut "
 "volume."
-msgstr ""
+msgstr "Skjermanalyseverktøyet til ColorHug kan profilera skjermar og GPU-einingar. Det målar ulike formar for forseinking, t.d. svart-til-kvit- og inndataforseinking, i tillegg til å rapportera fargeinformasjon og volumet på fargeskalaen (fargeomfanget/gamut-en)."
 
 msgid "Results can be exported as standalone HTML files and shared."
-msgstr ""
+msgstr "Du kan eksportera resultatet til HTML og dela det."
 
 msgid "Main application window"
-msgstr ""
+msgstr "Hovudvindauge for programmet"
 
 msgid "Display analysis results"
-msgstr ""
+msgstr "Resultat av skjermanalyse"
 
 #. TRANSLATORS: this is the application name
 msgid "ColorHug Firmware Updater"
@@ -253,10 +253,10 @@ msgid ""
 msgstr "Dette verktøyet kan òg, ved hjelp av kommandolinjeargument, leggja inn eigendefinerte flash-filer i eininga."
 
 msgid "Application window showing new firmware detected"
-msgstr ""
+msgstr "Programvindauge som visar ny fastvare oppdaga"
 
 msgid "Applying updated firmware to the ColorHug device"
-msgstr ""
+msgstr "Legg inn ny fastvare på ColorHug-eininga"
 
 msgid "ColorHug Documentation"
 msgstr "ColorHug-dokumentasjon"
@@ -265,13 +265,13 @@ msgid "Documentation for the ColorHug display colorimeter"
 msgstr "Dokumentasjon for ColorHug-skjermkolorimeteret"
 
 msgid "Display;Backlight;Ambient;ColorHug;"
-msgstr ""
+msgstr "Skjerm;Bakgrunnslys;Omgjevnad;ColorHug;"
 
 msgid "CCMX Loader"
 msgstr "CCMX-lastar"
 
 msgid "CCMX;ColorHug;"
-msgstr ""
+msgstr "CCMX;ColorHug;"
 
 msgid "Whether we should update to test firmware"
 msgstr "Om me skal oppdatera til testfastvaren"
@@ -288,86 +288,90 @@ msgid ""
 msgstr "Staden der fastvareoppdateringar og kalibreringsfiler er lagra."
 
 msgid "Zoom in the graph to show only one pulse"
-msgstr ""
+msgstr "Zoom inn på grafen for å visa berre éin puls"
 
 msgid "Whether the refresh graph should be zoomed to show one pulse only."
-msgstr ""
+msgstr "Om oppfriskningsgrafen skal vera zooma inn for å visa berre éin puls."
 
 msgid "Show all RGB channels on the graph"
-msgstr ""
+msgstr "Vis alle RGB-kanalane i grafen"
 
 msgid "Whether all captured channels should be shown."
-msgstr ""
+msgstr "Om alle oppfanga kanalar skal visast."
 
 msgid "Hide backlight flicker on the graph"
-msgstr ""
+msgstr "Skjul bakgrunnslysflimmer frå grafen"
 
 msgid "Whether the backlight PWM should be removed."
-msgstr ""
+msgstr "Om bakgrunnslys-PWM skal fjernast."
 
 msgid "The integration time for each sample"
-msgstr ""
+msgstr "Integreringstid for kvar måling"
 
 msgid "Set the integration time in seconds for the ambient light sample."
-msgstr ""
+msgstr "Set integreringstida i sekund for målingar av omgjevnadslys."
 
 msgid "Backlight smoothing factor"
-msgstr ""
+msgstr "Utjamningsfaktor for bakgrunnslys"
 
 msgid "The amount of backlight smoothing for ambient light changes."
-msgstr ""
+msgstr "Kor mykje bakgrunnslyset skal utjamnast for endringar i omgivnadslyset."
 
 msgid "The refresh rate between samples"
-msgstr ""
+msgstr "Oppfriskningsraten mellom målingar"
 
 msgid "The refresh rate in seconds between samples."
-msgstr ""
+msgstr "Oppfriskningsraten i sekund mellom målingar."
 
 msgid "The gamma value for ambient light"
-msgstr ""
+msgstr "Gammaverdi for omgjevnadslyset"
 
 msgid "The gamma values to use when scaling ambient light samples."
-msgstr ""
+msgstr "Gammaverdiar for å skalera målingane av omgjevnadslyset."
 
 msgid "Display;Analysis;ColorHug;"
-msgstr ""
+msgstr "Skjerm;Analyse;ColorHug;"
 
 msgid "Firmware Updater"
 msgstr "Fastvareoppdaterar"
 
 msgid "Flash;Firmware;ColorHug;"
-msgstr ""
+msgstr "Flash;Fastvare;ColorHug;"
 
 #. TRANSLATORS: no device is attached
 msgid "Please insert your ColorHugALS device."
-msgstr ""
+msgstr "Kopla til ColorHugALS-eininga di."
 
 #. TRANSLATORS: our device
 msgid "Using ColorHugALS device"
-msgstr ""
+msgstr "Bruker ColorHugALS-eininga"
 
 #. TRANSLATORS: laptop ambient light sensor
-msgid "Using internal device"
+msgid "Using ACPI device"
+msgstr ""
+
+#. TRANSLATORS: windows * sensor class device
+msgid "Using sensor HID device"
 msgstr ""
 
 #. TRANSLATORS: set the backlight
 msgid "Failed to set brightness"
-msgstr ""
+msgstr "Kunne ikkje stilla inn lysstyrken"
 
 #. TRANSLATORS: get the backlight
 msgid "Failed to get brightness"
-msgstr ""
+msgstr "Kunne ikkje henta lysstyrken"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Backlight Utility"
-msgstr ""
+msgstr "Om ColorHug bakgrunnslysverktøy"
 
 #. TRANSLATORS: application description
 msgid "Sample the ambient light to control the backlight."
-msgstr ""
+msgstr "Mål lyset frå omgivnadene for å kontrollera bakgrunnslyset."
 
 msgid "translator-credits"
-msgstr ""
+msgstr "Kevin Brubeck Unhammer"
 
 #. TRANSLATORS: command line option
 msgid "Show extra debugging information"
@@ -480,7 +484,7 @@ msgstr "Kunne ikkje skriva til fila"
 
 #. TRANSLATORS: could not download the directory listing
 msgid "Failed to get the list of CCMX files"
-msgstr ""
+msgstr "Kunne ikkje henta lista med CCMX-filer"
 
 #. TRANSLATORS: the directory listing returned no results
 msgid "Firmware list has zero size"
@@ -515,15 +519,15 @@ msgstr "Hentar nyaste data frå nettet …"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug CCMX Loader"
-msgstr ""
+msgstr "Om ColorHug CCMX-lastar"
 
 #. TRANSLATORS: application description
 msgid "Modify the calibration matrices on the ColorHug device."
-msgstr ""
+msgstr "Endra kalibreringsmatrisene på ColorHug-eininga."
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing data to ColorHug device"
-msgstr ""
+msgstr "Skriv data til ColorHug-eininga"
 
 #. TRANSLATORS: internal error when setting up HTTP
 msgid "Failed to setup networking"
@@ -603,7 +607,7 @@ msgstr "Kunne ikkje nullstilla ColorHug"
 #. TRANSLATORS: the user tried to flash a firmware on the wrong
 #. * kind of device, e.g. a ColorHug2 fw on a ColorHug+
 msgid "Wrong kind of firmware!"
-msgstr ""
+msgstr "Feil type fastvare!"
 
 #. TRANSLATORS: switch from firmware mode into bootloader mode
 msgid "Starting firmware upgrade…"
@@ -678,15 +682,15 @@ msgstr "ColorHug oppdaga"
 
 #. TRANSLATORS: second release hardware
 msgid "ColorHug2 Detected"
-msgstr ""
+msgstr "ColorHug2 oppdaga"
 
 #. TRANSLATORS: first release hardware
 msgid "ColorHug+ Detected"
-msgstr ""
+msgstr "ColorHug+ oppdaga"
 
 #. TRANSLATORS: ALS stands for ambient light sensor
 msgid "ColorHugALS Detected"
-msgstr ""
+msgstr "ColorHugALS oppdaga"
 
 #. TRANSLATORS: fake hardware
 msgid "Emulated ColorHug Detected"
@@ -725,7 +729,7 @@ msgstr "Oppdateringsinformasjon"
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Firmware Updater"
-msgstr ""
+msgstr "Om ColorHug fastvareoppdatering"
 
 #. TRANSLATORS: show the user some markdown formatted text
 msgid "See details about the update"
@@ -733,7 +737,7 @@ msgstr "Vis detaljar om oppgraderinga"
 
 #. TRANSLATORS: inhibit reason
 msgid "Writing firmware to ColorHug device"
-msgstr ""
+msgstr "Skriv fastvare til ColorHug-eininga"
 
 #. TRANSLATORS: command line option
 msgid "Flash a specific firmware file"
@@ -776,7 +780,7 @@ msgstr "%2im%02i"
 #. TRANSLATORS: This is ms
 #, c-format
 msgid "%.0fms"
-msgstr ""
+msgstr "%.0fms"
 
 #. Translators: This is %2i seconds
 #, c-format
@@ -836,15 +840,22 @@ msgstr "Integral"
 msgid "Pulses"
 msgstr "Pulsslag"
 
-msgid "Multiple ColorHug devices are attached"
-msgstr "Fleire ColorHug-einingar er kopla til"
-
 msgid "No ColorHug devices were found"
 msgstr "Fann inga ColorHug-einingar"
+
+msgid "Multiple ColorHug devices attached and invalid device index specified"
+msgstr ""
+
+msgid "Multiple ColorHug devices attached and no device index specified"
+msgstr ""
 
 #. TRANSLATORS: confirmation
 msgid "Flash the device?"
 msgstr "Overfør til eininga?"
+
+#. TRANSLATORS: command line option
+msgid "Use this device when multiple are available"
+msgstr ""
 
 #. TRANSLATORS: command description
 msgid "Gets the sensor color filter"
@@ -1000,11 +1011,11 @@ msgstr "Set forhandsskaleringskonstanten"
 
 #. TRANSLATORS: command description
 msgid "Gets the DAC value"
-msgstr ""
+msgstr "Hentar DAC-verdien"
 
 #. TRANSLATORS: command description
 msgid "Sets the DAC value"
-msgstr ""
+msgstr "Set DAC-verdien"
 
 #. TRANSLATORS: command description
 msgid "Gets the post scale constant"
@@ -1088,7 +1099,7 @@ msgstr "Set CCD-kalibreringsverdiar"
 
 #. TRANSLATORS: command description
 msgid "Converts Intel HEX to BIN"
-msgstr ""
+msgstr "Konverterer Intel HEX til BIN"
 
 #. TRANSLATORS: program name
 msgid "Color Management"
@@ -1104,60 +1115,60 @@ msgstr "Klarte ikkje å henta målingar frå eininga"
 
 #. TRANSLATORS: PWM is pulse-width-modulation?
 msgid "Failed to remove PWM"
-msgstr ""
+msgstr "Klarte ikkje fjerna PWM"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ukjend"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to calculate USB latency"
-msgstr ""
+msgstr "Klarte ikkje rekna ut USB-forseinking"
 
 msgid "Show single pulse"
-msgstr ""
+msgstr "Vis enkeltpuls"
 
 msgid "Show channels"
-msgstr ""
+msgstr "Vis kanalar"
 
 msgid "Filter backlight"
-msgstr ""
+msgstr "Filtrer bakgrunnslys"
 
 msgid "Export results"
-msgstr ""
+msgstr "Eksporter resultat"
 
 msgid "Export"
-msgstr ""
+msgstr "Eksporter"
 
 #. TRANSLATORS: permissions error perhaps?
 msgid "Failed to get save file"
-msgstr ""
+msgstr "Klarte ikkje henta lagrefil"
 
 msgid "Please connect your ColorHug2"
-msgstr ""
+msgstr "Kopla til ColorHug2-en din"
 
 msgid ""
 "Place your ColorHug in the spot on the left and click the blue button to "
 "start analyzing your display."
-msgstr ""
+msgstr "Plasser ColorHug-en din på punktet til venstre og klikk den blå knappen for å gå i gang med å analysera skjermen din."
 
 msgid "Don't disturb the device while working!"
-msgstr ""
+msgstr "Ikkje forstyrr eininga når ho arbeidar!"
 
 msgid ""
 "Please update the firmware on your ColorHug before using this application."
-msgstr ""
+msgstr "Oppdater fastvaren på ColorHug-en din før du bruker dette programmet."
 
 msgid "Device unsupported."
-msgstr ""
+msgstr "Eininga er ikkje støtta."
 
 msgid "Please connect your ColorHug2."
-msgstr ""
+msgstr "Kopla til ColorHug2-en din."
 
 #. TRANSLATORS: this is the title of the about window
 msgid "About ColorHug Display Analysis"
-msgstr ""
+msgstr "Om ColorHug skjermanalyse"
 
 msgid ""
 "Sample the display over time to observe PWM, input latency and refresh "
 "artifacts."
-msgstr ""
+msgstr "Hent målingar frå skjermen over tid for å observera PWM, inndataforseinking og oppfriskingsartefaktar."
