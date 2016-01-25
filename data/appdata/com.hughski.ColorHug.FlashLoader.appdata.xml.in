@@ -94,4 +94,5 @@
   </provides>
   <developer_name>Hughski Limited</developer_name>
   <update_contact>richard_at_hughsie.com</update_contact>
+  <translation type="gettext">colorhug-client</translation>
 </component>
