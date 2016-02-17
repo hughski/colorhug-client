@@ -2453,7 +2453,7 @@ ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 	g_usb_context_enumerate (priv->usb_ctx);
 
 	/* setup the session */
-	priv->session = soup_session_sync_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug-ccmx",
+	priv->session = soup_session_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug-ccmx",
 							    SOUP_SESSION_TIMEOUT, 5000,
 							    NULL);
 	if (priv->session == NULL) {

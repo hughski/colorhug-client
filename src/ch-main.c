@@ -3221,7 +3221,7 @@ main (int argc, char *argv[])
 	}
 
 	/* setup the session */
-	priv->session = soup_session_sync_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug",
+	priv->session = soup_session_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug",
 							    SOUP_SESSION_TIMEOUT, 5000,
 							    NULL);
 	if (priv->session == NULL) {

@@ -1398,7 +1398,7 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	g_usb_context_enumerate (priv->usb_ctx);
 
 	/* setup the session */
-	priv->session = soup_session_sync_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug-flash",
+	priv->session = soup_session_new_with_options (SOUP_SESSION_USER_AGENT, "colorhug-flash",
 							    SOUP_SESSION_TIMEOUT, 5000,
 							    NULL);
 	if (priv->session == NULL) {
