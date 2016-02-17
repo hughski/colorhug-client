@@ -14,12 +14,27 @@ AM_CPPFLAGS =						\
 	-DG_USB_API_IS_SUBJECT_TO_CHANGE		\
 	-DLOCALEDIR=\""$(localedir)"\"
 
-bin_PROGRAMS =						\
-	colorhug-backlight				\
-	colorhug-ccmx					\
-	colorhug-cmd					\
-	colorhug-flash					\
-	colorhug-refresh
+bin_PROGRAMS =
+
+if BUILD_COLORHUG_CMD
+bin_PROGRAMS += colorhug-cmd
+endif
+
+if BUILD_COLORHUG_CCMX
+bin_PROGRAMS += colorhug-ccmx
+endif
+
+if BUILD_COLORHUG_BACKLIGHT
+bin_PROGRAMS += colorhug-backlight
+endif
+
+if BUILD_COLORHUG_FLASH
+bin_PROGRAMS += colorhug-flash
+endif
+
+if BUILD_COLORHUG_REFRESH
+bin_PROGRAMS += colorhug-refresh
+endif
 
 colorhug_cmd_SOURCES =					\
 	ch-main.c
@@ -260,10 +275,12 @@ EXTRA_DIST =						\
 MAINTAINERCLEANFILES =					\
 	$(srcdir)/libchshared.a
 
+if BUILD_COLORHUG_CMD
 if HAVE_UNIX
 install-data-hook:
 	mkdir -p $(DESTDIR)$(libexecdir);
 	ln -fs $(bindir)/colorhug-cmd $(DESTDIR)$(libexecdir)/colorhug;
+endif
 endif
 
 TESTS_ENVIRONMENT =						\

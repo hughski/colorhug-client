@@ -15,13 +15,25 @@ pkgdata_DATA = $(pkgdata_in_files:.desktop.in=.desktop)
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
-desktop_in_files =					\
-	colorhug-docs.desktop.in			\
-	com.hughski.ColorHug.Backlight.desktop.in	\
-	com.hughski.ColorHug.CcmxLoader.desktop.in	\
-	com.hughski.ColorHug.DisplayAnalysis.desktop.in	\
-	com.hughski.ColorHug.FlashLoader.desktop.in
+desktop_in_files = colorhug-docs.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
+if BUILD_COLORHUG_CCMX
+desktop_in_files += com.hughski.ColorHug.CcmxLoader.desktop.xml.in
+endif
+
+if BUILD_COLORHUG_BACKLIGHT
+desktop_in_files += com.hughski.ColorHug.Backlight.desktop.xml.in
+endif
+
+if BUILD_COLORHUG_FLASH
+desktop_in_files += com.hughski.ColorHug.FlashLoader.desktop.xml.in
+endif
+
+if BUILD_COLORHUG_REFRESH
+desktop_in_files += com.hughski.ColorHug.DisplayAnalysis.desktop.xml.in
+endif
+
 endif
 
 @GSETTINGS_RULES@

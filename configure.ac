@@ -155,6 +155,23 @@ AC_ARG_ENABLE(release, AS_HELP_STRING([--enable-release],[Enable Windows release
 	      enable_release=$enableval,enable_release=no)
 AM_CONDITIONAL(HAVE_WIN32_RELEASE, test x$enable_release = xyes)
 
+# optional
+AC_ARG_ENABLE(cmd-tool, AS_HELP_STRING([--enable-cmd-tool],[Enable colorhug-cmd]),
+	      enable_cmd_tool=$enableval, enable_cmd_tool=yes)
+AC_ARG_ENABLE(flash-tool, AS_HELP_STRING([--enable-flash-tool],[Enable colorhug-flash]),
+	      enable_flash_tool=$enableval, enable_flash_tool=yes)
+AC_ARG_ENABLE(ccmx-tool, AS_HELP_STRING([--enable-ccmx-tool],[Enable colorhug-ccmx]),
+	      enable_ccmx_tool=$enableval, enable_ccmx_tool=yes)
+AC_ARG_ENABLE(refresh-tool, AS_HELP_STRING([--enable-refresh-tool],[Enable colorhug-refresh]),
+	      enable_refresh_tool=$enableval, enable_refresh_tool=yes)
+AC_ARG_ENABLE(backlight-tool, AS_HELP_STRING([--enable-backlight-tool],[Enable colorhug-backlight]),
+	      enable_backlight_tool=$enableval, enable_backlight_tool=yes)
+AM_CONDITIONAL(BUILD_COLORHUG_CMD, test x$enable_cmd_tool = xyes)
+AM_CONDITIONAL(BUILD_COLORHUG_FLASH, test x$enable_flash_tool = xyes)
+AM_CONDITIONAL(BUILD_COLORHUG_CCMX, test x$enable_ccmx_tool = xyes)
+AM_CONDITIONAL(BUILD_COLORHUG_REFRESH, test x$enable_refresh_tool = xyes)
+AM_CONDITIONAL(BUILD_COLORHUG_BACKLIGHT, test x$enable_backlight_tool = xyes)
+
 dnl ---------------------------------------------------------------------------
 dnl - Makefiles, etc.
 dnl ---------------------------------------------------------------------------
@@ -195,6 +212,11 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         cppflags:                  ${CPPFLAGS}
+        colorhug-cmd:              ${enable_cmd_tool}
+        colorhug-flash:            ${enable_flash_tool}
+        colorhug-ccmx:             ${enable_ccmx_tool}
+        colorhug-refresh:          ${enable_refresh_tool}
+        colorhug-backlight:        ${enable_backlight_tool}
 "
 if test x$enable_unix = xno; then
 	echo "
