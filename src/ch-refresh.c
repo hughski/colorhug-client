@@ -1484,12 +1484,12 @@ int
 main (int argc, char **argv)
 {
 	CdColorRGB rgb;
-	ChRefreshPrivate *priv;
+	ChRefreshPrivate *priv = NULL;
 	gboolean verbose = FALSE;
-	GOptionContext *context;
 	guint i;
 	int status = 0;
 	g_autoptr(GError) error = NULL;
+	g_autoptr(GOptionContext) context = NULL;
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 			/* TRANSLATORS: command line option */
@@ -1513,12 +1513,16 @@ main (int argc, char **argv)
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
 		g_warning ("%s: %s", _("Failed to parse command line options"),
 			   error->message);
+		goto out;
 	}
-	g_option_context_free (context);
 
 	priv = g_new0 (ChRefreshPrivate, 1);
 	priv->settings = g_settings_new ("com.hughski.ColorHug.DisplayAnalysis");
-	priv->usb_ctx = g_usb_context_new (NULL);
+	priv->usb_ctx = g_usb_context_new (&error);
+	if (priv->usb_ctx == NULL) {
+		g_print ("Failed to connect to USB: %s\n", error->message);
+		goto out;
+	}
 	priv->client = cd_client_new ();
 	priv->results = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 	priv->device_queue = ch_device_queue_new ();
@@ -1573,20 +1577,23 @@ main (int argc, char **argv)
 
 	/* wait */
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);
-
-	g_object_unref (priv->application);
-	if (priv->device_queue != NULL)
-		g_object_unref (priv->device_queue);
-	if (priv->usb_ctx != NULL)
-		g_object_unref (priv->usb_ctx);
-	if (priv->client != NULL)
-		g_object_unref (priv->client);
-	if (priv->builder != NULL)
-		g_object_unref (priv->builder);
-	if (priv->settings != NULL)
-		g_object_unref (priv->settings);
-	g_object_unref (priv->it8_ti1);
-	g_hash_table_unref (priv->results);
+out:
+	if (priv->application != NULL)
+		g_object_unref (priv->application);
+	if (priv != NULL) {
+		if (priv->device_queue != NULL)
+			g_object_unref (priv->device_queue);
+		if (priv->usb_ctx != NULL)
+			g_object_unref (priv->usb_ctx);
+		if (priv->client != NULL)
+			g_object_unref (priv->client);
+		if (priv->builder != NULL)
+			g_object_unref (priv->builder);
+		if (priv->settings != NULL)
+			g_object_unref (priv->settings);
+		g_object_unref (priv->it8_ti1);
+		g_hash_table_unref (priv->results);
+	}
 	g_free (priv);
 	return status;
 }
