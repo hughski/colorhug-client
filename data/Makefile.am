@@ -19,19 +19,19 @@ desktop_in_files = colorhug-docs.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 if BUILD_COLORHUG_CCMX
-desktop_in_files += com.hughski.ColorHug.CcmxLoader.desktop.xml.in
+desktop_in_files += com.hughski.ColorHug.CcmxLoader.desktop.in
 endif
 
 if BUILD_COLORHUG_BACKLIGHT
-desktop_in_files += com.hughski.ColorHug.Backlight.desktop.xml.in
+desktop_in_files += com.hughski.ColorHug.Backlight.desktop.in
 endif
 
 if BUILD_COLORHUG_FLASH
-desktop_in_files += com.hughski.ColorHug.FlashLoader.desktop.xml.in
+desktop_in_files += com.hughski.ColorHug.FlashLoader.desktop.in
 endif
 
 if BUILD_COLORHUG_REFRESH
-desktop_in_files += com.hughski.ColorHug.DisplayAnalysis.desktop.xml.in
+desktop_in_files += com.hughski.ColorHug.DisplayAnalysis.desktop.in
 endif
 
 endif
