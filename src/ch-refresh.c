@@ -1591,8 +1591,10 @@ out:
 			g_object_unref (priv->builder);
 		if (priv->settings != NULL)
 			g_object_unref (priv->settings);
-		g_object_unref (priv->it8_ti1);
-		g_hash_table_unref (priv->results);
+		if (priv->it8_ti1 != NULL)
+			g_object_unref (priv->it8_ti1);
+		if (priv->results != NULL)
+			g_hash_table_unref (priv->results);
 	}
 	g_free (priv);
 	return status;
