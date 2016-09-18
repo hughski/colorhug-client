@@ -1298,6 +1298,71 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 }
 
 /**
+ * ch_util_get_illuminants:
+ **/
+static gboolean
+ch_util_get_illuminants (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret;
+	ChIlluminant illuminants = 0;
+
+	/* get from HW */
+	ret = ch_device_get_illuminants (priv->device,
+					 &illuminants,
+					 NULL,
+					 error);
+	if (!ret)
+		return FALSE;
+
+	g_print ("illuminants: %i\n", illuminants);
+	return TRUE;
+}
+
+/**
+ * ch_util_set_illuminants:
+ **/
+static gboolean
+ch_util_set_illuminants (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	gboolean ret = FALSE;
+	ChIlluminant illuminants = 0;
+
+	/* parse */
+	if (g_strv_length (values) != 1) {
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expected "
+				     "'none|a|uv");
+		return FALSE;
+	}
+
+	/* get the illuminants value */
+	if (g_strstr_len (values[0], -1, "none") != NULL)
+		ret = TRUE;
+	if (g_strstr_len (values[0], -1, "a") != NULL) {
+		illuminants |= CH_ILLUMINANT_A;
+		ret = TRUE;
+	}
+	if (g_strstr_len (values[0], -1, "uv") != NULL) {
+		illuminants |= CH_ILLUMINANT_UV;
+		ret = TRUE;
+	}
+
+	/* nothing recognised */
+	if (!ret) {
+		g_set_error_literal (error, 1, 0,
+				     "invalid input, expected "
+				     "'<none|a|uv>");
+		return FALSE;
+	}
+
+	/* set to HW */
+	return ch_device_set_illuminants (priv->device,
+					  illuminants,
+					  NULL,
+					  error);
+}
+
+/**
  * ch_util_get_pcb_errata:
  **/
 static gboolean
@@ -2973,6 +3038,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Sets the LEDs"),
 		     ch_util_set_leds);
+	ch_util_add (priv->cmd_array,
+		     "get-illuminants",
+		     /* TRANSLATORS: command description */
+		     _("Gets the illuminant values"),
+		     ch_util_get_illuminants);
+	ch_util_add (priv->cmd_array,
+		     "set-illuminants",
+		     /* TRANSLATORS: command description */
+		     _("Sets the illuminants"),
+		     ch_util_set_illuminants);
 	ch_util_add (priv->cmd_array,
 		     "get-pcb-errata",
 		     /* TRANSLATORS: command description */
