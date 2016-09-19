@@ -45,9 +45,6 @@ typedef struct {
 	GPtrArray		*updates;
 } ChFlashMdPrivate;
 
-/**
- * ch_flash_md_pos_to_text:
- **/
 static const gchar *
 ch_flash_md_pos_to_text (ChFlashMdPos pos)
 {
@@ -74,9 +71,6 @@ ch_flash_md_pos_to_text (ChFlashMdPos pos)
 	g_assert_not_reached ();
 }
 
-/**
- * ch_flash_update_free:
- **/
 static void
 ch_flash_update_free (ChFlashUpdate *update)
 {
@@ -88,9 +82,6 @@ ch_flash_update_free (ChFlashUpdate *update)
 	g_free (update);
 }
 
-/**
- * ch_flash_md_priv_free:
- **/
 static void
 ch_flash_md_priv_free (ChFlashMdPrivate *priv)
 {
@@ -100,11 +91,6 @@ ch_flash_md_priv_free (ChFlashMdPrivate *priv)
 	g_free (priv);
 }
 
-/**
- * ch_flash_md_start_element_cb:
- *
- * Called for open tags <foo bar="baz">
- **/
 static void
 ch_flash_md_start_element_cb (GMarkupParseContext *context,
 			      const gchar *element_name,
@@ -183,11 +169,6 @@ ch_flash_md_start_element_cb (GMarkupParseContext *context,
 		 ch_flash_md_pos_to_text (priv->pos));
 }
 
-/**
- * ch_flash_md_end_element_cb:
- *
- * Called for close tags </foo>
- **/
 static void
 ch_flash_md_end_element_cb (GMarkupParseContext *context,
 			    const gchar *element_name,
@@ -284,9 +265,6 @@ ch_flash_md_end_element_cb (GMarkupParseContext *context,
 		 ch_flash_md_pos_to_text (priv->pos));
 }
 
-/**
- * ch_flash_md_state_from_string:
- **/
 static ChFlashMdState
 ch_flash_md_state_from_string (const gchar *state)
 {
@@ -298,11 +276,6 @@ ch_flash_md_state_from_string (const gchar *state)
 	return CH_FLASH_MD_STATE_UNKNOWN;
 }
 
-/**
- * ch_flash_md_text_cb:
- *
- * Called for character data -- text is not nul-terminated.
- **/
 static void
 ch_flash_md_text_cb (GMarkupParseContext *context,
 		     const gchar *text,
@@ -366,9 +339,6 @@ static GMarkupParser ch_flash_updates_parser = {
 	NULL
 };
 
-/**
- * ch_flash_md_parse_filename:
- **/
 GPtrArray *
 ch_flash_md_parse_data (const gchar *data, GError **error)
 {
@@ -398,9 +368,6 @@ out:
 	return updates;
 }
 
-/**
- * ch_flash_md_parse_filename:
- **/
 GPtrArray *
 ch_flash_md_parse_filename (const gchar *filename, GError **error)
 {

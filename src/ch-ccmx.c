@@ -92,9 +92,6 @@ static gboolean	 ch_ccmx_set_calibration_data		(ChCcmxPrivate *priv,
 							 gsize ccmx_size,
 							 GError **error);
 
-/**
- * ch_ccmx_error_dialog:
- **/
 static void
 ch_ccmx_error_dialog (ChCcmxPrivate *priv,
 		      const gchar *title,
@@ -115,9 +112,6 @@ ch_ccmx_error_dialog (ChCcmxPrivate *priv,
 	gtk_widget_destroy (dialog);
 }
 
-/**
- * ch_ccmx_activate_cb:
- **/
 static void
 ch_ccmx_activate_cb (GApplication *application, ChCcmxPrivate *priv)
 {
@@ -126,9 +120,6 @@ ch_ccmx_activate_cb (GApplication *application, ChCcmxPrivate *priv)
 	gtk_window_present (window);
 }
 
-/**
- * ch_ccmx_gen_close_button_cb:
- **/
 static void
 ch_ccmx_gen_close_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
@@ -136,9 +127,6 @@ ch_ccmx_gen_close_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 	gtk_widget_hide (w);
 }
 
-/**
- * ch_ccmx_create_user_datadir:
- **/
 static gboolean
 ch_ccmx_create_user_datadir (ChCcmxPrivate *priv, const gchar *location)
 {
@@ -158,9 +146,6 @@ ch_ccmx_create_user_datadir (ChCcmxPrivate *priv, const gchar *location)
 	return TRUE;
 }
 
-/**
- * ch_ccmx_find_by_desc:
- **/
 static gboolean
 ch_ccmx_find_by_desc (GtkTreeModel *model,
 		      GtkTreeIter *iter_found,
@@ -185,9 +170,6 @@ ch_ccmx_find_by_desc (GtkTreeModel *model,
 	return ret;
 }
 
-/**
- * ch_ccmx_add_local_file:
- **/
 static gboolean
 ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 			const gchar *filename,
@@ -337,9 +319,6 @@ ch_ccmx_add_local_file (ChCcmxPrivate *priv,
 	return TRUE;
 }
 
-/**
- * ch_ccmx_add_local_files:
- **/
 static void
 ch_ccmx_add_local_files (ChCcmxPrivate *priv)
 {
@@ -374,9 +353,6 @@ out:
 		g_dir_close (dir);
 }
 
-/**
- * ch_ccmx_set_combo_from_index:
- **/
 static void
 ch_ccmx_set_combo_from_index (GtkComboBox *combo, guint idx)
 {
@@ -400,9 +376,6 @@ ch_ccmx_set_combo_from_index (GtkComboBox *combo, guint idx)
 	}
 }
 
-/**
- * ch_ccmx_got_factory_calibration_cb:
- **/
 static void
 ch_ccmx_got_factory_calibration_cb (SoupSession *session,
 				    SoupMessage *msg,
@@ -498,9 +471,6 @@ _ch_device_get_download_id (GUsbDevice *device)
 	return str;
 }
 
-/**
- * ch_ccmx_get_serial_number_cb:
- **/
 static void
 ch_ccmx_get_serial_number_cb (GObject *source,
 			      GAsyncResult *res,
@@ -547,9 +517,6 @@ out:
 		soup_uri_free (base_uri);
 }
 
-/**
- * ch_ccmx_device_needs_repair_cb:
- **/
 static void
 ch_ccmx_device_needs_repair_cb (GtkDialog *dialog,
 			  GtkResponseType response_id,
@@ -571,9 +538,6 @@ out:
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-/**
- * ch_ccmx_device_needs_repair:
- **/
 static void
 ch_ccmx_device_needs_repair (ChCcmxPrivate *priv)
 {
@@ -607,9 +571,6 @@ ch_ccmx_device_needs_repair (ChCcmxPrivate *priv)
 	gtk_widget_show (dialog);
 }
 
-/**
- * ch_ccmx_device_force_repair:
- **/
 static void
 ch_ccmx_device_force_repair (ChCcmxPrivate *priv)
 {
@@ -643,9 +604,6 @@ ch_ccmx_device_force_repair (ChCcmxPrivate *priv)
 	gtk_widget_show (dialog);
 }
 
-/**
- * ch_ccmx_add_calibration:
- **/
 static void
 ch_ccmx_add_calibration (ChCcmxPrivate *priv,
 			 guint16 idx,
@@ -729,9 +687,6 @@ ch_ccmx_add_calibration (ChCcmxPrivate *priv,
 			     GINT_TO_POINTER (1));
 }
 
-/**
- * ch_ccmx_get_calibration_cb:
- **/
 static void
 ch_ccmx_get_calibration_cb (GObject *source,
 			    GAsyncResult *res,
@@ -801,9 +756,6 @@ ch_ccmx_get_calibration_cb (GObject *source,
 	}
 }
 
-/**
- * ch_ccmx_get_profile_filename:
- **/
 static gchar *
 ch_ccmx_get_profile_filename (GtkWindow *window)
 {
@@ -837,9 +789,6 @@ ch_ccmx_get_profile_filename (GtkWindow *window)
 	return filename;
 }
 
-/**
- * ch_ccmx_set_calibration_map_cb:
- **/
 static void
 ch_ccmx_set_calibration_map_cb (GObject *source,
 				GAsyncResult *res,
@@ -863,9 +812,6 @@ ch_ccmx_set_calibration_map_cb (GObject *source,
 	ch_ccmx_refresh_calibration_data (priv);
 }
 
-/**
- * ch_ccmx_set_calibration_cb:
- **/
 static void
 ch_ccmx_set_calibration_cb (GObject *source,
 			    GAsyncResult *res,
@@ -894,9 +840,6 @@ ch_ccmx_set_calibration_cb (GObject *source,
 				       priv);
 }
 
-/**
- * ch_ccmx_set_calibration_data:
- **/
 static gboolean
 ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 			      guint16 cal_idx,
@@ -953,9 +896,6 @@ ch_ccmx_set_calibration_data (ChCcmxPrivate *priv,
 	return TRUE;
 }
 
-/**
- * ch_ccmx_set_calibration_file:
- **/
 static gboolean
 ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 			      guint16 cal_idx,
@@ -975,9 +915,6 @@ ch_ccmx_set_calibration_file (ChCcmxPrivate *priv,
 					     error);
 }
 
-/**
- * ch_ccmx_refresh_calibration_data:
- **/
 static void
 ch_ccmx_refresh_calibration_data (ChCcmxPrivate *priv)
 {
@@ -1007,9 +944,6 @@ ch_ccmx_refresh_calibration_data (ChCcmxPrivate *priv)
 				       priv);
 }
 
-/**
- * ch_ccmx_got_device:
- **/
 static void
 ch_ccmx_got_device (ChCcmxPrivate *priv)
 {
@@ -1050,9 +984,6 @@ fake_device:
 	ch_ccmx_refresh_calibration_data (priv);
 }
 
-/**
- * ch_ccmx_set_combo_simple_text:
- **/
 static void
 ch_ccmx_set_combo_simple_text (GtkWidget *combo_box)
 {
@@ -1077,9 +1008,6 @@ ch_ccmx_set_combo_simple_text (GtkWidget *combo_box)
 					NULL);
 }
 
-/**
- * ch_ccmx_combo_changed_cb:
- **/
 static void
 ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 {
@@ -1162,9 +1090,6 @@ ch_ccmx_combo_changed_cb (GtkComboBox *combo, ChCcmxPrivate *priv)
 				       priv);
 }
 
-/**
- * ch_ccmx_got_file_cb:
- **/
 static void
 ch_ccmx_got_file_cb (SoupSession *session,
 		     SoupMessage *msg,
@@ -1221,9 +1146,6 @@ ch_ccmx_got_file_cb (SoupSession *session,
 	}
 }
 
-/**
- * ch_ccmx_download_file:
- **/
 static void
 ch_ccmx_download_file (ChCcmxPrivate *priv, const gchar *uri)
 {
@@ -1249,9 +1171,6 @@ out:
 		soup_uri_free (base_uri);
 }
 
-/**
- * ch_ccmx_got_index_cb:
- **/
 static void
 ch_ccmx_got_index_cb (SoupSession *session,
 		      SoupMessage *msg,
@@ -1333,9 +1252,6 @@ ch_ccmx_loop_quit_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_ccmx_measure_patches_spectro:
- **/
 static void
 ch_ccmx_measure_patches_spectro (ChCcmxPrivate *priv)
 {
@@ -1500,9 +1416,6 @@ ch_ccmx_measure_patches_colorhug (ChCcmxPrivate *priv)
 	ch_ccmx_gen_setup_page (priv);
 }
 
-/**
- * ch_ccmx_gen_window_move:
- **/
 static void
 ch_ccmx_gen_window_move (ChCcmxPrivate *priv)
 {
@@ -1541,9 +1454,6 @@ ch_ccmx_gen_window_move (ChCcmxPrivate *priv)
 			 rect.y + ((rect.height - win_height) / 2));
 }
 
-/**
- * ch_ccmx_gen_setup_page:
- **/
 static void
 ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 {
@@ -1664,9 +1574,6 @@ ch_ccmx_gen_setup_page (ChCcmxPrivate *priv)
 	}
 }
 
-/**
- * ch_ccmx_gen_default_ccmx_filename:
- **/
 static gchar *
 ch_ccmx_gen_default_ccmx_filename (ChCcmxPrivate *priv)
 {
@@ -1682,9 +1589,6 @@ ch_ccmx_gen_default_ccmx_filename (ChCcmxPrivate *priv)
 	return filename;
 }
 
-/**
- * ch_ccmx_gen_done_share_button_cb:
- **/
 static void
 ch_ccmx_gen_done_share_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
@@ -1734,9 +1638,6 @@ out:
 		soup_multipart_free (multipart);
 }
 
-/**
- * ch_ccmx_gen_done_save_button_cb:
- **/
 static void
 ch_ccmx_gen_done_save_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
@@ -1779,9 +1680,6 @@ out:
 	gtk_widget_destroy (dialog);
 }
 
-/**
- * ch_ccmx_gen_next_button_cb:
- **/
 static void
 ch_ccmx_gen_next_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
@@ -1791,9 +1689,6 @@ ch_ccmx_gen_next_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 	ch_ccmx_gen_setup_page (priv);
 }
 
-/**
- * ch_ccmx_gen_add_device:
- **/
 static void
 ch_ccmx_gen_add_device (ChCcmxPrivate *priv, CdDevice *device)
 {
@@ -1812,9 +1707,6 @@ ch_ccmx_gen_add_device (ChCcmxPrivate *priv, CdDevice *device)
 			    -1);
 }
 
-/**
- * ch_ccmx_client_get_devices_cb:
- **/
 static void
 ch_ccmx_client_get_devices_cb (GObject *object,
 			       GAsyncResult *res,
@@ -1843,9 +1735,6 @@ ch_ccmx_client_get_devices_cb (GObject *object,
 	}
 }
 
-/**
- * ch_ccmx_refresh_button_cb:
- **/
 static void
 ch_ccmx_refresh_button_cb (GtkWidget *w, ChCcmxPrivate *priv)
 {
@@ -1890,9 +1779,6 @@ out:
 		soup_uri_free (base_uri);
 }
 
-/**
- * ch_ccmx_get_fake_device:
- **/
 static GUsbDevice *
 ch_ccmx_get_fake_device (ChCcmxPrivate *priv)
 {
@@ -1905,9 +1791,6 @@ ch_ccmx_get_fake_device (ChCcmxPrivate *priv)
 	return g_object_ref (g_ptr_array_index (array, 0));
 }
 
-/**
- * ch_ccmx_gen_update_ui:
- **/
 static void
 ch_ccmx_gen_update_ui (ChCcmxPrivate *priv)
 {
@@ -1918,9 +1801,6 @@ ch_ccmx_gen_update_ui (ChCcmxPrivate *priv)
 				     priv->gen_sensor_spectral != NULL);
 }
 
-/**
- * ch_ccmx_check_sensor:
- **/
 static void
 ch_ccmx_check_sensor (ChCcmxPrivate *priv, CdSensor *sensor)
 {
@@ -1952,9 +1832,6 @@ out:
 	return;
 }
 
-/**
- * ch_ccmx_client_get_sensors_cb:
- **/
 static void
 ch_ccmx_client_get_sensors_cb (GObject *object,
 			       GAsyncResult *res,
@@ -1986,9 +1863,6 @@ ch_ccmx_client_get_sensors_cb (GObject *object,
 	}
 }
 
-/**
- * ch_ccmx_sensor_added_cb:
- **/
 static void
 ch_ccmx_sensor_added_cb (CdClient *gen_client,
 			 CdSensor *sensor,
@@ -2005,9 +1879,6 @@ ch_ccmx_sensor_added_cb (CdClient *gen_client,
 	ch_ccmx_check_sensor (priv, sensor);
 }
 
-/**
- * ch_ccmx_sensor_removed_cb:
- **/
 static void
 ch_ccmx_sensor_removed_cb (CdClient *gen_client,
 			   CdSensor *sensor,
@@ -2017,9 +1888,6 @@ ch_ccmx_sensor_removed_cb (CdClient *gen_client,
 		   cd_sensor_get_object_path (sensor));
 }
 
-/**
- * ch_ccmx_client_connect_cb:
- **/
 static void
 ch_ccmx_client_connect_cb (GObject *object,
 			   GAsyncResult *res,
@@ -2046,9 +1914,6 @@ ch_ccmx_client_connect_cb (GObject *object,
 			  G_CALLBACK (ch_ccmx_sensor_removed_cb), priv);
 }
 
-/**
- * gpk_ccmx_treeview_clicked_cb:
- **/
 static void
 gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 			      ChCcmxPrivate *priv)
@@ -2098,9 +1963,6 @@ gpk_ccmx_treeview_clicked_cb (GtkTreeSelection *selection,
 	gtk_widget_set_sensitive (w, TRUE);
 }
 
-/**
- * ch_ccmx_about_activated_cb:
- **/
 static void
 ch_ccmx_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -2134,9 +1996,6 @@ ch_ccmx_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer
 			       NULL);
 }
 
-/**
- * ch_ccmx_quit_activated_cb:
- **/
 static void
 ch_ccmx_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -2144,9 +2003,6 @@ ch_ccmx_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer 
 	g_application_release (G_APPLICATION (priv->application));
 }
 
-/**
- * ch_ccmx_help_activated_cb:
- **/
 static void
 ch_ccmx_help_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -2158,9 +2014,6 @@ ch_ccmx_help_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer 
 		g_warning ("Failed to load help document: %s", error->message);
 }
 
-/**
- * ch_ccmx_import_activated_cb:
- **/
 static void
 ch_ccmx_import_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -2195,9 +2048,6 @@ ch_ccmx_import_activated_cb (GSimpleAction *action, GVariant *parameter, gpointe
 	}
 }
 
-/**
- * ch_ccmx_generate_activated_cb:
- **/
 static void
 ch_ccmx_generate_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -2231,9 +2081,6 @@ static GActionEntry actions[] = {
 	{ "quit", ch_ccmx_quit_activated_cb, NULL, NULL, NULL }
 };
 
-/**
- * ch_ccmx_device_queue_progress_cb:
- **/
 static void
 ch_ccmx_device_queue_progress_cb (ChDeviceQueue	*device_queue,
 				  guint percentage,
@@ -2265,9 +2112,6 @@ ch_ccmx_device_queue_progress_cb (ChDeviceQueue	*device_queue,
 	}
 }
 
-/**
- * ch_ccmx_startup_cb:
- **/
 static void
 ch_ccmx_startup_cb (GApplication *application, ChCcmxPrivate *priv)
 {
@@ -2486,9 +2330,6 @@ out:
 	return;
 }
 
-/**
- * ch_ccmx_device_added_cb:
- **/
 static void
 ch_ccmx_device_added_cb (GUsbContext *context,
 			 GUsbDevice *device,
@@ -2512,9 +2353,6 @@ ch_ccmx_device_added_cb (GUsbContext *context,
 	}
 }
 
-/**
- * ch_ccmx_device_removed_cb:
- **/
 static void
 ch_ccmx_device_removed_cb (GUsbContext *context,
 			   GUsbDevice *device,
@@ -2539,18 +2377,12 @@ ch_ccmx_device_removed_cb (GUsbContext *context,
 	}
 }
 
-/**
- * ch_ccmx_ignore_cb:
- **/
 static void
 ch_ccmx_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
 		   const gchar *message, gpointer user_data)
 {
 }
 
-/**
- * main:
- **/
 int
 main (int argc, char **argv)
 {

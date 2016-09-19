@@ -52,9 +52,6 @@ typedef struct {
 	gdouble			 percentage_old;
 } ChBacklightPrivate;
 
-/**
- * ch_backlight_error_dialog:
- **/
 static void
 ch_backlight_error_dialog (ChBacklightPrivate *priv,
 			   const gchar *title,
@@ -75,9 +72,6 @@ ch_backlight_error_dialog (ChBacklightPrivate *priv,
 	gtk_widget_destroy (dialog);
 }
 
-/**
- * ch_backlight_activate_cb:
- **/
 static void
 ch_backlight_activate_cb (GApplication *application, ChBacklightPrivate *priv)
 {
@@ -86,9 +80,6 @@ ch_backlight_activate_cb (GApplication *application, ChBacklightPrivate *priv)
 	gtk_window_present (window);
 }
 
-/**
- * ch_backlight_update_ui:
- **/
 static void
 ch_backlight_update_ui (ChBacklightPrivate *priv)
 {
@@ -154,9 +145,6 @@ typedef struct {
 	gdouble		brightness;
 } ChBacklightSample;
 
-/**
- * ch_backlight_set_brightness:
- **/
 static void
 ch_backlight_set_brightness (ChBacklightPrivate *priv, gdouble percentage)
 {
@@ -188,9 +176,6 @@ ch_backlight_set_brightness (ChBacklightPrivate *priv, gdouble percentage)
 	priv->percentage_old = percentage;
 }
 
-/**
- * ch_backlight_get_brightness:
- **/
 static gdouble
 ch_backlight_get_brightness (ChBacklightPrivate *priv)
 {
@@ -219,9 +204,6 @@ ch_backlight_get_brightness (ChBacklightPrivate *priv)
 	return g_variant_get_int32 (brightness);
 }
 
-/**
- * ch_backlight_update_graph:
- **/
 static void
 ch_backlight_update_graph (ChBacklightPrivate *priv)
 {
@@ -295,9 +277,6 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 	ch_backlight_set_brightness (priv, priv->accumulator);
 }
 
-/**
- * ch_backlight_renormalize:
- **/
 static void
 ch_backlight_renormalize (ChBacklightPrivate *priv)
 {
@@ -311,9 +290,6 @@ ch_backlight_renormalize (ChBacklightPrivate *priv)
 	priv->norm_required = FALSE;
 }
 
-/**
- * ch_backlight_take_reading_cb:
- **/
 static void
 ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -382,9 +358,6 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 	priv->idle_id = 0;
 }
 
-/**
- * ch_backlight_tick_cb:
- **/
 static gboolean
 ch_backlight_tick_cb (gpointer user_data)
 {
@@ -419,9 +392,6 @@ ch_backlight_tick_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_backlight_about_activated_cb:
- **/
 static void
 ch_backlight_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -455,9 +425,6 @@ ch_backlight_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpo
 			       NULL);
 }
 
-/**
- * ch_backlight_quit_activated_cb:
- **/
 static void
 ch_backlight_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -470,9 +437,6 @@ static GActionEntry actions[] = {
 	{ "quit", ch_backlight_quit_activated_cb, NULL, NULL, NULL }
 };
 
-/**
- * ch_backlight_button_up_cb:
- **/
 static void
 ch_backlight_button_up_cb (GtkWidget *widget, ChBacklightPrivate *priv)
 {
@@ -481,9 +445,6 @@ ch_backlight_button_up_cb (GtkWidget *widget, ChBacklightPrivate *priv)
 	priv->norm_required = TRUE;
 }
 
-/**
- * ch_backlight_button_down_cb:
- **/
 static void
 ch_backlight_button_down_cb (GtkWidget *widget, ChBacklightPrivate *priv)
 {
@@ -492,9 +453,6 @@ ch_backlight_button_down_cb (GtkWidget *widget, ChBacklightPrivate *priv)
 	priv->norm_required = TRUE;
 }
 
-/**
- * ch_backlight_proxy_property_cb:
- **/
 static void
 ch_backlight_proxy_property_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -516,9 +474,6 @@ ch_backlight_proxy_property_cb (GObject *source, GAsyncResult *res, gpointer use
 	}
 }
 
-/**
- * ch_backlight_property_changed_cb:
- **/
 static void
 ch_backlight_property_changed_cb (GDBusProxy *proxy, GVariant *changed_properties,
 				  GStrv invalidated_properties, gpointer user_data)
@@ -544,9 +499,6 @@ ch_backlight_property_changed_cb (GDBusProxy *proxy, GVariant *changed_propertie
 
 }
 
-/**
- * ch_backlight_proxy_changed_cb:
- **/
 static void
 ch_backlight_proxy_changed_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -564,9 +516,6 @@ ch_backlight_proxy_changed_cb (GObject *source, GAsyncResult *res, gpointer user
 			  G_CALLBACK (ch_backlight_property_changed_cb), priv);
 }
 
-/**
- * ch_backlight_settings_changed_cb:
- **/
 static void
 ch_backlight_settings_changed_cb (GSettings *settings, const gchar *key, ChBacklightPrivate *priv)
 {
@@ -598,9 +547,6 @@ ch_backlight_settings_changed_cb (GSettings *settings, const gchar *key, ChBackl
 	}
 }
 
-/**
- * ch_backlight_startup_cb:
- **/
 static void
 ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 {
@@ -715,9 +661,6 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 	ch_backlight_update_ui (priv);
 }
 
-/**
- * ch_backlight_ambient_changed_cb:
- **/
 static void
 ch_backlight_ambient_changed_cb (ChAmbient *ambient,
 				 ChBacklightPrivate *priv)
@@ -728,9 +671,6 @@ ch_backlight_ambient_changed_cb (ChAmbient *ambient,
 	ch_backlight_update_ui (priv);
 }
 
-/**
- * main:
- **/
 int
 main (int argc, char **argv)
 {

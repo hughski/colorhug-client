@@ -35,11 +35,6 @@ static void	ch_ambient_finalize	(GObject     *object);
 #define CH_USB_PID_FIRMWARE_ALS_SENSOR_HID 0x1008
 #endif
 
-/**
- * ChAmbientPrivate:
- *
- * Private #ChAmbient data
- **/
 struct _ChAmbientPrivate
 {
 	GDBusProxy		*iio_proxy;
@@ -68,9 +63,6 @@ typedef struct {
 
 static guint signals[SIGNAL_LAST] = { 0 };
 
-/**
- * ch_ambient_free_helper:
- **/
 static void
 ch_ambient_free_helper (ChAmbientHelper *helper)
 {
@@ -81,9 +73,6 @@ ch_ambient_free_helper (ChAmbientHelper *helper)
 	g_free (helper);
 }
 
-/**
- * ch_backlight_take_reading_cb:
- **/
 static void
 ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -110,9 +99,6 @@ ch_backlight_take_reading_cb (GObject *source, GAsyncResult *res, gpointer user_
 	ch_ambient_free_helper (helper);
 }
 
-/**
- * ch_ambient_file_read_cb:
- **/
 static void
 ch_ambient_file_read_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -155,9 +141,6 @@ ch_ambient_file_read_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 	ch_ambient_free_helper (helper);
 }
 
-/**
- * ch_ambient_get_iio_value_cb:
- **/
 static void
 ch_ambient_get_iio_value_cb (ChAmbientHelper *helper)
 {
@@ -185,9 +168,6 @@ ch_ambient_get_iio_value_cb (ChAmbientHelper *helper)
 	g_simple_async_result_complete_in_idle (helper->res);
 }
 
-/**
- * ch_ambient_get_value_async:
- **/
 void
 ch_ambient_get_value_async (ChAmbient *ambient,
 			    GCancellable *cancellable,
@@ -262,9 +242,6 @@ ch_ambient_get_value_async (ChAmbient *ambient,
 	}
 }
 
-/**
- * ch_ambient_get_value_finish:
- **/
 GdkRGBA *
 ch_ambient_get_value_finish (ChAmbient *ambient,
 			     GAsyncResult *res,
@@ -283,9 +260,6 @@ ch_ambient_get_value_finish (ChAmbient *ambient,
 	return g_simple_async_result_get_op_res_gpointer (simple);
 }
 
-/**
- * ch_ambient_get_kind:
- **/
 ChAmbientKind
 ch_ambient_get_kind (ChAmbient *ambient)
 {
@@ -293,9 +267,6 @@ ch_ambient_get_kind (ChAmbient *ambient)
 	return priv->kind;
 }
 
-/**
- * ch_ambient_class_init:
- **/
 static void
 ch_ambient_class_init (ChAmbientClass *klass)
 {
@@ -312,9 +283,6 @@ ch_ambient_class_init (ChAmbientClass *klass)
 	g_type_class_add_private (klass, sizeof (ChAmbientPrivate));
 }
 
-/**
- * ch_ambient_device_added_cb:
- **/
 static void
 ch_ambient_device_added_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *ambient)
 {
@@ -358,9 +326,6 @@ ch_ambient_device_added_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *amb
 	}
 }
 
-/**
- * ch_ambient_device_removed_cb:
- **/
 static void
 ch_ambient_device_removed_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *ambient)
 {
@@ -381,9 +346,6 @@ ch_ambient_device_removed_cb (GUsbContext *ctx, GUsbDevice *device, ChAmbient *a
 	}
 }
 
-/**
- * ch_ambient_enumerate:
- **/
 void
 ch_ambient_enumerate (ChAmbient *ambient)
 {
@@ -391,9 +353,6 @@ ch_ambient_enumerate (ChAmbient *ambient)
 	g_usb_context_enumerate (ambient->priv->usb_ctx);
 }
 
-/**
- * ch_ambient_find_acpi_internal:
- **/
 static GFile *
 ch_ambient_find_acpi_internal (void)
 {
@@ -464,9 +423,6 @@ iio_proxy_vanished_cb (GDBusConnection *connection,
 	g_clear_object (&ambient->priv->iio_proxy);
 }
 
-/**
- * ch_ambient_init:
- **/
 static void
 ch_ambient_init (ChAmbient *ambient)
 {
@@ -494,9 +450,6 @@ ch_ambient_init (ChAmbient *ambient)
 				  ambient, NULL);
 }
 
-/**
- * ch_ambient_finalize:
- **/
 static void
 ch_ambient_finalize (GObject *object)
 {
@@ -514,9 +467,6 @@ ch_ambient_finalize (GObject *object)
 	G_OBJECT_CLASS (ch_ambient_parent_class)->finalize (object);
 }
 
-/**
- * ch_ambient_new:
- **/
 ChAmbient *
 ch_ambient_new (void)
 {

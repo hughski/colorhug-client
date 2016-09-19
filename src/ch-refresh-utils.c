@@ -25,9 +25,6 @@
 #include <glib/gi18n.h>
 
 #include "ch-refresh-utils.h"
-/**
- * ch_refresh_calc_average:
- **/
 gdouble
 ch_refresh_calc_average (const gdouble *data, guint data_len)
 {
@@ -38,9 +35,6 @@ ch_refresh_calc_average (const gdouble *data, guint data_len)
 	return tmp / (gdouble) data_len;
 }
 
-/**
- * ch_refresh_calc_jitter:
- **/
 gdouble
 ch_refresh_calc_jitter (const gdouble *data, guint data_len)
 {
@@ -56,9 +50,6 @@ ch_refresh_calc_jitter (const gdouble *data, guint data_len)
 	}
 	return jitter;
 }
-/**
- * ch_refresh_sort:
- **/
 static void
 ch_refresh_sort (gdouble *data, guint data_len)
 {
@@ -81,11 +72,6 @@ ch_refresh_sort (gdouble *data, guint data_len)
 	} while (!sorted);
 }
 
-/**
- * ch_refresh_get_rise:
- *
- * Calculates the rise time from 10% to 90%
- **/
 gboolean
 ch_refresh_get_rise (CdSpectrum *sp, gdouble *value, gdouble *jitter, GError **error)
 {
@@ -151,11 +137,6 @@ ch_refresh_get_rise (CdSpectrum *sp, gdouble *value, gdouble *jitter, GError **e
 	return TRUE;
 }
 
-/**
- * ch_refresh_get_fall:
- *
- * Calculates the rise time from 90% to 10%
- **/
 gboolean
 ch_refresh_get_fall (CdSpectrum *sp, gdouble *value, gdouble *jitter, GError **error)
 {
@@ -221,11 +202,6 @@ ch_refresh_get_fall (CdSpectrum *sp, gdouble *value, gdouble *jitter, GError **e
 	return TRUE;
 }
 
-/**
- * ch_refresh_get_input_latency:
- *
- * Calculates the input latency to 10%.
- **/
 gboolean
 ch_refresh_get_input_latency (CdSpectrum *sp, gdouble *value, gdouble *jitter, GError **error)
 {
@@ -284,11 +260,6 @@ ch_refresh_get_input_latency (CdSpectrum *sp, gdouble *value, gdouble *jitter, G
 	return TRUE;
 }
 
-/**
- * ch_refresh_remove_pwm:
- *
- * Removes any pulses in the spectrum caused by PWM
- **/
 gboolean
 ch_refresh_remove_pwm (CdSpectrum *sp, GError **error)
 {
@@ -356,18 +327,12 @@ ch_refresh_remove_pwm (CdSpectrum *sp, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_refresh_result_add:
- **/
 void
 ch_refresh_result_add (GHashTable *results, const gchar *key, const gchar *value)
 {
 	g_hash_table_insert (results, g_strdup (key), g_strdup (value));
 }
 
-/**
- * ch_refresh_result_set_cct:
- **/
 void
 ch_refresh_result_set_cct (GHashTable *results, gdouble value)
 {
@@ -380,9 +345,6 @@ ch_refresh_result_set_cct (GHashTable *results, gdouble value)
 	ch_refresh_result_add (results, "label_cct", str);
 }
 
-/**
- * ch_refresh_result_set_lux_white:
- **/
 void
 ch_refresh_result_set_lux_white (GHashTable *results, gdouble value)
 {
@@ -395,9 +357,6 @@ ch_refresh_result_set_lux_white (GHashTable *results, gdouble value)
 	ch_refresh_result_add (results, "label_lux_white", str);
 }
 
-/**
- * ch_refresh_result_set_lux_black:
- **/
 void
 ch_refresh_result_set_lux_black (GHashTable *results, gdouble value)
 {
@@ -410,9 +369,6 @@ ch_refresh_result_set_lux_black (GHashTable *results, gdouble value)
 	ch_refresh_result_add (results, "label_lux_black", str);
 }
 
-/**
- * ch_refresh_result_set_srgb:
- **/
 void
 ch_refresh_result_set_srgb (GHashTable *results, gdouble value)
 {
@@ -425,9 +381,6 @@ ch_refresh_result_set_srgb (GHashTable *results, gdouble value)
 	ch_refresh_result_add (results, "label_coverage_srgb", str);
 }
 
-/**
- * ch_refresh_result_set_adobergb:
- **/
 void
 ch_refresh_result_set_adobergb (GHashTable *results, gdouble value)
 {
@@ -440,9 +393,6 @@ ch_refresh_result_set_adobergb (GHashTable *results, gdouble value)
 	ch_refresh_result_add (results, "label_coverage_adobergb", str);
 }
 
-/**
- * ch_refresh_result_set_refresh:
- **/
 void
 ch_refresh_result_set_refresh (GHashTable *results, gdouble value)
 {
@@ -455,9 +405,6 @@ ch_refresh_result_set_refresh (GHashTable *results, gdouble value)
 	ch_refresh_result_add (results, "label_refresh", str);
 }
 
-/**
- * ch_refresh_result_set_gamma:
- **/
 void
 ch_refresh_result_set_gamma (GHashTable *results, gdouble value)
 {

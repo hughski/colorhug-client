@@ -80,9 +80,6 @@ enum
 	PROP_LAST
 };
 
-/**
- * up_graph_get_property:
- **/
 static void
 up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
@@ -115,9 +112,6 @@ up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec
 	}
 }
 
-/**
- * up_graph_set_property:
- **/
 static void
 up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
@@ -155,10 +149,6 @@ up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GPar
 	gtk_widget_show (GTK_WIDGET (graph));
 }
 
-/**
- * ch_graph_widget_class_init:
- * @class: This graph class instance
- **/
 static void
 ch_graph_widget_class_init (ChGraphWidgetClass *class)
 {
@@ -214,10 +204,6 @@ ch_graph_widget_class_init (ChGraphWidgetClass *class)
 							   G_PARAM_READWRITE));
 }
 
-/**
- * ch_graph_widget_init:
- * @graph: This class instance
- **/
 static void
 ch_graph_widget_init (ChGraphWidget *graph)
 {
@@ -245,9 +231,6 @@ ch_graph_widget_init (ChGraphWidget *graph)
 	pango_font_description_free (desc);
 }
 
-/**
- * ch_graph_widget_clear:
- **/
 gboolean
 ch_graph_widget_clear (ChGraphWidget *graph)
 {
@@ -259,10 +242,6 @@ ch_graph_widget_clear (ChGraphWidget *graph)
 	return TRUE;
 }
 
-/**
- * ch_graph_widget_finalize:
- * @object: This graph class instance
- **/
 static void
 ch_graph_widget_finalize (GObject *object)
 {
@@ -546,11 +525,6 @@ ch_graph_widget_get_y_label_max_width (ChGraphWidget *graph, cairo_t *cr)
 	return biggest;
 }
 
-/**
- * ch_graph_widget_set_color:
- * @cr: Cairo drawing context
- * @color: The color enum
- **/
 static void
 ch_graph_widget_set_color (cairo_t *cr, guint32 color)
 {
@@ -574,9 +548,6 @@ ch_graph_widget_get_pos_on_graph (ChGraphWidget *graph, gdouble data_x, gdouble 
 	*y = graph->priv->box_y + (graph->priv->unit_y * (gdouble)(graph->priv->stop_y - data_y)) + 1.5;
 }
 
-/**
- * ch_graph_widget_draw_dot:
- **/
 static void
 ch_graph_widget_draw_dot (cairo_t *cr, gdouble x, gdouble y, guint32 color)
 {
@@ -746,9 +717,6 @@ ch_graph_widget_draw (GtkWidget *widget, cairo_t *cr)
 	return FALSE;
 }
 
-/**
- * ch_graph_widget_export_to_svg_cb:
- **/
 static cairo_status_t
 ch_graph_widget_export_to_svg_cb (void *user_data, const unsigned char *data, unsigned int length)
 {
@@ -760,9 +728,6 @@ ch_graph_widget_export_to_svg_cb (void *user_data, const unsigned char *data, un
 	return CAIRO_STATUS_SUCCESS;
 }
 
-/**
- * ch_graph_widget_export_to_svg:
- **/
 gchar *
 ch_graph_widget_export_to_svg (ChGraphWidget *graph, guint width, guint height)
 {
@@ -783,10 +748,6 @@ ch_graph_widget_export_to_svg (ChGraphWidget *graph, guint width, guint height)
 	return g_string_free (str, FALSE);
 }
 
-/**
- * ch_graph_widget_new:
- * Return value: A new ChGraphWidget object.
- **/
 GtkWidget *
 ch_graph_widget_new (void)
 {

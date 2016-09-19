@@ -22,9 +22,6 @@
 
 #include "ch-point-obj.h"
 
-/**
- * ch_point_obj_copy:
- **/
 ChPointObj *
 ch_point_obj_copy (const ChPointObj *cobj)
 {
@@ -36,9 +33,6 @@ ch_point_obj_copy (const ChPointObj *cobj)
 	return obj;
 }
 
-/**
- * ch_point_obj_new:
- **/
 ChPointObj *
 ch_point_obj_new (void)
 {
@@ -50,9 +44,6 @@ ch_point_obj_new (void)
 	return obj;
 }
 
-/**
- * ch_point_obj_free:
- **/
 void
 ch_point_obj_free (ChPointObj *obj)
 {

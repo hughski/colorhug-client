@@ -114,9 +114,6 @@ out:
 	return ret;
 }
 
-/**
- * ch_markdown_to_text_line_is_bullett:
- **/
 static gboolean
 ch_markdown_to_text_line_is_bullett (const gchar *line)
 {
@@ -128,36 +125,24 @@ ch_markdown_to_text_line_is_bullett (const gchar *line)
 		g_str_has_prefix (line, " + "));
 }
 
-/**
- * ch_markdown_to_text_line_is_header1:
- **/
 static gboolean
 ch_markdown_to_text_line_is_header1 (const gchar *line)
 {
 	return g_str_has_prefix (line, "# ");
 }
 
-/**
- * ch_markdown_to_text_line_is_header2:
- **/
 static gboolean
 ch_markdown_to_text_line_is_header2 (const gchar *line)
 {
 	return g_str_has_prefix (line, "## ");
 }
 
-/**
- * ch_markdown_to_text_line_is_header1_type2:
- **/
 static gboolean
 ch_markdown_to_text_line_is_header1_type2 (const gchar *line)
 {
 	return g_str_has_prefix (line, "===");
 }
 
-/**
- * ch_markdown_to_text_line_is_header2_type2:
- **/
 static gboolean
 ch_markdown_to_text_line_is_header2_type2 (const gchar *line)
 {
@@ -165,18 +150,12 @@ ch_markdown_to_text_line_is_header2_type2 (const gchar *line)
 }
 
 #if 0
-/**
- * ch_markdown_to_text_line_is_code:
- **/
 static gboolean
 ch_markdown_to_text_line_is_code (const gchar *line)
 {
 	return (g_str_has_prefix (line, "    ") || g_str_has_prefix (line, "\t"));
 }
 
-/**
- * ch_markdown_to_text_line_is_blockquote:
- **/
 static gboolean
 ch_markdown_to_text_line_is_blockquote (const gchar *line)
 {
@@ -184,9 +163,6 @@ ch_markdown_to_text_line_is_blockquote (const gchar *line)
 }
 #endif
 
-/**
- * ch_markdown_to_text_line_is_blank:
- **/
 static gboolean
 ch_markdown_to_text_line_is_blank (const gchar *line)
 {
@@ -213,9 +189,6 @@ out:
 	return ret;
 }
 
-/**
- * ch_markdown_replace:
- **/
 static gchar *
 ch_markdown_replace (const gchar *haystack,
 		     const gchar *needle,
@@ -231,9 +204,6 @@ ch_markdown_replace (const gchar *haystack,
 	return new;
 }
 
-/**
- * ch_markdown_strstr_spaces:
- **/
 static gchar *
 ch_markdown_strstr_spaces (const gchar *haystack, const gchar *needle)
 {
@@ -258,9 +228,6 @@ retry:
 	return found;
 }
 
-/**
- * ch_markdown_to_text_line_formatter:
- **/
 static gchar *
 ch_markdown_to_text_line_formatter (const gchar *line,
 				    const gchar *formatter,
@@ -311,9 +278,6 @@ out:
 	return data;
 }
 
-/**
- * ch_markdown_to_text_line_format_sections:
- **/
 static gchar *
 ch_markdown_to_text_line_format_sections (ChMarkdown *markdown, const gchar *line)
 {
@@ -359,9 +323,6 @@ ch_markdown_to_text_line_format_sections (ChMarkdown *markdown, const gchar *lin
 	return data;
 }
 
-/**
- * ch_markdown_to_text_line_format:
- **/
 static gchar *
 ch_markdown_to_text_line_format (ChMarkdown *markdown, const gchar *line)
 {
@@ -400,9 +361,6 @@ out:
 	return text;
 }
 
-/**
- * ch_markdown_add_pending:
- **/
 static gboolean
 ch_markdown_add_pending (ChMarkdown *markdown, const gchar *line)
 {
@@ -420,9 +378,6 @@ ch_markdown_add_pending (ChMarkdown *markdown, const gchar *line)
 	return TRUE;
 }
 
-/**
- * ch_markdown_add_pending_header:
- **/
 static gboolean
 ch_markdown_add_pending_header (ChMarkdown *markdown, const gchar *line)
 {
@@ -437,9 +392,6 @@ ch_markdown_add_pending_header (ChMarkdown *markdown, const gchar *line)
 	return ret;
 }
 
-/**
- * ch_markdown_count_chars_in_word:
- **/
 static guint
 ch_markdown_count_chars_in_word (const gchar *text, gchar find)
 {
@@ -461,9 +413,6 @@ out:
 	return count;
 }
 
-/**
- * ch_markdown_word_is_code:
- **/
 static gboolean
 ch_markdown_word_is_code (const gchar *text)
 {
@@ -512,9 +461,6 @@ ch_markdown_word_is_code (const gchar *text)
 	return FALSE;
 }
 
-/**
- * ch_markdown_word_auto_format_code:
- **/
 static gchar *
 ch_markdown_word_auto_format_code (const gchar *text)
 {
@@ -549,9 +495,6 @@ out:
 	return temp;
 }
 
-/**
- * ch_markdown_flush_pending:
- **/
 static void
 ch_markdown_flush_pending (ChMarkdown *markdown)
 {
@@ -612,9 +555,6 @@ ch_markdown_flush_pending (ChMarkdown *markdown)
 	g_free (temp);
 }
 
-/**
- * ch_markdown_to_text_line_process:
- **/
 static gboolean
 ch_markdown_to_text_line_process (ChMarkdown *markdown, const gchar *line)
 {
@@ -698,9 +638,6 @@ out:
 	return ret;
 }
 
-/**
- * ch_markdown_parse:
- **/
 gchar *
 ch_markdown_parse (ChMarkdown *markdown, const gchar *text)
 {
@@ -740,9 +677,6 @@ ch_markdown_parse (ChMarkdown *markdown, const gchar *text)
 	return temp;
 }
 
-/**
- * ch_markdown_class_init:
- **/
 static void
 ch_markdown_class_init (ChMarkdownClass *klass)
 {
@@ -751,9 +685,6 @@ ch_markdown_class_init (ChMarkdownClass *klass)
 	g_type_class_add_private (klass, sizeof (ChMarkdownPrivate));
 }
 
-/**
- * ch_markdown_init:
- **/
 static void
 ch_markdown_init (ChMarkdown *markdown)
 {
@@ -766,9 +697,6 @@ ch_markdown_init (ChMarkdown *markdown)
 	markdown->priv->autocode = FALSE;
 }
 
-/**
- * ch_markdown_finalize:
- **/
 static void
 ch_markdown_finalize (GObject *object)
 {
@@ -785,9 +713,6 @@ ch_markdown_finalize (GObject *object)
 	G_OBJECT_CLASS (ch_markdown_parent_class)->finalize (object);
 }
 
-/**
- * ch_markdown_new:
- **/
 ChMarkdown *
 ch_markdown_new (void)
 {

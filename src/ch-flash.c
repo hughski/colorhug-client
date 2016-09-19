@@ -59,9 +59,6 @@ typedef struct {
 	guint		 inhibit_id;
 } ChFlashPrivate;
 
-/**
- * ch_flash_error_dialog:
- **/
 static void
 ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *message)
 {
@@ -94,9 +91,6 @@ ch_flash_error_dialog (ChFlashPrivate *priv, const gchar *title, const gchar *me
 	gtk_widget_destroy (w);
 }
 
-/**
- * ch_flash_error_do_not_panic:
- **/
 static void
 ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 {
@@ -107,9 +101,6 @@ ch_flash_error_do_not_panic (ChFlashPrivate *priv)
 	gtk_widget_hide (w);
 }
 
-/**
- * ch_flash_error_no_network:
- **/
 static void
 ch_flash_error_no_network (ChFlashPrivate *priv)
 {
@@ -120,9 +111,6 @@ ch_flash_error_no_network (ChFlashPrivate *priv)
 	gtk_widget_hide (w);
 }
 
-/**
- * ch_flash_activate_cb:
- **/
 static void
 ch_flash_activate_cb (GApplication *application, ChFlashPrivate *priv)
 {
@@ -131,9 +119,6 @@ ch_flash_activate_cb (GApplication *application, ChFlashPrivate *priv)
 	gtk_window_present (window);
 }
 
-/**
- * ch_flash_set_flash_success_1_cb:
- **/
 static void
 ch_flash_set_flash_success_1_cb (GObject *source,
 				 GAsyncResult *res,
@@ -174,9 +159,6 @@ ch_flash_set_flash_success_1_cb (GObject *source,
 #endif
 }
 
-/**
- * ch_flash_set_flash_success_1:
- **/
 static void
 ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 {
@@ -200,9 +182,6 @@ ch_flash_set_flash_success_1 (ChFlashPrivate *priv)
 				       priv);
 }
 
-/**
- * ch_flash_boot_flash_delay_cb:
- **/
 static gboolean
 ch_flash_boot_flash_delay_cb (gpointer user_data)
 {
@@ -224,9 +203,6 @@ ch_flash_boot_flash_delay_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_flash_boot_flash_cb:
- **/
 static void
 ch_flash_boot_flash_cb (GObject *source,
 			GAsyncResult *res,
@@ -253,9 +229,6 @@ ch_flash_boot_flash_cb (GObject *source,
 		       ch_flash_boot_flash_delay_cb, priv);
 }
 
-/**
- * ch_flash_verify_firmware_cb:
- **/
 static void
 ch_flash_verify_firmware_cb (GObject *source,
 			     GAsyncResult *res,
@@ -308,9 +281,6 @@ ch_flash_verify_firmware_cb (GObject *source,
 				       priv);
 }
 
-/**
- * ch_flash_write_firmware_cb:
- **/
 static void
 ch_flash_write_firmware_cb (GObject *source,
 			    GAsyncResult *res,
@@ -351,9 +321,6 @@ ch_flash_write_firmware_cb (GObject *source,
 				       priv);
 }
 
-/**
- * ch_flash_set_flash_success_0:
- **/
 static void
 ch_flash_set_flash_success_0 (ChFlashPrivate *priv)
 {
@@ -381,9 +348,6 @@ ch_flash_set_flash_success_0 (ChFlashPrivate *priv)
 				       priv);
 }
 
-/**
- * ch_flash_reset_delay_cb:
- **/
 static gboolean
 ch_flash_reset_delay_cb (gpointer user_data)
 {
@@ -404,9 +368,6 @@ ch_flash_reset_delay_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_flash_reset_cb:
- **/
 static void
 ch_flash_reset_cb (GObject *source,
 		   GAsyncResult *res,
@@ -430,9 +391,6 @@ ch_flash_reset_cb (GObject *source,
 	g_timeout_add (CH_FLASH_RECONNECT_TIMEOUT, ch_flash_reset_delay_cb, priv);
 }
 
-/**
- * ch_flash_got_firmware_data:
- **/
 static void
 ch_flash_got_firmware_data (ChFlashPrivate *priv)
 {
@@ -484,9 +442,6 @@ ch_flash_got_firmware_data (ChFlashPrivate *priv)
 				       priv);
 }
 
-/**
- * ch_flash_got_firmware_cb:
- **/
 static void
 ch_flash_got_firmware_cb (SoupSession *session,
 			  SoupMessage *msg,
@@ -538,9 +493,6 @@ ch_flash_got_firmware_cb (SoupSession *session,
 	ch_flash_got_firmware_data (priv);
 }
 
-/**
- * ch_flash_firmware_got_chunk_cb:
- **/
 static void
 ch_flash_firmware_got_chunk_cb (SoupMessage *msg,
 				SoupBuffer *chunk,
@@ -583,9 +535,6 @@ ch_flash_firmware_got_chunk_cb (SoupMessage *msg,
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (w), fraction);
 }
 
-/**
- * ch_flash_show_warning_dialog:
- **/
 static gboolean
 ch_flash_show_warning_dialog (ChFlashPrivate *priv)
 {
@@ -623,9 +572,6 @@ ch_flash_show_warning_dialog (ChFlashPrivate *priv)
 	return (response == GTK_RESPONSE_OK);
 }
 
-/**
- * ch_flash_get_device_download_kind:
- **/
 static const gchar *
 ch_flash_get_device_download_kind (ChFlashPrivate *priv)
 {
@@ -655,9 +601,6 @@ ch_flash_get_device_download_kind (ChFlashPrivate *priv)
 	return str;
 }
 
-/**
- * ch_flash_flash_button_cb:
- **/
 static void
 ch_flash_flash_button_cb (GtkWidget *w, ChFlashPrivate *priv)
 {
@@ -727,18 +670,12 @@ out:
 		soup_uri_free (base_uri);
 }
 
-/**
- * ch_flash_get_packed_version:
- **/
 static guint32
 ch_flash_get_packed_version (guint16 *ver)
 {
 	return ver[0] * 0xffff + ver[1] * 0xff + ver[2];
 }
 
-/**
- * ch_flash_version_is_newer:
- **/
 static gboolean
 ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 {
@@ -769,9 +706,6 @@ ch_flash_version_is_newer (ChFlashPrivate *priv, const gchar *version)
 	return ret;
 }
 
-/**
- * ch_flash_no_updates:
- **/
 static void
 ch_flash_no_updates (ChFlashPrivate *priv)
 {
@@ -785,9 +719,6 @@ ch_flash_no_updates (ChFlashPrivate *priv)
 	gtk_label_set_label (GTK_LABEL (w), title);
 }
 
-/**
- * ch_flash_has_updates:
- **/
 static void
 ch_flash_has_updates (ChFlashPrivate *priv)
 {
@@ -805,9 +736,6 @@ ch_flash_has_updates (ChFlashPrivate *priv)
 	gtk_label_set_label (GTK_LABEL (w), title);
 }
 
-/**
- * ch_flash_got_metadata_cb:
- **/
 static void
 ch_flash_got_metadata_cb (SoupSession *session,
 			  SoupMessage *msg,
@@ -910,9 +838,6 @@ ch_flash_got_metadata_cb (SoupSession *session,
 	ch_flash_has_updates (priv);
 }
 
-/**
- * ch_flash_got_device_data:
- **/
 static void
 ch_flash_got_device_data (ChFlashPrivate *priv)
 {
@@ -1072,9 +997,6 @@ out:
 		soup_uri_free (base_uri);
 }
 
-/**
- * ch_flash_get_serial_number_cb:
- **/
 static void
 ch_flash_get_serial_number_cb (GObject *source,
 			       GAsyncResult *res,
@@ -1097,9 +1019,6 @@ ch_flash_get_serial_number_cb (GObject *source,
 	ch_flash_got_device_data (priv);
 }
 
-/**
- * ch_flash_get_firmware_version_cb:
- **/
 static void
 ch_flash_get_firmware_version_cb (GObject *source,
 				  GAsyncResult *res,
@@ -1140,9 +1059,6 @@ ch_flash_get_firmware_version_cb (GObject *source,
 	}
 }
 
-/**
- * ch_flash_get_fake_device:
- **/
 static GUsbDevice *
 ch_flash_get_fake_device (ChFlashPrivate *priv)
 {
@@ -1155,9 +1071,6 @@ ch_flash_get_fake_device (ChFlashPrivate *priv)
 	return g_object_ref (g_ptr_array_index (array, 0));
 }
 
-/**
- * ch_flash_got_device:
- **/
 static void
 ch_flash_got_device (ChFlashPrivate *priv)
 {
@@ -1208,9 +1121,6 @@ fake_device:
 				       priv);
 }
 
-/**
- * ch_flash_activate_link_cb:
- **/
 static gboolean
 ch_flash_activate_link_cb (GtkLabel *label,
 			   const gchar *uri,
@@ -1240,9 +1150,6 @@ ch_flash_activate_link_cb (GtkLabel *label,
 	return TRUE;
 }
 
-/**
- * ch_flash_please_attach_device:
- **/
 static void
 ch_flash_please_attach_device (ChFlashPrivate *priv)
 {
@@ -1253,9 +1160,6 @@ ch_flash_please_attach_device (ChFlashPrivate *priv)
 	gtk_stack_set_visible_child_name (GTK_STACK (w), "insert");
 }
 
-/**
- * ch_backlight_help_activated_cb:
- **/
 static void
 ch_backlight_help_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -1269,9 +1173,6 @@ ch_backlight_help_activated_cb (GSimpleAction *action, GVariant *parameter, gpoi
 		g_warning ("Failed to load help document: %s", error->message);
 }
 
-/**
- * ch_backlight_quit_activated_cb:
- **/
 static void
 ch_backlight_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -1279,9 +1180,6 @@ ch_backlight_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpoi
 	g_application_quit (G_APPLICATION (priv->application));
 }
 
-/**
- * ch_backlight_about_activated_cb:
- **/
 static void
 ch_backlight_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -1321,9 +1219,6 @@ static GActionEntry actions[] = {
 	{ "quit", ch_backlight_quit_activated_cb, NULL, NULL, NULL }
 };
 
-/**
- * ch_flash_startup_cb:
- **/
 static void
 ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 {
@@ -1421,9 +1316,6 @@ ch_flash_startup_cb (GApplication *application, ChFlashPrivate *priv)
 	gtk_widget_show (main_window);
 }
 
-/**
- * ch_flash_device_added_cb:
- **/
 static void
 ch_flash_device_added_cb (GUsbContext *context,
 			  GUsbDevice *device,
@@ -1438,9 +1330,6 @@ ch_flash_device_added_cb (GUsbContext *context,
 	}
 }
 
-/**
- * ch_flash_device_removed_cb:
- **/
 static void
 ch_flash_device_removed_cb (GUsbContext *context,
 			    GUsbDevice *device,
@@ -1458,9 +1347,6 @@ ch_flash_device_removed_cb (GUsbContext *context,
 	}
 }
 
-/**
- * ch_flash_ignore_cb:
- **/
 static void
 ch_flash_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
 		    const gchar *message, gpointer user_data)
@@ -1501,9 +1387,6 @@ ch_flash_device_queue_progress_changed_cb (ChDeviceQueue *device_queue,
 	}
 }
 
-/**
- * main:
- **/
 int
 main (int argc, char **argv)
 {

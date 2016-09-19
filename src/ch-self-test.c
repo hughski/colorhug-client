@@ -28,9 +28,6 @@
 
 #include "ch-refresh-utils.h"
 
-/**
- * cd_test_get_filename:
- **/
 static gchar *
 cd_test_get_filename (const gchar *filename)
 {
@@ -44,9 +41,6 @@ cd_test_get_filename (const gchar *filename)
 	return g_strdup (full_tmp);
 }
 
-/**
- * ch_test_refresh_smooth_func:
- */
 static void
 ch_test_refresh_smooth_func (void)
 {
@@ -92,9 +86,6 @@ ch_test_refresh_smooth_func (void)
 	g_assert_cmpfloat (fabs (jitter - 0.015f), <, 0.05f);
 }
 
-/**
- * ch_test_refresh_pwm_func:
- */
 static void
 ch_test_refresh_pwm_func (void)
 {

@@ -66,9 +66,6 @@ typedef struct {
 	guint			 sample_idx;
 } ChRefreshMeasureHelper;
 
-/**
- * ch_refresh_error_dialog:
- **/
 static void
 ch_refresh_error_dialog (ChRefreshPrivate *priv,
 			 const gchar *title,
@@ -89,9 +86,6 @@ ch_refresh_error_dialog (ChRefreshPrivate *priv,
 	gtk_widget_destroy (dialog);
 }
 
-/**
- * ch_refresh_activate_cb:
- **/
 static void
 ch_refresh_activate_cb (GApplication *application, ChRefreshPrivate *priv)
 {
@@ -100,9 +94,6 @@ ch_refresh_activate_cb (GApplication *application, ChRefreshPrivate *priv)
 	gtk_window_present (window);
 }
 
-/**
- * ch_refresh_sample_set_black_cb:
- **/
 static gboolean
 ch_refresh_sample_set_black_cb (gpointer user_data)
 {
@@ -117,9 +108,6 @@ ch_refresh_sample_set_black_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_refresh_sample_set_white_cb:
- **/
 static gboolean
 ch_refresh_sample_set_white_cb (gpointer user_data)
 {
@@ -137,9 +125,6 @@ ch_refresh_sample_set_white_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_refresh_get_usb_speed:
- **/
 static gboolean
 ch_refresh_get_usb_speed (ChRefreshPrivate *priv,
 			  gdouble *latency,
@@ -175,9 +160,6 @@ ch_refresh_get_usb_speed (ChRefreshPrivate *priv,
 	return TRUE;
 }
 
-/**
- * ch_refresh_get_data_from_sram:
- **/
 static void
 ch_refresh_get_data_from_sram (ChRefreshMeasureHelper *helper)
 {
@@ -222,9 +204,6 @@ ch_refresh_get_data_from_sram (ChRefreshMeasureHelper *helper)
 
 }
 
-/**
- * ch_refresh_update_cancel_buttons:
- **/
 static void
 ch_refresh_update_cancel_buttons (ChRefreshPrivate *priv, gboolean in_progress)
 {
@@ -235,9 +214,6 @@ ch_refresh_update_cancel_buttons (ChRefreshPrivate *priv, gboolean in_progress)
 	gtk_widget_set_visible (w, !in_progress && priv->device != NULL);
 }
 
-/**
- * ch_refresh_update_graph:
- **/
 static void
 ch_refresh_update_graph (ChRefreshPrivate *priv)
 {
@@ -337,9 +313,6 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	}
 }
 
-/**
- * ch_refresh_update_refresh_rate:
- **/
 static void
 ch_refresh_update_refresh_rate (ChRefreshPrivate *priv)
 {
@@ -354,18 +327,12 @@ ch_refresh_update_refresh_rate (ChRefreshPrivate *priv)
 	ch_refresh_result_set_refresh (priv->results, refresh_rate);
 }
 
-/**
- * ch_refresh_round_fraction:
- **/
 static gdouble
 ch_refresh_round_fraction (gdouble tmp)
 {
 	return ceilf (tmp * 10.f) / 10.f;
 }
 
-/**
- * ch_refresh_update_ui:
- **/
 static void
 ch_refresh_update_ui (ChRefreshPrivate *priv)
 {
@@ -452,9 +419,6 @@ ch_refresh_update_ui (ChRefreshPrivate *priv)
 	ch_refresh_update_graph (priv);
 }
 
-/**
- * ch_refresh_update_page:
- **/
 static void
 ch_refresh_update_page (ChRefreshPrivate *priv, gboolean is_results)
 {
@@ -482,9 +446,6 @@ ch_refresh_update_page (ChRefreshPrivate *priv, gboolean is_results)
 	cd_sample_widget_set_color (CD_SAMPLE_WIDGET (priv->sample_widget), &source);
 }
 
-/**
- * ch_refresh_measure_helper_free:
- **/
 static void
 ch_refresh_measure_helper_free (ChRefreshMeasureHelper *helper)
 {
@@ -510,9 +471,6 @@ ch_refresh_measure_helper_free (ChRefreshMeasureHelper *helper)
 
 static void ch_refresh_ti3_show_patch (ChRefreshMeasureHelper *helper);
 
-/**
- * ch_refresh_find_colord_icc_profile:
- **/
 static GFile *
 ch_refresh_find_colord_icc_profile (const gchar *filename)
 {
@@ -534,9 +492,6 @@ ch_refresh_find_colord_icc_profile (const gchar *filename)
 	return NULL;
 }
 
-/**
- * ch_refresh_update_coverage:
- **/
 static void
 ch_refresh_update_coverage (ChRefreshMeasureHelper *helper)
 {
@@ -628,9 +583,6 @@ out:
 	ch_refresh_result_set_adobergb (helper->priv->results, coverage_adobergb);
 }
 
-/**
- * ch_refresh_update_labels_from_results:
- **/
 static void
 ch_refresh_update_labels_from_results (GtkBuilder *builder, GHashTable *results)
 {
@@ -651,9 +603,6 @@ ch_refresh_update_labels_from_results (GtkBuilder *builder, GHashTable *results)
 	}
 }
 
-/**
- * ch_refresh_ti3_take_readings_cb:
- **/
 static void
 ch_refresh_ti3_take_readings_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -696,9 +645,6 @@ ch_refresh_ti3_take_readings_cb (GObject *source, GAsyncResult *res, gpointer us
 	ch_refresh_ti3_show_patch (helper);
 }
 
-/**
- * ch_refresh_ti3_wait_for_patch_cb:
- **/
 static gboolean
 ch_refresh_ti3_wait_for_patch_cb (gpointer user_data)
 {
@@ -717,9 +663,6 @@ ch_refresh_ti3_wait_for_patch_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_refresh_ti3_show_patch:
- **/
 static void
 ch_refresh_ti3_show_patch (ChRefreshMeasureHelper *helper)
 {
@@ -732,9 +675,6 @@ ch_refresh_ti3_show_patch (ChRefreshMeasureHelper *helper)
 	g_timeout_add (200, ch_refresh_ti3_wait_for_patch_cb, helper);
 }
 
-/**
- * ch_refresh_take_reading_array_cb:
- **/
 static void
 ch_refresh_take_reading_array_cb (GObject *source, GAsyncResult *res, gpointer data)
 {
@@ -759,9 +699,6 @@ ch_refresh_take_reading_array_cb (GObject *source, GAsyncResult *res, gpointer d
 	ch_refresh_ti3_show_patch (helper);
 }
 
-/**
- * ch_refresh_update_usb_latency:
- **/
 static void
 ch_refresh_update_usb_latency (ChRefreshMeasureHelper *helper)
 {
@@ -792,9 +729,6 @@ ch_refresh_update_usb_latency (ChRefreshMeasureHelper *helper)
 			       "label_usb_latency", usb_latency_str);
 }
 
-/**
- * ch_refresh_get_readings_cb:
- **/
 static gboolean
 ch_refresh_get_readings_cb (gpointer user_data)
 {
@@ -820,9 +754,6 @@ ch_refresh_get_readings_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_refresh_get_readings:
- **/
 static void
 ch_refresh_get_readings (ChRefreshMeasureHelper *helper)
 {
@@ -834,9 +765,6 @@ ch_refresh_get_readings (ChRefreshMeasureHelper *helper)
 	g_timeout_add (200, ch_refresh_get_readings_cb, helper);
 }
 
-/**
- * ch_refresh_graph_settings_cb:
- **/
 static void
 ch_refresh_graph_settings_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 {
@@ -877,18 +805,12 @@ ch_refresh_graph_settings_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 	gtk_widget_show_all (pop);
 }
 
-/**
- * ch_refresh_button_back_cb:
- **/
 static void
 ch_refresh_button_back_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 {
 	ch_refresh_update_page (priv, FALSE);
 }
 
-/**
- * ch_refresh_cancel_cb:
- **/
 static void
 ch_refresh_cancel_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 {
@@ -896,9 +818,6 @@ ch_refresh_cancel_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 	ch_refresh_update_cancel_buttons (priv, FALSE);
 }
 
-/**
- * ch_refresh_find_xrandr_id:
- **/
 static gchar *
 ch_refresh_find_xrandr_id (GdkWindow *window)
 {
@@ -910,9 +829,6 @@ ch_refresh_find_xrandr_id (GdkWindow *window)
 	return gdk_screen_get_monitor_plug_name (screen, monitor_num);
 }
 
-/**
- * ch_refresh_device_profiling_inhibit_cb:
- **/
 static void
 ch_refresh_device_profiling_inhibit_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -927,9 +843,6 @@ ch_refresh_device_profiling_inhibit_cb (GObject *source, GAsyncResult *res, gpoi
 	ch_refresh_get_readings (helper);
 }
 
-/**
- * ch_refresh_device_connect_cb:
- **/
 static void
 ch_refresh_device_connect_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -955,9 +868,6 @@ ch_refresh_device_connect_cb (GObject *source, GAsyncResult *res, gpointer user_
 	ch_refresh_result_add (helper->priv->results, "title", helper->title);
 }
 
-/**
- * ch_refresh_colord_find_device_cb:
- **/
 static void
 ch_refresh_colord_find_device_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -977,9 +887,6 @@ ch_refresh_colord_find_device_cb (GObject *source, GAsyncResult *res, gpointer u
 			   ch_refresh_device_connect_cb, helper);
 }
 
-/**
- * ch_refresh_refresh_button_cb:
- **/
 static void
 ch_refresh_refresh_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 {
@@ -1009,9 +916,6 @@ ch_refresh_refresh_button_cb (GtkWidget *widget, ChRefreshPrivate *priv)
 	ch_refresh_update_usb_latency (helper);
 }
 
-/**
- * ch_refresh_update_title:
- **/
 static void
 ch_refresh_update_title (ChRefreshPrivate *priv, const gchar *filename)
 {
@@ -1031,9 +935,6 @@ ch_refresh_update_title (ChRefreshPrivate *priv, const gchar *filename)
 	gtk_label_set_label (GTK_LABEL (w), title);
 }
 
-/**
- * ch_refresh_export_html_file:
- **/
 static gboolean
 ch_refresh_export_html_file (ChRefreshPrivate *priv, const gchar *filename, GError **error)
 {
@@ -1126,9 +1027,6 @@ ch_refresh_export_html_file (ChRefreshPrivate *priv, const gchar *filename, GErr
 	return g_file_set_contents (filename, html->str, -1, NULL);
 }
 
-/**
- * ch_refresh_export_activated_cb:
- **/
 static void
 ch_refresh_export_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -1166,18 +1064,12 @@ ch_refresh_export_activated_cb (GSimpleAction *action, GVariant *parameter, gpoi
 	gtk_widget_destroy (d);
 }
 
-/**
- * ch_refresh_zoom_changed_cb:
- **/
 static void
 ch_refresh_zoom_changed_cb (GObject *object, GParamSpec *pspec, ChRefreshPrivate *priv)
 {
 	ch_refresh_update_ui (priv);
 }
 
-/**
- * ch_refresh_update_ui_for_device:
- **/
 static void
 ch_refresh_update_ui_for_device (ChRefreshPrivate *priv)
 {
@@ -1238,9 +1130,6 @@ ch_refresh_update_ui_for_device (ChRefreshPrivate *priv)
 	gtk_window_resize (GTK_WINDOW (w), 100, 100);
 }
 
-/**
- * ch_refresh_device_open:
- **/
 static void
 ch_refresh_device_open (ChRefreshPrivate *priv)
 {
@@ -1259,9 +1148,6 @@ ch_refresh_device_open (ChRefreshPrivate *priv)
 	ch_refresh_update_ui_for_device (priv);
 }
 
-/**
- * ch_refresh_about_activated_cb:
- **/
 static void
 ch_refresh_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -1294,9 +1180,6 @@ ch_refresh_about_activated_cb (GSimpleAction *action, GVariant *parameter, gpoin
 			       NULL);
 }
 
-/**
- * ch_refresh_quit_activated_cb:
- **/
 static void
 ch_refresh_quit_activated_cb (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
@@ -1310,9 +1193,6 @@ static GActionEntry actions[] = {
 	{ "quit", ch_refresh_quit_activated_cb, NULL, NULL, NULL }
 };
 
-/**
- * ch_refresh_colord_connect_cb:
- **/
 static void
 ch_refresh_colord_connect_cb (GObject *source, GAsyncResult *res, gpointer user_data)
 {
@@ -1325,9 +1205,6 @@ ch_refresh_colord_connect_cb (GObject *source, GAsyncResult *res, gpointer user_
 	}
 }
 
-/**
- * ch_refresh_startup_cb:
- **/
 static void
 ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 {
@@ -1441,9 +1318,6 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 	ch_refresh_update_title (priv, NULL);
 }
 
-/**
- * ch_refresh_device_added_cb:
- **/
 static void
 ch_refresh_device_added_cb (GUsbContext *context,
 			    GUsbDevice *device,
@@ -1458,9 +1332,6 @@ ch_refresh_device_added_cb (GUsbContext *context,
 	}
 }
 
-/**
- * ch_refresh_device_removed_cb:
- **/
 static void
 ch_refresh_device_removed_cb (GUsbContext *context,
 			      GUsbDevice *device,
@@ -1477,9 +1348,6 @@ ch_refresh_device_removed_cb (GUsbContext *context,
 	}
 }
 
-/**
- * main:
- **/
 int
 main (int argc, char **argv)
 {

@@ -49,9 +49,6 @@ typedef struct {
 	ChUtilPrivateCb	 callback;
 } ChUtilItem;
 
-/**
- * ch_util_item_free:
- **/
 static void
 ch_util_item_free (ChUtilItem *item)
 {
@@ -60,18 +57,12 @@ ch_util_item_free (ChUtilItem *item)
 	g_free (item);
 }
 
-/**
- * cd_sort_command_name_cb:
- **/
 static gint
 cd_sort_command_name_cb (ChUtilItem **item1, ChUtilItem **item2)
 {
 	return g_strcmp0 ((*item1)->name, (*item2)->name);
 }
 
-/**
- * ch_util_add:
- **/
 static void
 ch_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUtilPrivateCb callback)
 {
@@ -96,9 +87,6 @@ ch_util_add (GPtrArray *array, const gchar *name, const gchar *description, ChUt
 	}
 }
 
-/**
- * ch_util_get_descriptions:
- **/
 static gchar *
 ch_util_get_descriptions (GPtrArray *array)
 {
@@ -141,9 +129,6 @@ ch_util_get_descriptions (GPtrArray *array)
 	return g_string_free (string, FALSE);
 }
 
-/**
- * ch_util_run:
- **/
 static gboolean
 ch_util_run (ChUtilPrivate *priv, const gchar *command, gchar **values, GError **error)
 {
@@ -170,9 +155,6 @@ ch_util_run (ChUtilPrivate *priv, const gchar *command, gchar **values, GError *
 	return FALSE;
 }
 
-/**
- * ch_util_get_prompt:
- **/
 static gboolean
 ch_util_get_prompt (const gchar *question, gboolean defaultyes)
 {
@@ -190,9 +172,6 @@ ch_util_get_prompt (const gchar *question, gboolean defaultyes)
 	return FALSE;
 }
 
-/**
- * ch_util_get_color_select:
- **/
 static gboolean
 ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -226,9 +205,6 @@ ch_util_get_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_get_hardware_version:
- **/
 static gboolean
 ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -256,9 +232,6 @@ ch_util_get_hardware_version (ChUtilPrivate *priv, gchar **values, GError **erro
 	return TRUE;
 }
 
-/**
- * ch_util_take_reading_array:
- **/
 static gboolean
 ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -326,9 +299,6 @@ ch_util_take_reading_array (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_remote_profile_download:
- **/
 static gboolean
 ch_util_remote_profile_download (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -398,18 +368,12 @@ out:
 	return ret;
 }
 
-/**
- * ch_util_self_test:
- **/
 static gboolean
 ch_util_self_test (ChUtilPrivate *priv, gchar **values, GError **error)
 {
 	return ch_device_self_test (priv->device, NULL, error);
 }
 
-/**
- * ch_util_remote_profile_upload:
- **/
 static gboolean
 ch_util_remote_profile_upload (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -491,9 +455,6 @@ out:
 	return ret;
 }
 
-/**
- * ch_util_ccmx_upload:
- **/
 static gboolean
 ch_util_ccmx_upload (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -552,9 +513,6 @@ out:
 	return ret;
 }
 
-/**
- * ch_util_set_color_select:
- **/
 static gboolean
 ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -591,9 +549,6 @@ ch_util_set_color_select (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_multiplier:
- **/
 static gboolean
 ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -628,9 +583,6 @@ ch_util_get_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_multiplier:
- **/
 static gboolean
 ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -666,9 +618,6 @@ ch_util_set_multiplier (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_integral_time:
- **/
 static gboolean
 ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -687,9 +636,6 @@ ch_util_get_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_integral_time:
- **/
 static gboolean
 ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -710,9 +656,6 @@ ch_util_set_integral_time (ChUtilPrivate *priv, gchar **values, GError **error)
 					    error);
 }
 
-/**
- * ch_util_get_calibration_map:
- **/
 static gboolean
 ch_util_get_calibration_map (ChUtilPrivate *priv,
 			     gchar **values,
@@ -737,9 +680,6 @@ ch_util_get_calibration_map (ChUtilPrivate *priv,
 	return TRUE;
 }
 
-/**
- * ch_util_set_calibration_map:
- **/
 static gboolean
 ch_util_set_calibration_map (ChUtilPrivate *priv,
 			     gchar **values,
@@ -767,9 +707,6 @@ ch_util_set_calibration_map (ChUtilPrivate *priv,
 					error);
 }
 
-/**
- * ch_util_get_firmware_ver:
- **/
 static gboolean
 ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -795,9 +732,6 @@ ch_util_get_firmware_ver (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_show_calibration:
- **/
 static void
 ch_util_show_calibration (const CdMat3x3 *calibration)
 {
@@ -813,9 +747,6 @@ ch_util_show_calibration (const CdMat3x3 *calibration)
 	}
 }
 
-/**
- * ch_util_get_calibration:
- **/
 static gboolean
 ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -857,9 +788,6 @@ ch_util_get_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_calibration:
- **/
 static gboolean
 ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -931,9 +859,6 @@ ch_util_set_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_clear_calibration:
- **/
 static gboolean
 ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -957,9 +882,6 @@ ch_util_clear_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_types_to_short_string:
- **/
 static gchar *
 ch_util_types_to_short_string (guint8 types)
 {
@@ -975,9 +897,6 @@ ch_util_types_to_short_string (guint8 types)
 	return g_string_free (str, FALSE);
 }
 
-/**
- * ch_util_list_calibration:
- **/
 static gboolean
 ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1026,9 +945,6 @@ ch_util_list_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_calibration_ccmx:
- **/
 static gboolean
 ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1065,9 +981,6 @@ ch_util_set_calibration_ccmx (ChUtilPrivate *priv, gchar **values, GError **erro
 					error);
 }
 
-/**
- * ch_util_get_serial_number:
- **/
 static gboolean
 ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1086,9 +999,6 @@ ch_util_get_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_serial_number:
- **/
 static gboolean
 ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1116,9 +1026,6 @@ ch_util_set_serial_number (ChUtilPrivate *priv, gchar **values, GError **error)
 					    error);
 }
 
-/**
- * ch_util_get_owner_name:
- **/
 static gboolean
 ch_util_get_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1139,9 +1046,6 @@ ch_util_get_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_owner_name:
- **/
 static gboolean
 ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1169,9 +1073,6 @@ ch_util_set_owner_name (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_owner_email:
- **/
 static gboolean
 ch_util_get_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1192,9 +1093,6 @@ ch_util_get_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_owner_email:
- **/
 static gboolean
 ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1222,9 +1120,6 @@ ch_util_set_owner_email (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_leds:
- **/
 static gboolean
 ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1243,9 +1138,6 @@ ch_util_get_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_leds:
- **/
 static gboolean
 ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1297,9 +1189,6 @@ ch_util_set_leds (ChUtilPrivate *priv, gchar **values, GError **error)
 				   error);
 }
 
-/**
- * ch_util_get_illuminants:
- **/
 static gboolean
 ch_util_get_illuminants (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1318,9 +1207,6 @@ ch_util_get_illuminants (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_illuminants:
- **/
 static gboolean
 ch_util_set_illuminants (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1362,9 +1248,6 @@ ch_util_set_illuminants (ChUtilPrivate *priv, gchar **values, GError **error)
 					  error);
 }
 
-/**
- * ch_util_get_pcb_errata:
- **/
 static gboolean
 ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1390,9 +1273,6 @@ ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_pcb_errata:
- **/
 static gboolean
 ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1429,9 +1309,6 @@ ch_util_set_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 					 error);
 }
 
-/**
- * ch_util_get_remote_hash:
- **/
 static gboolean
 ch_util_get_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1456,9 +1333,6 @@ ch_util_get_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_remote_hash:
- **/
 static gboolean
 ch_util_set_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1488,9 +1362,6 @@ ch_util_set_remote_hash (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_dark_offsets:
- **/
 static gboolean
 ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1512,9 +1383,6 @@ ch_util_get_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_dark_offsets_auto:
- **/
 static gboolean
 ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 {
@@ -1603,9 +1471,6 @@ ch_util_set_dark_offsets_auto (ChUtilPrivate *priv, GError **error)
 					error);
 }
 
-/**
- * ch_util_set_dark_offsets:
- **/
 static gboolean
 ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1635,9 +1500,6 @@ ch_util_set_dark_offsets (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_write_eeprom:
- **/
 static gboolean
 ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1658,9 +1520,6 @@ ch_util_write_eeprom (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_take_reading_raw:
- **/
 static gboolean
 ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1718,9 +1577,6 @@ ch_util_take_reading_raw (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_take_readings:
- **/
 static gboolean
 ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1754,9 +1610,6 @@ ch_util_take_readings (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_print_color_values:
- **/
 static void
 ch_util_print_color_values (CdColorXYZ *value)
 {
@@ -1782,9 +1635,6 @@ ch_util_print_color_values (CdColorXYZ *value)
 	g_print ("R:% .5f\tG:% .5f\tB:% .5f\n", srgb.v0, srgb.v1, srgb.v2);
 }
 
-/**
- * ch_util_take_readings_xyz:
- **/
 static gboolean
 ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1811,9 +1661,6 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_take_reading_spectral:
- **/
 static gboolean
 ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1836,9 +1683,6 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 	return TRUE;
 }
 
-/**
- * ch_util_reset:
- **/
 static gboolean
 ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -1851,10 +1695,6 @@ ch_util_reset (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_default_device:
- * device_idx: the index, or -1 for 'any'
- **/
 static GUsbDevice *
 ch_util_get_default_device (gint device_idx, GError **error)
 {
@@ -1913,9 +1753,6 @@ ch_util_get_default_device (gint device_idx, GError **error)
 	return g_object_ref (device_tmp);
 }
 
-/**
- * ch_util_helper_quit_loop_cb:
- **/
 static gboolean
 ch_util_helper_quit_loop_cb (gpointer user_data)
 {
@@ -1924,9 +1761,6 @@ ch_util_helper_quit_loop_cb (gpointer user_data)
 	return FALSE;
 }
 
-/**
- * ch_util_flash_firmware_internal:
- **/
 static gboolean
 ch_util_flash_firmware_internal (ChUtilPrivate *priv,
 				 const gchar *filename,
@@ -2056,9 +1890,6 @@ out:
 	return ret;
 }
 
-/**
- * ch_util_flash_firmware_force:
- **/
 static gboolean
 ch_util_flash_firmware_force (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2078,9 +1909,6 @@ ch_util_flash_firmware_force (ChUtilPrivate *priv, gchar **values, GError **erro
 	return TRUE;
 }
 
-/**
- * ch_util_flash_firmware:
- **/
 static gboolean
 ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2109,9 +1937,6 @@ ch_util_flash_firmware (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_get_pre_scale:
- **/
 static gboolean
 ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2133,9 +1958,6 @@ ch_util_get_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_pre_scale:
- **/
 static gboolean
 ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2165,9 +1987,6 @@ ch_util_set_pre_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_dac_value:
- **/
 static gboolean
 ch_util_get_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2189,9 +2008,6 @@ ch_util_get_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_dac_value:
- **/
 static gboolean
 ch_util_set_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2221,9 +2037,6 @@ ch_util_set_dac_value (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_get_adc_vrefs:
- **/
 static gboolean
 ch_util_get_adc_vrefs (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2250,9 +2063,6 @@ ch_util_get_adc_vrefs (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_get_ccd_calibration:
- **/
 static gboolean
 ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2277,9 +2087,6 @@ ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error
 	return TRUE;
 }
 
-/**
- * ch_util_set_crypto_key:
- **/
 static gboolean
 ch_util_set_crypto_key (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2328,9 +2135,6 @@ ch_util_set_crypto_key (ChUtilPrivate *priv, gchar **values, GError **error)
 	return ch_device_set_crypto_key (priv->device, keys, NULL, error);
 }
 
-/**
- * ch_util_inhx32_to_bin:
- **/
 static gboolean
 ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2361,9 +2165,6 @@ ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
 	return g_file_set_contents (values[1], (const gchar *) out, len, error);
 }
 
-/**
- * ch_util_set_ccd_calibration:
- **/
 static gboolean
 ch_util_set_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2405,9 +2206,6 @@ ch_util_set_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error
 					error);
 }
 
-/**
- * ch_util_get_temperature:
- **/
 static gboolean
 ch_util_get_temperature (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2426,9 +2224,6 @@ ch_util_get_temperature (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_get_post_scale:
- **/
 static gboolean
 ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2449,9 +2244,6 @@ ch_util_get_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_post_scale:
- **/
 static gboolean
 ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2480,9 +2272,6 @@ ch_util_set_post_scale (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_boot_flash:
- **/
 static gboolean
 ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2495,9 +2284,6 @@ ch_util_boot_flash (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_set_flash_success:
- **/
 static gboolean
 ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2527,9 +2313,6 @@ ch_util_set_flash_success (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_eeprom_write:
- **/
 static gboolean
 ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2620,9 +2403,6 @@ ch_util_eeprom_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_eeprom_erase:
- **/
 static gboolean
 ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2661,9 +2441,6 @@ ch_util_eeprom_erase (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_eeprom_read:
- **/
 static gboolean
 ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2714,9 +2491,6 @@ ch_util_eeprom_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_get_measure_mode:
- **/
 static gboolean
 ch_util_get_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2748,9 +2522,6 @@ ch_util_get_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_set_measure_mode:
- **/
 static gboolean
 ch_util_set_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2783,9 +2554,6 @@ ch_util_set_measure_mode (ChUtilPrivate *priv, gchar **values, GError **error)
 					error);
 }
 
-/**
- * ch_util_sram_write:
- **/
 static gboolean
 ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2839,9 +2607,6 @@ ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_sram_read:
- **/
 static gboolean
 ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 {
@@ -2892,18 +2657,12 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	return TRUE;
 }
 
-/**
- * ch_util_ignore_cb:
- **/
 static void
 ch_util_ignore_cb (const gchar *log_domain, GLogLevelFlags log_level,
 		   const gchar *message, gpointer user_data)
 {
 }
 
-/**
- * main:
- **/
 int
 main (int argc, char *argv[])
 {
