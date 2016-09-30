@@ -15,6 +15,7 @@ AM_CPPFLAGS =						\
 	-DLOCALEDIR=\""$(localedir)"\"
 
 bin_PROGRAMS =						\
+	colorhug-spectro				\
 	colorhug-backlight				\
 	colorhug-ccmx					\
 	colorhug-cmd					\
@@ -116,10 +117,10 @@ colorhug_ccmx_DEPENDENCIES = ch-ccmx-rc.$(OBJEXT)
 endif
 
 colorhug_refresh_SOURCES =				\
-	ch-graph-widget.c				\
-	ch-graph-widget.h				\
-	ch-point-obj.c					\
-	ch-point-obj.h					\
+	egg-graph-widget.c				\
+	egg-graph-widget.h				\
+	egg-graph-point.c					\
+	egg-graph-point.h					\
 	ch-refresh.c					\
 	ch-refresh-resources.c				\
 	ch-refresh-resources.h				\
@@ -146,10 +147,10 @@ colorhug_refresh_CFLAGS =				\
 colorhug_backlight_SOURCES =				\
 	ch-ambient.c					\
 	ch-ambient.h					\
-	ch-graph-widget.c				\
-	ch-graph-widget.h				\
-	ch-point-obj.c					\
-	ch-point-obj.h					\
+	egg-graph-widget.c				\
+	egg-graph-widget.h				\
+	egg-graph-point.c					\
+	egg-graph-point.h					\
 	ch-backlight.c					\
 	ch-backlight-resources.c			\
 	ch-backlight-resources.h
@@ -169,6 +170,32 @@ colorhug_backlight_LDADD =				\
 	-lm
 
 colorhug_backlight_CFLAGS =				\
+	$(WARNINGFLAGS_C)
+
+colorhug_spectro_SOURCES =				\
+	egg-graph-widget.c				\
+	egg-graph-widget.h				\
+	egg-graph-point.c					\
+	egg-graph-point.h					\
+	ch-spectro.c					\
+	ch-spectro-resources.c				\
+	ch-spectro-resources.h
+
+if HAVE_WIN32_RELEASE
+colorhug_spectro_LDFLAGS =				\
+	-mwindows
+endif
+
+colorhug_spectro_LDADD =				\
+	$(COLORD_LIBS)					\
+	$(COLORD_GTK_LIBS)				\
+	$(GUSB_LIBS)					\
+	$(GLIB_LIBS)					\
+	$(GTK_LIBS)					\
+	$(COLORHUG_LIBS)				\
+	-lm
+
+colorhug_spectro_CFLAGS =				\
 	$(WARNINGFLAGS_C)
 
 if HAS_WINDOWS_ICON
@@ -241,9 +268,26 @@ ch-backlight-resources.h: colorhug-backlight.gresource.xml
 	--c-name ch					\
 	$(srcdir)/colorhug-backlight.gresource.xml
 
+ch-spectro-resources.c: colorhug-spectro.gresource.xml ../data/ch-spectro.ui ../data/ch-spectro-menus.ui
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-source				\
+	--c-name ch					\
+	$(srcdir)/colorhug-spectro.gresource.xml
+ch-spectro-resources.h: colorhug-spectro.gresource.xml
+	$(AM_V_GEN)					\
+	glib-compile-resources --target=$@		\
+	--sourcedir=$(top_srcdir)/data			\
+	--generate-header				\
+	--c-name ch					\
+	$(srcdir)/colorhug-spectro.gresource.xml
+
 BUILT_SOURCES =						\
 	ch-backlight-resources.c			\
 	ch-backlight-resources.h			\
+	ch-spectro-resources.c				\
+	ch-spectro-resources.h				\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
 	ch-flash-resources.c				\
@@ -253,6 +297,7 @@ BUILT_SOURCES =						\
 
 EXTRA_DIST =						\
 	colorhug-backlight.gresource.xml		\
+	colorhug-spectro.gresource.xml			\
 	colorhug-ccmx.gresource.xml			\
 	colorhug-flash.gresource.xml			\
 	colorhug-refresh.gresource.xml

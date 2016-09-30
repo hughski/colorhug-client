@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkApplicationWindow" id="dialog_spectro">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkStack" id="stack_spectro">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="transition_duration">400</property>
+        <property name="transition_type">crossfade</property>
+        <child>
+          <object class="GtkBox" id="box_connect">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="border_width">30</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="GtkImage" id="image_usb">
+                <property name="width_request">175</property>
+                <property name="height_request">175</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">12</property>
+                <property name="stock">gtk-stop</property>
+                <property name="icon_size">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_intro">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">Please insert your ColorHugPlus device.</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="max_width_chars">40</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="1.2"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">connect</property>
+            <property name="title">page0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack_view">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkBox" id="box_view_results">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkBox" id="box_results">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="margin_top">18</property>
+                    <property name="margin_bottom">18</property>
+                    <property name="spacing">40</property>
+                    <child>
+                      <object class="GtkGrid" id="grid_results_illum">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="label_wb_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes" comments="The spectro color">Wideband</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_uv_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes" comments="The spectro color">Ultraviolet (!)</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="switch_illum_wb">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="switch_illum_uv">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid_results_input">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="label_duration_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="label" translatable="yes" comments="The surrounding light level">Integration Time</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_duration">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="label">0ms</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_dark_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="label" translatable="yes" comments="The amount of smoothing done to the spectro readings">Apply Dark Calibration</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_irradiance_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="label" translatable="yes" comments="The amount the sensor can influence the brightness">Apply Irradiance Calibration</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="checkbutton_dark">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="use_stock">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="checkbutton_irradiance">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="use_stock">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_normalize_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="label" translatable="yes" comments="The amount the sensor can influence the brightness">Normalize Luminance</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="checkbutton_normalize">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="use_stock">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid_results_output">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="label_xyz_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes" comments="The spectro color">XYZ Color</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_rgb_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes" comments="The spectro color">sRGB Color</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_xyz">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="label">123.4, 567.8, 901.2</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_rgb">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="label">123.4, 567.8, 901.2</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_cct_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes" comments="The spectro color">CCT</property>
+                            <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_cct">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="label">100K</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <style>
+                  <class name="view"/>
+                </style>
+              </object>
+              <packing>
+                <property name="name">output</property>
+                <property name="title" translatable="yes">Output Spectrum</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box_view_raw">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="name">raw</property>
+                <property name="title" translatable="yes">Input Spectrum</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box_view_dark">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">end</property>
+                    <property name="margin_top">18</property>
+                    <property name="margin_bottom">18</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label_dark_title1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes" comments="The amount of smoothing done to the spectro readings">Recalibrate when sensor is dark</property>
+                        <property name="xalign">1</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_dark">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <property name="always_show_image">True</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">view-refresh-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="name">dark</property>
+                <property name="title" translatable="yes">Dark Calibration</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box_view_irradiance">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">end</property>
+                    <property name="margin_top">18</property>
+                    <property name="margin_bottom">18</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkButton" id="button_irradiance">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <property name="always_show_image">True</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">view-refresh-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label_irradiance_title2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes" comments="The amount of smoothing done to the spectro readings">Recalibrate with a reference source</property>
+                        <property name="xalign">1</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="name">irradiance</property>
+                <property name="title" translatable="yes">Irradiance Calibration</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">results</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show_close_button">True</property>
+        <child>
+          <object class="GtkButton" id="button_sample">
+            <property name="label" translatable="yes">Take Sample</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child type="title">
+          <object class="GtkStackSwitcher">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="stack">stack_view</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Continuous</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSwitch" id="switch_sample">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="active">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -45,6 +45,13 @@ Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
 %description backlight
 Sample the ambient light level to control the backlight.
 
+%package spectro
+Summary: ColorHug Spectrum Utility
+Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
+
+%description spectro
+Show a spectrum.
+
 %package ccmx
 Summary: ColorHug CCMX Utility
 Requires: yelp
@@ -114,6 +121,14 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/applications/com.hughski.ColorHug.Backlight.desktop
 %{_datadir}/icons/hicolor/*/apps/colorhug-backlight.png
 %{_mandir}/man1/colorhug-backlight.1.gz
+
+%files spectro
+%doc COPYING
+%{_bindir}/colorhug-spectro
+%{_datadir}/appdata/com.hughski.ColorHug.Spectro.appdata.xml
+%{_datadir}/applications/com.hughski.ColorHug.Spectro.desktop
+#%{_datadir}/icons/hicolor/*/apps/colorhug-spectro.png
+#%{_mandir}/man1/colorhug-spectro.1.gz
 
 %files ccmx
 %doc COPYING

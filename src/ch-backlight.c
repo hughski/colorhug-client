@@ -31,7 +31,7 @@
 #include <colorhug.h>
 
 #include "ch-ambient.h"
-#include "ch-graph-widget.h"
+#include "egg-graph-widget.h"
 
 typedef struct {
 	ChAmbient		*ambient;
@@ -207,7 +207,7 @@ ch_backlight_get_brightness (ChBacklightPrivate *priv)
 static void
 ch_backlight_update_graph (ChBacklightPrivate *priv)
 {
-	ChPointObj *point;
+	EggGraphPoint *point;
 	ChBacklightSample *sample;
 	GtkAdjustment *a;
 	guint i;
@@ -217,16 +217,16 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 	gdouble refresh;
 	g_autoptr(GError) error = NULL;
 
-	ch_graph_widget_clear (CH_GRAPH_WIDGET (priv->graph));
+	egg_graph_widget_data_clear (EGG_GRAPH_WIDGET (priv->graph));
 
 	/* add lines */
 	refresh = g_settings_get_double (priv->settings, "refresh");
 	for (j = 0; j < 4; j++) {
 		g_autoptr(GPtrArray) array = NULL;
-		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
+		array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 		for (i = 0; i < priv->data->len; i++) {
 			sample = g_ptr_array_index (priv->data, i);
-			point = ch_point_obj_new ();
+			point = egg_graph_point_new ();
 			point->x = (gdouble) i * refresh;
 			point->y = (gdouble) sample->data[j] * 100.f / priv->norm_value;
 			point->y = MIN (point->y, 100.f);
@@ -236,24 +236,24 @@ ch_backlight_update_graph (ChBacklightPrivate *priv)
 				point->color = 0x0000df << ((3-j) * 8);
 			g_ptr_array_add (array, point);
 		}
-		ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-					CH_GRAPH_WIDGET_PLOT_LINE, array);
+		egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph),
+					EGG_GRAPH_WIDGET_PLOT_LINE, array);
 	}
 
 	/* add historical values */
 	if (1) {
 		g_autoptr(GPtrArray) array = NULL;
-		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
+		array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 		for (i = 0; i < priv->data->len; i++) {
 			sample = g_ptr_array_index (priv->data, i);
-			point = ch_point_obj_new ();
+			point = egg_graph_point_new ();
 			point->x = (gdouble) i * refresh;
 			point->y = sample->brightness;
 			point->color = 0xaaaaaa;
 			g_ptr_array_add (array, point);
 		}
-		ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-					CH_GRAPH_WIDGET_PLOT_LINE, array);
+		egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph),
+					EGG_GRAPH_WIDGET_PLOT_LINE, array);
 	}
 
 	/* sanity check */
@@ -592,10 +592,10 @@ ch_backlight_startup_cb (GApplication *application, ChBacklightPrivate *priv)
 
 	/* add graph */
 	box = GTK_BOX (gtk_builder_get_object (priv->builder, "box_results"));
-	priv->graph = ch_graph_widget_new ();
+	priv->graph = egg_graph_widget_new ();
 	g_object_set (priv->graph,
-		      "type-x", CH_GRAPH_WIDGET_TYPE_TIME,
-		      "type-y", CH_GRAPH_WIDGET_TYPE_PERCENTAGE,
+		      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
+		      "type-y", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 		      "start-x", 0.f,
 		      "stop-x", 120.f,
 		      "start-y", 0.f,

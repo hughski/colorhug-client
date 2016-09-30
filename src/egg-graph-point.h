@@ -30,11 +30,11 @@ typedef struct
 	gdouble		 x;
 	gdouble		 y;
 	guint32		 color;
-} ChPointObj;
+} EggGraphPoint;
 
-ChPointObj	*ch_point_obj_new		(void);
-ChPointObj	*ch_point_obj_copy		(const ChPointObj	*cobj);
-void		 ch_point_obj_free		(ChPointObj		*obj);
+EggGraphPoint	*egg_graph_point_new		(void);
+EggGraphPoint	*egg_graph_point_copy		(const EggGraphPoint	*cobj);
+void		 egg_graph_point_free		(EggGraphPoint		*obj);
 
 G_END_DECLS
 

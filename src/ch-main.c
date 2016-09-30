@@ -1664,12 +1664,13 @@ ch_util_take_readings_xyz (ChUtilPrivate *priv, gchar **values, GError **error)
 static gboolean
 ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **error)
 {
+	gdouble cal[4];
 	g_autofree gchar *str = NULL;
 	g_autoptr(CdSpectrum) sp = NULL;
 
 	/* get from HW */
-	if (!ch_device_set_integral_time (priv->device, 50, NULL, error))
-		return FALSE;
+//	if (!ch_device_set_integral_time (priv->device, 50, NULL, error))
+//		return FALSE;
 	if (!ch_device_take_reading_spectral (priv->device,
 					      CH_SPECTRUM_KIND_RAW,
 					      NULL,
@@ -1678,7 +1679,13 @@ ch_util_take_reading_spectral (ChUtilPrivate *priv, gchar **values, GError **err
 	sp = ch_device_get_spectrum (priv->device, NULL, error);
 	if (sp == NULL)
 		return FALSE;
-	str = cd_spectrum_to_string (sp, 60, 10);
+	if (!ch_device_get_ccd_calibration (priv->device,
+					    &cal[0], &cal[1], &cal[2], &cal[3],
+					    NULL, error))
+		return FALSE;
+	cd_spectrum_set_start (sp, cal[0]);
+	cd_spectrum_set_wavelength_cal (sp, cal[1], cal[2], cal[3]);
+	str = cd_spectrum_to_string (sp, 150, 30);
 	g_print ("%s\n", str);
 	return TRUE;
 }
@@ -2066,24 +2073,19 @@ ch_util_get_adc_vrefs (ChUtilPrivate *priv, gchar **values, GError **error)
 static gboolean
 ch_util_get_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	gboolean ret;
-	guint16 ccd_calibration[3] = { 0x0000, 0x0000, 0x0000 };
-
-	/* get from HW */
-	ch_device_queue_get_ccd_calibration (priv->device_queue,
-					     priv->device,
-					     ccd_calibration);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
+	gdouble ccd_calibration[4];
+	if (!ch_device_get_ccd_calibration (priv->device,
+					    &ccd_calibration[0],
+					    &ccd_calibration[1],
+					    &ccd_calibration[2],
+					    &ccd_calibration[3],
+					    NULL, error))
 		return FALSE;
-
-	g_print ("CCD Calibration: %i %i %i\n",
+	g_print ("CCD Calibration: %.4f %.8f %.8f %.8f\n",
 		 ccd_calibration[0],
 		 ccd_calibration[1],
-		 ccd_calibration[2]);
+		 ccd_calibration[2],
+		 ccd_calibration[3]);
 	return TRUE;
 }
 
@@ -2168,42 +2170,32 @@ ch_util_inhx32_to_bin (ChUtilPrivate *priv, gchar **values, GError **error)
 static gboolean
 ch_util_set_ccd_calibration (ChUtilPrivate *priv, gchar **values, GError **error)
 {
-	guint16 ccd_calibration[3] = { 0x0000, 0x0000, 0x0000 };
-	guint16 last = 0;
+	gdouble ccd_calibration[4];
 	guint i;
 
 	/* parse */
-	if (g_strv_length (values) != 3) {
+	if (g_strv_length (values) != 4) {
 		g_set_error_literal (error, 1, 0,
-				     "invalid input, expect 'red', 'green', 'blue'");
+				     "invalid input, expect 'start', '1st', '2nd' 3rd");
 		return FALSE;
 	}
-	for (i = 0; i < 3; i++) {
-		ccd_calibration[i] = g_ascii_strtoll (values[i], NULL, 10);
-		if (ccd_calibration[i] == 0 ||
-		    ccd_calibration[i] > CH_CCD_SPECTRAL_RESOLUTION) {
+	for (i = 0; i < 4; i++) {
+		gchar *endptr = NULL;
+		ccd_calibration[i] = g_ascii_strtod (values[i], &endptr);
+		if (endptr && endptr[0] != '\0') {
 			g_set_error (error, 1, 0,
-				     "invalid ccd calibration value %s",
-				     values[i]);
+				     "Failed to parse float '%s'", values[i]);
 			return FALSE;
 		}
-		if (ccd_calibration[i] <= last) {
-			g_set_error (error, 1, 0,
-				     "ccd calibration values should increase %s",
-				     values[i]);
-			return FALSE;
-		}
-		last = ccd_calibration[i];
 	}
 
-	/* get from HW */
-	ch_device_queue_set_ccd_calibration (priv->device_queue,
-					     priv->device,
-					     ccd_calibration);
-	return ch_device_queue_process (priv->device_queue,
-					CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-					NULL,
-					error);
+	/* set to HW */
+	return ch_device_set_ccd_calibration (priv->device,
+					      ccd_calibration[0],
+					      ccd_calibration[1],
+					      ccd_calibration[2],
+					      ccd_calibration[3],
+					      NULL, error);
 }
 
 static gboolean
@@ -2585,21 +2577,30 @@ ch_util_sram_write (ChUtilPrivate *priv, gchar **values, GError **error)
 		return FALSE;
 	}
 
-	/* just write zeros */
+	/* just write random */
 	data = g_new0 (guint8, len);
 	for (i = 0; i < len; i++)
 		data[i] = g_random_int_range (0x00, 0xff);
-	ch_device_queue_write_sram (priv->device_queue,
-				    priv->device,
-				    (guint16) address,
-				    data,
-				    len);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		return FALSE;
+
+	/* write to hardware */
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE_PLUS) {
+		g_autoptr(GBytes) bytes = g_bytes_new (data, len);
+		ret = ch_device_write_sram (priv->device, address, bytes, NULL, error);
+		if (!ret)
+			return FALSE;
+	} else {
+		ch_device_queue_write_sram (priv->device_queue,
+					    priv->device,
+					    (guint16) address,
+					    data,
+					    len);
+		ret = ch_device_queue_process (priv->device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       error);
+		if (!ret)
+			return FALSE;
+	}
 
 	g_print ("Wrote:\n");
 	for (i = 0; i < len; i++)
@@ -2614,16 +2615,16 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 	gsize len;
 	guint32 address;
 	guint i;
+	const guint8 *buf_ptr;
 	g_autofree guint8 *data = NULL;
+	g_autoptr(GBytes) buf = NULL;
 
-	/* parse */
+	/* parse values */
 	if (g_strv_length (values) != 2) {
 		g_set_error_literal (error, 1, 0,
 				     "invalid input, expect 'address (base-16)' 'length (base-10)'");
 		return FALSE;
 	}
-
-	/* read sram */
 	address = g_ascii_strtoull (values[0], NULL, 16);
 	if (address > 0xffff) {
 		g_set_error (error, 1, 0,
@@ -2638,23 +2639,45 @@ ch_util_sram_read (ChUtilPrivate *priv, gchar **values, GError **error)
 			     len);
 		return FALSE;
 	}
-	data = g_new0 (guint8, len);
-	ch_device_queue_read_sram (priv->device_queue,
-				   priv->device,
-				   (guint16) address,
-				   data,
-				   len);
-	ret = ch_device_queue_process (priv->device_queue,
-				       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
-				       NULL,
-				       error);
-	if (!ret)
-		return FALSE;
+
+	/* get data */
+	if (ch_device_get_mode (priv->device) == CH_DEVICE_MODE_FIRMWARE_PLUS) {
+		buf = ch_device_read_sram (priv->device, address, len, NULL, error);
+		if (buf == NULL)
+			return FALSE;
+		buf_ptr = g_bytes_get_data (buf, NULL);
+	} else {
+		data = g_new0 (guint8, len);
+		ch_device_queue_read_sram (priv->device_queue,
+					   priv->device,
+					   (guint16) address,
+					   data,
+					   len);
+		ret = ch_device_queue_process (priv->device_queue,
+					       CH_DEVICE_QUEUE_PROCESS_FLAGS_NONE,
+					       NULL,
+					       error);
+		if (!ret)
+			return FALSE;
+		buf_ptr = data;
+	}
 
 	g_print ("Read:\n");
 	for (i = 0; i < len; i++)
-		g_print ("0x%04x = %02x\n", address + i, data[i]);
+		g_print ("0x%04x = %02x\n", address + i, buf_ptr[i]);
 	return TRUE;
+}
+
+static gboolean
+ch_util_sram_load (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	return ch_device_load_sram (priv->device, NULL, error);
+}
+
+static gboolean
+ch_util_sram_save (ChUtilPrivate *priv, gchar **values, GError **error)
+{
+	return ch_device_save_sram (priv->device, NULL, error);
 }
 
 static void
@@ -2992,6 +3015,16 @@ main (int argc, char *argv[])
 		     /* TRANSLATORS: command description */
 		     _("Write SRAM at a specified address"),
 		     ch_util_sram_write);
+	ch_util_add (priv->cmd_array,
+		     "sram-load",
+		     /* TRANSLATORS: command description */
+		     _("Loads the SRAM from the EEPROM"),
+		     ch_util_sram_load);
+	ch_util_add (priv->cmd_array,
+		     "sram-save",
+		     /* TRANSLATORS: command description */
+		     _("Save the SRAM to the EEPROM"),
+		     ch_util_sram_save);
 	ch_util_add (priv->cmd_array,
 		     "get-temperature",
 		     /* TRANSLATORS: command description */

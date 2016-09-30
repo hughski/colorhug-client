@@ -50,4 +50,23 @@
       <description>The gamma values to use when scaling ambient light samples.</description>
     </key>
   </schema>
+  <schema id="com.hughski.ColorHug.Spectro" path="/com/hughski/ColorHug/Spectro/">
+    <key name="integration" type="u">
+      <default>50</default>
+      <summary>The integration time in milliseconds for each sample</summary>
+      <description>Set the integration time in milliseconds for the sample.</description>
+    </key>
+    <key name="normalize" type="b">
+      <default>true</default>
+      <summary>Normalize the spectrum</summary>
+    </key>
+    <key name="dark-calibration" type="b">
+      <default>true</default>
+      <summary>Apply the dark calibration to the spectrum</summary>
+    </key>
+    <key name="irradiance-calibration" type="b">
+      <default>true</default>
+      <summary>Apply the irradiance calibration to the spectrum</summary>
+    </key>
+  </schema>
 </schemalist>

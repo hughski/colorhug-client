@@ -20,24 +20,24 @@
 
 #include <glib.h>
 
-#include "ch-point-obj.h"
+#include "egg-graph-point.h"
 
-ChPointObj *
-ch_point_obj_copy (const ChPointObj *cobj)
+EggGraphPoint *
+egg_graph_point_copy (const EggGraphPoint *cobj)
 {
-	ChPointObj *obj;
-	obj = g_new0 (ChPointObj, 1);
+	EggGraphPoint *obj;
+	obj = g_new0 (EggGraphPoint, 1);
 	obj->x = cobj->x;
 	obj->y = cobj->y;
 	obj->color = cobj->color;
 	return obj;
 }
 
-ChPointObj *
-ch_point_obj_new (void)
+EggGraphPoint *
+egg_graph_point_new (void)
 {
-	ChPointObj *obj;
-	obj = g_new0 (ChPointObj, 1);
+	EggGraphPoint *obj;
+	obj = g_new0 (EggGraphPoint, 1);
 	obj->x = 0.0f;
 	obj->y = 0.0f;
 	obj->color = 0x0;
@@ -45,7 +45,7 @@ ch_point_obj_new (void)
 }
 
 void
-ch_point_obj_free (ChPointObj *obj)
+egg_graph_point_free (EggGraphPoint *obj)
 {
 	if (obj == NULL)
 		return;

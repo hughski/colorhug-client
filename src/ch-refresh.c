@@ -30,7 +30,7 @@
 #include <gusb.h>
 #include <colorhug.h>
 
-#include "ch-graph-widget.h"
+#include "egg-graph-widget.h"
 #include "ch-refresh-utils.h"
 
 typedef struct {
@@ -219,7 +219,7 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 {
 	CdSpectrum *sp_graph[3] = { NULL, NULL, NULL };
 	CdSpectrum *sp_tmp;
-	ChPointObj *point;
+	EggGraphPoint *point;
 	const gchar *ids[] = { "X", "Y", "Z", NULL };
 	const gchar *title;
 	gboolean filter_pwm;
@@ -242,25 +242,25 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 		cd_spectrum_normalize_max (sp_graph[j], 1.f);
 	}
 
-	ch_graph_widget_clear (CH_GRAPH_WIDGET (priv->graph));
+	egg_graph_widget_data_clear (EGG_GRAPH_WIDGET (priv->graph));
 	if (gtk_switch_get_active (GTK_SWITCH (priv->switch_channels))) {
 		for (j = 0; j < 3; j++) {
 			g_autoptr(GPtrArray) array = NULL;
-			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
+			array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 			for (i = 0; i < NR_DATA_POINTS; i++) {
-				point = ch_point_obj_new ();
+				point = egg_graph_point_new ();
 				point->x = ((gdouble) i) * cd_spectrum_get_resolution (sp_graph[j]);
 				point->y = cd_spectrum_get_value (sp_graph[j], i) * 100.f;
 				point->color = 0x0000df << (j * 8);
 				g_ptr_array_add (array, point);
 			}
-			ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-						CH_GRAPH_WIDGET_PLOT_LINE,
+			egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph),
+						EGG_GRAPH_WIDGET_PLOT_LINE,
 						array);
 		}
 	} else {
 		g_autoptr(GPtrArray) array = NULL;
-		array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
+		array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 		for (i = 0; i < NR_DATA_POINTS; i++) {
 			/* get maximum value */
 			gdouble max = 0.f;
@@ -269,14 +269,14 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 				if (tmp > max)
 					max = tmp;
 			}
-			point = ch_point_obj_new ();
+			point = egg_graph_point_new ();
 			point->x = ((gdouble) i) * cd_spectrum_get_resolution (sp_graph[1]);
 			point->y = max * 100.f;
 			point->color = 0x000000;
 			g_ptr_array_add (array, point);
 		}
-		ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-					CH_GRAPH_WIDGET_PLOT_LINE,
+		egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph),
+					EGG_GRAPH_WIDGET_PLOT_LINE,
 					array);
 	}
 
@@ -284,23 +284,23 @@ ch_refresh_update_graph (ChRefreshPrivate *priv)
 	if (!gtk_switch_get_active (GTK_SWITCH (priv->switch_zoom))) {
 		for (j = 1; j < NR_PULSES; j++) {
 			g_autoptr(GPtrArray) array = NULL;
-			array = g_ptr_array_new_with_free_func ((GDestroyNotify) ch_point_obj_free);
+			array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 
 			/* bottom */
-			point = ch_point_obj_new ();
+			point = egg_graph_point_new ();
 			point->x = ((gdouble) j) * (gdouble) NR_PULSE_GAP / 1000.f;
 			point->y = 0.f;
 			point->color = 0xfff000;
 			g_ptr_array_add (array, point);
 
 			/* top */
-			point = ch_point_obj_new ();
+			point = egg_graph_point_new ();
 			point->x = ((gdouble) j) * (gdouble) NR_PULSE_GAP / 1000.f;
 			point->y = 100.f;
 			point->color = 0xffb000;
 			g_ptr_array_add (array, point);
-			ch_graph_widget_assign (CH_GRAPH_WIDGET (priv->graph),
-						 CH_GRAPH_WIDGET_PLOT_LINE,
+			egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph),
+						 EGG_GRAPH_WIDGET_PLOT_LINE,
 						 array);
 		}
 	}
@@ -1001,7 +1001,7 @@ ch_refresh_export_html_file (ChRefreshPrivate *priv, const gchar *filename, GErr
 	g_string_append (html, "</div>\n");
 	g_string_append (html, "<div id=\"graph\">\n");
 	gtk_widget_get_allocation (priv->graph, &size);
-	svg_data = ch_graph_widget_export_to_svg (CH_GRAPH_WIDGET (priv->graph),
+	svg_data = egg_graph_widget_export_to_svg (EGG_GRAPH_WIDGET (priv->graph),
 						  size.width, size.height);
 	g_string_append (html, svg_data);
 	g_string_append (html, "</div\n");
@@ -1276,10 +1276,10 @@ ch_refresh_startup_cb (GApplication *application, ChRefreshPrivate *priv)
 
 	/* add graph */
 	box = GTK_BOX (gtk_builder_get_object (priv->builder, "box_results"));
-	priv->graph = ch_graph_widget_new ();
+	priv->graph = egg_graph_widget_new ();
 	g_object_set (priv->graph,
-		      "type-x", CH_GRAPH_WIDGET_TYPE_TIME,
-		      "type-y", CH_GRAPH_WIDGET_TYPE_PERCENTAGE,
+		      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
+		      "type-y", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 		      "start-x", 0.f,
 		      "stop-x", 2.f,
 		      "start-y", 0.f,

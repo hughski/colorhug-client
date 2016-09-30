@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+ <gresource prefix="/com/hughski/ColorHug/Spectro">
+ <file compressed="true">ch-spectro.ui</file>
+ <file compressed="true" alias="gtk/menus.ui">ch-spectro-menus.ui</file>
+ <file compressed="true">usb.svg</file>
+ </gresource>
+</gresources>

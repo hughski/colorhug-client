@@ -1,0 +1,11 @@
+[Desktop Entry]
+_Name=ColorHug Spectro Workbench
+_Comment=Sample the display over time to observe spectra
+Icon=colorhug-refresh
+Exec=colorhug-spectro
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;System;
+_Keywords=Spectrum;Analysis;ColorHug;
+StartupNotify=true
+NoDisplay=false
