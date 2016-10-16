@@ -27,8 +27,10 @@ BuildRequires: bash-completion
 
 # require all the subpackages to deal with upgrades
 Requires: colorhug-client-ccmx%{?_isa} = %{version}-%{release}
-Requires: colorhug-client-flash%{?_isa} = %{version}-%{release}
 Requires: colorhug-client-refresh%{?_isa} = %{version}-%{release}
+
+# functionality moved to fwupd and gnome-software
+Obsoletes: colorhug-client-flash
 
 %description
 The Hughski ColorHug colorimeter is a low cost open-source hardware
@@ -59,14 +61,6 @@ Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
 
 %description ccmx
 GUI for adding and changing CCMX calibration matrices.
-
-%package flash
-Summary: ColorHug Firmare Flash Utility
-Requires: yelp
-Requires: colorhug-client-common%{?_isa} = %{version}-%{release}
-
-%description flash
-GUI for updating the device firmware.
 
 %package refresh
 Summary: ColorHug Display Analysis Utility
@@ -138,14 +132,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/mimetypes/application-x-ccmx.*
 %{_datadir}/icons/hicolor/*/apps/colorhug-ccmx.png
 %{_mandir}/man1/colorhug-ccmx.1.gz
-
-%files flash
-%doc COPYING
-%{_bindir}/colorhug-flash
-%{_datadir}/appdata/com.hughski.ColorHug.FlashLoader.appdata.xml
-%{_datadir}/applications/com.hughski.ColorHug.FlashLoader.desktop
-%{_datadir}/icons/hicolor/*/apps/colorhug-flash.png
-%{_mandir}/man1/colorhug-flash.1.gz
 
 %files refresh
 %doc COPYING

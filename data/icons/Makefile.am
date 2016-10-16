@@ -16,7 +16,6 @@ update-icon-cache:
 if HAS_WINDOWS_ICON
 noinst_DATA =								\
 	colorhug-ccmx.ico						\
-	colorhug-flash.ico						\
 	colorhug-refresh.ico
 
 colorhug-refresh.ico : $(top_srcdir)/data/icons/16x16/colorhug-refresh.png
@@ -34,14 +33,6 @@ colorhug-ccmx.ico : $(top_srcdir)/data/icons/16x16/colorhug-ccmx.png
 	$(top_srcdir)/data/icons/32x32/colorhug-ccmx.png		\
 	$(top_srcdir)/data/icons/48x48/colorhug-ccmx.png		\
 	$(top_srcdir)/data/icons/64x64/colorhug-ccmx.png		\
-	-o $@
-colorhug-flash.ico : $(top_srcdir)/data/icons/16x16/colorhug-flash.png
-	$(AM_V_GEN)							\
-	$(ICOTOOL) -c							\
-	$(top_srcdir)/data/icons/16x16/colorhug-flash.png		\
-	$(top_srcdir)/data/icons/32x32/colorhug-flash.png		\
-	$(top_srcdir)/data/icons/48x48/colorhug-flash.png		\
-	$(top_srcdir)/data/icons/64x64/colorhug-flash.png		\
 	-o $@
 endif
 

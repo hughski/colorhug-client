@@ -43,6 +43,7 @@ MAINTAINERCLEANFILES =					\
 	$(srcdir)/omf.make				\
 	$(srcdir)/ChangeLog				\
 	$(srcdir)/colorhug-*.tar.*			\
+	$(srcdir)/test-driver				\
 	`find "$(srcdir)" -type f -name Makefile.in -print`
 
 setup-win32:

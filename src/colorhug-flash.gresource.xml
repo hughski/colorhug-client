@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<gresources>
- <gresource prefix="/com/hughski/ColorHug/FlashLoader">
- <file compressed="true">ch-flash.ui</file>
- <file compressed="true" alias="gtk/menus.ui">ch-flash-menus.ui</file>
- <file compressed="true">colorhug-gray.svg</file>
- <file compressed="true">usb.svg</file>
- </gresource>
-</gresources>

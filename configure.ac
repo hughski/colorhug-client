@@ -161,7 +161,6 @@ dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
 Makefile
 data/ch-ccmx.rc
-data/ch-flash.rc
 data/ch-main.rc
 data/ch-refresh.rc
 data/Makefile

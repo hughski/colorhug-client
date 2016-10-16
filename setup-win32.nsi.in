@@ -80,7 +80,6 @@ Section "ColorHug Client Tools"
   SetOutPath "$INSTDIR\bin"
   File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-ccmx.exe"
   File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-cmd.exe"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-flash.exe"
   File "/usr/i686-w64-mingw32/sys-root/mingw/bin/colorhug-refresh.exe"
   File "/usr/i686-w64-mingw32/sys-root/mingw/bin/gdk-pixbuf-query-loaders.exe"
   File "/usr/i686-w64-mingw32/sys-root/mingw/bin/gio-querymodules.exe"
@@ -177,7 +176,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\16x16\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorhug.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/16x16/apps/colorimeter-colorhug-inactive.png"
@@ -187,7 +185,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\22x22\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorhug.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/22x22/apps/colorimeter-colorhug-inactive.png"
@@ -197,7 +194,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\24x24\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorhug.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/24x24/apps/colorimeter-colorhug-inactive.png"
@@ -207,7 +203,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\256x256\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/256x256/apps/colorhug.png"
 
@@ -216,7 +211,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\32x32\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorhug.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/32x32/apps/colorimeter-colorhug-inactive.png"
@@ -226,7 +220,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\48x48\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorhug.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/48x48/apps/colorimeter-colorhug-inactive.png"
@@ -236,7 +229,6 @@ Section "ColorHug Client Tools"
 
   SetOutPath "$INSTDIR\share\icons\hicolor\64x64\apps"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug-ccmx.png"
-  File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug-flash.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug-refresh.png"
   File "/usr/i686-w64-mingw32/sys-root/mingw/share/icons/hicolor/64x64/apps/colorhug.png"
 
@@ -263,14 +255,12 @@ Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\ColorHug Client Tools"
   CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\Uninstall ColorHug Client Tools.lnk" "$INSTDIR\Uninstall ColorHug Client Tools.exe" "" "$INSTDIR\Uninstall ColorHug Client Tools.exe" 0
   CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\ColorHug CCMX Loader.lnk" "$INSTDIR\bin\colorhug-ccmx.exe" "" "$INSTDIR\bin\colorhug-ccmx.exe" 0
-  CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\ColorHug Firmware Updater.lnk" "$INSTDIR\bin\colorhug-flash.exe" "" "$INSTDIR\bin\colorhug-flash.exe" 0
   CreateShortCut "$SMPROGRAMS\ColorHug Client Tools\ColorHug Display Analysis.lnk" "$INSTDIR\bin\colorhug-refresh.exe" "" "$INSTDIR\bin\colorhug-refresh.exe" 0
 SectionEnd
 
 Section "Desktop Icons"
   SetOutPath "$INSTDIR\bin"
   CreateShortCut "$DESKTOP\ColorHug CCMX Loader.lnk" "$INSTDIR\bin\colorhug-ccmx.exe" "" "$INSTDIR\bin\colorhug-ccmx.exe" 0
-  CreateShortCut "$DESKTOP\ColorHug Firmware Updater.lnk" "$INSTDIR\bin\colorhug-flash.exe" "" "$INSTDIR\bin\colorhug-flash.exe" 0
   CreateShortCut "$DESKTOP\ColorHug Display Analysis.lnk" "$INSTDIR\bin\colorhug-refresh.exe" "" "$INSTDIR\bin\colorhug-refresh.exe" 0
 SectionEnd
 

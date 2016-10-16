@@ -20,8 +20,7 @@ desktop_in_files =					\
 	com.hughski.ColorHug.Backlight.desktop.in	\
 	com.hughski.ColorHug.Spectro.desktop.in	\
 	com.hughski.ColorHug.CcmxLoader.desktop.in	\
-	com.hughski.ColorHug.DisplayAnalysis.desktop.in	\
-	com.hughski.ColorHug.FlashLoader.desktop.in
+	com.hughski.ColorHug.DisplayAnalysis.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 endif
 
@@ -35,8 +34,6 @@ UI_FILES =						\
 	ch-spectro.ui					\
 	ch-ccmx.ui					\
 	ch-ccmx-menus.ui				\
-	ch-flash.ui					\
-	ch-flash-menus.ui				\
 	ch-refresh-menus.ui				\
 	ch-refresh.ui
 
@@ -47,7 +44,6 @@ SVG_FILES =						\
 
 RC_FILES =						\
 	ch-ccmx.rc.in					\
-	ch-flash.rc.in					\
 	ch-main.rc.in					\
 	ch-refresh.rc.in
 
@@ -68,7 +64,6 @@ DISTCLEANFILES =					\
 	com.hughski.ColorHug.Spectro.desktop		\
 	com.hughski.ColorHug.CcmxLoader.desktop		\
 	com.hughski.ColorHug.DisplayAnalysis.desktop	\
-	com.hughski.ColorHug.FlashLoader.desktop	\
 	com.hughski.colorhug-client.gschema.xml.valid
 
 -include $(top_srcdir)/git.mk

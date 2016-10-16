@@ -19,7 +19,6 @@ bin_PROGRAMS =						\
 	colorhug-backlight				\
 	colorhug-ccmx					\
 	colorhug-cmd					\
-	colorhug-flash					\
 	colorhug-refresh
 
 colorhug_cmd_SOURCES =					\
@@ -44,43 +43,6 @@ ch-main-rc.$(OBJEXT) : $(top_builddir)/data/ch-main.rc
 	--output-format coff --output $@
 colorhug_cmd_LDADD += ch-main-rc.$(OBJEXT)
 colorhug_cmd_DEPENDENCIES = ch-main-rc.$(OBJEXT)
-endif
-
-colorhug_flash_SOURCES =				\
-	ch-markdown.c					\
-	ch-markdown.h					\
-	ch-flash-resources.c				\
-	ch-flash-resources.h				\
-	ch-flash-md.c					\
-	ch-flash-md.h					\
-	ch-flash.c
-
-colorhug_flash_LDADD =					\
-	$(COLORD_LIBS)					\
-	$(GLIB_LIBS)					\
-	$(GTK_LIBS)					\
-	$(GUSB_LIBS)					\
-	$(SOUP_LIBS)					\
-	$(COLORHUG_LIBS)				\
-	$(CANBERRA_LIBS)				\
-	-lm
-
-colorhug_flash_CFLAGS =					\
-	$(WARNINGFLAGS_C)
-
-if HAVE_WIN32_RELEASE
-colorhug_flash_LDFLAGS =				\
-	-mwindows
-endif
-
-if HAS_WINDOWS_ICON
-ch-flash-rc.$(OBJEXT) : $(top_builddir)/data/ch-flash.rc
-	$(AM_V_GEN)					\
-	$(WINDRES)					\
-	--input-format rc --input $<			\
-	--output-format coff --output $@
-colorhug_flash_LDADD += ch-flash-rc.$(OBJEXT)
-colorhug_flash_DEPENDENCIES = ch-flash-rc.$(OBJEXT)
 endif
 
 colorhug_ccmx_SOURCES =					\
@@ -208,21 +170,6 @@ colorhug_refresh_LDADD += ch-refresh-rc.$(OBJEXT)
 colorhug_refresh_DEPENDENCIES = ch-refresh-rc.$(OBJEXT)
 endif
 
-ch-flash-resources.c: colorhug-flash.gresource.xml ../data/ch-flash.ui
-	$(AM_V_GEN)					\
-	glib-compile-resources --target=$@		\
-	--sourcedir=$(top_srcdir)/data			\
-	--generate-source				\
-	--c-name ch					\
-	$(srcdir)/colorhug-flash.gresource.xml
-ch-flash-resources.h: colorhug-flash.gresource.xml ../data/ch-flash.ui ../data/ch-flash-menus.ui
-	$(AM_V_GEN)					\
-	glib-compile-resources --target=$@		\
-	--sourcedir=$(top_srcdir)/data			\
-	--generate-header				\
-	--c-name ch					\
-	$(srcdir)/colorhug-flash.gresource.xml
-
 ch-ccmx-resources.c: colorhug-ccmx.gresource.xml ../data/ch-ccmx.ui ../data/ch-ccmx-menus.ui
 	$(AM_V_GEN)					\
 	glib-compile-resources --target=$@		\
@@ -290,8 +237,6 @@ BUILT_SOURCES =						\
 	ch-spectro-resources.h				\
 	ch-ccmx-resources.c				\
 	ch-ccmx-resources.h				\
-	ch-flash-resources.c				\
-	ch-flash-resources.h				\
 	ch-refresh-resources.c				\
 	ch-refresh-resources.h
 
@@ -299,7 +244,6 @@ EXTRA_DIST =						\
 	colorhug-backlight.gresource.xml		\
 	colorhug-spectro.gresource.xml			\
 	colorhug-ccmx.gresource.xml			\
-	colorhug-flash.gresource.xml			\
 	colorhug-refresh.gresource.xml
 
 MAINTAINERCLEANFILES =					\

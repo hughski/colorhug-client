@@ -8,7 +8,6 @@ icons_DATA = 				\
 	colorimeter-colorhug-inactive.png \
 	colorhug-backlight.png		\
 	colorhug-ccmx.png		\
-	colorhug-flash.png		\
 	colorhug-refresh.png		\
 	colorhug.png
 

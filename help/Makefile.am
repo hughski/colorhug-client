@@ -8,8 +8,7 @@ HELP_LINGUAS =
 
 HELP_MEDIA =								\
 	colorhug1.jpg							\
-	colorhug-ccmx.png						\
-	colorhug-flash.png
+	colorhug-ccmx.png
 
 HELP_FILES =								\
 	legal.xml							\
@@ -17,7 +16,6 @@ HELP_FILES =								\
 	getting-started.page						\
 	index.page							\
 	load-ccmx.page							\
-	problems.page							\
-	update-firmware.page
+	problems.page
 
 -include $(top_srcdir)/git.mk

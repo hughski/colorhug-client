@@ -7,7 +7,6 @@ iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				\
 	colorhug-backlight.png		\
 	colorhug-ccmx.png		\
-	colorhug-flash.png		\
 	colorhug-refresh.png		\
 	colorhug.png
 
