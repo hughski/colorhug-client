@@ -454,6 +454,15 @@ ch_spectro_load_sample (ChSpectroPrivate *priv, GError **error)
 	CdSpectrum *sp;
 	g_autoptr(GTimer) timer = g_timer_new ();
 
+	/* no device yet */
+	if (priv->device == NULL) {
+		g_set_error_literal (error,
+				     G_IO_ERROR,
+				     G_IO_ERROR_FAILED,
+				     "No device connected");
+		return FALSE;
+	}
+
 	/* re-get dark cal */
 	if (!priv->dark_cal_valid) {
 		if (!ch_spetro_refresh_dark_cal (priv, error))
