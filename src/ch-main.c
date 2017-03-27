@@ -1264,7 +1264,7 @@ ch_util_get_pcb_errata (ChUtilPrivate *priv, gchar **values, GError **error)
 
 	if (pcb_errata == 0) {
 		g_print ("Errata: none\n");
-		return FALSE;
+		return TRUE;
 	}
 	if ((pcb_errata & CH_PCB_ERRATA_SWAPPED_LEDS) > 0)
 		g_print ("Errata: swapped-leds\n");
