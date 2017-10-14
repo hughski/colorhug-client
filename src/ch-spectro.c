@@ -146,18 +146,25 @@ ch_spectro_update_ui_graph_dark (ChSpectroPrivate *priv)
 	}
 	egg_graph_widget_data_clear (EGG_GRAPH_WIDGET (priv->graph_dark));
 	egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph_dark),
-				EGG_GRAPH_WIDGET_PLOT_LINE, array);
+				   EGG_GRAPH_WIDGET_PLOT_LINE, array);
 }
 
 static void
 ch_spectro_update_ui_graph_irradiance (ChSpectroPrivate *priv)
 {
+	const guint black_bodies[] = { 6500, 5000, 3200, 0 };
+	const guint32 black_bodies_col[] = { 0xdd0000, 0x00dd00, 0x0000dd, 0x0 };
 	gdouble nm;
+	guint i;
 	g_autoptr(GPtrArray) array = NULL;
 
 	/* nothing set */
 	if (priv->irradiance_cal == NULL)
 		return;
+
+	/* clear old data */
+	egg_graph_widget_data_clear (EGG_GRAPH_WIDGET (priv->graph_irradiance));
+	egg_graph_widget_key_legend_clear (EGG_GRAPH_WIDGET (priv->graph_irradiance));
 
 	/* add lines */
 	array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
@@ -176,9 +183,34 @@ ch_spectro_update_ui_graph_irradiance (ChSpectroPrivate *priv)
 			       ((guint32) tmp8.B);
 		g_ptr_array_add (array, point);
 	}
-	egg_graph_widget_data_clear (EGG_GRAPH_WIDGET (priv->graph_irradiance));
 	egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph_irradiance),
-				EGG_GRAPH_WIDGET_PLOT_POINTS, array);
+				   EGG_GRAPH_WIDGET_PLOT_POINTS, array);
+
+	/* add black bodies */
+	for (i = 0; black_bodies[i] != 0; i++) {
+		g_autoptr(GPtrArray) array_points = NULL;
+		g_autoptr(CdSpectrum) sp_plankian = NULL;
+		g_autofree gchar *str = NULL;
+		sp_plankian = cd_spectrum_planckian_new_full (black_bodies[i],
+							      350, 750, 1);
+		cd_spectrum_normalize_max (sp_plankian, 1.0);
+		array_points = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
+		for (nm = cd_spectrum_get_start (sp_plankian);
+		     nm < cd_spectrum_get_end (sp_plankian);
+		     nm += 1) {
+			EggGraphPoint *point = egg_graph_point_new ();
+			point->x = nm;
+			point->y = cd_spectrum_get_value_for_nm (sp_plankian, nm);
+			point->color = black_bodies_col[i];
+			g_ptr_array_add (array_points, point);
+		}
+		egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph_irradiance),
+					      EGG_GRAPH_WIDGET_PLOT_LINE, array_points);
+		str = g_strdup_printf ("%uK", black_bodies[i]);
+		egg_graph_widget_key_legend_add (EGG_GRAPH_WIDGET (priv->graph_irradiance),
+						 black_bodies_col[i],
+						 str);
+	}
 }
 
 static gboolean
@@ -266,6 +298,8 @@ ch_spectro_update_ui_results (ChSpectroPrivate *priv)
 	g_autoptr(CdIt8) cmf = NULL;
 	g_autoptr(CdSpectrum) illuminant = NULL;
 	g_autoptr(CdSpectrum) sp = NULL;
+	g_autoptr(CdSpectrum) sp_integration = NULL;
+	g_autoptr(CdSpectrum) sp_irradiance = NULL;
 	g_autoptr(GError) error = NULL;
 	g_autoptr(GFile) file = NULL;
 
@@ -276,13 +310,28 @@ ch_spectro_update_ui_results (ChSpectroPrivate *priv)
 		return;
 
 	/* dark offset */
-	sp = cd_spectrum_subtract (priv->sp_raw_last, priv->dark_cal, 1);
-	cd_spectrum_set_start (sp, priv->spectral_cal[0]);
-	cd_spectrum_set_wavelength_cal (sp,
-					priv->spectral_cal[1],
-					priv->spectral_cal[2],
-					priv->spectral_cal[3]);
+	if (g_settings_get_boolean (priv->settings, "dark-calibration")) {
+		sp = cd_spectrum_subtract (priv->sp_raw_last, priv->dark_cal, 1);
+		cd_spectrum_set_start (sp, priv->spectral_cal[0]);
+		cd_spectrum_set_wavelength_cal (sp,
+						priv->spectral_cal[1],
+						priv->spectral_cal[2],
+						priv->spectral_cal[3]);
+	} else {
+		sp = cd_spectrum_dup (priv->sp_raw_last);
+	}
 
+	/* multiply by the integration time */
+	sp_integration = cd_spectrum_multiply_scalar (sp, 1000.f / (gdouble) priv->integral_time);
+
+	/* multiply with the irradiance */
+	if (g_settings_get_boolean (priv->settings, "irradiance-calibration")) {
+		sp_irradiance = cd_spectrum_multiply (sp_integration, priv->irradiance_cal, 1);
+	} else {
+		sp_irradiance = cd_spectrum_dup (sp_integration);
+	}
+
+	/* use CMF to get XYZ */
 	cmf = cd_it8_new ();
 	file = g_file_new_for_path ("/usr/share/colord/cmf/CIE1931-2deg-XYZ.cmf");
 	if (!cd_it8_load_from_file (cmf, file, &error)) {
@@ -290,7 +339,7 @@ ch_spectro_update_ui_results (ChSpectroPrivate *priv)
 		return;
 	}
 	illuminant = cd_spectrum_planckian_new (6500);
-	if (!cd_it8_utils_calculate_xyz_from_cmf (cmf, illuminant, sp,
+	if (!cd_it8_utils_calculate_xyz_from_cmf (cmf, illuminant, sp_irradiance,
 						  &xyz, 1, &error)) {
 		g_warning ("failed to get XYZ: %s", error->message);
 		return;
@@ -326,14 +375,17 @@ ch_spectro_update_ui_results (ChSpectroPrivate *priv)
 static void
 ch_spectro_update_ui_graph_output (ChSpectroPrivate *priv)
 {
+	const guint32 cie1931_col[] = { 0xdd0000, 0x00dd00, 0x0000dd, 0x0 };
 	gdouble nm;
 	guint i;
-	g_autoptr(CdSpectrum) sp = NULL;
+	g_autoptr(CdIt8) cmf_cie1931 = NULL;
 	g_autoptr(CdSpectrum) sp_dark = NULL;
 	g_autoptr(CdSpectrum) sp_irradiance = NULL;
+	g_autoptr(CdSpectrum) sp = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GFile) file_cie1931 = NULL;
+	g_autoptr(GPtrArray) array_cie1931 = NULL;
 	g_autoptr(GPtrArray) array = NULL;
-	const guint black_bodies[] = { 6500, 5000, 3200, 0 };
-	const guint32 black_bodies_col[] = { 0xdd0000, 0x00dd00, 0x0000dd, 0x0 };
 
 	/* nothing set */
 	if (priv->sp_raw_last == NULL)
@@ -388,12 +440,12 @@ ch_spectro_update_ui_graph_output (ChSpectroPrivate *priv)
 	}
 
 	/* multiply the spectrum with the sensitivity factor */
-//	sp = cd_spectrum_multiply (sp_irradiance, priv->sensitivity_cal, 1);
-	sp = cd_spectrum_dup (sp_irradiance);
+	sp = cd_spectrum_multiply (sp_irradiance, priv->sensitivity_cal, 1);
+//	sp = cd_spectrum_dup (sp_irradiance);
 
 	/* normalize */
 	if (g_settings_get_boolean (priv->settings, "normalize"))
-		cd_spectrum_normalize_max (sp, 1.0);
+		cd_spectrum_normalize_max (sp, 2.0);
 
 	/* add lines */
 	array = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
@@ -421,29 +473,38 @@ ch_spectro_update_ui_graph_output (ChSpectroPrivate *priv)
 					 0xffffff,
 					 _("Result"));
 
-	/* add black bodies */
-	for (i = 0; black_bodies[i] != 0; i++) {
-		g_autoptr(GPtrArray) array_plankian = NULL;
-		g_autoptr(CdSpectrum) sp_plankian = NULL;
+	/* add XYZ */
+	cmf_cie1931 = cd_it8_new ();
+	file_cie1931 = g_file_new_for_path ("/usr/share/colord/cmf/CIE1931-2deg-XYZ.cmf");
+	if (!cd_it8_load_from_file (cmf_cie1931, file_cie1931, &error)) {
+		g_warning ("failed to load cmf: %s", error->message);
+		return;
+	}
+
+	array_cie1931 = cd_it8_get_spectrum_array (cmf_cie1931);
+	for (i = 0; i < 3; i++) {
+		CdSpectrum *sp_tmp;
 		g_autofree gchar *str = NULL;
-		sp_plankian = cd_spectrum_planckian_new_full (black_bodies[i],
-							      350, 750, 1);
-		cd_spectrum_normalize_max (sp_plankian, 1.0);
-		array_plankian = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
-		for (nm = cd_spectrum_get_start (sp_plankian);
-		     nm < cd_spectrum_get_end (sp_plankian);
+		g_autoptr(GPtrArray) array_points = NULL;
+
+		sp_tmp = g_ptr_array_index (array_cie1931, i);
+		g_assert (sp_tmp != NULL);
+//		cd_spectrum_normalize_max (sp_tmp, 1.0);
+		array_points = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
+		for (nm = cd_spectrum_get_start (sp);
+		     nm < cd_spectrum_get_end (sp);
 		     nm += 1) {
 			EggGraphPoint *point = egg_graph_point_new ();
 			point->x = nm;
-			point->y = cd_spectrum_get_value_for_nm (sp_plankian, nm);
-			point->color = black_bodies_col[i];
-			g_ptr_array_add (array_plankian, point);
+			point->y = cd_spectrum_get_value_for_nm (sp_tmp, nm);
+			point->color = cie1931_col[i];
+			g_ptr_array_add (array_points, point);
 		}
 		egg_graph_widget_data_add (EGG_GRAPH_WIDGET (priv->graph_output),
-					      EGG_GRAPH_WIDGET_PLOT_LINE, array_plankian);
-		str = g_strdup_printf ("%uK", black_bodies[i]);
+					      EGG_GRAPH_WIDGET_PLOT_LINE, array_points);
+		str = g_strdup_printf ("CIE1931 %s", cd_spectrum_get_id (sp_tmp));
 		egg_graph_widget_key_legend_add (EGG_GRAPH_WIDGET (priv->graph_output),
-						 black_bodies_col[i],
+						 cie1931_col[i],
 						 str);
 	}
 }
@@ -1066,6 +1127,7 @@ ch_spectro_startup_cb (GApplication *application, ChSpectroPrivate *priv)
 		      "start-x", 350.f,
 		      "stop-x", 750.f,
 		      "use-grid", TRUE,
+		      "use-legend", TRUE,
 		      "autorange-y", TRUE,
 		      NULL);
 	gtk_box_pack_start (box, priv->graph_irradiance, TRUE, TRUE, 0);
@@ -1190,7 +1252,7 @@ main (int argc, char **argv)
 	priv->sensitivity_cal = cd_spectrum_new ();
 	cd_spectrum_set_start (priv->sensitivity_cal, 0);
 	cd_spectrum_set_end (priv->sensitivity_cal, 1000);
-	cd_spectrum_add_value (priv->sensitivity_cal, 34); // <- FIXME: this needs to come from the device itself
+	cd_spectrum_add_value (priv->sensitivity_cal, 40); // <- FIXME: this needs to come from the device itself
 
 	/* wait */
 	status = g_application_run (G_APPLICATION (priv->application), argc, argv);
